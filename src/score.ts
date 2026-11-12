@@ -14,8 +14,8 @@ export type Window = {
   word: string;
   n: number;
   counts: { tl: number; tr: number; bl: number; br: number };
-  plurality: "tl" | "tr" | "bl" | "br";
-  pluralityShare: number;
+  dominant: "tl" | "tr" | "bl" | "br";
+  dominantShare: number;
   centroid: { x: number; y: number };
 };
 
@@ -190,7 +190,7 @@ export function scoreModel(model: string, windows: Window[]): Score {
 
   for (const a of pred) {
     const w = byDay.get(a.day)!;
-    const truth = KEY_TO_SLUG[w.plurality];
+    const truth = KEY_TO_SLUG[w.dominant];
     predHits.push(a.tie ? 0 : a.choice === truth ? 1 : 0);
 
     const xRight = w.counts.tr + w.counts.br;
@@ -219,7 +219,7 @@ export function scoreModel(model: string, windows: Window[]): Score {
 
   for (const a of read) {
     const w = byDay.get(a.day)!;
-    const truth = KEY_TO_SLUG[w.plurality];
+    const truth = KEY_TO_SLUG[w.dominant];
     readHits.push(a.tie ? 0 : a.choice === truth ? 1 : 0);
     if (!a.tie) {
       const c = CENTER[a.choice];
@@ -249,7 +249,7 @@ export function scoreModel(model: string, windows: Window[]): Score {
 
 export function majorityBaseline(windows: Window[]) {
   const tally = new Map<string, number>();
-  for (const w of windows) tally.set(w.plurality, (tally.get(w.plurality) ?? 0) + 1);
+  for (const w of windows) tally.set(w.dominant, (tally.get(w.dominant) ?? 0) + 1);
   const top = [...tally.entries()].sort((a, b) => b[1] - a[1])[0];
   return {
     label: top[0],
@@ -317,8 +317,8 @@ export function lexicalBaseline(windows: Window[]) {
     const xSide = xCue ?? (xHonest > 0.5 ? "honest" : "performed");
     const ySide = yCue ?? (yDividing > 0.5 ? "dividing" : "uniting");
     const guess = `${xSide}+${ySide}`;
-    hits.push(guess === KEY_TO_SLUG[w.plurality] ? 1 : 0);
-    answers.push({ day: w.day, word: w.word, guess, truth: KEY_TO_SLUG[w.plurality] });
+    hits.push(guess === KEY_TO_SLUG[w.dominant] ? 1 : 0);
+    answers.push({ day: w.day, word: w.word, guess, truth: KEY_TO_SLUG[w.dominant] });
   }
 
   const acc = hits.reduce((a, b) => a + b, 0) / hits.length;

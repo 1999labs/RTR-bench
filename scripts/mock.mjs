@@ -26,7 +26,7 @@ const rand = () => {
 for (const task of ["predict", "read"]) {
   fs.mkdirSync(path.join(dir, task), { recursive: true });
   for (const w of data.windows) {
-    const truth = SLUG[w.plurality];
+    const truth = SLUG[w.dominant];
     const right = rand() < acc;
     const other = KEY.filter((k) => SLUG[k] !== truth);
     const pick = right ? truth : SLUG[other[Math.floor(rand() * 3)]];

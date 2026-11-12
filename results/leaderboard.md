@@ -11,7 +11,7 @@ How well does a language model predict how people read a word? 165 windows, 39,8
 ## Baselines
 
 - random, 4 options: 25.0%
-- always the most common plurality (bl): 31.5%
+- always the most common quadrant (bl): 31.5%
 - lexical heuristic, cue list in `src/score.ts`: 33.9% [27.3%, 41.2%]
 
 ## What the numbers say

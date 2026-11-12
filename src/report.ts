@@ -79,7 +79,7 @@ export function writeReport() {
   lines.push("");
   lines.push(`- random, 4 options: 25.0%`);
   lines.push(
-    `- always the most common plurality (${baselines.majorityClass.quadrant}): ${pct(baselines.majorityClass.acc)}`
+    `- always the most common quadrant (${baselines.majorityClass.quadrant}): ${pct(baselines.majorityClass.acc)}`
   );
   lines.push(
     `- lexical heuristic, cue list in \`src/score.ts\`: ${pct(baselines.lexical.acc)} ${ci(baselines.lexical.ci)}`
