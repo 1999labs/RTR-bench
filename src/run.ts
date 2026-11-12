@@ -35,6 +35,7 @@ type Result = {
   temperature: number | null;
   reasoningEffort: string | null;
   providerRequested: string | null;
+  maxTokens: number | null;
   request: unknown;
   raw: string;
   parsed: { quadrant: string; confidence: number } | null;
@@ -57,7 +58,7 @@ async function call(
     messages,
     temperature: 0,
     reasoning: { effort: "low" },
-    max_tokens: 400,
+    max_tokens: 2000,
     usage: { include: true },
   };
 
@@ -106,12 +107,38 @@ async function call(
     throw new Error(`HTTP ${status}: ${text.slice(0, 300)}`);
   }
 
-  const j = await res.json();
+  const j0 = await res.json();
+  let j = j0;
+
+  // A reasoning model can spend the whole budget thinking and emit no answer.
+  // Retry that call once with room to finish, and record the cap used.
+  const noContent =
+    !(j0?.choices?.[0]?.message?.content ?? "") &&
+    j0?.choices?.[0]?.finish_reason === "length";
+  if (noContent) {
+    const bigger = { ...body, max_tokens: 4000 };
+    const r2 = await fetch(API, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey()}`,
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://mixedmessages.fyi",
+        "X-Title": "RTR-bench",
+      },
+      body: JSON.stringify(bigger),
+    });
+    if (r2.ok) {
+      j = await r2.json();
+      body.max_tokens = 4000;
+    }
+  }
+
   return {
     json: j,
     body,
     temperature: "temperature" in body ? 0 : null,
     reasoningEffort: (body.reasoning?.effort as string) ?? null,
+    maxTokens: body.max_tokens,
   };
 }
 
@@ -186,7 +213,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
     if (!fs.existsSync(f)) return false;
     try {
       const rec = JSON.parse(fs.readFileSync(f, "utf8"));
-      return !rec.error && (rec.providerRequested ?? null) === want;
+      return !rec.error && rec.parsed && (rec.providerRequested ?? null) === want;
     } catch {
       return false;
     }
@@ -206,7 +233,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
 
       let rec: Result;
       try {
-        const { json, body, temperature, reasoningEffort } = await withRetry(() =>
+        const { json, body, temperature, reasoningEffort, maxTokens } = await withRetry(() =>
           call(opts.model, j.task, j.word, j.order, opts.provider)
         );
         const raw = json?.choices?.[0]?.message?.content ?? "";
@@ -225,6 +252,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
           temperature,
           reasoningEffort,
           providerRequested: opts.provider ?? null,
+          maxTokens,
           request: body,
           raw,
           parsed: parseAnswer(raw),
@@ -245,6 +273,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
           temperature: 0,
           reasoningEffort: null,
           providerRequested: opts.provider ?? null,
+          maxTokens: null,
           request: null,
           raw: "",
           parsed: null,
@@ -291,7 +320,10 @@ export async function listEndpoints(model: string) {
       ctx: e.context_length ?? null,
       status: e.status ?? null,
     }))
-    .sort((a, b) => (a.status ?? 0) - (b.status ?? 0) || a.inUsd - b.inUsd);
+    .sort(
+      (a, b) =>
+        (a.status === 0 ? 0 : 1) - (b.status === 0 ? 0 : 1) || a.inUsd - b.inUsd
+    );
 }
 
 export async function listModels() {

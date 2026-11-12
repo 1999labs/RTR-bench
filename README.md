@@ -78,14 +78,15 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 |---|---|---|---|
 | z-ai/glm-5.3-flash | Tenstorrent (fp8) | 41.2 | $0.0281 |
 | z-ai/glm-5.3 | Tenstorrent (fp8) | 40.0 | $0.2828 |
-| minimax/minimax-m3.1-flash | TBD | TBD | TBD |
-| deepseek/deepseek-v4.1-flash-1017 | TBD | TBD | TBD |
+| minimax/minimax-m3.1-flash | GMICloud (fp8) | 32.1 | $0.2444 |
+| deepseek/deepseek-v4.1-flash-1017 | Morph (fp8) | 40.0 | $0.3414 |
 | tencent/hy4 | TBD | TBD | TBD |
 | google/gemini-3.8-flash | TBD | TBD | TBD |
 | google/gemini-4-carbon | TBD | TBD | TBD |
 | moonshotai/kimi-k3.1-pro | TBD | TBD | TBD |
 | x-ai/grok-4.7 | TBD | TBD | TBD |
 | qwen/qwen3.8-max-0902 | TBD | TBD | TBD |
+| openai/gpt-oss-120b | DekaLLM (bf16) | 32.7 | $0.0205 |
 
 ## License
 
