@@ -154,7 +154,11 @@ export async function runModel(windows: Window[], opts: RunOptions) {
     if (String((e as Error).message).startsWith("OpenRouter balance")) throw e;
     // A credits endpoint that is down or unauthorised should not block a run.
   }
-  const dir = path.join("results", "raw", slug(opts.model));
+  const dir = path.join(
+    "results",
+    "raw",
+    slug(opts.model) + (opts.provider ? `@${slug(opts.provider)}` : "")
+  );
   let done = 0;
   let failed = 0;
   let tokens = 0;
