@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>read-the-room: human baseline</title>
+<style>
+  :root { --ink:#111; --muted:#666; --line:#e5e5e5; --bg:#fff; --pick:#1f6feb; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 ui-sans-serif, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:40px 20px 80px; }
+  h1 { font:600 15px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:.02em; text-transform:lowercase; margin:0 0 6px; }
+  p.lede { color:var(--muted); margin:0 0 28px; font-size:14px; }
+  .bar { height:3px; background:var(--line); margin-bottom:36px; }
+  .bar span { display:block; height:100%; width:0; background:var(--ink); transition:width .25s ease; }
+  .word { font:600 clamp(28px,7vw,48px)/1.1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing:-.02em; margin:0 0 10px; }
+  .q { color:var(--muted); font-size:14px; margin:0 0 28px; }
+  .opts { display:grid; gap:10px; }
+  button.opt { text-align:left; padding:16px 18px; border:1px solid var(--line); background:#fff; border-radius:10px; font:inherit; cursor:pointer; display:flex; gap:14px; align-items:baseline; }
+  button.opt:hover { border-color:#bbb; }
+  button.opt.sel { border-color:var(--pick); box-shadow:0 0 0 2px rgba(31,111,235,.15); }
+  button.opt .k { font:600 12px/1 ui-monospace, monospace; color:var(--muted); }
+  button.opt .slug { font:600 13px/1.3 ui-monospace, monospace; }
+  button.opt .gloss { color:var(--muted); font-size:14px; }
+  .foot { margin-top:28px; display:flex; justify-content:space-between; align-items:center; color:var(--muted); font-size:13px; }
+  .done h2 { font-size:20px; margin:0 0 8px; }
+  .done code { display:block; background:#f6f6f6; padding:12px; border-radius:8px; font-size:12px; overflow:auto; margin:16px 0; word-break:break-all; }
+  a.btn, button.btn { display:inline-block; background:var(--ink); color:#fff; text-decoration:none; padding:12px 18px; border-radius:8px; border:0; font:inherit; cursor:pointer; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>read-the-room: human baseline</h1>
+  <p class="lede">21 words. For each one, pick the reading you think <em>most people</em> chose. You are guessing the crowd, not telling us your own view. No feedback until the end.</p>
+  <div class="bar"><span id="prog"></span></div>
+
+  <section id="quiz">
+    <p class="word" id="word"></p>
+    <p class="q">which reading did most people choose?</p>
+    <div class="opts" id="opts"></div>
+    <div class="foot">
+      <span id="counter"></span>
+      <span>keys 1-4, or click</span>
+    </div>
+  </section>
+
+  <section id="done" class="done hidden">
+    <h2>done. thank you.</h2>
+    <p>Download this file and send it back. It contains your answers only.</p>
+    <code id="out"></code>
+    <p><button class="btn" id="dl">download csv</button></p>
+  </section>
+</main>
+
+<script>
+const WINDOWS = [
+  {"day":1,"word":"THE INTERNET"},
+  {"day":9,"word":"THE ENHANCED GAMES"},
+  {"day":17,"word":"THE AMERICAN DREAM"},
+  {"day":25,"word":"CREDIT CARDS"},
+  {"day":38,"word":"COMPLIMENTS"},
+  {"day":48,"word":"NON-FUNGIBLE TOKENS"},
+  {"day":56,"word":"BURNING MAN"},
+  {"day":64,"word":"TRAUMA DUMPING"},
+  {"day":72,"word":"FOSSIL FUELS"},
+  {"day":82,"word":"RECYCLING"},
+  {"day":90,"word":"ONE NIGHT STANDS"},
+  {"day":98,"word":"JOE BIDEN"},
+  {"day":106,"word":"NETFLIX"},
+  {"day":114,"word":"MICRO-DOSING"},
+  {"day":122,"word":"PEOPLE PLEASING"},
+  {"day":130,"word":"BERNIE SANDERS"},
+  {"day":138,"word":"MARK ZUCKERBERG"},
+  {"day":147,"word":"JOE ROGAN"},
+  {"day":155,"word":"CHILD PROTECTIVE SERVICES"},
+  {"day":163,"word":"GAME SHOWS"},
+  {"day":171,"word":"ANONYMITY"}
+];
+
+const OPTIONS = [
+  { slug:"performed+uniting", gloss:"creating false unity among us" },
+  { slug:"honest+uniting", gloss:"bringing us together, authentically" },
+  { slug:"performed+dividing", gloss:"exploiting our divisions, deliberately" },
+  { slug:"honest+dividing", gloss:"fracturing us, truthfully" }
+];
+
+const id = (() => {
+  let v = localStorage.getItem("rtr-id");
+  if (!v) { v = Math.random().toString(36).slice(2, 10); localStorage.setItem("rtr-id", v); }
+  return v;
+})();
+
+let i = 0;
+const answers = [];
+
+const $ = (s) => document.querySelector(s);
+const wordEl = $("#word"), optsEl = $("#opts"), prog = $("#prog"), counter = $("#counter");
+
+function render() {
+  if (i >= WINDOWS.length) return finish();
+  const w = WINDOWS[i];
+  wordEl.textContent = w.word;
+  counter.textContent = (i + 1) + " / " + WINDOWS.length;
+  prog.style.width = (100 * i / WINDOWS.length) + "%";
+  optsEl.innerHTML = "";
+  OPTIONS.forEach((o, k) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = `<span class="k">${k + 1}</span><span><span class="slug">${o.slug}</span><br><span class="gloss">${o.gloss}</span></span>`;
+    b.onclick = () => choose(o.slug, b);
+    optsEl.appendChild(b);
+  });
+}
+
+function choose(slug, btn) {
+  document.querySelectorAll(".opt").forEach((x) => x.classList.remove("sel"));
+  btn.classList.add("sel");
+  answers[i] = slug;
+  setTimeout(() => { i++; render(); }, 170);
+}
+
+function finish() {
+  prog.style.width = "100%";
+  $("#quiz").classList.add("hidden");
+  $("#done").classList.remove("hidden");
+  const rows = WINDOWS.map((w, k) => `${id},${w.day},${w.word.replace(/,/g, "")},${answers[k] ?? ""}`);
+  const csv = ["participant,day,word,choice", ...rows].join("\n");
+  $("#out").textContent = csv;
+  $("#dl").onclick = () => {
+    const blob = new Blob([csv], { type: "text/csv" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `read-the-room-${id}.csv`;
+    a.click();
+  };
+}
+
+addEventListener("keydown", (e) => {
+  const k = Number(e.key);
+  if (k >= 1 && k <= 4) {
+    const btn = optsEl.children[k - 1];
+    if (btn) btn.click();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
