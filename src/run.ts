@@ -174,13 +174,15 @@ export async function runModel(windows: Window[], opts: RunOptions) {
   const file = (j: (typeof jobs)[number]) =>
     path.join(dir, j.task, `${j.day}-${j.order}.json`);
 
-  // A file that holds an error is not a finished call. Without this, a run
-  // that failed on every call would be skipped in full on the next attempt.
+  // A file that holds an error is not a finished call, and a call made under a
+  // different pin is not the same call. Without both checks, a failed run is
+  // skipped in full, and a pinned rerun silently reuses unpinned answers.
+  const want = opts.provider ?? null;
   const isDone = (f: string) => {
     if (!fs.existsSync(f)) return false;
     try {
       const rec = JSON.parse(fs.readFileSync(f, "utf8"));
-      return !rec.error;
+      return !rec.error && (rec.providerRequested ?? null) === want;
     } catch {
       return false;
     }
