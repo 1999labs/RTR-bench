@@ -10,7 +10,7 @@ None of this is a knowledge test, and that is deliberate. The benchmarks we use 
 
 ## The result, so far
 
-One model, 165 windows, 39,828 marks, four option orders per question.
+One model. 165 of the 174 closed windows clear the 25-mark floor: 39,828 marks, four option orders per question.
 
 | measure | score |
 |---|---|
