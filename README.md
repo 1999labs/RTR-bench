@@ -47,7 +47,7 @@ node src/cli.ts run --models <model-id> --concurrency 8
 node src/cli.ts report
 ```
 
-Once the package is published, the same run is one command with no clone:
+Published on npm, the same run is one command with no clone:
 
 ```bash
 npx rtr-bench <model-id>
