@@ -136,6 +136,24 @@ export async function runModel(windows: Window[], opts: RunOptions) {
     throw new Error(
       "OPENROUTER_API_KEY is not set. Put it in .env in this directory, or export it in your shell."
     );
+
+  // Fail before spending 1,320 doomed calls on an empty balance.
+  try {
+    const res = await fetch(`${API.replace("/chat/completions", "")}/credits`, {
+      headers: { Authorization: `Bearer ${apiKey()}` },
+    });
+    if (res.ok) {
+      const d = (await res.json()).data;
+      const remaining = d.total_credits - d.total_usage;
+      if (remaining <= 0)
+        throw new Error(
+          `OpenRouter balance is $${remaining.toFixed(4)}. Add credit at https://openrouter.ai/settings/credits, then rerun.`
+        );
+    }
+  } catch (e) {
+    if (String((e as Error).message).startsWith("OpenRouter balance")) throw e;
+    // A credits endpoint that is down or unauthorised should not block a run.
+  }
   const dir = path.join("results", "raw", slug(opts.model));
   let done = 0;
   let failed = 0;
@@ -156,7 +174,19 @@ export async function runModel(windows: Window[], opts: RunOptions) {
   const file = (j: (typeof jobs)[number]) =>
     path.join(dir, j.task, `${j.day}-${j.order}.json`);
 
-  const queue = jobs.filter((j) => !fs.existsSync(file(j)));
+  // A file that holds an error is not a finished call. Without this, a run
+  // that failed on every call would be skipped in full on the next attempt.
+  const isDone = (f: string) => {
+    if (!fs.existsSync(f)) return false;
+    try {
+      const rec = JSON.parse(fs.readFileSync(f, "utf8"));
+      return !rec.error;
+    } catch {
+      return false;
+    }
+  };
+
+  const queue = jobs.filter((j) => !isDone(file(j)));
   console.log(
     `${opts.model}: ${jobs.length} calls, ${jobs.length - queue.length} already on disk, ${queue.length} to go`
   );
