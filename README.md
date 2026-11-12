@@ -23,7 +23,7 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 **The dataset.** 39,828 submissions across 165 of the 174 closed windows, as of November 12th. Eight windows had fewer than 25 marks, which is the floor. `data/windows.json` holds everything: the prompt, the submission counts, the dominant quadrant, the center of mass, and the conviction and polarization scores, which are not used in scoring but may be included at a later date. 
 
-**The task.** Each window poses two questions. The first asks the model to determine, given the prompt, which quadrant received the most submissions. The second asks the model for its own interpretation. That is what makes the gap measurable, since a model can predict human interpretation and still interpret the prompt differently. Submission counts and dominant quadrants are never shown to the model, and the four options are rotated against four model calls so that no option gains from position. 3/4 matching answers is the model's final answer. A 2/2 split scores zero. 
+**The task.** For each window with N>25 submissions, the model is asked to determine, given the prompt, which quadrant received the most submissions. Submission counts and dominant quadrants are never shown to the model, and the four options are rotated against four model calls so that no option gains from position. 3/4 matching answers is the model's final answer. A 2/2 split scores zero. 
 
 ## Scoring
 
