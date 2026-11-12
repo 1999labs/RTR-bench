@@ -76,7 +76,7 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 
 | Model | Provider | Score | Cost |
 |---|---|---|---|
-| z-ai/glm-5.3-flash | TBD | TBD | TBD |
+| z-ai/glm-5.3-flash | Tenstorrent (fp8) | 41.2 | $0.0281 |
 | z-ai/glm-5.3 | TBD | TBD | TBD |
 | minimax/minimax-m3.1-flash | TBD | TBD | TBD |
 | deepseek/deepseek-v4.1-flash-1017 | TBD | TBD | TBD |
