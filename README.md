@@ -82,12 +82,6 @@ npx rtr-bench <model-id>
 
 `report` scores every folder in `results/raw/`, so several people can contribute runs and the leaderboard is the union of them.
 
-The human baseline is a static page. Open `human/index.html`, answer 21 words, send back the CSV, then score any number of them together:
-
-```bash
-node scripts/score-human.mjs human/alice.csv human/bob.csv
-```
-
 To rebuild the dataset from source you need the project's Postgres connection, so that step is not reproducible by a stranger. It is included so the export can be audited: `npm run export`.
 
 ## Results
