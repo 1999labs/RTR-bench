@@ -29,28 +29,37 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 ## Quickstart
 
-Scoring needs no database access.
+Scoring needs no database access. You need an OpenRouter key from openrouter.ai/keys.
+
+### Test a model
+
+Node 18 or newer. No clone, no install.
+
+```bash
+mkdir rtr-run && cd rtr-run
+echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
+
+# see ids and prices. costs nothing
+npx --yes rtr-bench catalog --limit 20
+
+# run one model, then score it
+npx --yes rtr-bench z-ai/glm-5.3-flash
+```
+
+`--yes` skips npx's install prompt. A run makes 1,320 calls, takes about four minutes on a cheap model, costs a few cents, and writes `results/` in the folder you created. Add `--concurrency 8` to go faster.
+
+### Work on the code
+
+The repository runs the TypeScript sources directly, so this path needs Node 22.18 or newer.
 
 ```bash
 git clone https://github.com/1999labs/RTR-bench
 cd RTR-bench
 npm install
-
-# keep the key in a file, not in shell history
 echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
-
-# list ids and prices
 node src/cli.ts catalog --limit 20
-
-# run a model, then score everything on disk
 node src/cli.ts run --models z-ai/glm-5.3-flash --concurrency 8
 node src/cli.ts report
-```
-
-Published on npm, the same run is one command with no clone:
-
-```bash
-npx rtr-bench z-ai/glm-5.3-flash
 ```
 
 Rebuilding the dataset needs the project's database connection, so `npm run export` is included for inspection only.
