@@ -6,7 +6,9 @@ Most labeled datasets are made by asking annotators to apply a rubric. This one 
 
 That distribution is what makes it useful for evaluating a model. Every window has a majority reading and a real minority, so a model can be scored on whether it lands with the crowd or against it, and on which axis it misreads when it does. There is also nothing here to memorize. The axes are cultural rather than factual, so no amount of training data tells a model how a crowd interpreted a prompt. The only way to get it right is for the model to understand how people would think and interpret. 
 
-None of this is a knowledge test, and that is deliberate. The benchmarks we use to compare computer intelligence and human intelligence are exam-like: multiple choice, math, and code. Exams are easy to grade, so they dominate, and models have been optimized for their shape. But those evals are very mechanical, and their results are not indicative of a model's ability to "read the room." If the industry ambition is a model that surpasses human intelligence, the comparison has to include the things humans are good at, like having cultural fluency, which models generally lack. That's why Mixed Messages provides a unique and differentiated dataset to benchmark. 
+The benchmarks we use to compare computer intelligence and human intelligence are exam-like: multiple choice, math, and code. Exams are easy to grade, so they dominate, and models have been optimized for their shape. But those evals are very mechanical, and their results are not indicative of a model's ability to "read the room." If the industry ambition is a model that surpasses human intelligence, the comparison has to include the things humans are good at, like having cultural fluency, which models generally lack. That's why Mixed Messages provides a unique and differentiated dataset to benchmark. 
+
+RTR-bench, or read-the-room, is not a knowledge test. That is deliberate. It is 
 
 ## The result, so far
 
