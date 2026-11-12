@@ -34,30 +34,25 @@ The 2x2 grid gives us four possible options for the dominant quadrant, with the 
 
 ## Scoring
 
-One window is one point. The score is points divided by questions, times 100, so it is always out of 100 and does not change scale as the dataset grows.
+Scoring is a quiz with 165 questions. Each one is a prompt and four possible dominant quadrants, and the question is which one the crowd picked most. A right answer is one point, a wrong answer is nothing.
 
-| reference point | score |
+The score is points divided by questions, times 100. All 165 right is 100. A score of 43 means about 71 right.
+
+Three numbers to read it against:
+
+| | |
 |---|---|
-| chance | 25 |
-| always the most common reading | 31.5 |
-| hand-written keyword list | 33.9 |
+| guessing at random | 25 |
+| always answering the most common quadrant | 31.5 |
+| a hand-written keyword list | 33.9 |
 
-The leaderboard also reports:
+Each question is asked four times, with the four options shuffled, because models tend to favour whichever option comes first. Three or four matching answers is the model's answer. A 2-2 split counts as wrong.
 
-| column | what it means |
-|---|---|
-| n | windows the model answered |
-| 95% CI | range the score would land in on a different sample of windows, bootstrapped by window |
-| axis x, axis y | accuracy on each axis separately, to show which one a model misreads |
-| Brier | calibration of the stated confidence |
-| own reading agrees | how often the model's own reading matches the crowd |
-| crowd distance | distance between that reading and the crowd's centre of mass |
-| gap | own reading agreement minus prediction accuracy |
-| unstable | share of windows with no stable answer |
+The score comes with a 95% interval: the range it would land in on a different set of 165 windows. A score of 43 with an interval of 35 to 50 means the true value sits inside that band, which is why a four-point gap between two models means very little.
 
-Two rules matter. A 2-2 split scores zero rather than being broken by a tie-break, so accuracy is a lower bound. And intervals are bootstrapped by window, not by call, because calls inside a window are not independent.
+The gap is the second question. Instead of guessing the crowd, the model is asked for its own reading. The gap is how often that reading matches the crowd, minus how often its prediction does. A model can predict the crowd well and still read the prompt differently, and the gap measures that difference.
 
-The prompt is frozen at `v1` and hashed into every raw call. The windows are public, so a model trained on this repo can score without generalising; a held-back set is not built yet. Intervals are wide because 165 questions is a small sample.
+One caveat: the prompt is frozen and hashed into every raw call, but the windows are public, so a model trained on this repo could score without generalising.
 
 ## Quickstart
 
