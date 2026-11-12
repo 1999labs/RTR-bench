@@ -7,6 +7,11 @@ How well does a language model predict how people read a word? 165 windows, 39,8
 | model | score /100 | n | cost | provider | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | `z-ai/glm-5.3-flash` | **43.0** | 165 | $0.0526 | 26 providers | [35.8%, 50.9%] | 55.8% | 60.0% | 0.657 | 38.2% | 0.211 | -4.8% | 17.0% |
+| `z-ai/glm-5.3-flash` | **41.2** | 165 | $0.0281 | Tenstorrent | [32.7%, 48.5%] | 56.4% | 60.0% | 0.682 | 40.6% | 0.213 | -0.6% | 20.0% |
+| `deepseek/deepseek-v4.1-flash-1017` | **40.0** | 165 | $0.3414 | Morph | [32.1%, 47.3%] | 60.6% | 58.8% | 0.727 | 37.0% | 0.232 | -3.0% | 8.5% |
+| `z-ai/glm-5.3` | **40.0** | 165 | $0.2828 | Tenstorrent | [32.7%, 47.3%] | 57.0% | 57.6% | 0.698 | 40.0% | 0.219 | +0.0% | 15.8% |
+| `openai/gpt-oss-120b` | **32.7** | 165 | $0.0205 | DekaLLM | [25.5%, 40.0%] | 52.7% | 51.5% | 0.813 | 23.6% | 0.300 | -9.1% | 16.4% |
+| `minimax/minimax-m3.1-flash` | **32.1** | 165 | $0.2444 | GMICloud | [25.5%, 39.4%] | 49.1% | 46.1% | 0.712 | 30.9% | 0.254 | -1.2% | 24.8% |
 
 ## Baselines
 
@@ -17,8 +22,8 @@ How well does a language model predict how people read a word? 165 windows, 39,8
 ## What the numbers say
 
 - Best predictor: `z-ai/glm-5.3-flash` at 43.0% (chance 25%, majority baseline 31.5%).
-- One model only. There is no spread to report and no leaderboard ordering.
-- Mean gap between a model's own reading and its prediction of the crowd: -4.8%. A positive gap means the model agrees with the crowd more often when answering for itself than when trying to predict it.
+- Spread across models: 32.1% to 43.0%, 10.9 points.
+- Mean gap between a model's own reading and its prediction of the crowd: -3.1%. A positive gap means the model agrees with the crowd more often when answering for itself than when trying to predict it.
 - Axis accuracy is the place to look for a systematic bias. The y axis (uniting vs dividing) and the x axis (performed vs honest) are scored separately, so a model that over-reads division shows up as high axis y and low axis x.
 
 ## Method
