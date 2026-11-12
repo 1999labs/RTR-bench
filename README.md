@@ -82,8 +82,8 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 | xiaomi/mimo-v2.6-flash | GMICloud (bf16) | 40.6 | $0.1216 |
 | deepseek/deepseek-v4.1-flash-1017 | Morph (fp8) | 40.0 | $0.3414 |
 | tencent/hy3 | Tencent (fp8) | 40.0 | $0.2665 |
-| google/gemini-3.8-flash | TBD | TBD | TBD |
-| openai/gpt-6-luna | TBD | TBD | TBD |
+| google/gemini-3.8-flash | Google AI Studio | 46.1 | $0.7790 |
+| openai/gpt-6-luna | OpenAI | 37.0 | $0.1329 |
 | anthropic/claude-haiku-5.5 | Claude Platform on AWS | 43.0 | $0.1696 |
 | x-ai/grok-4.7 | TBD | TBD | TBD |
 | thinkingmachines/inkling-small | DeepInfra (fp8) | 37.0 | $0.1733 |
