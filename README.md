@@ -43,14 +43,14 @@ echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
 node src/cli.ts catalog --limit 20
 
 # run a model, then score everything on disk
-node src/cli.ts run --models <model-id> --concurrency 8
+node src/cli.ts run --models z-ai/glm-5.3-flash --concurrency 8
 node src/cli.ts report
 ```
 
 Published on npm, the same run is one command with no clone:
 
 ```bash
-npx rtr-bench <model-id>
+npx rtr-bench z-ai/glm-5.3-flash
 ```
 
 Rebuilding the dataset needs the project's database connection, so `npm run export` is included for inspection only.
