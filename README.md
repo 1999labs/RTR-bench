@@ -23,7 +23,7 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 **The dataset.** 39,828 submissions across 165 of the 174 closed windows, as of November 12th. Eight windows had fewer than 25 marks, which is the floor. `data/windows.json` holds everything: the prompt, the submission counts, the dominant quadrant, the center of mass, and the conviction and polarization scores, which are not used in scoring but may be included at a later date. 
 
-**The task.** For each window with N>25 submissions, the model is asked to determine, given the prompt, which quadrant received the most submissions. Submission counts and dominant quadrants are never shown to the model.
+**The task.** For each window with N≥25 submissions, the model is asked to determine, given the prompt, which quadrant received the most submissions. Submission counts and dominant quadrants are never shown to the model.
 
 **Scoring.** For each window, the model is given the prompt and four possible dominant quadrants. A right answer is one point. A wrong answer is zero points. The final score is calculated as the number of points divided by the number of questions (165 as of 11/12/26), times 100. A score of 50 means that the model determined the correct dominant quadrant for half of the windows. The four dominant quadrant options are rotated against four model calls so that no option gains from position. 3/4 matching answers is the model's final answer. A 2/2 split scores zero. 
 
