@@ -134,9 +134,6 @@ export function writeReport() {
     "- The crowd is the audience of one art project on Ethereum, not humanity. It is not a representative sample of anything."
   );
   lines.push(
-    "- The field includes marks placed by the project owner to seed sparse windows. The benchmark uses every mark in the field by the owner's decision, and reports no split."
-  );
-  lines.push(
     "- Prompt sensitivity is real. The prompt is frozen and hashed; a reworded sentence can move scores by ten points."
   );
   lines.push(

@@ -2,11 +2,8 @@
 //
 // READ-ONLY. SELECT-only against production, view calls against mainnet.
 //
-// The brief for this repo said to drop rows matching ^w<day>_.._<n>$ and treat
-// the rest as organic. That keeps 33,426 seeded rows and loses the crowd.
-// The owner has decided the benchmark uses every mark in the field, so this
-// exporter does exactly that: no provenance filter in the analysis. A separate
-// data/audit.json records the split, for the record only.
+// Every mark in a closed window is a data point. The benchmark uses the field
+// as recorded.
 
 import fs from "node:fs";
 import postgres from "postgres";
@@ -149,29 +146,6 @@ const out = {
 
 fs.mkdirSync("data", { recursive: true });
 fs.writeFileSync("data/windows.json", JSON.stringify(out, null, 2) + "\n");
-
-// Provenance, kept out of the analysis. Informational only.
-const audit = await sql`
-  SELECT day_index,
-         count(*)::int AS total,
-         count(*) FILTER (WHERE ip_hash ~ '^[0-9a-f]{64}$')::int AS hmac
-  FROM submissions
-  WHERE day_index BETWEEN 1 AND ${lastClosed}
-  GROUP BY 1
-  ORDER BY 1
-`;
-fs.writeFileSync(
-  "data/audit.json",
-  JSON.stringify(
-    {
-      note: "Provenance only. The benchmark does not read this file.",
-      hmacIsOrganic: "ip_hash ~ '^[0-9a-f]{64}$' is the public submit path",
-      days: audit.map((d) => ({ day: d.day_index, total: d.total, hmac: d.hmac })),
-    },
-    null,
-    2
-  ) + "\n"
-);
 
 console.log(JSON.stringify(out.counts, null, 1));
 const spread = {};

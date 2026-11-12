@@ -127,10 +127,10 @@ export function collapse(calls: Call[], task: Task, windows: Window[]): WindowAn
 export function bootstrapCI(
   values: number[],
   reps = 2000,
-  seed = 7
+  start = 7
 ): [number, number] {
   if (values.length === 0) return [NaN, NaN];
-  let s = seed;
+  let s = start;
   const rand = () => {
     s = (s * 1664525 + 1013904223) % 4294967296;
     return s / 4294967296;

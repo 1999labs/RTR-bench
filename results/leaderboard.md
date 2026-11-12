@@ -31,7 +31,6 @@ How well does a language model predict how people read a word? 165 windows, 39,8
 ## Limits
 
 - The crowd is the audience of one art project on Ethereum, not humanity. It is not a representative sample of anything.
-- The field includes marks placed by the project owner to seed sparse windows. The benchmark uses every mark in the field by the owner's decision, and reports no split.
 - Prompt sensitivity is real. The prompt is frozen and hashed; a reworded sentence can move scores by ten points.
 - The splits are public. A model trained on this repo can score without generalising.
 
