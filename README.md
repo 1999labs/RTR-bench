@@ -88,6 +88,7 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 | x-ai/grok-4.7 | TBD | TBD | TBD |
 | thinkingmachines/inkling-small | DeepInfra (fp8) | 37.0 | $0.1733 |
 | openai/gpt-oss-120b | DekaLLM (bf16) | 32.7 | $0.0205 |
+| anthropic/claude-haiku-4.5 | TBD | TBD | TBD |
 
 ## License
 
