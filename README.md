@@ -10,150 +10,102 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 **RTR-bench**, or read-the-room, is not a knowledge test. That is deliberate. It is an attempt at a different kind of benchmark, built from a creative act rather than an exam structure. Cultural fluency resists the traditional benchmark shape, which is why this one is a prediction task that measures whether a model can anticipate how people would interpret a prompt, and whether it would have interpreted that prompt the same way, both against real human data.
 
-## The result, so far
+## About
 
-One model. 165 of the 174 closed windows clear the 25-mark floor: 39,828 marks, four option orders per question.
+**The window.** Mixed Messages publishes one prompt a day. Each 24-hour window collects marks from anyone who wants to answer, then closes and becomes a single artwork. The marks are the record of how that prompt was read.
 
-| measure | score |
+A mark is a coordinate on a 10,000 by 10,000 grid, so one placement answers two questions at once:
+
+| axis | 0 | 10,000 |
+|---|---|---|
+| x | performed | honest |
+| y | uniting | dividing |
+
+Crossing the two gives the four readings a model chooses between:
+
+| quadrant | reading |
 |---|---|
-| score (out of 100) | 43.0 [35.2, 50.3] |
-| chance | 25.0 |
-| always the most common answer | 31.5 |
-| keyword heuristic | 33.9 [27.3, 41.2] |
-| axis: uniting vs dividing | 60.6 |
-| axis: performed vs honest | 57.0 |
-| own reading matches the crowd | 37.0 |
-| no stable answer across four orders | 15.8 |
+| performed + uniting | creating false unity among us |
+| honest + uniting | bringing us together, authentically |
+| performed + dividing | exploiting our divisions, deliberately |
+| honest + dividing | fracturing us, truthfully |
 
-Four things worth saying about that.
+**The data.** 165 of the 174 closed windows, 39,828 marks, between 44 and 1,163 per window. Eight windows have fewer than 25 marks and one closed with none. A plurality decided by two marks is one person's opinion, so those are out. `data/windows.json` holds every question: the word, the four counts, the plurality, the crowd's centre of mass, and two summary numbers, conviction and polarization. Scoring needs no database.
 
-**It clears chance easily.** 43.0 against 25 on a four-way choice, and the bottom of its interval is ten points above chance. Word choice carries real signal about crowd placement.
+The field includes marks placed by the project owner to seed sparse windows. The benchmark uses every mark and reports no split. `data/audit.json` records how many marks in each window came from the public submit path; no score reads it.
 
-**It clears the majority-answer baseline, but only just.** Paired difference +11.5 points, 95% interval [1.2, 21.2]. Real, thin, and entirely a consequence of 165 windows.
+**The task.** Each window is one question: given the word and the four readings, which one did the crowd choose most? The winner is the plurality, which is often not a majority. In 39 of the 165 windows no reading took half the marks.
 
-**It does not beat a keyword list.** The hand-written cue list scores 33.9. The paired difference is +9.1 points with an interval of [-0.6, 18.8]. At this sample size a cheap language model and a list of negative words are not distinguishable. Anyone claiming a leaderboard from this dataset is measuring noise.
+A second question asks the model for its own reading. That is what makes the gap measurable, since a model can predict the crowd and still read the word differently.
 
-**The bias is directional, and it is the only finding here that does not depend on a significance test.** On the 139 windows where the model gave a stable answer, it predicted `honest+uniting` 42 times where the field chose it 31, and predicted `honest+dividing` 22 times where the field chose it 34. It reads "fracturing us, truthfully" as "bringing us together, authentically." The model believes the room agreed more than the room did.
+The crowd's answer is never shown to the model, and the four options are rotated across four calls so no option gains from position. Three or four matching answers is the model's answer. A 2-2 split is no answer and scores zero.
 
-The instability number sets the ceiling on everything else. 26 of 165 windows (15.8%) produce no stable answer when the same four options are reordered, and those score zero. That is the instrument's own noise floor, and it is larger than any difference a single-model run could claim.
+## Scoring
 
-The sample size follows from that. The paired interval on the difference from the keyword list is 19.4 points wide. Halving it needs four times the windows, roughly 660. A real leaderboard needs more than 165 questions, or several samples per question, before the ordering of two models means anything.
+One window is one point. The score is points divided by questions, times 100, so it is always out of 100 and does not change scale as the dataset grows.
 
-## The field
-
-165 closed windows. 39,828 marks, between 44 and 1,163 per window, median 192.
-
-| plurality | windows |
+| reference point | score |
 |---|---|
-| performed+dividing | 52 |
-| honest+dividing | 39 |
-| performed+uniting | 37 |
-| honest+uniting | 37 |
+| chance | 25 |
+| always the most common reading | 31.5 |
+| hand-written keyword list | 33.9 |
 
-There is no dominant answer, which is why the majority baseline is only 31.5%. A four-way task with a balanced target is a harder task than a four-way task with a common answer.
+The leaderboard also reports:
 
-## The two questions
+| column | what it means |
+|---|---|
+| n | windows the model answered |
+| 95% CI | range the score would land in on a different sample of windows, bootstrapped by window |
+| axis x, axis y | accuracy on each axis separately, to show which one a model misreads |
+| Brier | calibration of the stated confidence |
+| own reading agrees | how often the model's own reading matches the crowd |
+| crowd distance | distance between that reading and the crowd's centre of mass |
+| gap | own reading agreement minus prediction accuracy |
+| unstable | share of windows with no stable answer |
 
-**Predict.** Given the word and the four readings, which reading did most people choose?
+Two rules matter. A 2-2 split scores zero rather than being broken by a tie-break, so accuracy is a lower bound. And intervals are bootstrapped by window, not by call, because calls inside a window are not independent.
 
-**Read.** Given the word and the four readings, which reading is yours?
+The prompt is frozen at `v1` and hashed into every raw call. The windows are public, so a model trained on this repo can score without generalising; a held-back set is not built yet. Intervals are wide because 165 questions is a small sample.
 
-The second question is what makes the gap possible. A model that predicts the crowd well but reads the word differently is doing something more interesting than a model that simply agrees with people.
+## Quickstart
 
-Each question is asked four times per window, with the four options rotated. Every option sits in every position once. The modal answer across the four is the model's answer. A 2-2 split is not a modal answer: it scores as a miss and sets the `unstable` flag. That rule is conservative on purpose, because the alternative is choosing a tie-break and letting it decide the leaderboard.
-
-## Method
-
-- Temperature 0, reasoning effort `low` where the model accepts it. Both are recorded in every raw call.
-- The prompt is frozen at `v1` and hashed. The hash is written into every raw file.
-- Strict JSON output: `{"quadrant": "...", "confidence": 0.0-1.0}`.
-- Confidence is used only for the Brier score. It does not affect accuracy.
-- Accuracy intervals are bootstrapped by window, 2,000 resamples. Calls inside a window are not independent, and the largest window carries 1,163 marks on one question.
-- The scorer never reads the site. It reads `data/windows.json`, which is exported read-only from Postgres, plus the raw call files.
-
-## Limits
-
-- **One model in the checked-in run.** The OpenRouter balance ran out at $0.005 after the first full sweep. The other nine ids in `models.txt` are listed but unrun. Do not read this as a leaderboard yet.
-- **The field includes marks placed by the project owner** to seed sparse windows. By the owner's decision the benchmark uses every mark in the field and reports no split. The split is recorded in `data/audit.json` for anyone who wants it; no score uses it.
-- **165 windows is small for a four-way task.** Every accuracy number carries its interval, and the intervals are wide.
-- **Prompt sensitivity is real.** One reworded sentence can move scores by ten points. The prompt is versioned and hashed and should not change mid-leaderboard.
-- **The splits are public.** A model trained on this repo can score without generalising. A held-back set with a published hash is the fix, and it is not built yet.
-- **The instability floor is 15.8%** on the one model measured. That is not a property of the task, it is a property of the calls. Any comparison tighter than that is noise.
-
-## How the score works
-
-Each window is one question with four possible answers. The model scores one point if it picks the answer that most marks in that window chose.
-
-It answers each question four times, with the four options rotated so no option gets the advantage of position. Three or four matching answers is the model's answer. A 2-2 split is no answer and scores zero.
-
-The score is points divided by questions, times 100, so it is always out of 100:
-
-- 165 questions: each question is worth 0.61 points.
-- 500 questions: each is worth 0.2.
-- The scale never changes. More windows do not make the score larger or smaller, they make it more precise.
-
-Chance is 25. Always answering the most common reading is 31.5. The interval beside the score is the range it would land in on a different sample of windows, so 43.0 with an interval of 35 to 50 means the true value sits somewhere in that band.
-
-## Reproduce
-
-Scoring a model needs no database access: `data/windows.json` is in the repo.
-
-### Run your own model
+Scoring needs no database access.
 
 ```bash
 git clone https://github.com/1999labs/RTR-bench
 cd RTR-bench
 npm install
 
-# put your own key in a file, not in shell history
+# keep the key in a file, not in shell history
 echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
 
 # list ids and prices
 node src/cli.ts catalog --limit 20
 
-# run any model on the catalogue
+# run a model, then score everything on disk
 node src/cli.ts run --models <model-id> --concurrency 8
 node src/cli.ts report
 ```
 
-Installed globally (`npm i -g rtr-bench`) or run with `npx rtr-bench`, a bare model id does both steps in one command:
+Once the package is published, the same run is one command with no clone:
 
 ```bash
-rtr-bench <model-id>
+npx rtr-bench <model-id>
 ```
 
-The key is read from `.env` or from the environment. It is never written into results. `report` scores every model directory on disk, so several people can contribute runs and the leaderboard is just the set of folders in `results/raw/`.
+`report` scores every folder in `results/raw/`, so several people can contribute runs and the leaderboard is the union of them.
 
-### Rebuild the dataset
-
-This needs the project's own Postgres connection, so it is not reproducible by a stranger. It is included so the export can be audited.
-
-```bash
-npm run export
-```
-
-The human baseline is a static page. Open `human/index.html`, answer 21 words, and send back the CSV. Score any number of them together:
+The human baseline is a static page. Open `human/index.html`, answer 21 words, send back the CSV, then score any number of them together:
 
 ```bash
 node scripts/score-human.mjs human/alice.csv human/bob.csv
 ```
 
-## Files
+To rebuild the dataset from source you need the project's Postgres connection, so that step is not reproducible by a stranger. It is included so the export can be audited: `npm run export`.
 
-```
-data/windows.json       165 windows: word, counts, plurality, centroid, conviction, polarization
-data/audit.json         how many marks in each window came from the public submit path (not scored)
-src/prompt.ts           the frozen prompt, the four orders, the parser
-src/run.ts              OpenRouter runner, one JSON file per call, resumable
-src/score.ts            metrics, baselines, bootstrap intervals
-src/report.ts           results/leaderboard.md and results/leaderboard.svg
-src/cli.ts              catalog / run / score / report
-src/env.ts              loads .env so a key never has to sit in shell history
-human/index.html        the human baseline instrument
-scripts/export.mjs      read-only export from Postgres plus getWord on mainnet
-scripts/score-human.mjs scores returned human CSVs
-results/raw/<model>/    every call, verbatim
-```
+## Results
+
+<!-- populated after the multi-model run. results/leaderboard.md is generated by `rtr-bench report`. -->
 
 ## License
 
