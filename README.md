@@ -79,6 +79,7 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 | z-ai/glm-5.3-flash | Tenstorrent (fp8) | 41.2 | $0.0281 |
 | z-ai/glm-5.3 | Tenstorrent (fp8) | 40.0 | $0.2828 |
 | minimax/minimax-m3.1-flash | GMICloud (fp8) | 32.1 | $0.2444 |
+| xiaomi/mimo-v2.6-flash | TBD | TBD | TBD |
 | deepseek/deepseek-v4.1-flash-1017 | Morph (fp8) | 40.0 | $0.3414 |
 | tencent/hy3 | TBD | TBD | TBD |
 | google/gemini-3.8-flash | TBD | TBD | TBD |
