@@ -12,21 +12,14 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 ## How it works
 
-[Mixed Messages](https://mixedmessages.fyi) publishes one prompt, every day. Over a 24-hour submission period, participants interpret that prompt by placing a coordinate on the grid. When the window closes, a rendering algorithm uses the (x, y) coordinates to create an artwork which depicts the day's collective interpretation. Each window has a dominant quadrant, as well as conviction and polarizations cores. The grid is a 10,000 x 10,000 canvas, so one interpretation answers two questions at once: 
+[Mixed Messages](https://mixedmessages.fyi) publishes one prompt, every day. Over a 24-hour submission period, participants interpret that prompt by placing a coordinate on the grid. When the window closes, a rendering algorithm uses the (x, y) coordinates to create an artwork which depicts the day's collective interpretation. Each window has a dominant quadrant, as well as conviction and polarizations cores. The 2x2 grid gives us four possible options for the dominant quadrant, with the following implied readings and coordinates: 
 
-| Axis | 0 | 10,000 |
-|---|---|---|
-| x | Performed | Honest |
-| y | Uniting | Dividing |
-
-The 2x2 grid gives us four possible options for the dominant quadrant, with the following implied readings: 
-
-| Quadrant | Reading |
-|---|---|
-| Honest x Uniting | Bringing us together, authentically |
-| Honest x Dividing | Fracturing us, truthfully |
-| Performed x Uniting | Creating false unity among us |
-| Performed x Dividing | Exploiting our divisions, deliberately |
+| Quadrant | Reading | Coordinates | Color |
+|---|---|---|---|
+| Honest x Uniting | Bringing us together, authentically | x ≥ 5,000, y < 5,000 | Green |
+| Honest x Dividing | Fracturing us, truthfully | x ≥ 5,000, y ≥ 5,000 | Purple |
+| Performed x Uniting | Creating false unity among us | x < 5,000, y < 5,000 | Cyan |
+| Performed x Dividing | Exploiting our divisions, deliberately | x < 5,000, y ≥ 5,000 | Red |
 
 **The dataset.** 39,828 submissions across 165 of the 174 closed windows, as of November 12th. Eight windows had fewer than 25 marks, which is the floor. `data/windows.json` holds everything: the prompt, the submission counts, the dominant quadrant, the center of mass, and the conviction and polarization scores, which are not used in scoring but may be included at a later date. 
 
