@@ -70,10 +70,11 @@ if (cmd === "catalog") {
   const windows = loadWindows().map((w) => ({ day: w.day, word: w.word }));
   const limit = flags.limit ? Number(flags.limit) : undefined;
   const concurrency = Number(flags.concurrency ?? 6);
+  const rpm = flags.rpm ? Number(flags.rpm) : undefined;
   const provider = flags.provider ? String(flags.provider) : undefined;
 
   for (const model of models) {
-    await runModel(windows, { model, tasks: [...tasks], concurrency, limit, provider });
+    await runModel(windows, { model, tasks: [...tasks], concurrency, limit, provider, rpm });
   }
 
   const data = writeReport();

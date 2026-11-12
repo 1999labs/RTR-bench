@@ -79,14 +79,14 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 | z-ai/glm-5.3-flash | Tenstorrent (fp8) | 41.2 | $0.0281 |
 | z-ai/glm-5.3 | Tenstorrent (fp8) | 40.0 | $0.2828 |
 | minimax/minimax-m3.1-flash | GMICloud (fp8) | 32.1 | $0.2444 |
-| xiaomi/mimo-v2.6-flash | TBD | TBD | TBD |
+| xiaomi/mimo-v2.6-flash | GMICloud (bf16) | 40.6 | $0.1216 |
 | deepseek/deepseek-v4.1-flash-1017 | Morph (fp8) | 40.0 | $0.3414 |
-| tencent/hy3 | TBD | TBD | TBD |
+| tencent/hy3 | Tencent (fp8) | 40.0 | $0.2665 |
 | google/gemini-3.8-flash | TBD | TBD | TBD |
 | openai/gpt-6-luna | TBD | TBD | TBD |
-| anthropic/claude-haiku-5.5 | TBD | TBD | TBD |
+| anthropic/claude-haiku-5.5 | Claude Platform on AWS | 43.0 | $0.1696 |
 | x-ai/grok-4.7 | TBD | TBD | TBD |
-| thinkingmachines/inkling-small | TBD | TBD | TBD |
+| thinkingmachines/inkling-small | DeepInfra (fp8) | 37.0 | $0.1733 |
 | openai/gpt-oss-120b | DekaLLM (bf16) | 32.7 | $0.0205 |
 
 ## License

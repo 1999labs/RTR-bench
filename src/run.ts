@@ -19,7 +19,21 @@ export type RunOptions = {
   limit?: number;
   maxUsd?: number;
   provider?: string;
+  rpm?: number;
 };
+
+// OpenRouter caps some models at a low requests-per-minute rate for new
+// accounts. A shared slot clock keeps every worker under that ceiling.
+let nextSlot = 0;
+async function pace(rpm?: number) {
+  if (!rpm) return;
+  const gap = 60_000 / rpm;
+  const now = Date.now();
+  const start = Math.max(now, nextSlot);
+  nextSlot = start + gap;
+  const wait = start - now;
+  if (wait > 0) await new Promise((r) => setTimeout(r, wait));
+}
 
 export function slug(model: string): string {
   return model.replace(/[^a-zA-Z0-9]+/g, "-").toLowerCase();
@@ -233,6 +247,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
 
       let rec: Result;
       try {
+        await pace(opts.rpm);
         const { json, body, temperature, reasoningEffort, maxTokens } = await withRetry(() =>
           call(opts.model, j.task, j.word, j.order, opts.provider)
         );
