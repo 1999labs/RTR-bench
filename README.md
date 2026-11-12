@@ -62,13 +62,13 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 | z-ai/glm-5.3-flash | TBD | TBD | TBD |
 | z-ai/glm-5.3 | TBD | TBD | TBD |
 | minimax/minimax-m3.1-flash | TBD | TBD | TBD |
-| deepseek/deepseek-v4.1-flash | TBD | TBD | TBD |
+| deepseek/deepseek-v4.1-flash-1017 | TBD | TBD | TBD |
 | tencent/hy4 | TBD | TBD | TBD |
 | google/gemini-3.8-flash | TBD | TBD | TBD |
 | google/gemini-4-carbon | TBD | TBD | TBD |
 | moonshotai/kimi-k3.1-pro | TBD | TBD | TBD |
 | x-ai/grok-4.7 | TBD | TBD | TBD |
-| qwen/qwen3.8-max | TBD | TBD | TBD |
+| qwen/qwen3.8-max-0902 | TBD | TBD | TBD |
 
 ## License
 
