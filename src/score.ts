@@ -52,6 +52,7 @@ type Call = {
   order: number;
   task: Task;
   parsed: { quadrant: string; confidence: number } | null;
+  cost: number;
 };
 
 export type WindowAnswer = {
@@ -78,6 +79,7 @@ export function readModel(dir: string): Call[] {
         order: rec.order,
         task,
         parsed: rec.parsed ?? null,
+        cost: rec.usage?.cost ?? rec.usage?.total_cost ?? 0,
       });
     }
   }
@@ -158,6 +160,7 @@ export type Score = {
   gap: number;
   instability: number;
   parseFailures: number;
+  costUsd: number;
 };
 
 export function scoreModel(model: string, windows: Window[]): Score {
@@ -242,6 +245,7 @@ export function scoreModel(model: string, windows: Window[]): Score {
     gap: readAgree - predictAcc,
     instability: pred.length ? pred.filter((a) => a.unstable).length / pred.length : NaN,
     parseFailures: calls.filter((c) => !c.parsed).length,
+    costUsd: calls.reduce((a, c) => a + c.cost, 0),
   };
 }
 

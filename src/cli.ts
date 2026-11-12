@@ -12,7 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadWindows } from "./score.ts";
 import { runModel, listModels } from "./run.ts";
-import { writeReport } from "./report.ts";
+import { writeReport, scoreLine } from "./report.ts";
 
 type Options = Record<string, string | boolean>;
 
@@ -74,6 +74,11 @@ if (cmd === "catalog") {
   for (const model of models) {
     await runModel(windows, { model, tasks: [...tasks], concurrency, limit });
   }
+
+  const data = writeReport();
+  for (const s of data.scores) {
+    if (models.includes(s.model)) console.log(scoreLine(s));
+  }
 } else if (cmd === "score" || cmd === "report" || cmd === "all") {
   const data = writeReport();
   console.log(
@@ -95,7 +100,9 @@ if (cmd === "catalog") {
     concurrency: Number(flags.concurrency ?? 6),
     limit: flags.limit ? Number(flags.limit) : undefined,
   });
-  writeReport();
+  const data = writeReport();
+  const s = data.scores.find((x) => x.model === cmd);
+  if (s) console.log(scoreLine(s));
 } else {
   const here = path.dirname(fileURLToPath(import.meta.url));
   console.log(fs.readFileSync(path.join(here, "..", "README.md"), "utf8").slice(0, 1200));

@@ -66,12 +66,12 @@ export function writeReport() {
   lines.push("## Leaderboard");
   lines.push("");
   lines.push(
-    "| model | score /100 | n | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |"
+    "| model | score /100 | n | cost | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |"
   );
-  lines.push("|---|---|---|---|---|---|---|---|---|---|---|");
+  lines.push("|---|---|---|---|---|---|---|---|---|---|---|---|");
   for (const s of ranked) {
     lines.push(
-      `| \`${s.model}\` | **${(100 * s.predict.acc).toFixed(1)}** | ${s.windows} | ${ci(s.predict.ci)} | ${pct(s.axes.x)} | ${pct(s.axes.y)} | ${round(s.brier)} | ${pct(s.read.agree)} | ${round(s.crowdDistance)} | ${s.gap >= 0 ? "+" : ""}${pct(s.gap)} | ${pct(s.instability)} |`
+      `| \`${s.model}\` | **${(100 * s.predict.acc).toFixed(1)}** | ${s.windows} | $${s.costUsd.toFixed(4)} | ${ci(s.predict.ci)} | ${pct(s.axes.x)} | ${pct(s.axes.y)} | ${round(s.brier)} | ${pct(s.read.agree)} | ${round(s.crowdDistance)} | ${s.gap >= 0 ? "+" : ""}${pct(s.gap)} | ${pct(s.instability)} |`
     );
   }
   lines.push("");
@@ -146,6 +146,17 @@ export function writeReport() {
   fs.writeFileSync("results/leaderboard.svg", svg(ranked, baselines, dataset.windows));
   console.log("wrote results/leaderboard.md and results/leaderboard.svg");
   return data;
+}
+
+export function scoreLine(s: Score): string {
+  const [lo, hi] = s.predict.ci;
+  return [
+    s.model,
+    `${(100 * s.predict.acc).toFixed(1)} / 100`,
+    `${s.windows} windows`,
+    `95% CI ${(100 * lo).toFixed(1)} to ${(100 * hi).toFixed(1)}`,
+    `cost $${s.costUsd.toFixed(4)}`,
+  ].join("   ");
 }
 
 function svg(scores: Score[], baselines: any, windowCount: number) {
