@@ -53,9 +53,7 @@ Once the package is published, the same run is one command with no clone:
 npx rtr-bench <model-id>
 ```
 
-`report` scores every folder in `results/raw/`, so several people can contribute runs and the leaderboard is the union of them.
-
-To rebuild the dataset from source you need the project's Postgres connection, so that step is not reproducible by a stranger. It is included so the export can be audited: `npm run export`.
+Rebuilding the dataset needs the project's database connection, so `npm run export` is included for inspection only.
 
 ## Results
 
