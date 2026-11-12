@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// read-the-room CLI
+// RTR-bench CLI
 //
 //   node src/cli.ts catalog --limit 20
 //   node src/cli.ts run --models a,b --tasks both

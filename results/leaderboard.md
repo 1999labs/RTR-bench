@@ -1,4 +1,4 @@
-# read-the-room
+# RTR-bench
 
 How well does a language model predict how people read a word? 165 windows, 39,828 marks, 4 readings, 4 option orders.
 

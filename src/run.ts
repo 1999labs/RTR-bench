@@ -60,7 +60,7 @@ async function call(model: string, task: Task, word: string, order: number) {
         Authorization: `Bearer ${apiKey()}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://mixedmessages.fyi",
-        "X-Title": "read-the-room",
+        "X-Title": "RTR-bench",
       },
       body: JSON.stringify(body),
     });
@@ -220,7 +220,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
 
 export async function listModels() {
   const res = await fetch("https://openrouter.ai/api/v1/models", {
-    headers: { "User-Agent": "read-the-room", Accept: "application/json" },
+    headers: { "User-Agent": "RTR-bench", Accept: "application/json" },
   });
   if (!res.ok) throw new Error(`catalog HTTP ${res.status}`);
   const j = await res.json();

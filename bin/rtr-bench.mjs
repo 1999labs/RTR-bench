@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Thin launcher so `read-the-room` can be run as a command after npm install.
+// Thin launcher so `rtr-bench` can be run as a command after npm install.
 // Node 22 runs the TypeScript sources directly by stripping types.
 
 import { spawnSync } from "node:child_process";

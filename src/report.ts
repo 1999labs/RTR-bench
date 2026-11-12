@@ -57,7 +57,7 @@ export function writeReport() {
   const ranked = [...scores].sort((a, b) => b.predict.acc - a.predict.acc);
 
   const lines: string[] = [];
-  lines.push("# read-the-room");
+  lines.push("# RTR-bench");
   lines.push("");
   lines.push(
     `How well does a language model predict how people read a word? ${dataset.windows} windows, ${dataset.marks.toLocaleString()} marks, 4 readings, 4 option orders.`
@@ -146,12 +146,12 @@ export function writeReport() {
 
   fs.mkdirSync("results", { recursive: true });
   fs.writeFileSync("results/leaderboard.md", lines.join("\n") + "\n");
-  fs.writeFileSync("results/leaderboard.svg", svg(ranked, baselines));
+  fs.writeFileSync("results/leaderboard.svg", svg(ranked, baselines, dataset.windows));
   console.log("wrote results/leaderboard.md and results/leaderboard.svg");
   return data;
 }
 
-function svg(scores: Score[], baselines: any) {
+function svg(scores: Score[], baselines: any, windowCount: number) {
   const rowH = 38;
   const top = 84;
   const left = 320;
@@ -204,8 +204,8 @@ function svg(scores: Score[], baselines: any) {
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
   <rect width="100%" height="100%" fill="#fff"/>
-  <text x="24" y="32" font-family="ui-monospace, monospace" font-size="15" fill="#111">read-the-room: can a model predict which reading a crowd chose?</text>
-  <text x="24" y="52" font-family="ui-monospace, monospace" font-size="11" fill="#666">${scores.length} model${scores.length === 1 ? "" : "s"}, bars are accuracy on 164 windows</text>
+  <text x="24" y="32" font-family="ui-monospace, monospace" font-size="15" fill="#111">RTR-bench: can a model predict which reading a crowd chose?</text>
+  <text x="24" y="52" font-family="ui-monospace, monospace" font-size="11" fill="#666">${scores.length} model${scores.length === 1 ? "" : "s"}, bars are accuracy on ${windowCount} windows</text>
   ${line(0.25, "#c4c4c4")}
   ${line(baselines.majorityClass.acc, "#6f6f6f")}
   ${line(baselines.lexical.acc, "#b06000")}

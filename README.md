@@ -101,8 +101,8 @@ Scoring a model needs no database access: `data/windows.json` is in the repo.
 ### Run your own model
 
 ```bash
-git clone https://github.com/1999labs/read-the-room-bench
-cd read-the-room-bench
+git clone https://github.com/1999labs/RTR-bench
+cd RTR-bench
 npm install
 
 # put your own key in a file, not in shell history
