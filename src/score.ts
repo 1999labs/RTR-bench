@@ -53,6 +53,7 @@ type Call = {
   task: Task;
   parsed: { quadrant: string; confidence: number } | null;
   cost: number;
+  provider: string | null;
 };
 
 export type WindowAnswer = {
@@ -80,6 +81,7 @@ export function readModel(dir: string): Call[] {
         task,
         parsed: rec.parsed ?? null,
         cost: rec.usage?.cost ?? rec.usage?.total_cost ?? 0,
+        provider: rec.provider ?? null,
       });
     }
   }
@@ -161,6 +163,7 @@ export type Score = {
   instability: number;
   parseFailures: number;
   costUsd: number;
+  providers: Record<string, number>;
 };
 
 export function scoreModel(model: string, windows: Window[]): Score {
@@ -234,6 +237,11 @@ export function scoreModel(model: string, windows: Window[]): Score {
   const predictAcc = mean(predHits);
   const readAgree = mean(readHits);
 
+  const providers: Record<string, number> = {};
+  for (const c of calls) {
+    if (c.provider) providers[c.provider] = (providers[c.provider] ?? 0) + 1;
+  }
+
   return {
     model: display,
     windows: predHits.length,
@@ -246,6 +254,7 @@ export function scoreModel(model: string, windows: Window[]): Score {
     instability: pred.length ? pred.filter((a) => a.unstable).length / pred.length : NaN,
     parseFailures: calls.filter((c) => !c.parsed).length,
     costUsd: calls.reduce((a, c) => a + c.cost, 0),
+    providers,
   };
 }
 

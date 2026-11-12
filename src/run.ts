@@ -18,6 +18,7 @@ export type RunOptions = {
   concurrency: number;
   limit?: number;
   maxUsd?: number;
+  provider?: string;
 };
 
 export function slug(model: string): string {
@@ -33,6 +34,7 @@ type Result = {
   promptHash: string;
   temperature: number | null;
   reasoningEffort: string | null;
+  providerRequested: string | null;
   request: unknown;
   raw: string;
   parsed: { quadrant: string; confidence: number } | null;
@@ -42,7 +44,13 @@ type Result = {
   at: string;
 };
 
-async function call(model: string, task: Task, word: string, order: number) {
+async function call(
+  model: string,
+  task: Task,
+  word: string,
+  order: number,
+  provider?: string
+) {
   const messages = buildMessages(task, word, order);
   const body: any = {
     model,
@@ -52,6 +60,10 @@ async function call(model: string, task: Task, word: string, order: number) {
     max_tokens: 400,
     usage: { include: true },
   };
+
+  // Pinning is all-or-nothing: no fallback, so a mixed run cannot happen
+  // silently.
+  if (provider) body.provider = { order: [provider], allow_fallbacks: false };
 
   const post = async () =>
     fetch(API, {
@@ -129,6 +141,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
   let failed = 0;
   let tokens = 0;
   let usd = 0;
+  const served: Record<string, number> = {};
 
   const list = opts.limit ? windows.slice(0, opts.limit) : windows;
   const jobs: { day: number; word: string; task: Task; order: number }[] = [];
@@ -158,12 +171,13 @@ export async function runModel(windows: Window[], opts: RunOptions) {
       let rec: Result;
       try {
         const { json, body, temperature, reasoningEffort } = await withRetry(() =>
-          call(opts.model, j.task, j.word, j.order)
+          call(opts.model, j.task, j.word, j.order, opts.provider)
         );
         const raw = json?.choices?.[0]?.message?.content ?? "";
         const usage = json?.usage ?? {};
         tokens += usage.total_tokens ?? 0;
-        usd += Number(json?.usage?.total_cost ?? 0);
+        usd += Number(usage.cost ?? usage.total_cost ?? 0);
+        if (json?.provider) served[json.provider] = (served[json.provider] ?? 0) + 1;
 
         rec = {
           model: opts.model,
@@ -174,6 +188,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
           promptHash: PROMPT_HASH,
           temperature,
           reasoningEffort,
+          providerRequested: opts.provider ?? null,
           request: body,
           raw,
           parsed: parseAnswer(raw),
@@ -193,6 +208,7 @@ export async function runModel(windows: Window[], opts: RunOptions) {
           promptHash: PROMPT_HASH,
           temperature: 0,
           reasoningEffort: null,
+          providerRequested: opts.provider ?? null,
           request: null,
           raw: "",
           parsed: null,
@@ -214,8 +230,32 @@ export async function runModel(windows: Window[], opts: RunOptions) {
   };
 
   await Promise.all(Array.from({ length: opts.concurrency }, worker));
+  const names = Object.keys(served);
+  const mix = names.length
+    ? names.map((n) => `${n} ${served[n]}`).join(", ")
+    : "unknown";
   console.log(`${opts.model}: wrote ${done}, failed ${failed}, tokens ${tokens.toLocaleString()}`);
-  return { done, failed, tokens, usd };
+  console.log(`${opts.model}: providers ${mix}${opts.provider ? " (pinned)" : ""}`);
+  return { done, failed, tokens, usd, providers: served };
+}
+
+export async function listEndpoints(model: string) {
+  const res = await fetch(`${API.replace("/chat/completions", "")}/models/${model}/endpoints`, {
+    headers: { "User-Agent": "RTR-bench", Accept: "application/json" },
+  });
+  if (!res.ok) throw new Error(`endpoints HTTP ${res.status}`);
+  const j = await res.json();
+  const eps: any[] = j.data?.endpoints ?? [];
+  return eps
+    .map((e) => ({
+      provider: e.provider ?? e.provider_name ?? "?",
+      quant: e.quantization ?? "?",
+      inUsd: +(Number(e.pricing?.prompt) * 1e6).toFixed(3),
+      outUsd: +(Number(e.pricing?.completion) * 1e6).toFixed(3),
+      ctx: e.context_length ?? null,
+      status: e.status ?? null,
+    }))
+    .sort((a, b) => (a.status ?? 0) - (b.status ?? 0) || a.inUsd - b.inUsd);
 }
 
 export async function listModels() {

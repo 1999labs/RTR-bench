@@ -48,6 +48,14 @@ npx --yes rtr-bench z-ai/glm-5.3-flash
 
 `--yes` skips npx's install prompt. A run makes 1,320 calls, takes about four minutes on a cheap model, costs a few cents, and writes `results/` in the folder you created. Add `--concurrency 8` to go faster.
 
+By default OpenRouter may route each call to any host that serves the model, and hosts differ in quantisation. List them, with price and precision:
+
+```bash
+npx --yes rtr-bench providers z-ai/glm-5.3-flash
+```
+
+Pin one with `--provider Wafer`. A pinned run refuses to fall back, and the summary names the host that served the calls.
+
 ### Work on the code
 
 The repository runs the TypeScript sources directly, so this path needs Node 22.18 or newer.

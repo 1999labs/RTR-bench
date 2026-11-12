@@ -66,12 +66,12 @@ export function writeReport() {
   lines.push("## Leaderboard");
   lines.push("");
   lines.push(
-    "| model | score /100 | n | cost | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |"
+    "| model | score /100 | n | cost | provider | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |"
   );
-  lines.push("|---|---|---|---|---|---|---|---|---|---|---|---|");
+  lines.push("|---|---|---|---|---|---|---|---|---|---|---|---|---|");
   for (const s of ranked) {
     lines.push(
-      `| \`${s.model}\` | **${(100 * s.predict.acc).toFixed(1)}** | ${s.windows} | $${s.costUsd.toFixed(4)} | ${ci(s.predict.ci)} | ${pct(s.axes.x)} | ${pct(s.axes.y)} | ${round(s.brier)} | ${pct(s.read.agree)} | ${round(s.crowdDistance)} | ${s.gap >= 0 ? "+" : ""}${pct(s.gap)} | ${pct(s.instability)} |`
+      `| \`${s.model}\` | **${(100 * s.predict.acc).toFixed(1)}** | ${s.windows} | $${s.costUsd.toFixed(4)} | ${providerLabel(s)} | ${ci(s.predict.ci)} | ${pct(s.axes.x)} | ${pct(s.axes.y)} | ${round(s.brier)} | ${pct(s.read.agree)} | ${round(s.crowdDistance)} | ${s.gap >= 0 ? "+" : ""}${pct(s.gap)} | ${pct(s.instability)} |`
     );
   }
   lines.push("");
@@ -148,6 +148,13 @@ export function writeReport() {
   return data;
 }
 
+function providerLabel(s: Score): string {
+  const names = Object.keys(s.providers);
+  if (names.length === 0) return "?";
+  if (names.length === 1) return names[0];
+  return `${names.length} providers`;
+}
+
 export function scoreLine(s: Score): string {
   const [lo, hi] = s.predict.ci;
   return [
@@ -156,6 +163,7 @@ export function scoreLine(s: Score): string {
     `${s.windows} windows`,
     `95% CI ${(100 * lo).toFixed(1)} to ${(100 * hi).toFixed(1)}`,
     `cost $${s.costUsd.toFixed(4)}`,
+    `provider ${providerLabel(s)}`,
   ].join("   ");
 }
 

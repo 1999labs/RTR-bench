@@ -11,7 +11,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadWindows } from "./score.ts";
-import { runModel, listModels } from "./run.ts";
+import { runModel, listModels, listEndpoints } from "./run.ts";
 import { writeReport, scoreLine } from "./report.ts";
 
 type Options = Record<string, string | boolean>;
@@ -70,9 +70,10 @@ if (cmd === "catalog") {
   const windows = loadWindows().map((w) => ({ day: w.day, word: w.word }));
   const limit = flags.limit ? Number(flags.limit) : undefined;
   const concurrency = Number(flags.concurrency ?? 6);
+  const provider = flags.provider ? String(flags.provider) : undefined;
 
   for (const model of models) {
-    await runModel(windows, { model, tasks: [...tasks], concurrency, limit });
+    await runModel(windows, { model, tasks: [...tasks], concurrency, limit, provider });
   }
 
   const data = writeReport();
@@ -99,10 +100,15 @@ if (cmd === "catalog") {
     tasks: ["predict", "read"],
     concurrency: Number(flags.concurrency ?? 6),
     limit: flags.limit ? Number(flags.limit) : undefined,
+    provider: flags.provider ? String(flags.provider) : undefined,
   });
   const data = writeReport();
   const s = data.scores.find((x) => x.model === cmd);
   if (s) console.log(scoreLine(s));
+} else if (cmd === "providers") {
+  const id = rest.find((a) => !a.startsWith("--"));
+  if (!id) throw new Error("usage: rtr-bench providers <model-id>");
+  console.table(await listEndpoints(id));
 } else {
   const here = path.dirname(fileURLToPath(import.meta.url));
   console.log(fs.readFileSync(path.join(here, "..", "README.md"), "utf8").slice(0, 1200));
