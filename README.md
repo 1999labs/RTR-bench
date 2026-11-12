@@ -16,8 +16,8 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 | Axis | 0 | 10,000 |
 |---|---|---|
-| x | performed | honest |
-| y | uniting | dividing |
+| x | Performed | Honest |
+| y | Uniting | Dividing |
 
 The 2x2 grid gives us four possible options for the dominant quadrant, with the following implied readings: 
 
