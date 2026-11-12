@@ -6,45 +6,45 @@ This repo asks a narrower question. Given only the word, can a language model pr
 
 ## The result, so far
 
-One model, 164 windows, 39,784 marks, four option orders per question.
+One model, 165 windows, 39,828 marks, four option orders per question.
 
 | measure | score |
 |---|---|
-| score (out of 100) | 42.7 [36.0, 50.0] |
+| score (out of 100) | 43.0 [35.2, 50.3] |
 | chance | 25.0 |
-| always the most common answer | 31.7 |
-| keyword heuristic | 34.1 [26.8, 41.5] |
-| axis: uniting vs dividing | 60.4 |
-| axis: performed vs honest | 56.7 |
-| own reading matches the crowd | 36.6 |
-| no stable answer across four orders | 15.9 |
+| always the most common answer | 31.5 |
+| keyword heuristic | 33.9 [27.3, 41.2] |
+| axis: uniting vs dividing | 60.6 |
+| axis: performed vs honest | 57.0 |
+| own reading matches the crowd | 37.0 |
+| no stable answer across four orders | 15.8 |
 
 Four things worth saying about that.
 
-**It clears chance easily.** 42.7% against 25% on a four-way choice, and the bottom of its interval is eleven points above chance. Word choice carries real signal about crowd placement.
+**It clears chance easily.** 43.0 against 25 on a four-way choice, and the bottom of its interval is ten points above chance. Word choice carries real signal about crowd placement.
 
-**It clears the majority-answer baseline, but only just.** Paired difference +11.0 points, 95% interval [1.2, 20.7]. Real, thin, and entirely a consequence of 164 windows.
+**It clears the majority-answer baseline, but only just.** Paired difference +11.5 points, 95% interval [1.2, 21.2]. Real, thin, and entirely a consequence of 165 windows.
 
-**It does not beat a keyword list.** The hand-written cue list scores 34.1%. The paired difference is +8.5 points with an interval of [-1.2, 18.3]. At this sample size a cheap language model and a list of negative words are not distinguishable. Anyone claiming a leaderboard from this dataset is measuring noise.
+**It does not beat a keyword list.** The hand-written cue list scores 33.9. The paired difference is +9.1 points with an interval of [-0.6, 18.8]. At this sample size a cheap language model and a list of negative words are not distinguishable. Anyone claiming a leaderboard from this dataset is measuring noise.
 
-**The bias is directional, and it is the only finding here that does not depend on a significance test.** On the 138 windows where the model gave a stable answer, it predicted `honest+uniting` 41 times where the field chose it 30, and predicted `honest+dividing` 22 times where the field chose it 34. It reads "fracturing us, truthfully" as "bringing us together, authentically." The model believes the room agreed more than the room did.
+**The bias is directional, and it is the only finding here that does not depend on a significance test.** On the 139 windows where the model gave a stable answer, it predicted `honest+uniting` 42 times where the field chose it 31, and predicted `honest+dividing` 22 times where the field chose it 34. It reads "fracturing us, truthfully" as "bringing us together, authentically." The model believes the room agreed more than the room did.
 
-The instability number sets the ceiling on everything else. 26 of 164 windows (15.9%) produce no stable answer when the same four options are reordered, and those score zero. That is the instrument's own noise floor, and it is larger than any difference a single-model run could claim.
+The instability number sets the ceiling on everything else. 26 of 165 windows (15.8%) produce no stable answer when the same four options are reordered, and those score zero. That is the instrument's own noise floor, and it is larger than any difference a single-model run could claim.
 
-The sample size follows from that. The paired interval on the difference from the keyword list is 19.5 points wide. Halving it needs four times the windows, roughly 650. A real leaderboard needs more than 164 questions, or several samples per question, before the ordering of two models means anything.
+The sample size follows from that. The paired interval on the difference from the keyword list is 19.4 points wide. Halving it needs four times the windows, roughly 660. A real leaderboard needs more than 165 questions, or several samples per question, before the ordering of two models means anything.
 
 ## The field
 
-164 closed windows. 39,784 marks, between 52 and 1,163 per window, median 198.
+165 closed windows. 39,828 marks, between 44 and 1,163 per window, median 192.
 
 | plurality | windows |
 |---|---|
 | performed+dividing | 52 |
 | honest+dividing | 39 |
 | performed+uniting | 37 |
-| honest+uniting | 36 |
+| honest+uniting | 37 |
 
-There is no dominant answer, which is why the majority baseline is only 31.7%. A four-way task with a balanced target is a harder task than a four-way task with a common answer.
+There is no dominant answer, which is why the majority baseline is only 31.5%. A four-way task with a balanced target is a harder task than a four-way task with a common answer.
 
 ## The two questions
 
@@ -69,10 +69,10 @@ Each question is asked four times per window, with the four options rotated. Eve
 
 - **One model in the checked-in run.** The OpenRouter balance ran out at $0.005 after the first full sweep. The other nine ids in `models.txt` are listed but unrun. Do not read this as a leaderboard yet.
 - **The field includes marks placed by the project owner** to seed sparse windows. By the owner's decision the benchmark uses every mark in the field and reports no split. The split is recorded in `data/audit.json` for anyone who wants it; no score uses it.
-- **164 windows is small for a four-way task.** Every accuracy number carries its interval, and the intervals are wide.
+- **165 windows is small for a four-way task.** Every accuracy number carries its interval, and the intervals are wide.
 - **Prompt sensitivity is real.** One reworded sentence can move scores by ten points. The prompt is versioned and hashed and should not change mid-leaderboard.
 - **The splits are public.** A model trained on this repo can score without generalising. A held-back set with a published hash is the fix, and it is not built yet.
-- **The instability floor is 15.9%** on the one model measured. That is not a property of the task, it is a property of the calls. Any comparison tighter than that is noise.
+- **The instability floor is 15.8%** on the one model measured. That is not a property of the task, it is a property of the calls. Any comparison tighter than that is noise.
 
 ## How the score works
 
@@ -82,11 +82,11 @@ It answers each question four times, with the four options rotated so no option 
 
 The score is points divided by questions, times 100, so it is always out of 100:
 
-- 164 questions: each question is worth 0.61 points.
+- 165 questions: each question is worth 0.61 points.
 - 500 questions: each is worth 0.2.
 - The scale never changes. More windows do not make the score larger or smaller, they make it more precise.
 
-Chance is 25. Always answering the most common reading is 31.7. The interval beside the score is the range it would land in on a different sample of windows, so 42.7 with an interval of 36 to 50 means the true value sits somewhere in that band.
+Chance is 25. Always answering the most common reading is 31.5. The interval beside the score is the range it would land in on a different sample of windows, so 43.0 with an interval of 35 to 50 means the true value sits somewhere in that band.
 
 ## Reproduce
 
@@ -129,7 +129,7 @@ node scripts/score-human.mjs human/alice.csv human/bob.csv
 ## Files
 
 ```
-data/windows.json       164 windows: word, counts, plurality, centroid, conviction, polarization
+data/windows.json       165 windows: word, counts, plurality, centroid, conviction, polarization
 data/audit.json         how many marks in each window came from the public submit path (not scored)
 src/prompt.ts           the frozen prompt, the four orders, the parser
 src/run.ts              OpenRouter runner, one JSON file per call, resumable

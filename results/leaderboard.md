@@ -1,22 +1,22 @@
 # read-the-room
 
-How well does a language model predict how people read a word? 164 windows, 39,784 marks, 4 readings, 4 option orders.
+How well does a language model predict how people read a word? 165 windows, 39,828 marks, 4 readings, 4 option orders.
 
 ## Leaderboard
 
 | model | score /100 | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |
 |---|---|---|---|---|---|---|---|---|---|
-| `z-ai/glm-5.3-flash` | **42.7** | [36.0%, 50.0%] | 56.7% | 60.4% | 0.668 | 36.6% | 0.222 | -6.1% | 15.9% |
+| `z-ai/glm-5.3-flash` | **43.0** | [35.2%, 50.3%] | 57.0% | 60.6% | 0.665 | 37.0% | 0.221 | -6.1% | 15.8% |
 
 ## Baselines
 
 - random, 4 options: 25.0%
-- always the most common plurality (bl): 31.7%
-- lexical heuristic, cue list in `src/score.ts`: 34.1% [26.8%, 41.5%]
+- always the most common plurality (bl): 31.5%
+- lexical heuristic, cue list in `src/score.ts`: 33.9% [27.3%, 41.2%]
 
 ## What the numbers say
 
-- Best predictor: `z-ai/glm-5.3-flash` at 42.7% (chance 25%, majority baseline 31.7%).
+- Best predictor: `z-ai/glm-5.3-flash` at 43.0% (chance 25%, majority baseline 31.5%).
 - One model only. There is no spread to report and no leaderboard ordering.
 - Mean gap between a model's own reading and its prediction of the crowd: -6.1%. A positive gap means the model agrees with the crowd more often when answering for itself than when trying to predict it.
 - Axis accuracy is the place to look for a systematic bias. The y axis (uniting vs dividing) and the x axis (performed vs honest) are scored separately, so a model that over-reads division shows up as high axis y and low axis x.

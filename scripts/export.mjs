@@ -16,7 +16,7 @@ import { mainnet } from "viem/chains";
 const MM = "0x0169a0dd0a5Cfe48E80539EB02a4E221B8f77991";
 const RPC = "https://eth-mainnet.g.alchemy.com/v2/OBdzjpzwdtJdvUq3tQmIH";
 const ENV = "/Users/noahmclaughlin/Code/mixed-messages/frontend/.env.local";
-const MIN_MARKS = 50;
+const MIN_MARKS = 25;
 
 const url = fs.readFileSync(ENV, "utf8").match(/DATABASE_URL="?([^"\n]+)"?/)?.[1];
 if (!url || url.includes("***")) throw new Error("no usable DATABASE_URL");
