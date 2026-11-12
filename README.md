@@ -23,29 +23,9 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 **The dataset.** 39,828 submissions across 165 of the 174 closed windows, as of November 12th. Eight windows had fewer than 25 marks, which is the floor. `data/windows.json` holds everything: the prompt, the submission counts, the dominant quadrant, the center of mass, and the conviction and polarization scores, which are not used in scoring but may be included at a later date. 
 
-**The task.** For each window with N>25 submissions, the model is asked to determine, given the prompt, which quadrant received the most submissions. Submission counts and dominant quadrants are never shown to the model, and the four options are rotated against four model calls so that no option gains from position. 3/4 matching answers is the model's final answer. A 2/2 split scores zero. 
+**The task.** For each window with N>25 submissions, the model is asked to determine, given the prompt, which quadrant received the most submissions. Submission counts and dominant quadrants are never shown to the model.
 
-## Scoring
-
-Scoring is a quiz with 165 questions. Each one is a prompt and four possible dominant quadrants, and the question is which one the crowd picked most. A right answer is one point, a wrong answer is nothing.
-
-The score is points divided by questions, times 100. All 165 right is 100. A score of 43 means about 71 right.
-
-Three numbers to read it against:
-
-| | |
-|---|---|
-| guessing at random | 25 |
-| always answering the most common quadrant | 31.5 |
-| a hand-written keyword list | 33.9 |
-
-Each question is asked four times, with the four options shuffled, because models tend to favour whichever option comes first. Three or four matching answers is the model's answer. A 2-2 split counts as wrong.
-
-The score comes with a 95% interval: the range it would land in on a different set of 165 windows. A score of 43 with an interval of 35 to 50 means the true value sits inside that band, which is why a four-point gap between two models means very little.
-
-The gap is the second question. Instead of guessing the crowd, the model is asked for its own reading. The gap is how often that reading matches the crowd, minus how often its prediction does. A model can predict the crowd well and still read the prompt differently, and the gap measures that difference.
-
-One caveat: the prompt is frozen and hashed into every raw call, but the windows are public, so a model trained on this repo could score without generalising.
+**Scoring.** For each window, the model is given the prompt and four possible dominant quadrants. A right answer is one point. A wrong answer is zero points. The final score is calculated as the number of points divided by the number of questions (165 as of 11/12/26), times 100. A score of 50 means that the model determined the correct dominant quadrant for half of the windows. The four dominant quadrant options are rotated against four model calls so that no option gains from position. 3/4 matching answers is the model's final answer. A 2/2 split scores zero. 
 
 ## Quickstart
 
