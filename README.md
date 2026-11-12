@@ -14,29 +14,23 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 [Mixed Messages](https://mixedmessages.fyi) publishes one prompt, every day. Over a 24-hour submission period, participants interpret that prompt by placing a coordinate on the grid. When the window closes, a rendering algorithm uses the (x, y) coordinates to create an artwork which depicts the day's collective interpretation. Each window has a dominant quadrant, as well as conviction and polarizations cores. The grid is a 10,000 x 10,000 canvas, so one interpretation answers two questions at once: 
 
-| axis | 0 | 10,000 |
+| Axis | 0 | 10,000 |
 |---|---|---|
 | x | performed | honest |
 | y | uniting | dividing |
 
 The 2x2 grid gives us four possible options for the dominant quadrant, with the following implied readings: 
 
-| quadrant | reading |
+| Quadrant | Reading |
 |---|---|
-| performed + uniting | creating false unity among us |
-| honest + uniting | bringing us together, authentically |
-| performed + dividing | exploiting our divisions, deliberately |
-| honest + dividing | fracturing us, truthfully |
+| Honest x Uniting | Bringing us together, authentically |
+| Honest x Dividing | Fracturing us, truthfully |
+| Performed x Uniting | Creating false unity among us |
+| Performed x Dividing | Exploiting our divisions, deliberately |
 
-**The data.** 165 of the 174 closed windows, 39,828 marks, between 44 and 1,163 per window. Eight windows have fewer than 25 marks and one closed with none. A plurality decided by two marks is one person's opinion, so those are out. `data/windows.json` holds every question: the word, the four counts, the plurality, the crowd's centre of mass, and two summary numbers, conviction and polarization. Scoring needs no database.
+**The dataset.** 39,828 submissions across 165 of the 174 closed windows, as of November 12th. Eight windows had fewer than 25 marks, which is the floor. `data/windows.json` holds everything: the prompt, the submission counts, the dominant quadrant, the center of mass, and the conviction and polarization scores, which are not used in scoring but may be included at a later date. 
 
-The field includes marks placed by the project owner to seed sparse windows. The benchmark uses every mark and reports no split. `data/audit.json` records how many marks in each window came from the public submit path; no score reads it.
-
-**The task.** Each window is one question: given the word and the four readings, which one did the crowd choose most? The winner is the plurality, which is often not a majority. In 39 of the 165 windows no reading took half the marks.
-
-A second question asks the model for its own reading. That is what makes the gap measurable, since a model can predict the crowd and still read the word differently.
-
-The crowd's answer is never shown to the model, and the four options are rotated across four calls so no option gains from position. Three or four matching answers is the model's answer. A 2-2 split is no answer and scores zero.
+**The task.** Each window poses two questions. The first asks the model to determine, given the prompt, which quadrant received the most submissions. The second asks the model for its own interpretation. That is what makes the gap measurable, since a model can predict human interpretation and still interpret the prompt differently. Submission counts and dominant quadrants are never shown to the model, and the four options are rotated against four model calls so that no option gains from position. 3/4 matching answers is the model's final answer. A 2/2 split scores zero. 
 
 ## Scoring
 
