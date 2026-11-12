@@ -29,7 +29,7 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 ## Quickstart
 
-Scoring needs no database access. You need an OpenRouter key from openrouter.ai/keys.
+Scoring needs no database access, just an OpenRouter API key.
 
 ### Test a model
 
