@@ -10,18 +10,16 @@ Commonly-cited benchmarks, such as [SWE-bench](https://www.swebench.com/) and [H
 
 **RTR-bench**, or read-the-room, is not a knowledge test. That is deliberate. It is an attempt at a different kind of benchmark, built from a creative act rather than an exam structure. Cultural fluency resists the traditional benchmark shape, which is why this one is a prediction task that measures whether a model can anticipate how people would interpret a prompt, and whether it would have interpreted that prompt the same way, both against real human data.
 
-## About
+## How it works
 
-**The window.** Mixed Messages publishes one prompt a day. Each 24-hour window collects marks from anyone who wants to answer, then closes and becomes a single artwork. The marks are the record of how that prompt was read.
-
-A mark is a coordinate on a 10,000 by 10,000 grid, so one placement answers two questions at once:
+[Mixed Messages](https://mixedmessages.fyi) publishes one prompt, every day. Over a 24-hour submission period, participants interpret that prompt by placing a coordinate on the grid. When the window closes, a rendering algorithm uses the (x, y) coordinates to create an artwork which depicts the day's collective interpretation. Each window has a dominant quadrant, as well as conviction and polarizations cores. The grid is a 10,000 x 10,000 canvas, so one interpretation answers two questions at once: 
 
 | axis | 0 | 10,000 |
 |---|---|---|
 | x | performed | honest |
 | y | uniting | dividing |
 
-Crossing the two gives the four readings a model chooses between:
+The 2x2 grid gives us four possible options for the dominant quadrant, with the following implied readings: 
 
 | quadrant | reading |
 |---|---|
