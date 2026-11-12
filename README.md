@@ -116,6 +116,12 @@ node src/cli.ts run --models <model-id> --concurrency 8
 node src/cli.ts report
 ```
 
+Installed globally (`npm i -g rtr-bench`) or run with `npx rtr-bench`, a bare model id does both steps in one command:
+
+```bash
+rtr-bench <model-id>
+```
+
 The key is read from `.env` or from the environment. It is never written into results. `report` scores every model directory on disk, so several people can contribute runs and the leaderboard is just the set of folders in `results/raw/`.
 
 ### Rebuild the dataset

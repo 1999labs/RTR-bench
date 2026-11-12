@@ -66,12 +66,12 @@ export function writeReport() {
   lines.push("## Leaderboard");
   lines.push("");
   lines.push(
-    "| model | score /100 | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |"
+    "| model | score /100 | n | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |"
   );
-  lines.push("|---|---|---|---|---|---|---|---|---|---|");
+  lines.push("|---|---|---|---|---|---|---|---|---|---|---|");
   for (const s of ranked) {
     lines.push(
-      `| \`${s.model}\` | **${(100 * s.predict.acc).toFixed(1)}** | ${ci(s.predict.ci)} | ${pct(s.axes.x)} | ${pct(s.axes.y)} | ${round(s.brier)} | ${pct(s.read.agree)} | ${round(s.crowdDistance)} | ${s.gap >= 0 ? "+" : ""}${pct(s.gap)} | ${pct(s.instability)} |`
+      `| \`${s.model}\` | **${(100 * s.predict.acc).toFixed(1)}** | ${s.windows} | ${ci(s.predict.ci)} | ${pct(s.axes.x)} | ${pct(s.axes.y)} | ${round(s.brier)} | ${pct(s.read.agree)} | ${round(s.crowdDistance)} | ${s.gap >= 0 ? "+" : ""}${pct(s.gap)} | ${pct(s.instability)} |`
     );
   }
   lines.push("");

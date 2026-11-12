@@ -1,13 +1,36 @@
 {
   "name": "rtr-bench",
   "version": "0.1.0",
-  "private": true,
+  "description": "Can a language model predict how a crowd reads a word? A cultural fluency benchmark built from Mixed Messages.",
   "type": "module",
-  "description": "How well do language models predict how people read a word?",
-  "bin": {
-    "rtr-bench": "bin/rtr-bench.mjs"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1999labs/RTR-bench.git"
   },
+  "homepage": "https://github.com/1999labs/RTR-bench",
+  "keywords": [
+    "benchmark",
+    "llm",
+    "evaluation",
+    "cultural-fluency",
+    "generative-art"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "bin": {
+    "rtr-bench": "dist/cli.js"
+  },
+  "files": [
+    "dist/",
+    "data/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "build": "esbuild src/cli.ts --bundle --platform=node --format=esm --outfile=dist/cli.js --external:node:*",
+    "prepack": "npm run build",
     "export": "node scripts/export.mjs",
     "run": "node src/cli.ts run",
     "score": "node src/cli.ts score",
@@ -15,7 +38,8 @@
     "human": "node scripts/score-human.mjs",
     "mock": "node scripts/mock.mjs"
   },
-  "dependencies": {
+  "devDependencies": {
+    "esbuild": "^0.28.2",
     "postgres": "^3.4.5",
     "viem": "^2.21.0"
   }

@@ -8,6 +8,8 @@
 
 import "./env.ts";
 import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { loadWindows } from "./score.ts";
 import { runModel, listModels } from "./run.ts";
 import { writeReport } from "./report.ts";
@@ -84,6 +86,17 @@ if (cmd === "catalog") {
       );
     }
   }
+} else if (cmd && cmd.includes("/")) {
+  // One-command self-serve: `rtr-bench <model-id>` runs and reports.
+  const windows = loadWindows().map((w) => ({ day: w.day, word: w.word }));
+  await runModel(windows, {
+    model: cmd,
+    tasks: ["predict", "read"],
+    concurrency: Number(flags.concurrency ?? 6),
+    limit: flags.limit ? Number(flags.limit) : undefined,
+  });
+  writeReport();
 } else {
-  console.log(fs.readFileSync("README.md", "utf8").slice(0, 1200));
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  console.log(fs.readFileSync(path.join(here, "..", "README.md"), "utf8").slice(0, 1200));
 }

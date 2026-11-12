@@ -6,6 +6,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { QUADRANTS, type Task } from "./prompt.ts";
 
 export type Window = {
@@ -33,7 +34,12 @@ const CENTER: Record<string, { x: number; y: number }> = {
 };
 
 export function loadWindows(): Window[] {
-  const raw = JSON.parse(fs.readFileSync("data/windows.json", "utf8"));
+  // Resolve against the module, not the caller's cwd, so a globally installed
+  // `rtr-bench` can find its own dataset.
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const raw = JSON.parse(
+    fs.readFileSync(path.join(here, "..", "data", "windows.json"), "utf8")
+  );
   return raw.windows;
 }
 
