@@ -1,4 +1,4 @@
-# read-the-room
+# READTHEROOMbench
 
 Mixed Messages asks a crowd to place a word on a grid: uniting or dividing on one axis, performed or honest on the other. Every mark in a window becomes one artwork, and every window keeps the shape of how the crowd read that word.
 
