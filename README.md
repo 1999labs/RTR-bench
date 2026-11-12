@@ -1,8 +1,12 @@
-# READTHEROOMbench
+# RTR-bench
 
-Mixed Messages asks a crowd to place a word on a grid: uniting or dividing on one axis, performed or honest on the other. Every mark in a window becomes one artwork, and every window keeps the shape of how the crowd read that word.
+Mixed Messages is a generative art project that asks participants to interpret a daily prompt by placing a coordinate on a 2x2 grid, where the x-axis is Honest vs Performed, and the y-axis is Uniting vs Dividing. Across 175 windows, there have been almost 40k individual submissions. Each is a unique human data point. 
 
-This repo asks a narrower question. Given only the word, can a language model predict where the crowd lands? And where does the model's own reading differ from the crowd's?
+Most labelled datasets are made by asking annotators to apply a rubric. This one was not. Nobody was given a definition of honest or performed, nobody was trained, and there was no correct answer to converge on. People arrived, interpreted a prompt, placed a submission, and left. What makes the data unusual is that the crowd's answer is a distribution, rather than a label. Not "people say X", but "31% of people said this, 44% said that, and the rest said something else."
+
+That distribution is what makes it useful for evaluating a model. Every window has a majority reading and a real minority, so a model can be scored on whether it lands with the crowd or against it, and on which axis it misreads when it does. There is also nothing here to memorize. The axes are cultural rather than factual, so no amount of training data tells a model how a crowd interpreted a prompt. The only way to get it right is for the model to understand how people would think and interpret. 
+
+None of this is a knowledge test, and that is deliberate. The benchmarks we use to compare models against people are mostly exams: multiple choice, math, code. Exams are easy to grade, so they dominate, and models have been optimized for their shape. But people do not live in exams. If the ambition is a model that surpasses human intelligence, the comparison has to include the things humans are good at. Reading a room. Sensing how a group will take something. Having taste. That is cultural fluency, and it is not a softer test than an exam, but a different subject entirely. That's why Mixed Messages provides a unique and differentiated dataset to benchmark. 
 
 ## The result, so far
 
