@@ -10,14 +10,14 @@ One model, 164 windows, 39,784 marks, four option orders per question.
 
 | measure | score |
 |---|---|
-| predicts the plurality reading | 42.7% [36.0, 50.0] |
-| chance | 25.0% |
-| always the most common answer | 31.7% |
-| keyword heuristic | 34.1% [26.8, 41.5] |
-| axis: uniting vs dividing | 60.4% |
-| axis: performed vs honest | 56.7% |
-| own reading matches the crowd | 36.6% |
-| no stable answer across four orders | 15.9% |
+| score (out of 100) | 42.7 [36.0, 50.0] |
+| chance | 25.0 |
+| always the most common answer | 31.7 |
+| keyword heuristic | 34.1 [26.8, 41.5] |
+| axis: uniting vs dividing | 60.4 |
+| axis: performed vs honest | 56.7 |
+| own reading matches the crowd | 36.6 |
+| no stable answer across four orders | 15.9 |
 
 Four things worth saying about that.
 
@@ -74,19 +74,50 @@ Each question is asked four times per window, with the four options rotated. Eve
 - **The splits are public.** A model trained on this repo can score without generalising. A held-back set with a published hash is the fix, and it is not built yet.
 - **The instability floor is 15.9%** on the one model measured. That is not a property of the task, it is a property of the calls. Any comparison tighter than that is noise.
 
+## How the score works
+
+Each window is one question with four possible answers. The model scores one point if it picks the answer that most marks in that window chose.
+
+It answers each question four times, with the four options rotated so no option gets the advantage of position. Three or four matching answers is the model's answer. A 2-2 split is no answer and scores zero.
+
+The score is points divided by questions, times 100, so it is always out of 100:
+
+- 164 questions: each question is worth 0.61 points.
+- 500 questions: each is worth 0.2.
+- The scale never changes. More windows do not make the score larger or smaller, they make it more precise.
+
+Chance is 25. Always answering the most common reading is 31.7. The interval beside the score is the range it would land in on a different sample of windows, so 42.7 with an interval of 36 to 50 means the true value sits somewhere in that band.
+
 ## Reproduce
 
+Scoring a model needs no database access: `data/windows.json` is in the repo.
+
+### Run your own model
+
 ```bash
+git clone https://github.com/1999labs/read-the-room-bench
+cd read-the-room-bench
 npm install
 
-# rebuild the dataset from Postgres and mainnet (read-only)
-npm run export
+# put your own key in a file, not in shell history
+echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
 
-# run one model, both questions, four orders
-node src/cli.ts run --models z-ai/glm-5.3-flash --concurrency 8
+# list ids and prices
+node src/cli.ts catalog --limit 20
 
-# score everything on disk and write the leaderboard and chart
+# run any model on the catalogue
+node src/cli.ts run --models <model-id> --concurrency 8
 node src/cli.ts report
+```
+
+The key is read from `.env` or from the environment. It is never written into results. `report` scores every model directory on disk, so several people can contribute runs and the leaderboard is just the set of folders in `results/raw/`.
+
+### Rebuild the dataset
+
+This needs the project's own Postgres connection, so it is not reproducible by a stranger. It is included so the export can be audited.
+
+```bash
+npm run export
 ```
 
 The human baseline is a static page. Open `human/index.html`, answer 21 words, and send back the CSV. Score any number of them together:
@@ -105,6 +136,7 @@ src/run.ts              OpenRouter runner, one JSON file per call, resumable
 src/score.ts            metrics, baselines, bootstrap intervals
 src/report.ts           results/leaderboard.md and results/leaderboard.svg
 src/cli.ts              catalog / run / score / report
+src/env.ts              loads .env so a key never has to sit in shell history
 human/index.html        the human baseline instrument
 scripts/export.mjs      read-only export from Postgres plus getWord on mainnet
 scripts/score-human.mjs scores returned human CSVs

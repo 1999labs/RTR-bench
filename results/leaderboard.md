@@ -4,9 +4,9 @@ How well does a language model predict how people read a word? 164 windows, 39,7
 
 ## Leaderboard
 
-| model | predicts the crowd | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |
+| model | score /100 | 95% CI | axis x | axis y | Brier | own reading agrees | crowd distance | gap | unstable |
 |---|---|---|---|---|---|---|---|---|---|
-| `z-ai/glm-5.3-flash` | **42.7%** | [36.0%, 50.0%] | 56.7% | 60.4% | 0.668 | 36.6% | 0.222 | -6.1% | 15.9% |
+| `z-ai/glm-5.3-flash` | **42.7** | [36.0%, 50.0%] | 56.7% | 60.4% | 0.668 | 36.6% | 0.222 | -6.1% | 15.9% |
 
 ## Baselines
 

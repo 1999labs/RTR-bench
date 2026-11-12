@@ -6,7 +6,9 @@ import path from "node:path";
 import { buildMessages, parseAnswer, type Task, PROMPT_HASH, PROMPT_VERSION } from "./prompt.ts";
 
 const API = "https://openrouter.ai/api/v1/chat/completions";
-const KEY = process.env.OPENROUTER_API_KEY;
+
+// Read lazily so a .env loaded by the CLI is visible here.
+const apiKey = () => process.env.OPENROUTER_API_KEY ?? "";
 
 export type Window = { day: number; word: string };
 
@@ -55,7 +57,7 @@ async function call(model: string, task: Task, word: string, order: number) {
     fetch(API, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${KEY}`,
+        Authorization: `Bearer ${apiKey()}`,
         "Content-Type": "application/json",
         "HTTP-Referer": "https://mixedmessages.fyi",
         "X-Title": "read-the-room",
@@ -118,7 +120,10 @@ async function withRetry<T>(fn: () => Promise<T>, tries = 4): Promise<T> {
 }
 
 export async function runModel(windows: Window[], opts: RunOptions) {
-  if (!KEY) throw new Error("OPENROUTER_API_KEY is not set");
+  if (!apiKey())
+    throw new Error(
+      "OPENROUTER_API_KEY is not set. Put it in .env in this directory, or export it in your shell."
+    );
   const dir = path.join("results", "raw", slug(opts.model));
   let done = 0;
   let failed = 0;

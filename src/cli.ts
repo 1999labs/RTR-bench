@@ -6,6 +6,7 @@
 //   node src/cli.ts score
 //   node src/cli.ts report
 
+import "./env.ts";
 import fs from "node:fs";
 import { loadWindows } from "./score.ts";
 import { runModel, listModels } from "./run.ts";
