@@ -1,6 +1,6 @@
 # RTR-bench expansion: distribution prediction and Learn the Room
 
-This document proposes two additions to RTR-bench that can be built using the existing Mixed Messages dataset, without recruiting participants or collecting new human responses. Neither track is implemented yet.
+This document describes two additions to RTR-bench using the existing Mixed Messages dataset, without recruiting participants or collecting new human responses. The distribution-prediction track has a versioned split, shared scorer, CLI runner, and reports. Learn the Room now has a controlled interactive environment, no-example and seeded-random baseline runners, and comparison reports with episode traces. Both are verified with synthetic fixtures; no live model pilots have been run. Similarity and agent-selected evidence adapters remain planned. See the [distribution protocol](docs/distribution.md) and [Learn the Room protocol](docs/learn-room.md) for implemented rules and commands.
 
 Both additions belong in the existing repository. They share a distribution-prediction format and scorer, while testing different abilities:
 
@@ -169,7 +169,7 @@ Because the existing dataset is public, a held-out split does not guarantee that
 
 Build both tracks in the existing RTR-bench repository, with separate modules, commands, and result directories. Reuse model access, dataset loading, response logging, and reporting where practical. Keep task-specific instructions and scoring separate from the current benchmark.
 
-The following command names are proposals, not existing functionality:
+Both track commands are implemented:
 
 ```bash
 rtr-bench distribution <model>

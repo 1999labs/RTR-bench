@@ -14,6 +14,10 @@ import { loadWindows } from "./score.ts";
 import { runModel, listModels, listEndpoints } from "./run.ts";
 import { writeReport, scoreLine, listRuns } from "./report.ts";
 import { writeInterpretations } from "./interpretations.ts";
+import { runDistribution } from "./tracks/distribution/run.ts";
+import { writeDistributionReport } from "./tracks/distribution/report.ts";
+import { runLearnRoom } from "./tracks/learn-room/run.ts";
+import { writeLearnRoomReport } from "./tracks/learn-room/report.ts";
 
 type Options = Record<string, string | boolean>;
 
@@ -37,7 +41,47 @@ function parse(args: string[]): Options {
 const [cmd, ...rest] = process.argv.slice(2);
 const flags = parse(rest);
 
-if (cmd === "catalog") {
+if (cmd === "learn-room") {
+  const allowed = new Set(["split", "limit", "provider", "fixture", "output", "strategy", "budget", "seed"]);
+  for (const [key,value] of Object.entries(flags)) {
+    if (!allowed.has(key)) throw new Error(`Unknown learn-room flag --${key}`);
+    if (typeof value !== "string") throw new Error(`--${key} requires a value`);
+  }
+  const {dir,report} = await runLearnRoom({
+    model: rest[0] && !rest[0].startsWith("--") ? rest[0] : undefined,
+    partition: (flags.split ?? "development") as "development" | "evaluation",
+    strategy: (flags.strategy ?? "both") as "none" | "random" | "both",
+    limit: flags.limit === undefined ? undefined : Number(flags.limit),
+    budget: flags.budget === undefined ? undefined : Number(flags.budget),
+    seed: flags.seed === undefined ? undefined : Number(flags.seed),
+    provider: flags.provider as string | undefined, fixture: flags.fixture as string | undefined,
+    output: flags.output as string | undefined,
+  });
+  for (const summary of report.summaries) console.log(`${report.manifest.config.mode === "fixture" ? "SYNTHETIC FIXTURE: " : ""}learn-room ${summary.strategy}: ${summary.score?.toFixed(2)}/100`);
+  console.log(`report: ${path.resolve(dir,"report.html")}`);
+} else if (cmd === "learn-room-report") {
+  if (!rest[0] || rest[0].startsWith("--")) throw new Error("usage: rtr-bench learn-room-report <run-directory>");
+  const report = writeLearnRoomReport(rest[0]);
+  console.log(`learn-room: ${report.complete ? "complete" : "incomplete"}`);
+} else if (cmd === "distribution") {
+  const allowed = new Set(["split", "limit", "provider", "fixture", "output"]);
+  for (const [key,value] of Object.entries(flags)) {
+    if (!allowed.has(key)) throw new Error(`Unknown distribution flag --${key}`);
+    if (typeof value !== "string") throw new Error(`--${key} requires a value`);
+  }
+  const model = rest[0] && !rest[0].startsWith("--") ? rest[0] : undefined;
+  const {dir,report} = await runDistribution({
+    model, partition: (flags.split ?? "development") as "development" | "evaluation",
+    limit: flags.limit === undefined ? undefined : Number(flags.limit),
+    provider: flags.provider as string | undefined, fixture: flags.fixture as string | undefined,
+    output: flags.output as string | undefined,
+  });
+  console.log(`${report.manifest.config.mode === "fixture" ? "SYNTHETIC FIXTURE: " : ""}distribution ${report.summary.score?.toFixed(2)}/100; report: ${path.resolve(dir,"report.html")}`);
+} else if (cmd === "distribution-report") {
+  if (!rest[0] || rest[0].startsWith("--")) throw new Error("usage: rtr-bench distribution-report <run-directory>");
+  const report = writeDistributionReport(rest[0]);
+  console.log(`distribution: ${report.summary.complete ? report.summary.score?.toFixed(2)+"/100" : "incomplete"}`);
+} else if (cmd === "catalog") {
   const models = await listModels();
   const limit = Number(flags.limit ?? 20);
   const rows = models

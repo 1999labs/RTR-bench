@@ -99,6 +99,30 @@ These results return to what makes the source data unusual: the crowd’s answer
 
 ## Optional usage
 
+### Distribution prediction (source checkout)
+
+The new distribution track predicts all four crowd shares and reports its own score out of 100, alongside uniform and reference-distribution baselines. It is separate from the existing winning-quadrant score. See the [frozen v1 protocol](docs/distribution.md) for splits, output validation, failure handling, and reproducibility.
+
+Try the five-target synthetic pilot without an API key or any API spending:
+
+```bash
+node src/cli.ts distribution --fixture tests/fixtures/distribution-pilot.json --limit 5
+```
+
+This writes an explicitly labeled fixture report under `results/distribution/`, including browsable HTML and every raw response. It demonstrates the pipeline, not model performance. The protocol also documents API runs and offline report regeneration.
+
+### Learn the Room (source checkout)
+
+The Learn the Room environment allows controlled inspection of historical examples before a distribution prediction. Its initial runner compares no examples with seeded random examples, scores each condition out of 100, and reports paired gains and evidence usage separately.
+
+```bash
+node src/cli.ts learn-room --fixture tests/fixtures/learn-room-pilot.json --limit 5
+```
+
+This makes no API calls and writes a synthetic comparison with browsable episode traces under `results/learn-room/`. See the [Learn the Room protocol](docs/learn-room.md) for the environment interface, budgets, reproducibility rules, and model-run commands. Similarity selection and model-driven interactive selection are future adapters.
+
+### Providers and concurrency
+
 OpenRouter may route calls to different providers serving the same model. To list providers, token prices, and numerical precision:
 
 ```bash
