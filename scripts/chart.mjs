@@ -57,7 +57,7 @@ const yMin = 25;
 const yMax = 50;
 const xs = rows.map((r) => r.cost);
 const xMin = Math.log10(Math.min(...xs) * 0.8);
-const xMax = Math.log10(Math.max(...xs) * 2.2);
+const xMax = Math.log10(1);
 
 const xOf = (cost) => M.left + ((Math.log10(cost) - xMin) / (xMax - xMin)) * innerW;
 const yOf = (score) => M.top + innerH - ((score - yMin) / (yMax - yMin)) * innerH;
@@ -98,56 +98,37 @@ parts.push(
   `<text x="24" y="40" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#111">RTR-bench</text>`
 );
 
-// Grid and y axis
+// Axes: pure black rules and numbers, faint interior grid.
 for (const t of yTicks) {
   const y = yOf(t);
   parts.push(
     `<line x1="${M.left}" y1="${y.toFixed(1)}" x2="${M.left + innerW}" y2="${y.toFixed(1)}" stroke="#efefef"/>`
   );
   parts.push(
-    `<text x="${M.left - 12}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-family="ui-monospace, monospace" font-size="11" fill="#666">${t}</text>`
+    `<text x="${M.left - 12}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-family="ui-monospace, monospace" font-size="11" fill="#000">${t}</text>`
   );
 }
-parts.push(`<line x1="${M.left}" y1="${M.top}" x2="${M.left}" y2="${M.top + innerH}" stroke="#9a9a9a"/>`);
+parts.push(`<line x1="${M.left}" y1="${M.top}" x2="${M.left}" y2="${M.top + innerH}" stroke="#000"/>`);
 parts.push(
-  `<text transform="translate(24 ${M.top + innerH / 2}) rotate(-90)" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#444">Score</text>`
+  `<text transform="translate(24 ${M.top + innerH / 2}) rotate(-90)" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="bold" fill="#000">Score</text>`
 );
 
 // X axis
 parts.push(
-  `<line x1="${M.left}" y1="${M.top + innerH}" x2="${M.left + innerW}" y2="${M.top + innerH}" stroke="#9a9a9a"/>`
+  `<line x1="${M.left}" y1="${M.top + innerH}" x2="${M.left + innerW}" y2="${M.top + innerH}" stroke="#000"/>`
 );
 for (const t of xTicks) {
   const x = xOf(t);
   parts.push(
-    `<line x1="${x.toFixed(1)}" y1="${M.top + innerH}" x2="${x.toFixed(1)}" y2="${M.top + innerH + 5}" stroke="#9a9a9a"/>`
+    `<line x1="${x.toFixed(1)}" y1="${M.top + innerH}" x2="${x.toFixed(1)}" y2="${M.top + innerH + 5}" stroke="#000"/>`
   );
   parts.push(
-    `<text x="${x.toFixed(1)}" y="${M.top + innerH + 20}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#666">$${t.toFixed(2)}</text>`
+    `<text x="${x.toFixed(1)}" y="${M.top + innerH + 20}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#000">$${t.toFixed(2)}</text>`
   );
 }
 parts.push(
-  `<text x="${M.left + innerW / 2}" y="${H - 18}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#444">Cost per full run, log scale</text>`
+  `<text x="${M.left + innerW / 2}" y="${H - 18}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" font-weight="bold" fill="#000">Cost per full run, log scale</text>`
 );
-
-// Baselines: chance and most common.
-const baselineLines = [
-  { v: baselines.random * 100, color: "#cfcfcf", label: `chance ${(baselines.random * 100).toFixed(1)}` },
-  {
-    v: baselines.majorityClass.acc * 100,
-    color: "#9a9a9a",
-    label: `most common ${(baselines.majorityClass.acc * 100).toFixed(1)}`,
-  },
-];
-for (const b of baselineLines) {
-  const y = yOf(b.v);
-  parts.push(
-    `<line x1="${M.left}" y1="${y.toFixed(1)}" x2="${M.left + innerW}" y2="${y.toFixed(1)}" stroke="${b.color}" stroke-width="1.2" stroke-dasharray="5 4"/>`
-  );
-  parts.push(
-    `<text x="${M.left + 6}" y="${(y - 5).toFixed(1)}" font-family="ui-monospace, monospace" font-size="9.5" fill="#8a8a8a">${esc(b.label)}</text>`
-  );
-}
 
 // Pareto staircase
 const pts = frontier.map((r) => ({ x: xOf(r.cost), y: yOf(r.score) }));
@@ -155,53 +136,106 @@ let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
 for (let i = 1; i < pts.length; i++) {
   d += ` L ${pts[i].x.toFixed(1)} ${pts[i - 1].y.toFixed(1)} L ${pts[i].x.toFixed(1)} ${pts[i].y.toFixed(1)}`;
 }
-parts.push(`<path d="${d}" fill="none" stroke="#0f766e" stroke-width="1.6" stroke-dasharray="6 4"/>`);
+parts.push(`<path d="${d}" fill="none" stroke="#5555FF" stroke-width="1.8" stroke-dasharray="6 4"/>`);
 for (const p of pts) {
   parts.push(
-    `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7" fill="none" stroke="#0f766e" stroke-width="1.3"/>`
+    `<rect x="${(p.x - 7).toFixed(1)}" y="${(p.y - 7).toFixed(1)}" width="14" height="14" fill="none" stroke="#5555FF" stroke-width="1.4"/>`
   );
 }
-const fen = pts[pts.length - 1];
-const prev = pts.length > 1 ? pts[pts.length - 2] : fen;
-const labelX = (prev.x + fen.x) / 2;
-const labelY = prev.y - 11;
-parts.push(
-  `<text x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="#0f766e">pareto frontier</text>`
-);
+
+// Staircase segments, used to keep labels clear of the line.
+const segs = [];
+for (let i = 1; i < pts.length; i++) {
+  segs.push([pts[i - 1].x, pts[i - 1].y, pts[i].x, pts[i - 1].y]);
+  segs.push([pts[i].x, pts[i - 1].y, pts[i].x, pts[i].y]);
+}
+const hitsFrontier = (b, pad = 6) =>
+  segs.some(([x1, y1, x2, y2]) => {
+    const sx1 = Math.min(x1, x2) - pad;
+    const sx2 = Math.max(x1, x2) + pad;
+    const sy1 = Math.min(y1, y2) - pad;
+    const sy2 = Math.max(y1, y2) + pad;
+    return b.x1 < sx2 && sx1 < b.x2 && b.y1 < sy2 && sy1 < b.y2;
+  });
 
 // Points with greedy label placement.
 const placed = [];
 const overlaps = (a, b) => a.x1 < b.x2 && b.x1 < a.x2 && a.y1 < b.y2 && b.y1 < a.y2;
 
+// Points sharing a score and sitting close together get a stacked fan of
+// labels instead of competing for the same slot, so each label is unambiguous.
+const special = new Map();
+{
+  const used = new Set();
+  for (let i = 0; i < byCost.length; i++) {
+    if (used.has(i)) continue;
+    const cluster = [i];
+    for (let j = i + 1; j < byCost.length; j++) {
+      const a = byCost[cluster[cluster.length - 1]];
+      const b = byCost[j];
+      if (Math.abs(b.score - a.score) <= 1 && xOf(b.cost) - xOf(a.cost) <= 110) {
+        cluster.push(j);
+        used.add(j);
+      }
+    }
+    if (cluster.length < 2) continue;
+    const members = cluster.map((k) => byCost[k]);
+    const rightX = Math.max(...members.map((r) => xOf(r.cost)));
+    const baseY = Math.min(...members.map((r) => yOf(r.score)));
+    members
+      .slice()
+      .sort((a, b) => a.cost - b.cost)
+      .forEach((r, k) => {
+        const lx = rightX + 18;
+        const ly = baseY + 28 + k * 18;
+        const text = shortName(r.model);
+        const tw = text.length * 6.2 + 6;
+        special.set(r.model, { lx, ly, text });
+        placed.push({ x1: lx, x2: lx + tw, y1: ly - 9, y2: ly + 3 });
+      });
+  }
+}
+
 for (const r of byCost) {
   const px = xOf(r.cost);
   const py = yOf(r.score);
-  parts.push(`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4.6" fill="#1f6feb"/>`);
+  parts.push(
+    `<rect x="${(px - 4.5).toFixed(1)}" y="${(py - 4.5).toFixed(1)}" width="9" height="9" fill="#56FFFF"/>`
+  );
+
+  const spec = special.get(r.model);
+  if (spec) {
+    parts.push(
+      `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${spec.lx.toFixed(1)}" y2="${(spec.ly - 3).toFixed(1)}" stroke="#9aa7c7" stroke-width="0.7"/>`
+    );
+    parts.push(
+      `<text x="${spec.lx.toFixed(1)}" y="${spec.ly.toFixed(1)}" text-anchor="start" font-family="ui-monospace, monospace" font-size="10.5" fill="#111">${esc(spec.text)}</text>`
+    );
+    continue;
+  }
 
   const text = shortName(r.model);
   const tw = text.length * 6.2 + 6;
   const leftSide = px > M.left + innerW * 0.7;
-  const offsets = [-10, 16, -25, 31, -40, 46, -55, 61];
+  const offsets = [-14, 20, -30, 36, -46, 52, -62, 68];
   let box = null;
   for (const dy of offsets) {
-    const x1 = leftSide ? px - 11 - tw : px + 11;
+    const x1 = leftSide ? px - 12 - tw : px + 12;
     const cand = { x1, x2: x1 + tw, y1: py + dy - 9, y2: py + dy + 3, dy };
     if (cand.x1 < M.left + 2 || cand.x2 > W - 6) continue;
-    if (!placed.some((p) => overlaps(cand, p))) {
-      box = cand;
-      break;
-    }
+    if (hitsFrontier(cand)) continue;
+    if (placed.some((p) => overlaps(cand, p))) continue;
+    box = cand;
+    break;
   }
-  if (!box) box = { x1: px + 11, x2: px + 11 + tw, y1: py - 9, y2: py + 3, dy: -10 };
+  if (!box) box = { x1: px + 12, x2: px + 12 + tw, y1: py - 9, y2: py + 3, dy: -12 };
   placed.push(box);
 
   const anchor = leftSide ? "end" : "start";
-  const lx = leftSide ? px - 11 : px + 11;
-  if (Math.abs(box.dy) > 15) {
-    parts.push(
-      `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${(py + box.dy).toFixed(1)}" stroke="#b9c9e6" stroke-width="0.8"/>`
-    );
-  }
+  const lx = leftSide ? px - 12 : px + 12;
+  parts.push(
+    `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${(py + box.dy).toFixed(1)}" stroke="#9aa7c7" stroke-width="0.7"/>`
+  );
   parts.push(
     `<text x="${lx.toFixed(1)}" y="${(py + box.dy).toFixed(1)}" text-anchor="${anchor}" font-family="ui-monospace, monospace" font-size="10.5" fill="#111">${esc(text)}</text>`
   );
