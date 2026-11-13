@@ -29,48 +29,33 @@ The score is one way to compare models; their patterns of agreement and error ar
 
 ## Quickstart
 
-Scoring needs no database access, just an OpenRouter API key.
+You need Node.js 18 or newer and an OpenRouter API key with available credits. The published package includes the benchmark dataset; no repository setup is required.
 
-### Test a model
-
-Node 18 or newer. No clone, no install.
+Create a folder for your results, add your API key, and run a model:
 
 ```bash
 mkdir rtr-run && cd rtr-run
 echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
-
-# see ids and prices. costs nothing
-npx --yes rtr-bench catalog --limit 20
-
-# run one model, then score it
-npx --yes rtr-bench z-ai/glm-5.3-flash
+npx --yes rtr-bench@latest z-ai/glm-5.3-flash
 ```
 
-`--yes` skips npx's install prompt. A run makes 1,320 calls, takes about four minutes on a cheap model, costs a few cents, and writes `results/` in the folder you created. Add `--concurrency 8` to go faster.
+Replace `sk-or-your-key` with your OpenRouter API key. To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID. `npx` downloads and caches the package automatically; `--yes` skips its install prompt.
 
-By default OpenRouter may route each call to any host that serves the model, and hosts differ in quantisation. List them, with price and precision:
+The command runs the benchmark, prints the score, and saves responses, scores, and a report in `results/`. A full run schedules 1,320 calls: two questions, each asked in four option orders, across 165 prompts. Retries can add calls. Time and cost depend on the model and provider.
+
+To list available model IDs and token prices:
 
 ```bash
-npx --yes rtr-bench providers z-ai/glm-5.3-flash
+npx --yes rtr-bench@latest catalog --limit 20
 ```
 
-Pin one with `--provider Wafer`. A pinned run refuses to fall back, and the summary names the host that served the calls.
-
-### Work on the code
-
-The repository runs the TypeScript sources directly, so this path needs Node 22.18 or newer.
+To try the command on just five prompts before running the full benchmark:
 
 ```bash
-git clone https://github.com/1999labs/RTR-bench
-cd RTR-bench
-npm install
-echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
-node src/cli.ts catalog --limit 20
-node src/cli.ts run --models z-ai/glm-5.3-flash --concurrency 8
-node src/cli.ts report
+npx --yes rtr-bench@latest z-ai/glm-5.3-flash --limit 5
 ```
 
-Rebuilding the dataset needs the project's database connection, so `npm run export` is included for inspection only.
+This smaller run checks your setup; its score is not comparable with the full benchmark results. Rerunning without `--limit 5` reuses completed responses and runs the remaining prompts.
 
 ## Results
 
@@ -99,6 +84,40 @@ The clearest shared departure was Honest × Dividing. This was the crowd’s dom
 Donald Trump and Elon Musk illustrate both the pattern and the limits of the current score. None of the eleven models correctly predicted the dominant quadrant for either Trump’s window or either of Musk’s two windows. For Trump, 634 of 738 submissions—85.9%—landed in Honest × Dividing. In the first Musk window, the same quadrant won with only 278 of 720 submissions, or 38.6%, narrowly ahead of Performed × Dividing at 34.7%. Both count as an incorrect prediction, although one misses an overwhelming consensus and the other misses a closely divided crowd. At the other end, all eleven models correctly predicted Handwritten Notes, The CIA, and Altruism.
 
 These results return to what makes the source data unusual: the crowd’s answer is a distribution. The current score reduces that distribution to its largest quadrant, making comparison straightforward while leaving much of the disagreement unmeasured. My main takeaway is that these models share a difficulty anticipating when this audience reads division as honest. Establishing how broadly that pattern holds will require more audiences, prompt variants, and future windows. Next, I would like to test more frontier models, report performance separately where the crowd was decisive, and evaluate predictions of the full distribution alongside the dominant-quadrant score. Conviction and polarization could then help describe the kinds of disagreement a model understands, and the kinds it consistently misreads.
+
+## Optional usage
+
+OpenRouter may route calls to different providers serving the same model. To list providers, token prices, and numerical precision:
+
+```bash
+npx --yes rtr-bench@latest providers z-ai/glm-5.3-flash
+```
+
+To use a specific provider, add `--provider` with a name from that list:
+
+```bash
+npx --yes rtr-bench@latest z-ai/glm-5.3-flash --provider Wafer
+```
+
+A pinned run refuses to fall back to another provider, and the summary names the providers that served the calls. Provider availability can change.
+
+The default is six concurrent calls. To allow up to eight calls at once, add `--concurrency 8`. This may shorten the run if the provider's rate limits allow it.
+
+## Development
+
+To modify the benchmark or run the repository's source code, use the setup below. These commands run TypeScript directly and require Node.js 22.18 or newer.
+
+```bash
+git clone https://github.com/1999labs/RTR-bench
+cd RTR-bench
+npm install
+echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
+node src/cli.ts z-ai/glm-5.3-flash
+```
+
+Replace `sk-or-your-key` with your OpenRouter API key. The run automatically generates scores and a report in `results/`.
+
+Rebuilding the dataset requires the project's database connection and the configuration in `scripts/export.mjs`. The exported dataset is already included, so running the benchmark does not require database access.
 
 ## License
 
