@@ -6,7 +6,6 @@ import fs from "node:fs";
 
 const README = "README.md";
 const OUT_SVG = "results/leaderboard-scatter.svg";
-const OUT_PNG = "results/leaderboard-scatter.png";
 
 function readTable() {
   const text = fs.readFileSync(README, "utf8");
@@ -19,24 +18,25 @@ function readTable() {
     const cells = line.split("|").map((c) => c.trim());
     if (cells.length < 6) continue;
     const model = cells[1];
+    if (model === "Model" || model.startsWith("---")) continue;
     const score = Number(cells[3]);
     const cost = Number(cells[4].replace("$", ""));
     if (!model || !Number.isFinite(score) || !Number.isFinite(cost)) continue;
-    if (cells[1] === "Model" || cells[1].startsWith("---")) continue;
     rows.push({ model, score, cost });
   }
   return rows;
 }
 
 function shortName(model) {
-  const tail = model.split("/").pop();
-  return tail
+  return model
+    .split("/")
+    .pop()
     .replace("-1017", "")
     .replace("m3.1-flash", "m3.1")
     .replace("v2.6-flash", "v2.6")
     .replace("v4.1-flash", "v4.1")
     .replace("3.8-flash", "3.8")
-    .replace("small", "")
+    .replace("-small", "")
     .replace(/-+$/, "");
 }
 
@@ -46,18 +46,18 @@ if (rows.length === 0) {
   process.exit(1);
 }
 
-// Geometry
-const W = 980;
-const H = 620;
-const M = { top: 92, right: 96, bottom: 74, left: 74 };
+// Landscape canvas with wide margins so nothing is clipped.
+const W = 1200;
+const H = 640;
+const M = { top: 74, right: 74, bottom: 80, left: 80 };
 const innerW = W - M.left - M.right;
 const innerH = H - M.top - M.bottom;
 
 const yMin = 25;
 const yMax = 50;
 const xs = rows.map((r) => r.cost);
-const xMin = Math.log10(Math.min(...xs) * 0.75);
-const xMax = Math.log10(Math.max(...xs) * 1.8);
+const xMin = Math.log10(Math.min(...xs) * 0.8);
+const xMax = Math.log10(Math.max(...xs) * 2.2);
 
 const xOf = (cost) => M.left + ((Math.log10(cost) - xMin) / (xMax - xMin)) * innerW;
 const yOf = (score) => M.top + innerH - ((score - yMin) / (yMax - yMin)) * innerH;
@@ -70,119 +70,145 @@ const yTicks = [25, 30, 35, 40, 45, 50];
 const esc = (s) =>
   String(s).replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]));
 
-// Baseline values from the last scoring run
-let baselines = { random: 0.25, majorityClass: { acc: 0.3152 }, lexical: { acc: 0.339 } };
+let baselines = { random: 0.25, majorityClass: { acc: 0.3152 } };
 try {
   const s = JSON.parse(fs.readFileSync("results/scores.json", "utf8"));
-  baselines = s.baselines ?? baselines;
+  if (s.baselines?.majorityClass) {
+    baselines = { random: s.baselines.random ?? 0.25, majorityClass: s.baselines.majorityClass };
+  }
 } catch {}
+
+// Pareto frontier: models no cheaper model beats on score.
+const byCost = [...rows].sort((a, b) => a.cost - b.cost);
+const frontier = [];
+let bestScore = -Infinity;
+for (const r of byCost) {
+  if (r.score > bestScore) {
+    frontier.push(r);
+    bestScore = r.score;
+  }
+}
 
 const parts = [];
 parts.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`);
 parts.push(`<rect width="100%" height="100%" fill="#fff"/>`);
 
-// Title
+// Title only.
 parts.push(
-  `<text x="24" y="34" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16" fill="#111">RTR-bench: score against cost</text>`
-);
-parts.push(
-  `<text x="24" y="54" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#666">${rows.length} models, each a full run of 1,320 calls pinned to one host. ${"165"} windows, 4 readings, 4 orders.</text>`
+  `<text x="24" y="40" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#111">RTR-bench</text>`
 );
 
-// Grid + y axis
+// Grid and y axis
 for (const t of yTicks) {
   const y = yOf(t);
   parts.push(
-    `<line x1="${M.left}" y1="${y.toFixed(1)}" x2="${M.left + innerW}" y2="${y.toFixed(1)}" stroke="#ececec"/>`
+    `<line x1="${M.left}" y1="${y.toFixed(1)}" x2="${M.left + innerW}" y2="${y.toFixed(1)}" stroke="#efefef"/>`
   );
   parts.push(
     `<text x="${M.left - 12}" y="${(y + 4).toFixed(1)}" text-anchor="end" font-family="ui-monospace, monospace" font-size="11" fill="#666">${t}</text>`
   );
 }
+parts.push(`<line x1="${M.left}" y1="${M.top}" x2="${M.left}" y2="${M.top + innerH}" stroke="#9a9a9a"/>`);
 parts.push(
-  `<line x1="${M.left}" y1="${M.top}" x2="${M.left}" y2="${M.top + innerH}" stroke="#999"/>`
-);
-parts.push(
-  `<text transform="translate(22 ${M.top + innerH / 2}) rotate(-90)" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#444">score / 100</text>`
+  `<text transform="translate(24 ${M.top + innerH / 2}) rotate(-90)" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#444">Score</text>`
 );
 
 // X axis
 parts.push(
-  `<line x1="${M.left}" y1="${M.top + innerH}" x2="${M.left + innerW}" y2="${M.top + innerH}" stroke="#999"/>`
+  `<line x1="${M.left}" y1="${M.top + innerH}" x2="${M.left + innerW}" y2="${M.top + innerH}" stroke="#9a9a9a"/>`
 );
 for (const t of xTicks) {
   const x = xOf(t);
   parts.push(
-    `<line x1="${x.toFixed(1)}" y1="${M.top + innerH}" x2="${x.toFixed(1)}" y2="${M.top + innerH + 5}" stroke="#999"/>`
+    `<line x1="${x.toFixed(1)}" y1="${M.top + innerH}" x2="${x.toFixed(1)}" y2="${M.top + innerH + 5}" stroke="#9a9a9a"/>`
   );
   parts.push(
-    `<text x="${x.toFixed(1)}" y="${M.top + innerH + 19}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#666">$${t < 0.1 ? t.toFixed(2) : t.toFixed(2)}</text>`
+    `<text x="${x.toFixed(1)}" y="${M.top + innerH + 20}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#666">$${t.toFixed(2)}</text>`
   );
 }
 parts.push(
-  `<text x="${M.left + innerW / 2}" y="${H - 24}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="11" fill="#444">cost per full run, USD, log scale</text>`
+  `<text x="${M.left + innerW / 2}" y="${H - 18}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="12" fill="#444">Cost per full run, log scale</text>`
 );
 
-// Baselines
+// Baselines: chance and most common.
 const baselineLines = [
-  { v: baselines.random * 100, color: "#c9c9c9", label: `chance ${(baselines.random * 100).toFixed(1)}` },
-  { v: baselines.majorityClass.acc * 100, color: "#8a8a8a", label: `most common ${(baselines.majorityClass.acc * 100).toFixed(1)}` },
-  { v: baselines.lexical.acc * 100, color: "#b06000", label: `lexical cue list ${(baselines.lexical.acc * 100).toFixed(1)}` },
+  { v: baselines.random * 100, color: "#cfcfcf", label: `chance ${(baselines.random * 100).toFixed(1)}` },
+  {
+    v: baselines.majorityClass.acc * 100,
+    color: "#9a9a9a",
+    label: `most common ${(baselines.majorityClass.acc * 100).toFixed(1)}`,
+  },
 ];
-baselineLines.forEach((b, i) => {
+for (const b of baselineLines) {
   const y = yOf(b.v);
   parts.push(
     `<line x1="${M.left}" y1="${y.toFixed(1)}" x2="${M.left + innerW}" y2="${y.toFixed(1)}" stroke="${b.color}" stroke-width="1.2" stroke-dasharray="5 4"/>`
   );
   parts.push(
-    `<text x="${M.left + 6}" y="${(y - 5).toFixed(1)}" font-family="ui-monospace, monospace" font-size="9.5" fill="${b.color}">${esc(b.label)}</text>`
+    `<text x="${M.left + 6}" y="${(y - 5).toFixed(1)}" font-family="ui-monospace, monospace" font-size="9.5" fill="#8a8a8a">${esc(b.label)}</text>`
   );
-});
+}
 
-// Points, with greedy label placement to avoid collisions
+// Pareto staircase
+const pts = frontier.map((r) => ({ x: xOf(r.cost), y: yOf(r.score) }));
+let d = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
+for (let i = 1; i < pts.length; i++) {
+  d += ` L ${pts[i].x.toFixed(1)} ${pts[i - 1].y.toFixed(1)} L ${pts[i].x.toFixed(1)} ${pts[i].y.toFixed(1)}`;
+}
+parts.push(`<path d="${d}" fill="none" stroke="#0f766e" stroke-width="1.6" stroke-dasharray="6 4"/>`);
+for (const p of pts) {
+  parts.push(
+    `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="7" fill="none" stroke="#0f766e" stroke-width="1.3"/>`
+  );
+}
+const fen = pts[pts.length - 1];
+const prev = pts.length > 1 ? pts[pts.length - 2] : fen;
+const labelX = (prev.x + fen.x) / 2;
+const labelY = prev.y - 11;
+parts.push(
+  `<text x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10" fill="#0f766e">pareto frontier</text>`
+);
+
+// Points with greedy label placement.
 const placed = [];
-const boxesOverlap = (a, b) =>
-  a.x1 < b.x2 && b.x1 < a.x2 && a.y1 < b.y2 && b.y1 < a.y2;
+const overlaps = (a, b) => a.x1 < b.x2 && b.x1 < a.x2 && a.y1 < b.y2 && b.y1 < a.y2;
 
-const sorted = [...rows].sort((a, b) => a.cost - b.cost);
-for (const r of sorted) {
+for (const r of byCost) {
   const px = xOf(r.cost);
   const py = yOf(r.score);
   parts.push(`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="4.6" fill="#1f6feb"/>`);
 
   const text = shortName(r.model);
-  const tw = text.length * 6.1 + 4;
-  const leftSide = px > M.left + innerW * 0.72;
-  const offsets = [-9, 15, -24, 30, -39, 45, -54, 60];
-  let chosen = null;
+  const tw = text.length * 6.2 + 6;
+  const leftSide = px > M.left + innerW * 0.7;
+  const offsets = [-10, 16, -25, 31, -40, 46, -55, 61];
+  let box = null;
   for (const dy of offsets) {
-    const x1 = leftSide ? px - 10 - tw : px + 10;
-    const box = { x1, x2: x1 + tw, y1: py + dy - 9, y2: py + dy + 3, dy };
-    if (!placed.some((p) => boxesOverlap(box, p))) {
-      chosen = box;
+    const x1 = leftSide ? px - 11 - tw : px + 11;
+    const cand = { x1, x2: x1 + tw, y1: py + dy - 9, y2: py + dy + 3, dy };
+    if (cand.x1 < M.left + 2 || cand.x2 > W - 6) continue;
+    if (!placed.some((p) => overlaps(cand, p))) {
+      box = cand;
       break;
     }
   }
-  if (!chosen) chosen = { x1: px + 10, x2: px + 10 + tw, y1: py - 9, y2: py + 3, dy: -9 };
-  placed.push(chosen);
+  if (!box) box = { x1: px + 11, x2: px + 11 + tw, y1: py - 9, y2: py + 3, dy: -10 };
+  placed.push(box);
 
   const anchor = leftSide ? "end" : "start";
-  const lx = leftSide ? px - 10 : px + 10;
-  if (Math.abs(chosen.dy) > 14) {
+  const lx = leftSide ? px - 11 : px + 11;
+  if (Math.abs(box.dy) > 15) {
     parts.push(
-      `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${(py + chosen.dy).toFixed(1)}" stroke="#b9c9e6" stroke-width="0.8"/>`
+      `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${(py + box.dy).toFixed(1)}" stroke="#b9c9e6" stroke-width="0.8"/>`
     );
   }
   parts.push(
-    `<text x="${lx.toFixed(1)}" y="${(py + chosen.dy).toFixed(1)}" text-anchor="${anchor}" font-family="ui-monospace, monospace" font-size="10.5" fill="#111">${esc(text)}</text>`
+    `<text x="${lx.toFixed(1)}" y="${(py + box.dy).toFixed(1)}" text-anchor="${anchor}" font-family="ui-monospace, monospace" font-size="10.5" fill="#111">${esc(text)}</text>`
   );
 }
 
-parts.push(
-  `<text x="24" y="${H - 8}" font-family="ui-monospace, monospace" font-size="10" fill="#888">Source: data/windows.json and results/scores.json. Bars absent by design; each point is one model.</text>`
-);
 parts.push(`</svg>`);
 
 fs.mkdirSync("results", { recursive: true });
 fs.writeFileSync(OUT_SVG, parts.join("\n") + "\n");
-console.log(`wrote ${OUT_SVG} (${rows.length} models)`);
+console.log(`wrote ${OUT_SVG} (${rows.length} models, terminus ${frontier.length})`);
