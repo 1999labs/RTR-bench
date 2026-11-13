@@ -23,7 +23,7 @@ export type RoomConfig = {
 };
 export type RoomManifest = {id:string;createdAt:string;config:RoomConfig;status:"incomplete"|"complete";completedAt?:string};
 export type EpisodeRecord = {day:number;strategy:Strategy;request:Request;attempts:Attempt[];agentCalls?:AgentCall[];terminal:boolean;trace:TraceEntry[];outcome:Outcome|null};
-type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all";budget?:number;seed?:number;maxModelCalls?:number;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
+type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
 
 export function prepareEpisode(config: RoomConfig, strategy: Strategy, day: number, data = loadDistributionData()) {
   const target = data.windows.find(w=>w.day===day);
@@ -57,6 +57,8 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   if (!Number.isInteger(seed)||seed<0||seed>0xffffffff) throw new Error("--seed must be an unsigned 32-bit integer");
   const maxModelCalls=options.maxModelCalls??8;
   if (!Number.isInteger(maxModelCalls)||maxModelCalls<1||maxModelCalls>8) throw new Error("--max-model-calls must be an integer from 1 to 8");
+  const maxTokens=options.maxTokens??2000;
+  if (!Number.isSafeInteger(maxTokens)||maxTokens<1) throw new Error("--max-tokens must be a positive safe integer");
   if (options.limit!==undefined && (!Number.isInteger(options.limit)||options.limit<1)) throw new Error("--limit must be a positive integer");
   const targets=data.split[partition].slice(0,options.limit), strategies: Strategy[]=strategy==="all" ? ["none","random","similar","agent"] : strategy==="both" ? ["none","random"] : [strategy];
   const fixtureRaw=options.fixture ? fs.readFileSync(options.fixture,"utf8") : null;
@@ -67,7 +69,7 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   if (!model) throw new Error("Specify a model or --fixture <file>");
   if(fixture&&(options.maxUsd!==undefined||options.spending)) throw new Error("Fixture runs do not need a spending policy");
   const spending=options.spending??(options.maxUsd!==undefined?await discoverSpendingPolicy(model,options.provider??"",options.maxUsd):undefined);
-  const config: RoomConfig={track:"learn-room",version:"learn-room-runner-v2",scorerVersion:DISTRIBUTION_VERSION,environmentVersion:ENVIRONMENT_VERSION,strategyVersion:STRATEGY_VERSION,similarityVersion:SIMILARITY_VERSION,agentVersion:AGENT_VERSION,agentPromptHash:AGENT_PROMPT_HASH,maxModelCalls,promptHash:PROMPT_HASH,evidenceInstruction:EVIDENCE_INSTRUCTION,datasetHash:data.datasetHash,splitHash:data.splitHash,partition,targets,reference:data.split.reference,strategies,budget,maxActions:MAX_ACTIONS,seed,model,provider:options.provider??null,mode:fixture?"fixture":"api",fixtureHash:fixtureRaw===null?null:digest(fixtureRaw),settings:{temperature:0,maxTokens:2000,maxAttempts:MAX_ATTEMPTS,timeoutMs:TIMEOUT_MS,apiUrl:API_URL}};
+  const config: RoomConfig={track:"learn-room",version:"learn-room-runner-v2",scorerVersion:DISTRIBUTION_VERSION,environmentVersion:ENVIRONMENT_VERSION,strategyVersion:STRATEGY_VERSION,similarityVersion:SIMILARITY_VERSION,agentVersion:AGENT_VERSION,agentPromptHash:AGENT_PROMPT_HASH,maxModelCalls,promptHash:PROMPT_HASH,evidenceInstruction:EVIDENCE_INSTRUCTION,datasetHash:data.datasetHash,splitHash:data.splitHash,partition,targets,reference:data.split.reference,strategies,budget,maxActions:MAX_ACTIONS,seed,model,provider:options.provider??null,mode:fixture?"fixture":"api",fixtureHash:fixtureRaw===null?null:digest(fixtureRaw),settings:{temperature:0,maxTokens,maxAttempts:MAX_ATTEMPTS,timeoutMs:TIMEOUT_MS,apiUrl:API_URL}};
   if(spending) config.spending=spending;
   config.version="learn-room-runner-v3";
   config.settings.retryPolicy="retry-after-v1";

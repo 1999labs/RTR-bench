@@ -42,7 +42,7 @@ const [cmd, ...rest] = process.argv.slice(2);
 const flags = parse(rest);
 
 if (cmd === "learn-room") {
-  const allowed = new Set(["split", "limit", "provider", "fixture", "output", "strategy", "budget", "seed", "max-model-calls", "max-usd"]);
+  const allowed = new Set(["split", "limit", "provider", "fixture", "output", "strategy", "budget", "seed", "max-model-calls", "max-tokens", "max-usd"]);
   for (const [key,value] of Object.entries(flags)) {
     if (!allowed.has(key)) throw new Error(`Unknown learn-room flag --${key}`);
     if (typeof value !== "string") throw new Error(`--${key} requires a value`);
@@ -52,6 +52,7 @@ if (cmd === "learn-room") {
     partition: (flags.split ?? "development") as "development" | "evaluation",
     strategy: (flags.strategy ?? "both") as "none" | "random" | "similar" | "agent" | "both" | "all",
     maxModelCalls: flags["max-model-calls"] === undefined ? undefined : Number(flags["max-model-calls"]),
+    maxTokens: flags["max-tokens"] === undefined ? undefined : Number(flags["max-tokens"]),
     maxUsd: flags["max-usd"] === undefined ? undefined : Number(flags["max-usd"]),
     limit: flags.limit === undefined ? undefined : Number(flags.limit),
     budget: flags.budget === undefined ? undefined : Number(flags.budget),

@@ -53,6 +53,8 @@ Malformed JSON and empty successful responses become invalid actions and receive
 
 The default maximum is eight model turns, independent of the eight-action environment limit. `--max-model-calls` can lower the turn limit to 1–8. Each turn has at most three HTTP attempts, so an agent episode makes at most 24 HTTP attempts under the defaults. Failed and interrupted attempts count toward that bound. Once the model-turn limit is reached without submission, the host ends the episode with zero points. Early successful submission stops immediately.
 
+`--max-tokens <positive-integer>` sets the output-token allowance for every baseline request and every agent turn; it defaults to 2,000. It does not change the number of turns. Providers may consume this allowance on reasoning before returning final content. A truncated response follows the existing validation rules: empty baseline content is missing, malformed baseline content is invalid, and empty or malformed agent actions receive bounded feedback. A length stop does not trigger a transport retry. Changing the allowance creates a separate run because `settings.maxTokens` is fingerprinted, and the spending guard reserves the configured output allowance before each attempt. Existing default runs retain their identities and resume behavior.
+
 ## Scores and comparison
 
 For each completed episode, use the shared `100 * (1 - error / 2)` score. Invalid and missing predictions receive error 2. There is no inspection or compute penalty. Aggregate targets equally, and keep each track's result separate from the original RTR score.
@@ -118,6 +120,14 @@ For example, a five-target GLM pilot capped at $0.25:
 ```bash
 node src/cli.ts learn-room z-ai/glm-5.3-flash --provider Tenstorrent --strategy all --split development --limit 5 --max-usd 0.25
 ```
+
+For a separately authorized development comparison with a 4,000-token allowance:
+
+```bash
+node src/cli.ts learn-room z-ai/glm-5.3-flash --provider Relace --strategy all --split development --limit 30 --max-tokens 4000 --max-usd 0.25
+```
+
+Keep the other settings fixed when comparing output allowances. A single run at each allowance cannot separate the allowance's effect from run-to-run variation; use paired results as development evidence, not a causal estimate.
 
 Use `--output <directory>` to choose an output root. Use `--split evaluation` only once development decisions are frozen. Omitting `--limit` runs the entire selected partition and requires corresponding fixture entries in fixture mode.
 
