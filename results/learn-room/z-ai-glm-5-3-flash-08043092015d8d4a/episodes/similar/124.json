@@ -1,0 +1,617 @@
+{
+  "day": 124,
+  "strategy": "similar",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"STEVE JOBS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":31,\"prompt\":\"TASTE\",\"distribution\":{\"performed+uniting\":0.42452830188679247,\"honest+uniting\":0.054245283018867926,\"performed+dividing\":0.4339622641509434,\"honest+dividing\":0.08726415094339622},\"submissions\":424},{\"id\":98,\"prompt\":\"JOE BIDEN\",\"distribution\":{\"performed+uniting\":0.1322314049586777,\"honest+uniting\":0.09090909090909091,\"performed+dividing\":0.45041322314049587,\"honest+dividing\":0.32644628099173556},\"submissions\":242},{\"id\":50,\"prompt\":\"TRIBUTE LABS\",\"distribution\":{\"performed+uniting\":0.18654434250764526,\"honest+uniting\":0.6116207951070336,\"performed+dividing\":0.0061162079510703364,\"honest+dividing\":0.19571865443425077},\"submissions\":327}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 2000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-13T23:24:38.649Z",
+      "status": "error",
+      "raw": "",
+      "response": null,
+      "provider": null,
+      "usage": null,
+      "error": "TimeoutError: The operation was aborted due to timeout",
+      "retriable": true,
+      "finishedAt": "2026-11-13T23:25:38.652Z"
+    },
+    {
+      "index": 2,
+      "startedAt": "2026-11-13T23:25:39.655Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.40, \"honest+uniting\": 0.20, \"performed+dividing\": 0.28, \"honest+dividing\": 0.12}",
+      "response": {
+        "id": "gen-1794612339-vRSYVlxiiIhYKAEqIgVU",
+        "object": "chat.completion",
+        "created": 1794612339,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.40, \"honest+uniting\": 0.20, \"performed+dividing\": 0.28, \"honest+dividing\": 0.12}",
+              "refusal": null,
+              "reasoning": "Let me analyze this. The word is \"STEVE JOBS\". The audience is participants in Mixed Messages, a generative art project (likely by Tribute Labs, given \"TRIBUTE LABS\" is one of the historical examples).\n\nThe quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n1. TASTE (424 submissions): performed+uniting 0.4245, honest+uniting 0.0542, performed+dividing 0.4340, honest+dividing 0.0873. So mostly performed quadrants, split between uniting and dividing.\n\n2. JOE BIDEN (242 submissions): performed+uniting 0.1322, honest+uniting 0.0909, performed+dividing 0.4504, honest+dividing 0.3264. Mostly dividing, with performed+dividing dominant.\n\n3. TRIBUTE LABS (327 submissions): performed+uniting 0.1865, honest+uniting 0.6116, performed+dividing 0.0061, honest+dividing 0.1957. Mostly honest+uniting — the audience sees Tribute Labs as authentically bringing them together (it's their community/project).\n\nNow for STEVE JOBS. Steve Jobs is a polarizing figure: visionary who \"brought the world together\" through technology (iPhone, etc.), but also known as manipulative, reality distortion field, divisive leadership style, cult of personality, marketing manipulation (\"Think Different\" as performed unity).\n\nHow would this audience interpret \"STEVE JOBS\"?\n\nSteve Jobs is often seen as a master marketer who created false unity — \"Think Different\" cult, Apple community as a tribe, reality distortion field. That's performed+uniting. Also, he was genuinely seen as bringing people together through technology — honest+uniting. He was also divisive — elitism, Apple vs Android wars, polarizing figure — could be performed+dividing (exploiting divisions for profit, marketing) or honest+dividing (fracturing us truthfully — his abrasive personality genuinely divided people).\n\nGiven the audience pattern: they tend toward \"performed\" interpretations for abstract concepts (TASTE) and figures (JOE BIDEN got mostly performed+dividing). Tribute Labs got honest+uniting because it's their own community.\n\nSteve Jobs is a tech figure — this audience is likely crypto/web3 (Tribute Labs is a web3 company). Crypto audiences have mixed views on Steve Jobs: admiration for innovation but also skepticism of cult of personality, marketing hype.\n\nJoe Biden got performed+dividing 0.45, honest+dividing 0.33 — a politician seen as divisive. Steve Jobs is similar in being a polarizing figure but with more \"uniting\" narrative (bringing technology to people, \"putting a dent in the universe\").\n\nI'd estimate:\n- performed+uniting: high — the reality distortion field, marketing creating false unity among Apple faithful. Maybe 0.40-0.45.\n- honest+uniting: moderate — genuine belief he brought the world together through tech. Maybe 0.20-0.25.\n- performed+dividing: moderate — exploiting divisions (Apple vs others, elitism for profit). Maybe 0.20-0.25.\n- honest+dividing: lower — truthfully fracturing (his abrasive genuine personality divided people). Maybe 0.10-0.15.\n\nLet me think about the audience more. This is a web3/crypto community (Tribute Labs does DAO tooling). They might view Steve Jobs as: visionary (honest+uniting), or as a marketing manipulator (performed+uniting), or as someone who created walled gardens and division (dividing).\n\nGiven Joe Biden's distribution leaned heavily dividing (0.78 combined), and TASTE leaned performed (0.86 combined), the audience tends toward performed interpretations. For a person like Jobs, they'd likely see through the myth — performed+uniting seems strong (the cult of Apple, \"reality distortion field\" is literally performed unity).\n\nMy prediction:\n- performed+uniting: 0.42\n- honest+uniting: 0.22\n- performed+dividing: 0.24\n- honest+dividing: 0.12\n\nSum = 1.000.\n\nAlternatively weight more toward dividing like Biden: performed+uniting 0.35, honest+uniting 0.15, performed+dividing 0.35, honest+dividing 0.15.\n\nHmm. Steve Jobs vs Joe Biden: Biden is a politician — inherently divisive in a polarized audience. Jobs is a tech icon — this tech-savvy audience may admire him more, but also critique the cult. I think performed+uniting is the strongest signal: \"creating false unity among us\" — Apple marketing, reality distortion field, \"one more thing\" spectacle.\n\nI'll go with:\n- performed+uniting: 0.40\n- honest+uniting: 0.20\n- performed+dividing: 0.28\n- honest+dividing: 0.12\n\nSum = 1.000. That seems reasonable.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me analyze this. The word is \"STEVE JOBS\". The audience is participants in Mixed Messages, a generative art project (likely by Tribute Labs, given \"TRIBUTE LABS\" is one of the historical examples).\n\nThe quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n1. TASTE (424 submissions): performed+uniting 0.4245, honest+uniting 0.0542, performed+dividing 0.4340, honest+dividing 0.0873. So mostly performed quadrants, split between uniting and dividing.\n\n2. JOE BIDEN (242 submissions): performed+uniting 0.1322, honest+uniting 0.0909, performed+dividing 0.4504, honest+dividing 0.3264. Mostly dividing, with performed+dividing dominant.\n\n3. TRIBUTE LABS (327 submissions): performed+uniting 0.1865, honest+uniting 0.6116, performed+dividing 0.0061, honest+dividing 0.1957. Mostly honest+uniting — the audience sees Tribute Labs as authentically bringing them together (it's their community/project).\n\nNow for STEVE JOBS. Steve Jobs is a polarizing figure: visionary who \"brought the world together\" through technology (iPhone, etc.), but also known as manipulative, reality distortion field, divisive leadership style, cult of personality, marketing manipulation (\"Think Different\" as performed unity).\n\nHow would this audience interpret \"STEVE JOBS\"?\n\nSteve Jobs is often seen as a master marketer who created false unity — \"Think Different\" cult, Apple community as a tribe, reality distortion field. That's performed+uniting. Also, he was genuinely seen as bringing people together through technology — honest+uniting. He was also divisive — elitism, Apple vs Android wars, polarizing figure — could be performed+dividing (exploiting divisions for profit, marketing) or honest+dividing (fracturing us truthfully — his abrasive personality genuinely divided people).\n\nGiven the audience pattern: they tend toward \"performed\" interpretations for abstract concepts (TASTE) and figures (JOE BIDEN got mostly performed+dividing). Tribute Labs got honest+uniting because it's their own community.\n\nSteve Jobs is a tech figure — this audience is likely crypto/web3 (Tribute Labs is a web3 company). Crypto audiences have mixed views on Steve Jobs: admiration for innovation but also skepticism of cult of personality, marketing hype.\n\nJoe Biden got performed+dividing 0.45, honest+dividing 0.33 — a politician seen as divisive. Steve Jobs is similar in being a polarizing figure but with more \"uniting\" narrative (bringing technology to people, \"putting a dent in the universe\").\n\nI'd estimate:\n- performed+uniting: high — the reality distortion field, marketing creating false unity among Apple faithful. Maybe 0.40-0.45.\n- honest+uniting: moderate — genuine belief he brought the world together through tech. Maybe 0.20-0.25.\n- performed+dividing: moderate — exploiting divisions (Apple vs others, elitism for profit). Maybe 0.20-0.25.\n- honest+dividing: lower — truthfully fracturing (his abrasive genuine personality divided people). Maybe 0.10-0.15.\n\nLet me think about the audience more. This is a web3/crypto community (Tribute Labs does DAO tooling). They might view Steve Jobs as: visionary (honest+uniting), or as a marketing manipulator (performed+uniting), or as someone who created walled gardens and division (dividing).\n\nGiven Joe Biden's distribution leaned heavily dividing (0.78 combined), and TASTE leaned performed (0.86 combined), the audience tends toward performed interpretations. For a person like Jobs, they'd likely see through the myth — performed+uniting seems strong (the cult of Apple, \"reality distortion field\" is literally performed unity).\n\nMy prediction:\n- performed+uniting: 0.42\n- honest+uniting: 0.22\n- performed+dividing: 0.24\n- honest+dividing: 0.12\n\nSum = 1.000.\n\nAlternatively weight more toward dividing like Biden: performed+uniting 0.35, honest+uniting 0.15, performed+dividing 0.35, honest+dividing 0.15.\n\nHmm. Steve Jobs vs Joe Biden: Biden is a politician — inherently divisive in a polarized audience. Jobs is a tech icon — this tech-savvy audience may admire him more, but also critique the cult. I think performed+uniting is the strongest signal: \"creating false unity among us\" — Apple marketing, reality distortion field, \"one more thing\" spectacle.\n\nI'll go with:\n- performed+uniting: 0.40\n- honest+uniting: 0.20\n- performed+dividing: 0.28\n- honest+dividing: 0.12\n\nSum = 1.000. That seems reasonable.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 552,
+          "completion_tokens": 1193,
+          "total_tokens": 1745,
+          "cost": 0.0001104872,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 512,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001104872,
+            "upstream_inference_prompt_cost": 0.000016956,
+            "upstream_inference_completions_cost": 0.0000935312
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1163,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 552,
+        "completion_tokens": 1193,
+        "total_tokens": 1745,
+        "cost": 0.0001104872,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001104872,
+          "upstream_inference_prompt_cost": 0.000016956,
+          "upstream_inference_completions_cost": 0.0000935312
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1163,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-13T23:26:23.704Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 31
+      },
+      "observation": {
+        "ok": true,
+        "id": 31,
+        "prompt": "TASTE",
+        "distribution": {
+          "performed+uniting": 0.42452830188679247,
+          "honest+uniting": 0.054245283018867926,
+          "performed+dividing": 0.4339622641509434,
+          "honest+dividing": 0.08726415094339622
+        },
+        "submissions": 424,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 98
+      },
+      "observation": {
+        "ok": true,
+        "id": 98,
+        "prompt": "JOE BIDEN",
+        "distribution": {
+          "performed+uniting": 0.1322314049586777,
+          "honest+uniting": 0.09090909090909091,
+          "performed+dividing": 0.45041322314049587,
+          "honest+dividing": 0.32644628099173556
+        },
+        "submissions": 242,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 50
+      },
+      "observation": {
+        "ok": true,
+        "id": 50,
+        "prompt": "TRIBUTE LABS",
+        "distribution": {
+          "performed+uniting": 0.18654434250764526,
+          "honest+uniting": 0.6116207951070336,
+          "performed+dividing": 0.0061162079510703364,
+          "honest+dividing": 0.19571865443425077
+        },
+        "submissions": 327,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.4,
+          "honest+uniting": 0.2,
+          "performed+dividing": 0.28,
+          "honest+dividing": 0.12
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.4,
+      "honest+uniting": 0.2,
+      "performed+dividing": 0.28,
+      "honest+dividing": 0.12
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.17642377625347744,
+    "score": 91.17881118732612,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}
