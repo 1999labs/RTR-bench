@@ -85,7 +85,7 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 | google/gemini-3.8-flash | Google AI Studio | 46.1 | $0.7790 |
 | openai/gpt-6-luna | OpenAI | 37.0 | $0.1329 |
 | anthropic/claude-haiku-5.5 | Claude Platform on AWS | 43.0 | $0.1696 |
-| x-ai/grok-4.7 | TBD | TBD | TBD |
+| x-ai/grok-4.7 | xAI | 40.0 | $5.6188 |
 | thinkingmachines/inkling-small | DeepInfra (fp8) | 37.0 | $0.1733 |
 | openai/gpt-oss-120b | DekaLLM (bf16) | 32.7 | $0.0205 |
 
