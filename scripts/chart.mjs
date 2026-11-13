@@ -137,11 +137,6 @@ for (let i = 1; i < pts.length; i++) {
   d += ` L ${pts[i].x.toFixed(1)} ${pts[i - 1].y.toFixed(1)} L ${pts[i].x.toFixed(1)} ${pts[i].y.toFixed(1)}`;
 }
 parts.push(`<path d="${d}" fill="none" stroke="#5555FF" stroke-width="1.8" stroke-dasharray="6 4"/>`);
-for (const p of pts) {
-  parts.push(
-    `<rect x="${(p.x - 7).toFixed(1)}" y="${(p.y - 7).toFixed(1)}" width="14" height="14" fill="none" stroke="#5555FF" stroke-width="1.4"/>`
-  );
-}
 
 // Staircase segments, used to keep labels clear of the line.
 const segs = [];
@@ -157,6 +152,11 @@ const hitsFrontier = (b, pad = 6) =>
     const sy2 = Math.max(y1, y2) + pad;
     return b.x1 < sx2 && sx1 < b.x2 && b.y1 < sy2 && sy1 < b.y2;
   });
+
+// Every marker, so a label never lands on top of a point.
+const MARKERS = byCost.map((r) => ({ x: xOf(r.cost), y: yOf(r.score) }));
+const hitsMarker = (b) =>
+  MARKERS.some((m) => b.x1 < m.x + 6 && m.x - 6 < b.x2 && b.y1 < m.y + 6 && m.y - 6 < b.y2);
 
 // Points with greedy label placement.
 const placed = [];
@@ -186,8 +186,8 @@ const special = new Map();
       .slice()
       .sort((a, b) => a.cost - b.cost)
       .forEach((r, k) => {
-        const lx = rightX + 18;
-        const ly = baseY + 28 + k * 18;
+        const lx = rightX + 12;
+        const ly = baseY + 18 + k * 14;
         const text = shortName(r.model);
         const tw = text.length * 6.2 + 6;
         special.set(r.model, { lx, ly, text });
@@ -216,23 +216,32 @@ for (const r of byCost) {
 
   const text = shortName(r.model);
   const tw = text.length * 6.2 + 6;
-  const leftSide = px > M.left + innerW * 0.7;
-  const offsets = [-14, 20, -30, 36, -46, 52, -62, 68];
+  const preferLeft = px > M.left + innerW * 0.72;
+  const sides = preferLeft ? [-1, 1] : [1, -1];
+  const dys = [-8, 8, -16, 16, -24, 24, -32, 32, -40];
   let box = null;
-  for (const dy of offsets) {
-    const x1 = leftSide ? px - 12 - tw : px + 12;
-    const cand = { x1, x2: x1 + tw, y1: py + dy - 9, y2: py + dy + 3, dy };
-    if (cand.x1 < M.left + 2 || cand.x2 > W - 6) continue;
-    if (hitsFrontier(cand)) continue;
-    if (placed.some((p) => overlaps(cand, p))) continue;
-    box = cand;
-    break;
+  let side = 1;
+  outer: for (const sgn of sides) {
+    for (const dy of dys) {
+      const x1 = sgn > 0 ? px + 10 : px - 10 - tw;
+      const cand = { x1, x2: x1 + tw, y1: py + dy - 8, y2: py + dy + 2, dy };
+      if (cand.x1 < M.left + 2 || cand.x2 > W - 6) continue;
+      if (hitsFrontier(cand) || hitsMarker(cand)) continue;
+      if (placed.some((p) => overlaps(cand, p))) continue;
+      box = cand;
+      side = sgn;
+      break outer;
+    }
   }
-  if (!box) box = { x1: px + 12, x2: px + 12 + tw, y1: py - 9, y2: py + 3, dy: -12 };
+  if (!box) {
+    const x1 = px + 10;
+    box = { x1, x2: x1 + tw, y1: py - 8, y2: py + 2, dy: -8 };
+    side = 1;
+  }
   placed.push(box);
 
-  const anchor = leftSide ? "end" : "start";
-  const lx = leftSide ? px - 12 : px + 12;
+  const anchor = side > 0 ? "start" : "end";
+  const lx = side > 0 ? px + 10 : px - 10;
   parts.push(
     `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${lx.toFixed(1)}" y2="${(py + box.dy).toFixed(1)}" stroke="#9aa7c7" stroke-width="0.7"/>`
   );
