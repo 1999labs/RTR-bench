@@ -9,6 +9,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { QUADRANTS, type Task } from "./prompt.ts";
 
+export const SCORING_VERSION = "v2";
+
 export type Window = {
   day: number;
   word: string;
@@ -47,7 +49,20 @@ export function slugOfKey(key: string): string {
   return KEY_TO_SLUG[key];
 }
 
-type Call = {
+export function winningKeys(w: Window): string[] {
+  const largest = Math.max(...Object.values(w.counts));
+  return Object.keys(w.counts).filter((key) => w.counts[key as keyof Window["counts"]] === largest);
+}
+
+export function crowdWinners(w: Window): string[] {
+  return winningKeys(w).map(slugOfKey);
+}
+
+export function randomBaseline(windows: Window[]): number {
+  return windows.reduce((sum, w) => sum + crowdWinners(w).length / QUADRANTS.length, 0) / windows.length;
+}
+
+export type Call = {
   day: number;
   order: number;
   task: Task;
@@ -59,12 +74,39 @@ type Call = {
 export type WindowAnswer = {
   day: number;
   word: string;
-  choice: string;
-  confidence: number;
+  choice: string | null;
+  confidence: number | null;
   unstable: boolean;
   tie: boolean;
   missing: number;
+  votes: Record<string, number>;
+  pattern: VotePattern;
 };
+
+export type VotePattern = "4-0" | "3-1" | "2-1-1" | "2-2" | "1-1-1-1" | "incomplete" | "missing";
+export type VoteConsistency = {
+  windows: number;
+  completeWindows: number;
+  unanimous: number;
+  unanimousRate: number;
+  invalidOrMissingCalls: number;
+  patterns: Record<VotePattern, number>;
+};
+
+export function summarizeConsistency(answers: WindowAnswer[]): VoteConsistency {
+  const patterns: Record<VotePattern, number> = {
+    "4-0": 0, "3-1": 0, "2-1-1": 0, "2-2": 0, "1-1-1-1": 0, incomplete: 0, missing: 0,
+  };
+  for (const a of answers) patterns[a.pattern]++;
+  return {
+    windows: answers.length,
+    completeWindows: answers.filter((a) => a.missing === 0).length,
+    unanimous: patterns["4-0"],
+    unanimousRate: answers.length ? patterns["4-0"] / answers.length : NaN,
+    invalidOrMissingCalls: answers.reduce((sum, a) => sum + a.missing, 0),
+    patterns,
+  };
+}
 
 export function readModel(dir: string): Call[] {
   const out: Call[] = [];
@@ -98,8 +140,9 @@ export function collapse(calls: Call[], task: Task, windows: Window[]): WindowAn
 
   const out: WindowAnswer[] = [];
   for (const w of windows) {
-    const got = (byDay.get(w.day) ?? []).filter((c) => c.parsed);
-    if (got.length === 0) continue;
+    const attempted = byDay.get(w.day);
+    if (!attempted) continue;
+    const got = attempted.filter((c) => c.parsed);
 
     const tally = new Map<string, number>();
     const conf = new Map<string, number>();
@@ -109,20 +152,23 @@ export function collapse(calls: Call[], task: Task, windows: Window[]): WindowAn
       conf.set(q, (conf.get(q) ?? 0) + c.parsed!.confidence);
     }
 
-    const ranked = [...tally.entries()].sort(
-      (a, b) => b[1] - a[1] || conf.get(b[0])! / b[1] - conf.get(a[0])! / a[1]
-    );
+    const ranked = [...tally.entries()].sort((a, b) => b[1] - a[1]);
     const top = ranked[0];
-    const tied = ranked.filter((r) => r[1] === top[1]);
+    const tied = top ? ranked.filter((r) => r[1] === top[1]) : [];
+    const choice = top && tied.length === 1 ? top[0] : null;
+    const shape = ranked.map(([, n]) => n).join("-");
+    const pattern: VotePattern = got.length === 0 ? "missing" : got.length < 4 ? "incomplete" : shape === "4" ? "4-0" : shape as VotePattern;
 
     out.push({
       day: w.day,
       word: w.word,
-      choice: top[0],
-      confidence: conf.get(top[0])! / top[1],
+      choice,
+      confidence: choice ? conf.get(choice)! / tally.get(choice)! : null,
       unstable: got.length < 4 || tied.length > 1,
       tie: tied.length > 1,
       missing: 4 - got.length,
+      votes: Object.fromEntries(tally),
+      pattern,
     });
   }
   return out;
@@ -154,10 +200,10 @@ export function bootstrapCI(
 export type Score = {
   model: string;
   windows: number;
-  predict: { acc: number; ci: [number, number] };
+  predict: { acc: number; ci: [number, number]; consistency: VoteConsistency };
   axes: { x: number; y: number; nX: number; nY: number };
   brier: number;
-  read: { agree: number; ci: [number, number] };
+  read: { agree: number; ci: [number, number]; consistency: VoteConsistency };
   crowdDistance: number;
   gap: number;
   instability: number;
@@ -166,8 +212,8 @@ export type Score = {
   providers: Record<string, number>;
 };
 
-export function scoreModel(model: string, windows: Window[]): Score {
-  const dir = path.join("results", "raw", model);
+export function scoreModel(model: string, windows: Window[], rawDir = path.join("results", "raw")): Score {
+  const dir = path.join(rawDir, model);
   const calls = readModel(dir);
 
   // The directory name is a slug; the display name and the exact id live in
@@ -196,8 +242,8 @@ export function scoreModel(model: string, windows: Window[]): Score {
 
   for (const a of pred) {
     const w = byDay.get(a.day)!;
-    const truth = KEY_TO_SLUG[w.dominant];
-    predHits.push(a.tie ? 0 : a.choice === truth ? 1 : 0);
+    const winners = crowdWinners(w);
+    predHits.push(a.choice && winners.includes(a.choice) ? 1 : 0);
 
     const xRight = w.counts.tr + w.counts.br;
     const xLeft = w.counts.tl + w.counts.bl;
@@ -206,17 +252,18 @@ export function scoreModel(model: string, windows: Window[]): Score {
 
     const xSide = w.counts.tr + w.counts.br > xLeft ? "honest" : "performed";
     const ySide = yBottom > yTop ? "dividing" : "uniting";
-    if (xRight !== xLeft) axisX.push(a.tie ? 0 : a.choice.startsWith(xSide) ? 1 : 0);
-    if (yTop !== yBottom) axisY.push(a.tie ? 0 : a.choice.endsWith(ySide) ? 1 : 0);
+    if (xRight !== xLeft) axisX.push(a.choice?.startsWith(xSide) ? 1 : 0);
+    if (yTop !== yBottom) axisY.push(a.choice?.endsWith(ySide) ? 1 : 0);
 
     // Multiclass Brier: p on the chosen label, the rest spread evenly. A tie
-    // has no chosen label, so it is left out of the calibration score.
-    if (!a.tie) {
+    // has no chosen label, so it is left out of the calibration score. Crowd
+    // ties use an equal-mass target over all co-winners, never an arbitrary one.
+    if (a.choice && a.confidence !== null) {
       const p = a.confidence;
       const rest = (1 - p) / 3;
       let b = 0;
       for (const q of QUADRANTS) {
-        const target = q === truth ? 1 : 0;
+        const target = winners.includes(q) ? 1 / winners.length : 0;
         b += (q === a.choice ? (p - target) ** 2 : (rest - target) ** 2);
       }
       briers.push(b);
@@ -225,9 +272,8 @@ export function scoreModel(model: string, windows: Window[]): Score {
 
   for (const a of read) {
     const w = byDay.get(a.day)!;
-    const truth = KEY_TO_SLUG[w.dominant];
-    readHits.push(a.tie ? 0 : a.choice === truth ? 1 : 0);
-    if (!a.tie) {
+    readHits.push(a.choice && crowdWinners(w).includes(a.choice) ? 1 : 0);
+    if (a.choice) {
       const c = CENTER[a.choice];
       dists.push(Math.hypot(c.x - w.centroid.x, c.y - w.centroid.y) / Math.SQRT2);
     }
@@ -245,10 +291,10 @@ export function scoreModel(model: string, windows: Window[]): Score {
   return {
     model: display,
     windows: predHits.length,
-    predict: { acc: predictAcc, ci: bootstrapCI(predHits) },
+    predict: { acc: predictAcc, ci: bootstrapCI(predHits), consistency: summarizeConsistency(pred) },
     axes: { x: mean(axisX), y: mean(axisY), nX: axisX.length, nY: axisY.length },
     brier: mean(briers),
-    read: { agree: readAgree, ci: bootstrapCI(readHits) },
+    read: { agree: readAgree, ci: bootstrapCI(readHits), consistency: summarizeConsistency(read) },
     crowdDistance: mean(dists),
     gap: readAgree - predictAcc,
     instability: pred.length ? pred.filter((a) => a.unstable).length / pred.length : NaN,
@@ -262,7 +308,9 @@ export function scoreModel(model: string, windows: Window[]): Score {
 
 export function majorityBaseline(windows: Window[]) {
   const tally = new Map<string, number>();
-  for (const w of windows) tally.set(w.dominant, (tally.get(w.dominant) ?? 0) + 1);
+  for (const w of windows) {
+    for (const key of winningKeys(w)) tally.set(key, (tally.get(key) ?? 0) + 1);
+  }
   const top = [...tally.entries()].sort((a, b) => b[1] - a[1])[0];
   return {
     label: top[0],
@@ -320,7 +368,7 @@ export function lexicalBaseline(windows: Window[]) {
     windows.reduce((a, w) => a + w.n, 0);
 
   const hits: number[] = [];
-  const answers: { day: number; word: string; guess: string; truth: string }[] = [];
+  const answers: { day: number; word: string; guess: string; truth: string[] }[] = [];
 
   for (const w of windows) {
     const word = w.word.toUpperCase();
@@ -330,8 +378,9 @@ export function lexicalBaseline(windows: Window[]) {
     const xSide = xCue ?? (xHonest > 0.5 ? "honest" : "performed");
     const ySide = yCue ?? (yDividing > 0.5 ? "dividing" : "uniting");
     const guess = `${xSide}+${ySide}`;
-    hits.push(guess === KEY_TO_SLUG[w.dominant] ? 1 : 0);
-    answers.push({ day: w.day, word: w.word, guess, truth: KEY_TO_SLUG[w.dominant] });
+    const truth = crowdWinners(w);
+    hits.push(truth.includes(guess) ? 1 : 0);
+    answers.push({ day: w.day, word: w.word, guess, truth });
   }
 
   const acc = hits.reduce((a, b) => a + b, 0) / hits.length;

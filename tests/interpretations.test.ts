@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "node:test";
 import { Script } from "node:vm";
 import { buildInterpretations, interpretationCell, interpretationsHtml, interpretationsMarkdown, writeInterpretations } from "../src/interpretations.ts";
-import type { Window } from "../src/score.ts";
+import { summarizeConsistency, type Window } from "../src/score.ts";
 
 test("own readings preserve split votes, missing responses, run identity, and prompt identity", () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), "rtr-interpretations-test-"));
@@ -50,7 +50,7 @@ test("own readings preserve split votes, missing responses, run identity, and pr
 });
 
 test("HTML safely embeds prompt text and contains valid interactive JavaScript", () => {
-  const data = { runs: [{ id: "a", model: "example/model", provider: null, providers: [] }], rows: [{ day: 1, word: '</script><script>alert("bad")</script>|', crowd: "honest+uniting", readings: [{ choice: "honest+dividing", status: "chosen" as const, votes: { "honest+dividing": 4 }, validResponses: 4, missingResponses: 0 }] }] };
+  const data = { scoringVersion: "v2", runs: [{ id: "a", model: "example/model", provider: null, providers: [], consistency: summarizeConsistency([]) }], rows: [{ day: 1, word: '</script><script>alert("bad")</script>|', crowd: ["honest+uniting", "honest+dividing"], readings: [{ choice: "honest+dividing", status: "chosen" as const, votes: { "honest+dividing": 4 }, validResponses: 4, missingResponses: 0 }] }] };
   const html = interpretationsHtml(data);
   assert.equal(html.includes('</script><script>alert("bad")'), false);
   const embedded = html.match(/<script id="data" type="application\/json">([\s\S]*?)<\/script>/)!;
@@ -58,5 +58,6 @@ test("HTML safely embeds prompt text and contains valid interactive JavaScript",
   const interactive = html.match(/<script>\n([\s\S]*?)<\/script>/)!;
   new Script(interactive[1]);
   assert.ok(interpretationsMarkdown(data).includes('\\|'));
-  assert.ok(interpretationsHtml({ runs: [], rows: [] }).includes("All runs"));
+  assert.ok(interpretationsHtml({ scoringVersion: "v2", runs: [], rows: [] }).includes("All runs"));
+  assert.ok(interpretationsMarkdown(data).includes("HU / HD"));
 });

@@ -99,6 +99,7 @@ const windows = rows.map((r) => {
   const counts = { tl: r.tl, tr: r.tr, bl: r.bl, br: r.br };
   const sorted = [...Q].sort((a, b) => counts[b] - counts[a]);
   const dominant = sorted[0];
+  const dominants = sorted.filter((q) => counts[q] === counts[dominant]);
   const share = counts[dominant] / r.n;
 
   const mx = mean(coords.map((p) => p.x));
@@ -115,6 +116,10 @@ const windows = rows.map((r) => {
     counts,
     dominant,
     dominantLabel: LABEL[dominant],
+    // Legacy singular fields remain for compatibility; v2 scoring derives all
+    // co-winners from counts and never treats this first label as authoritative.
+    dominants,
+    dominantLabels: dominants.map((q) => LABEL[q]),
     dominantShare: +share.toFixed(3),
     centroid: { x: +(mx / 10000).toFixed(4), y: +(my / 10000).toFixed(4) },
     conviction: +conviction.toFixed(1),
@@ -149,7 +154,9 @@ fs.writeFileSync("data/windows.json", JSON.stringify(out, null, 2) + "\n");
 
 console.log(JSON.stringify(out.counts, null, 1));
 const spread = {};
-for (const w of windows) spread[w.dominant] = (spread[w.dominant] ?? 0) + 1;
+for (const w of windows) {
+  for (const q of w.dominants) spread[q] = (spread[q] ?? 0) + 1;
+}
 console.log("dominant quadrant spread:", JSON.stringify(spread));
 console.log(
   "top windows:",

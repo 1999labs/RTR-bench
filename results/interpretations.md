@@ -5,24 +5,25 @@ Responses to "Which reading is yours?" only. These are not predictions of the cr
 Open [interpretations.html](interpretations.html) locally for a searchable table with a model selector and vote details.
 
 165 prompts; 11 runs. Each column is a distinct model/provider run. Runs are listed alphabetically, not ranked.
+Scoring v2. The crowd column shows all co-winning quadrants when submissions tie.
 
 HU = Honest × Uniting; HD = Honest × Dividing; PU = Performed × Uniting; PD = Performed × Dividing.
 
 Final choices use the scorer's modal vote across four option orders. Fractions show support among valid responses. Tie means no unique winning choice; Missing means no valid response. An asterisk (*) marks fewer than four valid responses. The crowd column is included for context only.
 
-| Column | Model | Requested provider | Observed providers |
-|---|---|---|---|
-| M1 | anthropic/claude-haiku-5.5 | Claude Platform on AWS | Claude Platform on AWS |
-| M2 | deepseek/deepseek-v4.1-flash-1017 | Morph | Morph |
-| M3 | google/gemini-3.8-flash | Google AI Studio | Google AI Studio |
-| M4 | minimax/minimax-m3.1-flash | GMICloud | GMICloud |
-| M5 | openai/gpt-6-luna | OpenAI | OpenAI |
-| M6 | openai/gpt-oss-120b | DekaLLM | DekaLLM |
-| M7 | tencent/hy3 | Tencent | Tencent |
-| M8 | thinkingmachines/inkling-small | DeepInfra | DeepInfra |
-| M9 | xiaomi/mimo-v2.6-flash | GMICloud | GMICloud |
-| M10 | z-ai/glm-5.3-flash | Tenstorrent | Tenstorrent |
-| M11 | z-ai/glm-5.3 | Tenstorrent | Tenstorrent |
+| Column | Model | Requested provider | Observed providers | Own reading 4/4 |
+|---|---|---|---|---|
+| M1 | anthropic/claude-haiku-5.5 | Claude Platform on AWS | Claude Platform on AWS | 58.2% (96/165) |
+| M2 | deepseek/deepseek-v4.1-flash-1017 | Morph | Morph | 44.2% (73/165) |
+| M3 | google/gemini-3.8-flash | Google AI Studio | Google AI Studio | 54.5% (90/165) |
+| M4 | minimax/minimax-m3.1-flash | GMICloud | GMICloud | 18.2% (30/165) |
+| M5 | openai/gpt-6-luna | OpenAI | OpenAI | 50.3% (83/165) |
+| M6 | openai/gpt-oss-120b | DekaLLM | DekaLLM | 64.2% (106/165) |
+| M7 | tencent/hy3 | Tencent | Tencent | 40.6% (67/165) |
+| M8 | thinkingmachines/inkling-small | DeepInfra | DeepInfra | 16.4% (27/165) |
+| M9 | xiaomi/mimo-v2.6-flash | GMICloud | GMICloud | 25.5% (42/165) |
+| M10 | z-ai/glm-5.3-flash | Tenstorrent | Tenstorrent | 37.0% (61/165) |
+| M11 | z-ai/glm-5.3 | Tenstorrent | Tenstorrent | 35.2% (58/165) |
 
 | Day | Prompt | Crowd | M1 | M2 | M3 | M4 | M5 | M6 | M7 | M8 | M9 | M10 | M11 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -78,7 +79,7 @@ Final choices use the scorer's modal vote across four option orders. Fractions s
 | 57 | FAMILY DINNERS | HU | HU (4/4) | HU (3/4) | Tie | HU (3/4) | HU (4/4) | HU (4/4) | HU (3/4) | HU (3/4) | PU (2/4) | HU (4/4) | HU (4/4) |
 | 58 | SOBRIETY | HU | HU (4/4) | HU (3/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (3/4) | Tie | HU (3/4) | HU (3/4) | HU (3/4) |
 | 59 | TECH STARTUPS | HU | Tie | PU (3/4) | PU (4/4) | PU (3/4) | HD (3/4) | HU (3/4) | PU (3/4) | Tie | HD (3/4) | PD (2/4) | PU (3/4) |
-| 60 | REPUBLICANS | PD | HD (4/4) | Tie | HU (2/3)* | HD (2/4) | Tie | HU (3/4) | PD (3/4) | PD (3/4) | PU (2/4) | Tie | PD (4/4) |
+| 60 | REPUBLICANS | PD / HD | HD (4/4) | Tie | HU (2/3)* | HD (2/4) | Tie | HU (3/4) | PD (3/4) | PD (3/4) | PU (2/4) | Tie | PD (4/4) |
 | 61 | PROFESSIONAL SPORTS | HU | HU (4/4) | PU (4/4) | PU (3/4) | Tie | HU (4/4) | Tie | PU (4/4) | PD (3/4) | PU (3/4) | Tie | Tie |
 | 62 | JEFFREY EPSTEIN | PD | HD (3/4) | PD (3/4) | PD (3/4) | PD (3/4) | HD (3/4) | Tie | PD (4/4) | Tie | HD (3/4) | HD (3/4) | Tie |
 | 63 | DISNEY WORLD | PU | PU (4/4) | PU (4/4) | PU (4/4) | PU (4/4) | PU (3/4) | HU (3/4) | PU (4/4) | Tie | PU (3/4) | PU (4/4) | PU (4/4) |
@@ -86,7 +87,7 @@ Final choices use the scorer's modal vote across four option orders. Fractions s
 | 65 | CANNABIS | PD | HU (4/4) | HU (3/4) | HU (3/4) | HU (4/4) | HU (3/4) | HU (4/4) | HU (4/4) | HD (2/4) | HU (4/4) | HD (4/4) | Tie |
 | 66 | MCDONALD'S | PD | Tie | PU (4/4) | PU (4/4) | PU (4/4) | PU (4/4) | HU (4/4) | PU (4/4) | PD (4/4) | PU (4/4) | PU (4/4) | PU (4/4) |
 | 67 | VITALIK BUTERIN | HD | HU (4/4) | HU (4/4) | HU (4/4) | PU (3/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (3/4) | HU (4/4) | HU (4/4) | HU (4/4) |
-| 68 | POLICE DEPARTMENTS | PD | HD (4/4) | PD (2/4) | HU (3/4) | HD (2/4) | HU (3/4) | HU (4/4) | PD (3/4) | PD (3/4) | HD (3/4) | PD (2/4) | HD (3/4) |
+| 68 | POLICE DEPARTMENTS | PD / HD | HD (4/4) | PD (2/4) | HU (3/4) | HD (2/4) | HU (3/4) | HU (4/4) | PD (3/4) | PD (3/4) | HD (3/4) | PD (2/4) | HD (3/4) |
 | 69 | SILENCE | PD | Tie | HU (4/4) | HU (3/4) | HD (2/4) | HU (4/4) | HU (4/4) | Tie | Tie | HU (3/4) | HD (3/4) | HU (3/4) |
 | 70 | MILLENNIALS | PU | PD (3/4) | HU (2/4) | PD (4/4) | PU (4/4) | Tie | HU (4/4) | PD (2/4) | Tie | PD (4/4) | HD (4/4) | PD (3/4) |
 | 71 | DEMOCRATS | PD | HU (4/4) | HU (4/4) | Tie | HU (2/4) | HU (4/4) | HU (4/4) | Tie | PD (3/4) | HU (2/4) | HD (4/4) | HU (2/4) |
@@ -99,7 +100,7 @@ Final choices use the scorer's modal vote across four option orders. Fractions s
 | 80 | ALCOHOL | HD | HU (4/4) | PU (4/4) | PU (4/4) | PU (3/4) | HU (3/4) | HU (3/4) | PU (3/4) | HD (3/4) | PU (2/4) | HD (4/4) | HD (2/4) |
 | 81 | BORDER WALLS | HD | HD (4/4) | HD (3/4) | Tie | PD (3/4) | HD (4/4) | HD (2/4) | PD (3/4) | PD (3/4) | HD (3/4) | HD (3/4) | HD (4/4) |
 | 82 | RECYCLING | HU | HU (3/4) | HU (3/4) | PU (4/4) | HU (3/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | Tie | Tie |
-| 83 | FREEDOM | PU | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (3/4) | HU (3/4) | HU (3/4) | HU (2/4) |
+| 83 | FREEDOM | PU / HD | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (3/4) | HU (3/4) | HU (3/4) | HU (2/4) |
 | 84 | STARBUCKS | PU | Tie | PU (4/4) | PU (4/4) | PU (4/4) | PU (3/4) | HU (3/4) | PU (4/4) | PD (2/4) | Tie | PU (4/4) | PU (4/4) |
 | 85 | BARACK OBAMA | HD | HU (4/4) | HU (4/4) | HU (4/4) | HU (3/4) | HU (4/4) | HU (4/4) | HU (4/4) | HU (2/4) | HU (3/4) | HU (3/4) | HU (4/4) |
 | 86 | UNIVERSAL BASIC INCOME | PD | HU (3/4) | HU (4/4) | Tie | PU (3/4) | HU (4/4) | HU (4/4) | HU (4/4) | Tie | HU (4/4) | Tie | HU (2/4) |

@@ -63,9 +63,11 @@ const yTicks = [25, 30, 35, 40, 45, 50];
 const esc = (s) =>
   String(s).replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]));
 
+let scoringVersion = "v1";
 let baselines = { random: 0.25, majorityClass: { acc: 0.3152 } };
 try {
   const s = JSON.parse(fs.readFileSync("results/scores.json", "utf8"));
+  scoringVersion = s.scoringVersion ?? "v1";
   if (s.baselines?.majorityClass) {
     baselines = { random: s.baselines.random ?? 0.25, majorityClass: s.baselines.majorityClass };
   }
@@ -88,7 +90,7 @@ parts.push(`<rect width="100%" height="100%" fill="#fff"/>`);
 
 // Title only.
 parts.push(
-  `<text x="${W / 2}" y="40" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#111">RTR-bench</text>`
+  `<text x="${W / 2}" y="40" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#111">RTR-bench · scoring ${esc(scoringVersion)}</text>`
 );
 
 // Axes: pure black rules and numbers, faint interior grid.

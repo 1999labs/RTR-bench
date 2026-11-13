@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { QUADRANTS } from "./prompt.ts";
-import { collapse, readModel, slugOfKey, type Window } from "./score.ts";
+import { collapse, readModel, crowdWinners, summarizeConsistency, SCORING_VERSION, type VoteConsistency, type Window } from "./score.ts";
 
 export type Interpretation = {
   choice: string | null;
@@ -12,8 +12,9 @@ export type Interpretation = {
 };
 
 export type InterpretationTable = {
-  runs: { id: string; model: string; provider: string | null; providers: string[] }[];
-  rows: { day: number; word: string; crowd: string; readings: Interpretation[] }[];
+  scoringVersion: string;
+  runs: { id: string; model: string; provider: string | null; providers: string[]; consistency: VoteConsistency }[];
+  rows: { day: number; word: string; crowd: string[]; readings: Interpretation[] }[];
 };
 
 const SHORT: Record<string, string> = {
@@ -23,8 +24,7 @@ const SHORT: Record<string, string> = {
   "performed+dividing": "PD",
 };
 
-// Reuse the scorer's modal-vote aggregation, but never present its internal
-// confidence-based tie ordering as a final interpretation.
+// Reuse the scorer's unique modal vote, with ties and missing calls explicit.
 export function buildInterpretations(
   windows: Window[],
   runIds: string[],
@@ -48,7 +48,8 @@ export function buildInterpretations(
     }
 
     const own = calls.filter((c) => c.task === "read");
-    const answers = new Map(collapse(own, "read", windows).map((a) => [a.day, a]));
+    const ownAnswers = collapse(own, "read", windows);
+    const answers = new Map(ownAnswers.map((a) => [a.day, a]));
     const votesByDay = new Map<number, Record<string, number>>();
     for (const c of own) {
       if (!c.parsed) continue;
@@ -62,6 +63,7 @@ export function buildInterpretations(
       model: identity.model ?? id,
       provider: identity.providerRequested ?? null,
       providers: [...new Set(own.flatMap((c) => c.provider ? [c.provider] : []))].sort(),
+      consistency: summarizeConsistency(ownAnswers),
     });
     columns.push(windows.map((w) => {
       const a = answers.get(w.day);
@@ -69,7 +71,7 @@ export function buildInterpretations(
       const validResponses = Object.values(votes).reduce((sum, n) => sum + n, 0);
       return {
         choice: a && !a.tie ? a.choice : null,
-        status: !a ? "missing" : a.tie ? "tie" : "chosen",
+        status: !a || a.missing === 4 ? "missing" : a.tie ? "tie" : "chosen",
         votes,
         validResponses,
         missingResponses: 4 - validResponses,
@@ -77,11 +79,12 @@ export function buildInterpretations(
     }));
   }
   return {
+    scoringVersion: SCORING_VERSION,
     runs,
     rows: windows.map((w, i) => ({
       day: w.day,
       word: w.word,
-      crowd: slugOfKey(w.dominant),
+      crowd: crowdWinners(w),
       readings: columns.map((column) => column[i]),
     })),
   };
@@ -107,18 +110,19 @@ export function interpretationsMarkdown(data: InterpretationTable): string {
     "Open [interpretations.html](interpretations.html) locally for a searchable table with a model selector and vote details.",
     "",
     `${data.rows.length} prompts; ${data.runs.length} runs. Each column is a distinct model/provider run. Runs are listed alphabetically, not ranked.`,
+    `Scoring ${data.scoringVersion}. The crowd column shows all co-winning quadrants when submissions tie.`,
     "",
     "HU = Honest × Uniting; HD = Honest × Dividing; PU = Performed × Uniting; PD = Performed × Dividing.",
     "",
     "Final choices use the scorer's modal vote across four option orders. Fractions show support among valid responses. Tie means no unique winning choice; Missing means no valid response. An asterisk (*) marks fewer than four valid responses. The crowd column is included for context only.",
     "",
-    "| Column | Model | Requested provider | Observed providers |",
-    "|---|---|---|---|",
-    ...data.runs.map((run, i) => `| M${i + 1} | ${markdown(run.model)} | ${markdown(run.provider ?? "Unpinned")} | ${markdown(run.providers.join(", ") || "Unknown")} |`),
+    "| Column | Model | Requested provider | Observed providers | Own reading 4/4 |",
+    "|---|---|---|---|---|",
+    ...data.runs.map((run, i) => `| M${i + 1} | ${markdown(run.model)} | ${markdown(run.provider ?? "Unpinned")} | ${markdown(run.providers.join(", ") || "Unknown")} | ${run.consistency.windows ? (100 * run.consistency.unanimousRate).toFixed(1) + "%" : "n/a"} (${run.consistency.unanimous}/${run.consistency.windows}) |`),
     "",
     `| Day | Prompt | Crowd | ${data.runs.map((_, i) => `M${i + 1}`).join(" | ")} |`,
     `|---|---|---|${data.runs.map(() => "---|").join("")}`,
-    ...data.rows.map((row) => `| ${row.day} | ${markdown(row.word)} | ${SHORT[row.crowd]} | ${row.readings.map(interpretationCell).join(" | ")} |`),
+    ...data.rows.map((row) => `| ${row.day} | ${markdown(row.word)} | ${row.crowd.map((q) => SHORT[q]).join(" / ")} | ${row.readings.map(interpretationCell).join(" | ")} |`),
     "",
   ];
   return lines.join("\n");
@@ -140,6 +144,7 @@ export function interpretationsHtml(data: InterpretationTable): string {
 <p class="note">Fractions show votes for the final choice among valid responses. Ties have no final choice. A dashed border marks fewer than four valid responses. Hover over a cell for the full vote breakdown. Every run remains separate.</p>
 <details><summary>Run details and observed providers</summary><ul id="runs"></ul></details>
 <p id="count" aria-live="polite"></p>
+<p id="consistency" class="note" aria-live="polite"></p>
 <div class="wrap" tabindex="0" role="region" aria-label="Own interpretations by prompt and model"><table><caption class="note">Runs are alphabetical, not ranked. Scroll horizontally to compare models.</caption><thead id="head"></thead><tbody id="body"></tbody></table></div>
 <script id="data" type="application/json">${payload}</script>
 <script>
@@ -154,13 +159,15 @@ function render(){
  const rows=data.rows.filter(row=>row.word.toLocaleLowerCase().includes(term)||String(row.day)===term);
  const header=document.createElement('tr');header.append(cell('th','Prompt'),cell('th','Crowd (context)'));indices.forEach(i=>header.append(cell('th',data.labels[i])));document.getElementById('head').replaceChildren(header);
  const fragment=document.createDocumentFragment();
- rows.forEach(row=>{const tr=document.createElement('tr'),prompt=cell('th',row.word);prompt.scope='row';const day=cell('span','Day '+row.day);day.className='day';prompt.append(day);tr.append(prompt);const crowd=cell('td',short[row.crowd]);crowd.className=short[row.crowd].toLowerCase();crowd.title=row.crowd;tr.append(crowd);
+ rows.forEach(row=>{const tr=document.createElement('tr'),prompt=cell('th',row.word);prompt.scope='row';const day=cell('span','Day '+row.day);day.className='day';prompt.append(day);tr.append(prompt);const crowd=cell('td',row.crowd.map(q=>short[q]).join(' / '));crowd.className=row.crowd.length===1?short[row.crowd[0]].toLowerCase():'tie';crowd.title=row.crowd.join('; ');tr.append(crowd);
   indices.forEach(i=>{const a=row.readings[i],td=cell('td',a.status==='chosen'?short[a.choice]:a.status==='tie'?'Tie':'Missing');td.className=a.status==='chosen'?short[a.choice].toLowerCase():a.status;
    if(a.missingResponses>0)td.classList.add('incomplete');
    const detail=a.status==='chosen'?a.votes[a.choice]+'/'+a.validResponses+' votes':a.validResponses+'/4 valid responses';const votes=cell('span',detail);votes.className='votes';td.append(votes);
    td.title=data.quadrants.map(q=>q+': '+(a.votes[q]||0)).join('\u005cn')+'\u005cnMissing or invalid: '+a.missingResponses;tr.append(td);
   });fragment.append(tr);
- });document.getElementById('body').replaceChildren(fragment);document.getElementById('count').textContent=rows.length+' of '+data.rows.length+' prompts · '+indices.length+' of '+data.runs.length+' runs';
+ });document.getElementById('body').replaceChildren(fragment);document.getElementById('count').textContent=rows.length+' of '+data.rows.length+' prompts · '+indices.length+' of '+data.runs.length+' runs · scoring '+data.scoringVersion;
+ const summaries=indices.map(i=>data.runs[i].consistency),attempted=summaries.reduce((n,c)=>n+c.windows,0),unanimous=summaries.reduce((n,c)=>n+c.unanimous,0),incomplete=summaries.reduce((n,c)=>n+c.patterns.incomplete+c.patterns.missing,0);
+ document.getElementById('consistency').textContent='Across all prompts for the selected runs: 4/4 own-reading consistency '+unanimous+'/'+attempted+(attempted?' ('+(100*unanimous/attempted).toFixed(1)+'%)':'')+'; '+incomplete+' cases with incomplete or missing responses. Consistency is separate from agreement with the crowd.';
 }
 search.addEventListener('input',render);model.addEventListener('change',render);render();
 </script></body></html>\n`;

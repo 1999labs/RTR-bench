@@ -9,6 +9,9 @@ import {
   scoreModel,
   majorityBaseline,
   lexicalBaseline,
+  randomBaseline,
+  crowdWinners,
+  SCORING_VERSION,
   type Score,
 } from "./score.ts";
 
@@ -34,13 +37,22 @@ export function buildScores() {
   const majority = majorityBaseline(windows);
   const lexical = lexicalBaseline(windows);
   const out = {
+    scoringVersion: SCORING_VERSION,
+    scoring: {
+      crowdTarget: "All quadrants tied for the most submissions are accepted.",
+      modelAggregation: "Unique modal quadrant among valid responses; vote ties have no final choice.",
+      missingResponses: "Attempted windows with no valid response score zero; incomplete valid call sets retain their unique mode and are flagged separately.",
+      consistency: "Four valid matching responses divided by attempted windows, separately for predict and read.",
+      brierTarget: "Equal probability mass over crowd co-winners; model probability uses confidence on the selected quadrant and distributes the remainder equally.",
+      tiedCrowdWindows: windows.filter((w) => crowdWinners(w).length > 1).map((w) => ({ day: w.day, word: w.word, winners: crowdWinners(w), counts: w.counts })),
+    },
     generatedAt: new Date().toISOString(),
     dataset: {
       windows: windows.length,
       marks: windows.reduce((a, w) => a + w.n, 0),
     },
     baselines: {
-      random: 0.25,
+      random: randomBaseline(windows),
       majorityClass: { quadrant: majority.label, acc: majority.acc, counts: majority.counts },
       lexical: { acc: lexical.acc, ci: lexical.ci },
     },
@@ -64,6 +76,9 @@ export function writeReport() {
     `How well does a language model predict how people read a word? ${dataset.windows} windows, ${dataset.marks.toLocaleString()} marks, 4 readings, 4 option orders.`
   );
   lines.push("");
+  const historyLink = fs.existsSync("results/history/scoring-v1/scores.json") ? "history/scoring-v1/" : "https://github.com/1999labs/RTR-bench/tree/main/results/history/scoring-v1";
+  lines.push(`Scoring **${data.scoringVersion}**. All crowd co-winners are accepted. Historical scoring-v1 reports are preserved in [history/scoring-v1/](${historyLink}).`);
+  lines.push("");
   lines.push("## Leaderboard");
   lines.push("");
   lines.push(
@@ -76,11 +91,24 @@ export function writeReport() {
     );
   }
   lines.push("");
+  lines.push("## Consistency across option orders");
+  lines.push("");
+  lines.push("4/4 consistency counts four valid matching responses as a percentage of attempted windows. The other columns are window counts. Incomplete means one to three valid responses; Missing means zero. Neither is counted as 4/4 consistency. This measures consistency across reordered inputs; separating order effects from variation between identical calls requires a separate control experiment.");
+  lines.push("");
+  lines.push("| Model | Question | Windows | 4/4 | 3–1 | 2–1–1 | 2–2 | 1–1–1–1 | Incomplete | Missing |");
+  lines.push("|---|---|---|---|---|---|---|---|---|---|");
+  for (const s of ranked) {
+    for (const task of ["predict", "read"] as const) {
+      const c = s[task].consistency;
+      lines.push(`| \`${s.model}\` | ${task === "read" ? "Own reading" : "Crowd prediction"} | ${c.windows} | ${pct(c.unanimousRate)} (${c.unanimous}) | ${c.patterns["3-1"]} | ${c.patterns["2-1-1"]} | ${c.patterns["2-2"]} | ${c.patterns["1-1-1-1"]} | ${c.patterns.incomplete} | ${c.patterns.missing} |`);
+    }
+  }
+  lines.push("");
   lines.push("See [models' own interpretations](interpretations.md) for every prompt, or open [the searchable table](interpretations.html) locally. These responses do not affect the headline score.");
   lines.push("");
   lines.push("## Baselines");
   lines.push("");
-  lines.push(`- random, 4 options: 25.0%`);
+  lines.push(`- uniformly random final quadrant, accepting crowd co-winners: ${pct(baselines.random)}`);
   lines.push(
     `- always the most common quadrant (${baselines.majorityClass.quadrant}): ${pct(baselines.majorityClass.acc)}`
   );
@@ -95,7 +123,7 @@ export function writeReport() {
     lines.push("## What the numbers say");
     lines.push("");
     lines.push(
-      `- Best predictor: \`${best.model}\` at ${pct(best.predict.acc)} (chance 25%, majority baseline ${pct(baselines.majorityClass.acc)}).`
+      `- Best predictor: \`${best.model}\` at ${pct(best.predict.acc)} (random baseline ${pct(baselines.random)}, majority baseline ${pct(baselines.majorityClass.acc)}).`
     );
     if (ranked.length > 1) {
       lines.push(
@@ -111,7 +139,7 @@ export function writeReport() {
       `- Mean gap between a model's own reading and its prediction of the crowd: ${meanGap >= 0 ? "+" : ""}${pct(meanGap)}. A positive gap means the model agrees with the crowd more often when answering for itself than when trying to predict it.`
     );
     lines.push(
-      `- Axis accuracy is the place to look for a systematic bias. The y axis (uniting vs dividing) and the x axis (performed vs honest) are scored separately, so a model that over-reads division shows up as high axis y and low axis x.`
+      "- Axis accuracy compares each predicted axis with the crowd's marginal majority on that axis. A crowd tie on an axis is omitted from that axis metric. Directional bias needs the actual choice counts as well as accuracy."
     );
     lines.push("");
   }
@@ -122,8 +150,9 @@ export function writeReport() {
     "- Two questions per word: which reading did most people choose (predict), and which reading is yours (read)."
   );
   lines.push(
-    "- Four calls per question, each with the four options in a different cyclic order. The modal answer is the model's answer. A 2-2 split across orders is treated as no answer and scores zero, so the accuracy figure is a lower bound. The share of windows with no stable answer is the `unstable` column."
+    "- Four calls per question, each with a different cyclic option order. A unique modal answer wins: 4–0, 3–1, and 2–1–1 are resolved. A 2–2 or four-way vote tie has no final choice and scores zero. The `unstable` column counts prediction windows with a vote tie or fewer than four valid responses; it is separate from 4/4 consistency."
   );
+  lines.push("- All quadrants tied for the largest crowd count are accepted for prediction accuracy and own-reading agreement. The random and constant-class baselines follow the same rule. The Brier target shares probability mass equally among crowd co-winners; unresolved or missing model answers are omitted from Brier, not from attempted-window accuracy.");
   lines.push(
     "- Temperature 0. Prompt version and hash are written into every raw call. Confidence is used only for the Brier score."
   );
@@ -163,7 +192,7 @@ export function scoreLine(s: Score): string {
   const [lo, hi] = s.predict.ci;
   return [
     s.model,
-    `${(100 * s.predict.acc).toFixed(1)} / 100`,
+    `${(100 * s.predict.acc).toFixed(1)} / 100 (scoring ${SCORING_VERSION})`,
     `${s.windows} windows`,
     `95% CI ${(100 * lo).toFixed(1)} to ${(100 * hi).toFixed(1)}`,
     `cost $${s.costUsd.toFixed(4)}`,
@@ -208,7 +237,7 @@ function svg(scores: Score[], baselines: any, windowCount: number) {
   };
 
   const legend = [
-    { x: left, color: "#c4c4c4", label: `chance ${pct(0.25)}` },
+    { x: left, color: "#c4c4c4", label: `random ${pct(baselines.random)}` },
     { x: left, color: "#6f6f6f", label: `majority ${pct(baselines.majorityClass.acc)}` },
     { x: left, color: "#b06000", label: `lexical ${pct(baselines.lexical.acc)}` },
   ];
@@ -224,9 +253,9 @@ function svg(scores: Score[], baselines: any, windowCount: number) {
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
   <rect width="100%" height="100%" fill="#fff"/>
-  <text x="24" y="32" font-family="ui-monospace, monospace" font-size="15" fill="#111">RTR-bench: can a model predict which reading a crowd chose?</text>
+  <text x="24" y="32" font-family="ui-monospace, monospace" font-size="15" fill="#111">RTR-bench: predicting crowd readings, scoring ${SCORING_VERSION}</text>
   <text x="24" y="52" font-family="ui-monospace, monospace" font-size="11" fill="#666">${scores.length} model${scores.length === 1 ? "" : "s"}, bars are accuracy on ${windowCount} windows</text>
-  ${line(0.25, "#c4c4c4")}
+  ${line(baselines.random, "#c4c4c4")}
   ${line(baselines.majorityClass.acc, "#6f6f6f")}
   ${line(baselines.lexical.acc, "#b06000")}
   ${bars}
@@ -240,4 +269,5 @@ function escapeXml(s: string) {
   return s.replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]!));
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) writeReport();
+// Do not auto-run this module when esbuild embeds it in the CLI entry point.
+if (import.meta.url.endsWith("/report.ts") && import.meta.url === `file://${process.argv[1]}`) writeReport();
