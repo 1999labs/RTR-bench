@@ -1,6 +1,6 @@
 # Learn the Room protocol v2
 
-Learn the Room is a separate evaluation track built on the [distribution protocol](distribution.md). It uses the same chronological split, probability validation, failure penalties, equal-window weighting, and score out of 100. This implementation provides a controlled interactive environment, four evidence strategies, resumable runs, and comparison reports. The runner and strategies are now version 2; the environment and distribution scorer remain version 1. Saved version 1 no-example/random reports remain replayable.
+Learn the Room is a separate evaluation track built on the [distribution protocol](distribution.md). It uses the same chronological split, probability validation, failure penalties, equal-window weighting, and score out of 100. This implementation provides a controlled interactive environment, four evidence strategies, resumable runs, and comparison reports. Strategies are version 2; the runner is version 3 with provider Retry-After handling and optional spending enforcement. The environment and distribution scorer remain version 1. Saved earlier reports remain replayable.
 
 ## Environment contract
 
@@ -73,9 +73,17 @@ A fixture comparison demonstrates arithmetic and trace handling; it provides no 
 
 ## Runs, retries, and traces
 
-Each baseline episode permits one logical prediction request and at most three HTTP attempts. Agent permits the bounded turns described above, with at most three HTTP attempts per turn. The shared client retries only transport failures or HTTP 429/500/502/503/504, with one- and two-second backoffs and a 60-second timeout per attempt. Malformed baseline predictions are terminal and are not rerolled; malformed agent actions receive bounded feedback instead. Provider pinning disables fallback. Unsupported settings fail explicitly.
+Each baseline episode permits one logical prediction request and at most three HTTP attempts. Agent permits the bounded turns described above, with at most three HTTP attempts per turn. The shared client retries only transport failures or HTTP 429/500/502/503/504, with a 60-second timeout per attempt. Backoff is the larger of the provider's Retry-After hint and the default one-/two-second delay. Retry hints can come from HTTP headers or saved OpenRouter error metadata. Malformed baseline predictions are terminal and are not rerolled; malformed agent actions receive bounded feedback instead. Provider pinning disables fallback. Unsupported settings fail explicitly.
 
 Each run manifest fingerprints the dataset, split, target/reference IDs, model/provider, strategies, budget, seed, prompts, environment/scorer/runner versions, generation/retry settings, and fixture contents. Runs live under `results/learn-room/`. Each episode records its exact prediction request, every API attempt, the action/observation trace, and its outcome. Unknown usage from interrupted calls remains explicitly unknown. Fixture mode makes zero API calls.
+
+### Optional spending limit
+
+Use `--max-usd <amount>` with `--provider <name>` to enforce a per-run API usage budget. Before execution, the runner fetches public endpoint metadata, chooses an available fixed-price endpoint for that provider, and records its exact tag, context limit, and token prices in the manifest. Requests pin that tag with fallback disabled and send OpenRouter maximum-price ceilings. Endpoints with unsupported extra charges or cache-read rates above ordinary input rates are rejected by this guard.
+
+Before each HTTP attempt, the runner durably reserves the endpoint's full input-context allowance plus the request's maximum output tokens at those prices. This deliberately overestimates the short text prompts. Reported cost replaces the reservation when available; unknown costs and interrupted requests retain the full reservation. Explicit pre-generation HTTP 429 rate-limit rejections, with no generation ID or choices, release the reservation as unbilled under [OpenRouter's pricing policy](https://openrouter.ai/pricing); that basis is saved in the ledger. This exception never treats network failures or empty successful responses as free. Accounting rounds upward to billionths of a dollar and persists in `spending.json` across resumes. The run stops before dispatch if the next reservation would exceed the cap. An unexpected provider charge above the reservation stops further calls for review.
+
+Budget stops leave the evaluation incomplete and write an incomplete report; they do not convert unattempted targets into benchmark failures. The cap covers this run's API usage, not unrelated account activity or credit-purchase fees. Changing configuration creates a new run with a separate ledger; do not interpret multiple run caps as a shared campaign budget. Fixture runs require no spending policy.
 
 Identical commands resume saved terminal episodes, including failures. Each agent turn stores its exact request, all attempts, and whether its action has been applied. On resume, the adapter reconstructs prior messages and observations, checks request/trace identity, and applies a durably saved but unapplied response exactly once. It does not rerun completed model turns. Interrupted attempts consume the fixed attempt budget. Atomic record writes and an exclusive run lock prevent partial writes and concurrent writers. Remove a stale lock only after confirming that its recorded process has exited.
 
@@ -103,6 +111,12 @@ For a future authorized model pilot:
 
 ```bash
 node src/cli.ts learn-room <model-id> --provider <provider-name> --strategy all --split development --limit 5
+```
+
+For example, a five-target GLM pilot capped at $0.25:
+
+```bash
+node src/cli.ts learn-room z-ai/glm-5.3-flash --provider Tenstorrent --strategy all --split development --limit 5 --max-usd 0.25
 ```
 
 Use `--output <directory>` to choose an output root. Use `--split evaluation` only once development decisions are frozen. Omitting `--limit` runs the entire selected partition and requires corresponding fixture entries in fixture mode.

@@ -3,6 +3,7 @@ import { SYSTEM } from "../distribution/prompt.ts";
 import type { Message, Request, Attempt } from "../../shared/model-client.ts";
 import type { createEpisode } from "./environment.ts";
 import type { RoomConfig, EpisodeRecord } from "./run.ts";
+import { spendingProvider } from "../../shared/spending.ts";
 
 export const AGENT_VERSION="learn-room-agent-v1";
 export const AGENT_SYSTEM=`${SYSTEM}
@@ -26,6 +27,7 @@ export function agentMessages(episode:Episode,config:RoomConfig):Message[] {
 export function agentRequest(config:RoomConfig,messages:Message[]):Request {
   const request:Request={model:config.model,messages:structuredClone(messages),temperature:config.settings.temperature,max_tokens:config.settings.maxTokens,usage:{include:true}};
   if(config.provider) request.provider={order:[config.provider],allow_fallbacks:false};
+  if(config.spending) request.provider=spendingProvider(config.spending);
   return request;
 }
 export function callFinished(attempts:Attempt[]) {

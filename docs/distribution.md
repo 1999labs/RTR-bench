@@ -95,4 +95,4 @@ npm run build
 
 ## Next implementation milestone
 
-The Learn the Room environment and all four strategies (no examples, random, text similarity, and agent selection) are implemented and verified with fixtures. Next, use an explicitly authorized live development pilot to check provider behavior and freeze any revised settings before final evaluation comparisons.
+The Learn the Room environment and all four strategies (no examples, random, text similarity, and agent selection) are implemented and verified with fixtures. A live five-target GLM 5.3 Flash pilot completed through Relace with valid predictions in every condition. Its no-examples condition serves as the direct-distribution evaluation without duplicate calls. The pilot also led to spending-reservation enforcement and Retry-After handling in the Learn the Room runner. Inspect development traces and expand the development comparison before freezing final evaluation settings.
