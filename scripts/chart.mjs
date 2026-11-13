@@ -180,18 +180,16 @@ const special = new Map();
     }
     if (cluster.length < 2) continue;
     const members = cluster.map((k) => byCost[k]);
-    const rightX = Math.max(...members.map((r) => xOf(r.cost)));
-    const baseY = Math.min(...members.map((r) => yOf(r.score)));
     members
       .slice()
       .sort((a, b) => a.cost - b.cost)
       .forEach((r, k) => {
-        const lx = rightX + 12;
-        const ly = baseY + 18 + k * 14;
+        const lx = xOf(r.cost);
+        const ly = yOf(r.score) + 22 + k * 18;
         const text = shortName(r.model);
         const tw = text.length * 6.2 + 6;
         special.set(r.model, { lx, ly, text });
-        placed.push({ x1: lx, x2: lx + tw, y1: ly - 9, y2: ly + 3 });
+        placed.push({ x1: lx - tw / 2, x2: lx + tw / 2, y1: ly - 9, y2: ly + 3 });
       });
   }
 }
@@ -206,10 +204,10 @@ for (const r of byCost) {
   const spec = special.get(r.model);
   if (spec) {
     parts.push(
-      `<line x1="${px.toFixed(1)}" y1="${py.toFixed(1)}" x2="${spec.lx.toFixed(1)}" y2="${(spec.ly - 3).toFixed(1)}" stroke="#9aa7c7" stroke-width="0.7"/>`
+      `<line x1="${px.toFixed(1)}" y1="${(py + 5).toFixed(1)}" x2="${spec.lx.toFixed(1)}" y2="${(spec.ly - 4).toFixed(1)}" stroke="#9aa7c7" stroke-width="0.7"/>`
     );
     parts.push(
-      `<text x="${spec.lx.toFixed(1)}" y="${spec.ly.toFixed(1)}" text-anchor="start" font-family="ui-monospace, monospace" font-size="10.5" fill="#111">${esc(spec.text)}</text>`
+      `<text x="${spec.lx.toFixed(1)}" y="${spec.ly.toFixed(1)}" text-anchor="middle" font-family="ui-monospace, monospace" font-size="10.5" fill="#111">${esc(spec.text)}</text>`
     );
     continue;
   }
