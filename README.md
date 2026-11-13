@@ -90,7 +90,7 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 
 ![RTR-bench: score against cost](results/leaderboard-scatter.png)
 
-Eleven models were tested against the same 165 windows. Scores concentrated in the high 30s and low 40s. Models were more alike in how they fail than in how they score. Across 1,591 answers, they decided on Honest x Uniting 67.7% of the time and Honest x Dividing 18.2% of the time, while the dominant quadrant was Honest x Dividing in 39 of those 165 windows. Division, when a model registers it at all, reads as spin or as bad faith, and almost never as candor. 
+Eleven models were tested against all windows with N≥25 submissions (165). Scores concentrated in the high 30s and low 40s. Models were more alike in how they fail than in how they score. Across 1,591 answers, they decided on Honest x Uniting 67.7% of the time and Honest x Dividing 18.2% of the time, while the dominant quadrant was Honest x Dividing in 39 of those 165 windows. Division, when a model registers it at all, reads as spin or as bad faith, and almost never as candor. 
 
 There were seven prompts that no model got right. They were Donald Trump, Elon Musk, Las Vegas, Barack Obama, Reputation, Dreams, and Honor. The dominant quadrant for each of them besides Dreams was Honest x Dividing. There were three prompts that every model got right. They were Handwritten Notes, The CIA, and Altruism. 
 
