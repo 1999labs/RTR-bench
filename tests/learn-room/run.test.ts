@@ -63,7 +63,7 @@ test('validation rejects unsupported strategies, budgets, seeds, and incomplete 
   const output=temp(t);
   await assert.rejects(runLearnRoom({fixture,budget:4,output}),/budget/);
   await assert.rejects(runLearnRoom({fixture,seed:-1,output}),/seed/);
-  await assert.rejects(runLearnRoom({fixture,strategy:'agent' as any,output}),/strategy/);
+  await assert.rejects(runLearnRoom({fixture,strategy:'unknown' as any,output}),/strategy/);
   await assert.rejects(runLearnRoom({fixture,limit:6,output}),/Fixture/);
   await assert.rejects(runLearnRoom({fixture,limit:1,provider:'Test',output}),/provider/);
 });

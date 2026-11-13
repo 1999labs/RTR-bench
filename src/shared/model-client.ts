@@ -1,4 +1,4 @@
-export type Message = { role: "system" | "user"; content: string };
+export type Message = { role: "system" | "user" | "assistant"; content: string };
 export type Request = {
   model: string; messages: Message[]; temperature: number;
   max_tokens: number; usage: { include: boolean };

@@ -95,4 +95,4 @@ npm run build
 
 ## Next implementation milestone
 
-The Learn the Room environment and no-example/seeded-random baselines are implemented. Next, add similarity and agent selection through its controlled interface, and freeze those strategy rules before making final evaluation comparisons.
+The Learn the Room environment and all four strategies (no examples, random, text similarity, and agent selection) are implemented and verified with fixtures. Next, use an explicitly authorized live development pilot to check provider behavior and freeze any revised settings before final evaluation comparisons.
