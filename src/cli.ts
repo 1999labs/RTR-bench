@@ -12,7 +12,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadWindows } from "./score.ts";
 import { runModel, listModels, listEndpoints } from "./run.ts";
-import { writeReport, scoreLine } from "./report.ts";
+import { writeReport, scoreLine, listRuns } from "./report.ts";
+import { writeInterpretations } from "./interpretations.ts";
 
 type Options = Record<string, string | boolean>;
 
@@ -81,6 +82,8 @@ if (cmd === "catalog") {
   for (const s of data.scores) {
     if (models.includes(s.model)) console.log(scoreLine(s));
   }
+} else if (cmd === "interpretations") {
+  writeInterpretations(loadWindows(), listRuns());
 } else if (cmd === "score" || cmd === "report" || cmd === "all") {
   const data = writeReport();
   console.log(

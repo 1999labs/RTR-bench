@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { QUADRANTS } from "./prompt.ts";
+import { writeInterpretations } from "./interpretations.ts";
 import {
   loadWindows,
   scoreModel,
@@ -75,6 +76,8 @@ export function writeReport() {
     );
   }
   lines.push("");
+  lines.push("See [models' own interpretations](interpretations.md) for every prompt, or open [the searchable table](interpretations.html) locally. These responses do not affect the headline score.");
+  lines.push("");
   lines.push("## Baselines");
   lines.push("");
   lines.push(`- random, 4 options: 25.0%`);
@@ -144,6 +147,7 @@ export function writeReport() {
   fs.mkdirSync("results", { recursive: true });
   fs.writeFileSync("results/leaderboard.md", lines.join("\n") + "\n");
   fs.writeFileSync("results/leaderboard.svg", svg(ranked, baselines, dataset.windows));
+  writeInterpretations(loadWindows(), listRuns());
   console.log("wrote results/leaderboard.md and results/leaderboard.svg");
   return data;
 }

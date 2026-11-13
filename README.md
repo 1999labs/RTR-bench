@@ -75,6 +75,8 @@ This smaller run checks your setup; its score is not comparable with the full be
 
 ![RTR-bench: score against cost](results/leaderboard-scatter.png)
 
+See the [results guide](results/README.md) for the saved outputs and [models' own interpretations](results/interpretations.md) for each prompt. Open `results/interpretations.html` locally to search prompts and select a model/provider run.
+
 Eleven models were tested against the same 165 windows, representing 39,828 human submissions. Scores ranged from 32.1 to 46.1, compared with a 31.5 baseline for always choosing the most common quadrant and 33.9 for a simple lexical heuristic. Gemini scored highest, correctly predicting 76 of the 165 windows. Its bootstrapped 95% confidence interval was 38.2–53.3%, however, so small differences between models should be treated cautiously.
 
 Perhaps the value of the benchmark lies more in exposing model behavior than in actually ranking models. As described above, benchmarks such as HLE and SWE-bench evaluate whether a model can answer an expert question or resolve a software issue against defined criteria. RTR-bench asks whether a model can anticipate how a particular crowd interpreted something ambiguous. An incorrect prediction does not establish that the model’s interpretation is unreasonable. It shows where that interpretation departs from the room.
