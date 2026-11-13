@@ -90,6 +90,12 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 
 ![RTR-bench: score against cost](results/leaderboard-scatter.png)
 
+Eleven models land between 32.1 and 46.1 out of 100. Chance is 25, and a model that always names the most common quadrant scores 31.5, so nearly all of them clear the trivial floors and none comes close to reading the room. The top of the table is not a ranking either. At 165 windows the 95% intervals are about seven points wide, and gemini-3.8-flash at 46.1 overlaps claude-haiku-5.5 at 43.0 almost entirely, at four and a half times the cost.
+
+Where they fail is more interesting than where they land. Across 1,591 answers, the models name honest+uniting 67.7% of the time and honest+dividing 18.2% of the time. Division is read as spin or as bad faith, almost never as candour. Six of the seven windows no model got right are honest+dividing, including Donald Trump and Elon Musk, where the crowd itself agreed 86% and 70%. The seventy-eight-cent model and the models under twenty cents miss the same quadrant.
+
+The whole table cost $2.56 to produce. Cost barely relates to score: two cents buys 32.7, seventeen cents buys 43.0, seventy-eight cents buys 46.1.
+
 ## License
 
 MIT for the code. CC0 for `data/windows.json`.
