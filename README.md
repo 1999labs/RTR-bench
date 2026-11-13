@@ -1,6 +1,6 @@
 # RTR-bench
 
-**RTR-bench** tests whether language models can predict how a crowd interprets an ambiguous prompt. It investigates one aspect of cultural fluency: anticipating how people assign meaning to words, people, institutions, and ideas. Its source is [Mixed Messages](https://mixedmessages.fyi), a generative art project where participants respond to a daily prompt by placing a coordinate on a 2×2 grid: Honest vs Performed on one axis, Uniting vs Dividing on the other. The dataset used here contains 39,828 submissions across 165 closed windows.
+**RTR-bench** is an exploratory benchmark that tests whether language models can predict how a crowd interprets an ambiguous prompt. It investigates one aspect of cultural fluency: anticipating how people assign meaning to words, people, institutions, and ideas. Its source is [Mixed Messages](https://mixedmessages.fyi), a generative art project where participants respond to a daily prompt by placing a coordinate on a 2×2 grid: Honest vs Performed on one axis, Uniting vs Dividing on the other. The dataset used here contains 39,828 submissions across 165 closed windows.
 
 These submissions were collected through participation in a generative art project. Participants were not trained to apply an annotation rubric or converge on a correct answer. Each placement recorded an interpretation, and together those placements formed a distribution. That distribution preserves both agreement and disagreement: how strongly one reading prevailed, which alternatives attracted people, and where the crowd split.
 
@@ -9,6 +9,8 @@ Commonly cited benchmarks such as [HLE](https://lastexam.ai/) and [SWE-bench](ht
 For each prompt, the model answers two separate questions: which of the four quadrants received the most human submissions, and which quadrant represents its own interpretation. Both responses are compared with the recorded crowd response. The headline score measures how often the model correctly predicts a quadrant with the most crowd submissions, accepting either when the crowd ties. This gives a straightforward measure of agreement, although it captures only part of the underlying distribution.
 
 The score is one way to compare models; their patterns of agreement and error are another. Which interpretations do models consistently anticipate? Where do different models make the same mistake? How does asking a model to predict the crowd change its answer? RTR-bench uses these questions to examine what it means for a model to read the room - with the room here defined by the participants in Mixed Messages.
+
+RTR-bench is intended to surface patterns of agreement, disagreement, and consistency that warrant further investigation. Its results describe performance on this audience and prompt set; broader claims about cultural fluency require validation across other audiences and settings.
 
 ## How it works
 
