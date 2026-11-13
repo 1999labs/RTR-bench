@@ -80,12 +80,21 @@ test('interrupted HTTP attempt consumes retry budget, not another agent action; 
   const summary=report.summaries[0];assert.equal(summary.modelCalls,3);assert.equal(summary.apiCalls,4);assert.equal(summary.costUsd.known,.03);assert.equal(summary.costUsd.unknownAttempts,1);assert.equal(summary.inspections,1);assert.equal(report.rows[0].outcome!.actions,3);
 });
 
-test('exhausted HTTP retries abort without inventing an action; old checkpoint reports still replay',async t=>{
+test('exhausted HTTP retries abort without inventing an action',async t=>{
   const output=temp(t),options={fixture,strategy:'agent' as const,limit:1,output};
   const {dir}=await runLearnRoom(options,noNetwork),file=path.join(dir,'episodes/agent/100.json'),rec=readJson<EpisodeRecord>(file);
   const first=rec.agentCalls![0];first.applied=false;
   first.attempts=Array.from({length:3},(_,i)=>({...first.attempts[0],index:i+1,status:'started' as const,usage:null,raw:''}));
   rec.agentCalls=[first];rec.attempts=first.attempts;rec.trace=[];rec.outcome=null;rec.terminal=false;writeJson(file,rec);
   const resumed=await runLearnRoom(options,noNetwork);assert.equal(resumed.report.summaries[0].missing,1);assert.equal(resumed.report.summaries[0].costUsd.unknownAttempts,3);assert.equal(resumed.report.rows[0].outcome!.actions,0);
-  const old=buildLearnRoomReport(path.join(packageRoot(),'results/learn-room/fixture-synthetic-5169ab87498e34cd'));assert.equal(old.summaries.length,2);assert.equal(old.complete,true);
+});
+
+test('version 1 records still replay without checked-in generated reports',t=>{
+  const fixture=readJson<any>(path.join(packageRoot(),'tests/fixtures/learn-room-v1-replay.json'));
+  const dir=temp(t);
+  writeJson(path.join(dir,'manifest.json'),fixture.manifest);
+  for(const strategy of ['none','random']) writeJson(path.join(dir,'episodes',strategy,'100.json'),fixture.episodes[strategy]);
+  const report=buildLearnRoomReport(dir);
+  assert.equal(report.summaries.length,2);assert.equal(report.complete,true);
+  assert.deepEqual(report.rows.map(row=>row.outcome),['none','random'].map(s=>fixture.episodes[s].outcome));
 });

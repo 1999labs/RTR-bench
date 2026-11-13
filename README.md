@@ -121,6 +121,8 @@ node src/cli.ts learn-room --fixture tests/fixtures/learn-room-four-strategies.j
 
 This makes no API calls and writes a synthetic comparison with browsable episode traces under `results/learn-room/`. See the [Learn the Room protocol](docs/learn-room.md) for the fixed similarity method, interactive action interface, budgets, reproducibility rules, and model-run commands.
 
+Synthetic run directories for both tracks are ignored by Git. Fixture inputs and tests stay tracked; regenerate the reports locally with the commands above. Published benchmark reports remain tracked and are marked as generated in `.gitattributes`.
+
 ### Providers and concurrency
 
 OpenRouter may route calls to different providers serving the same model. To list providers, token prices, and numerical precision:
