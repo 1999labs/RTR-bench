@@ -8,7 +8,7 @@ Commonly cited benchmarks such as [HLE](https://lastexam.ai/) and [SWE-bench](ht
 
 For each prompt, the model answers two separate questions: which of the four quadrants received the most human submissions, and which quadrant represents its own interpretation. Both responses are compared with the recorded crowd response. The headline score measures how often the model correctly predicts the crowd’s dominant quadrant. This gives a straightforward measure of agreement, although it captures only part of the underlying distribution.
 
-The score is one way to compare models; their patterns of agreement and error are another. Which interpretations do models consistently anticipate? Where do different models make the same mistake? How does asking a model to predict the crowd change its answer? RTR-bench uses these questions to examine what it means for a model to read the room—with the room here defined by the participants in Mixed Messages.
+The score is one way to compare models; their patterns of agreement and error are another. Which interpretations do models consistently anticipate? Where do different models make the same mistake? How does asking a model to predict the crowd change its answer? RTR-bench uses these questions to examine what it means for a model to read the room - with the room here defined by the participants in Mixed Messages.
 
 ## How it works
 
