@@ -28,16 +28,9 @@ function readTable() {
 }
 
 function shortName(model) {
-  return model
-    .split("/")
-    .pop()
-    .replace("-1017", "")
-    .replace("m3.1-flash", "m3.1")
-    .replace("v2.6-flash", "v2.6")
-    .replace("v4.1-flash", "v4.1")
-    .replace("3.8-flash", "3.8")
-    .replace("-small", "")
-    .replace(/-+$/, "");
+  // Keep the full model name after the vendor: the suffixes distinguish
+  // variants that would otherwise read as the same model.
+  return model.split("/").pop();
 }
 
 const rows = readTable();
@@ -184,10 +177,12 @@ const special = new Map();
       .slice()
       .sort((a, b) => a.cost - b.cost)
       .forEach((r, k) => {
-        const lx = xOf(r.cost);
-        const ly = yOf(r.score) + 22 + k * 18;
         const text = shortName(r.model);
         const tw = text.length * 6.2 + 6;
+        const half = tw / 2;
+        const want = xOf(r.cost);
+        const lx = Math.min(Math.max(want, M.left + 4 + half), M.left + innerW - 4 - half);
+        const ly = yOf(r.score) + 22 + k * 18;
         special.set(r.model, { lx, ly, text });
         placed.push({ x1: lx - tw / 2, x2: lx + tw / 2, y1: ly - 9, y2: ly + 3 });
       });
