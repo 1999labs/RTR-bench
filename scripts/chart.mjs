@@ -95,7 +95,7 @@ parts.push(`<rect width="100%" height="100%" fill="#fff"/>`);
 
 // Title only.
 parts.push(
-  `<text x="24" y="40" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#111">RTR-bench</text>`
+  `<text x="${W / 2}" y="40" text-anchor="middle" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" fill="#111">RTR-bench</text>`
 );
 
 // Axes: pure black rules and numbers, faint interior grid.

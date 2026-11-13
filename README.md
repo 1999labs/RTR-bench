@@ -88,6 +88,8 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 | thinkingmachines/inkling-small | DeepInfra (fp8) | 37.0 | $0.1733 |
 | openai/gpt-oss-120b | DekaLLM (bf16) | 32.7 | $0.0205 |
 
+![RTR-bench: score against cost](results/leaderboard-scatter.png)
+
 ## License
 
 MIT for the code. CC0 for `data/windows.json`.
