@@ -90,11 +90,11 @@ Rebuilding the dataset needs the project's database connection, so `npm run expo
 
 ![RTR-bench: score against cost](results/leaderboard-scatter.png)
 
-Eleven models land between 32.1 and 46.1 out of 100. Chance is 25, and a model that always names the most common quadrant scores 31.5, so nearly all of them clear the trivial floors and none comes close to reading the room. The top of the table is not a ranking either. At 165 windows the 95% intervals are about seven points wide, and gemini-3.8-flash at 46.1 overlaps claude-haiku-5.5 at 43.0 almost entirely, at four and a half times the cost.
+Eleven models were run against the same 165 windows, and all of them landed between 32.1 and 46.1 out of 100. The floors sit low: guessing among four readings scores 25, and always naming the crowd's most common quadrant scores 31.5. Nearly every model clears both, and none of them comes close to reading the room. The order at the top is not a ranking either. At 165 windows the confidence intervals are about seven points wide, so gemini-3.8-flash at 46.1 and claude-haiku-5.5 at 43.0 are the same result measured twice, once for 78 cents and once for 17.
 
-Where they fail is more interesting than where they land. Across 1,591 answers, the models name honest+uniting 67.7% of the time and honest+dividing 18.2% of the time. Division is read as spin or as bad faith, almost never as candour. Six of the seven windows no model got right are honest+dividing, including Donald Trump and Elon Musk, where the crowd itself agreed 86% and 70%. The seventy-eight-cent model and the models under twenty cents miss the same quadrant.
+The models are more alike in how they fail than in how they score. Across 1,591 answers they name honest+uniting 67.7 percent of the time and honest+dividing 18.2 percent of the time, while the crowd chose honest+dividing in 39 of the 165 windows. Division, when a model registers it at all, reads as spin or as bad faith, and almost never as candour. Six of the seven windows that no model got right are honest+dividing, among them Donald Trump and Elon Musk, where the crowd agreed with itself 86 and 70 percent. The 78-cent model and the two-cent one miss the same quadrant.
 
-The whole table cost $2.56 to produce. Cost barely relates to score: two cents buys 32.7, seventeen cents buys 43.0, seventy-eight cents buys 46.1.
+Cost barely enters into it. Two cents buys 32.7, seventeen cents buys 43.0, seventy-eight cents buys 46.1, and the whole table cost $2.56 to produce. What the numbers describe is a set of models that can tell whether a word feels warm or hostile, and cannot tell what this particular audience would do with it. That gap is the thing the benchmark was built to measure, and eleven models later it is still open.
 
 ## License
 
