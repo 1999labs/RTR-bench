@@ -2,6 +2,12 @@
 
 Learn the Room is a separate evaluation track built on the [distribution protocol](distribution.md). It uses the same chronological split, probability validation, failure penalties, equal-window weighting, and score out of 100. This implementation provides a controlled interactive environment, four evidence strategies, resumable runs, and comparison reports. Strategies are version 2; the runner is version 3 with provider Retry-After handling and optional spending enforcement. The environment and distribution scorer remain version 1. Saved earlier reports remain replayable.
 
+## Public commands
+
+Use `node src/cli.ts read-the-room <model>` for Predict (`none`) and Learn (`agent`), `predict <model>` for Predict alone, or `learn <model>` for Learn alone. Add the boolean `--controls` flag to `read-the-room` for all four strategies. These commands default to 4,000 output tokens per response and, when running Learn, `transfer-check-v1`. They share the existing runner, spending enforcement, reports, and `results/learn-room/` storage. Use `--max-usd` and `--provider` for a capped paid run; see the [Quickstart](../README.md#quickstart).
+
+The legacy `learn-room` command retains its defaults: 2,000 tokens, the original agent policy, and `--strategy both` meaning `none` plus `random`. Its new `--strategy tracks` selects `none` plus `agent`; `--strategy all` still selects all four conditions. New commands do not accept `--strategy`. A combined run reports Learn’s paired gain; Learn alone does not calculate a gain without a Predict baseline. Separate strategy sets have separate run identities and do not share saved predictions or budgets.
+
 ## Environment contract
 
 `createEpisode(target, reference, options)` returns separate `agent` and `evaluator` capabilities. A policy receives only `agent`. The evaluator owns the hidden target distribution, scoring, and trace access. Each episode copies its inputs, has independent state, and rejects references that repeat the target entity, are not earlier than the target, or duplicate an ID.

@@ -57,19 +57,18 @@ From the repository directory, add your API key and run a five-target developmen
 ```bash
 echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
 
-node src/cli.ts learn-room z-ai/glm-5.3-flash \
+node src/cli.ts read-the-room z-ai/glm-5.3-flash \
   --provider Relace \
-  --strategy all \
   --split development \
   --limit 5 \
-  --max-tokens 4000 \
-  --agent-policy transfer-check-v1 \
   --max-usd 0.25
 ```
 
-Replace `sk-or-your-key` with your OpenRouter API key. To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID and select a serving provider. The implementation command remains `learn-room`; `--strategy all` runs Predict, Learn, and both comparison controls.
+Replace `sk-or-your-key` with your OpenRouter API key. To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID and select a serving provider. Use `read-the-room` for both tracks, `predict` for Predict alone, or `learn` for Learn alone. Add `--controls` to `read-the-room` to include randomly selected and text-similarity examples.
 
-The command prints the scores and saves requests, responses, action traces, and reports under `results/learn-room/`. The spending limit applies to this run’s API usage and persists across resumes. Provider availability and pricing can change.
+The new commands default to 4,000 output tokens per response; Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
+
+The command prints the scores and Learn’s gain over Predict, and saves requests, responses, action traces, and reports under `results/learn-room/`. The spending limit applies to this run’s API usage and persists across resumes. Provider availability and pricing can change.
 
 To list available model IDs and token prices:
 
@@ -77,20 +76,18 @@ To list available model IDs and token prices:
 node src/cli.ts catalog --limit 20
 ```
 
-Once the settings are fixed, evaluate all 45 final targets:
+Once the settings are fixed, evaluate all 45 final targets with both comparison controls, matching the conditions in the results table:
 
 ```bash
-node src/cli.ts learn-room z-ai/glm-5.3-flash \
+node src/cli.ts read-the-room z-ai/glm-5.3-flash \
   --provider Relace \
-  --strategy all \
+  --controls \
   --split evaluation \
   --limit 45 \
-  --max-tokens 4000 \
-  --agent-policy transfer-check-v1 \
   --max-usd 0.25
 ```
 
-A typical full comparison uses about 360 model calls: 45 for Predict, 45 for each automatic control, and approximately five calls per Learn episode. Early stopping can reduce that number; additional agent turns and transport retries can increase it. The first final GLM run used 347 calls.
+Both tracks alone typically use about 270 model calls on 45 targets. A full comparison with `--controls` uses about 360: 45 for Predict, 45 for each automatic control, and approximately five calls per Learn episode. Early stopping can reduce that number; additional agent turns and transport retries can increase it. The first final GLM run used 347 calls.
 
 A development pilot checks the setup and is not comparable with final evaluation results. Identical commands resume their saved runs. Changing the target set or settings creates a separate run and spending ledger; a pilot’s predictions and budget are not automatically carried into a larger run.
 
@@ -112,41 +109,41 @@ A development pilot checks the setup and is not comparable with final evaluation
 
 ## Optional usage
 
-### Predict without the comparison conditions
+### Run one track
 
-To run Predict alone with a configurable token allowance and spending limit, use the no-example condition:
+To run Predict alone:
 
 ```bash
-node src/cli.ts learn-room z-ai/glm-5.3-flash \
+node src/cli.ts predict z-ai/glm-5.3-flash \
   --provider Relace \
-  --strategy none \
   --split development \
   --limit 5 \
-  --max-tokens 4000 \
   --max-usd 0.25
 ```
 
-This uses the same prediction messages and scorer as Predict in the full comparison. Running it separately creates its own run; use `--strategy all` when evaluating both tracks together to avoid duplicating the no-example calls.
+Replace `predict` with `learn` to run Learn alone. Each reports its own score; Learn’s gain requires the matching Predict result, which `read-the-room` calculates automatically. The standalone commands use the same prompts and scorer as their conditions in the combined run.
+
+Separate commands and changes to `--controls` create separate runs and spending ledgers; saved predictions are not automatically shared between them. Use `read-the-room --controls` from the outset when you want both tracks and the controls.
+
+The legacy `learn-room` and `distribution` commands remain available with their original defaults and saved-run formats. In particular, legacy `learn-room` without `--strategy` runs the no-example and random conditions. New commands use the existing `results/learn-room/` storage and report format; internal strategy labels are `none` (Predict), `agent` (Learn), `random`, and `similar`.
 
 ### Synthetic runs
 
-Try Predict’s five-target fixture without an API key or any API spending:
+Try Predict on the five-target fixture without an API key or any API spending:
 
 ```bash
-node src/cli.ts distribution \
-  --fixture tests/fixtures/distribution-pilot.json \
+node src/cli.ts predict \
+  --fixture tests/fixtures/learn-room-four-strategies.json \
   --limit 5
 ```
 
 To exercise Learn and all comparison conditions:
 
 ```bash
-node src/cli.ts learn-room \
+node src/cli.ts read-the-room \
   --fixture tests/fixtures/learn-room-four-strategies.json \
-  --strategy all \
-  --limit 5 \
-  --max-tokens 4000 \
-  --agent-policy transfer-check-v1
+  --controls \
+  --limit 5
 ```
 
 These commands write explicitly labeled synthetic reports with saved outputs and browsable traces. They demonstrate the pipeline, not model performance.
@@ -178,12 +175,10 @@ npm ci
 npm test
 npm run build
 
-node src/cli.ts learn-room \
+node src/cli.ts read-the-room \
   --fixture tests/fixtures/learn-room-four-strategies.json \
-  --strategy all \
-  --limit 5 \
-  --max-tokens 4000 \
-  --agent-policy transfer-check-v1
+  --controls \
+  --limit 5
 ```
 
 This setup verifies the implementation and generates a synthetic report without making model API calls. For paid runs, add your OpenRouter key and use the Quickstart commands.

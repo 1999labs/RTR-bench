@@ -1,5 +1,7 @@
 # Distribution prediction protocol v1
 
+For the public Predict track, use `node src/cli.ts predict <model>`; see the [Quickstart](../README.md#quickstart). This uses the shared Learn runner’s no-example condition with a 4,000-token default and support for `--max-usd`. `read-the-room <model>` runs Predict and Learn together. The legacy `distribution` command and its fixture format remain available unchanged.
+
 This is a separate RTR-bench track. The original winning-quadrant benchmark retains its prompts, scoring, and result paths. [Learn the Room](learn-room.md) reuses this protocol's probability validation and scorer for its interactive environment and initial baseline comparisons.
 
 ## Dataset and frozen split

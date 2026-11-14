@@ -41,20 +41,31 @@ function parse(args: string[]): Options {
 const [cmd, ...rest] = process.argv.slice(2);
 const flags = parse(rest);
 
-if (cmd === "learn-room") {
+if (["read-the-room", "predict", "learn", "learn-room"].includes(cmd)) {
+  const legacy = cmd === "learn-room";
   const allowed = new Set(["split", "limit", "provider", "fixture", "output", "strategy", "budget", "seed", "max-model-calls", "max-tokens", "max-usd", "replicate", "agent-policy"]);
+  if (!legacy) allowed.delete("strategy");
+  if (cmd === "read-the-room") allowed.add("controls");
+  if (cmd === "predict") {
+    for (const key of ["agent-policy", "budget", "max-model-calls"]) allowed.delete(key);
+  }
   for (const [key,value] of Object.entries(flags)) {
-    if (!allowed.has(key)) throw new Error(`Unknown learn-room flag --${key}`);
+    if (!allowed.has(key)) throw new Error(`Unknown ${cmd} flag --${key}`);
+    if (key === "controls") {
+      if (value !== true) throw new Error("--controls does not take a value");
+      continue;
+    }
     if (typeof value !== "string") throw new Error(`--${key} requires a value`);
   }
+  const strategy = legacy ? (flags.strategy ?? "both") : cmd === "predict" ? "none" : cmd === "learn" ? "agent" : flags.controls ? "all" : "tracks";
   const {dir,report} = await runLearnRoom({
     model: rest[0] && !rest[0].startsWith("--") ? rest[0] : undefined,
     partition: (flags.split ?? "development") as "development" | "evaluation",
-    strategy: (flags.strategy ?? "both") as "none" | "random" | "similar" | "agent" | "both" | "all",
+    strategy: strategy as "none" | "random" | "similar" | "agent" | "both" | "all" | "tracks",
     maxModelCalls: flags["max-model-calls"] === undefined ? undefined : Number(flags["max-model-calls"]),
-    maxTokens: flags["max-tokens"] === undefined ? undefined : Number(flags["max-tokens"]),
+    maxTokens: flags["max-tokens"] === undefined ? (legacy ? undefined : 4000) : Number(flags["max-tokens"]),
     replicate: flags.replicate as string | undefined,
-    agentPolicy: flags["agent-policy"] as "default" | "transfer-check-v1" | undefined,
+    agentPolicy: (flags["agent-policy"] ?? (!legacy && cmd !== "predict" ? "transfer-check-v1" : undefined)) as "default" | "transfer-check-v1" | undefined,
     maxUsd: flags["max-usd"] === undefined ? undefined : Number(flags["max-usd"]),
     limit: flags.limit === undefined ? undefined : Number(flags.limit),
     budget: flags.budget === undefined ? undefined : Number(flags.budget),
@@ -62,7 +73,13 @@ if (cmd === "learn-room") {
     provider: flags.provider as string | undefined, fixture: flags.fixture as string | undefined,
     output: flags.output as string | undefined,
   });
-  for (const summary of report.summaries) console.log(`${report.manifest.config.mode === "fixture" ? "SYNTHETIC FIXTURE: " : ""}learn-room ${summary.strategy}: ${summary.score?.toFixed(2)}/100`);
+  const prefix = report.manifest.config.mode === "fixture" ? "SYNTHETIC FIXTURE: " : "";
+  const labels = {none:"Predict", agent:"Learn", random:"Random control", similar:"Similarity control"};
+  for (const summary of report.summaries) console.log(`${prefix}${legacy ? `learn-room ${summary.strategy}` : labels[summary.strategy]}: ${summary.score?.toFixed(2)}/100`);
+  if (!legacy) {
+    const gain = report.comparisons.find(c=>c.strategy === "agent" && c.control === "none");
+    if (gain) console.log(`${prefix}Learn gain: ${gain.scoreGain.toFixed(2)} points`);
+  }
   console.log(`report: ${path.resolve(dir,"report.html")}`);
 } else if (cmd === "learn-room-report") {
   if (!rest[0] || rest[0].startsWith("--")) throw new Error("usage: rtr-bench learn-room-report <run-directory>");

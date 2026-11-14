@@ -25,7 +25,7 @@ export type RoomConfig = {
 };
 export type RoomManifest = {id:string;createdAt:string;config:RoomConfig;status:"incomplete"|"complete";completedAt?:string};
 export type EpisodeRecord = {day:number;strategy:Strategy;request:Request;attempts:Attempt[];agentCalls?:AgentCall[];terminal:boolean;trace:TraceEntry[];outcome:Outcome|null};
-type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;replicate?:string;agentPolicy?:AgentPolicyName;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
+type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all"|"tracks";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;replicate?:string;agentPolicy?:AgentPolicyName;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
 
 export function prepareEpisode(config: RoomConfig, strategy: Strategy, day: number, data = loadDistributionData()) {
   const target = data.windows.find(w=>w.day===day);
@@ -53,7 +53,7 @@ export function finishEpisode(episode: ReturnType<typeof createEpisode>, attempt
 export async function runLearnRoom(options: Options, client = requestCompletion) {
   const data=loadDistributionData(), partition=options.partition??"development", strategy=options.strategy??"both";
   if (!["development","evaluation"].includes(partition)) throw new Error("--split must be development or evaluation");
-  if (!["none","random","similar","agent","both","all"].includes(strategy)) throw new Error("--strategy must be none, random, similar, agent, both, or all");
+  if (!["none","random","similar","agent","both","all","tracks"].includes(strategy)) throw new Error("--strategy must be none, random, similar, agent, both, all, or tracks");
   const budget=options.budget??3, seed=options.seed??7;
   if (!Number.isInteger(budget)||budget<0||budget>3) throw new Error("--budget must be an integer from 0 to 3");
   if (!Number.isInteger(seed)||seed<0||seed>0xffffffff) throw new Error("--seed must be an unsigned 32-bit integer");
@@ -63,9 +63,9 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   if (!Number.isSafeInteger(maxTokens)||maxTokens<1) throw new Error("--max-tokens must be a positive safe integer");
   if (options.replicate!==undefined && (typeof options.replicate!=="string"||!/^[A-Za-z0-9_-]{1,64}$/.test(options.replicate))) throw new Error("--replicate must contain 1–64 letters, numbers, underscores, or hyphens");
   if (options.limit!==undefined && (!Number.isInteger(options.limit)||options.limit<1)) throw new Error("--limit must be a positive integer");
-  const targets=data.split[partition].slice(0,options.limit), strategies: Strategy[]=strategy==="all" ? ["none","random","similar","agent"] : strategy==="both" ? ["none","random"] : [strategy];
+  const targets=data.split[partition].slice(0,options.limit), strategies: Strategy[]=strategy==="all" ? ["none","random","similar","agent"] : strategy==="tracks" ? ["none","agent"] : strategy==="both" ? ["none","random"] : [strategy];
   const policy=getAgentPolicy(options.agentPolicy);
-  if(options.agentPolicy!==undefined&&!strategies.includes("agent")) throw new Error("--agent-policy requires --strategy agent or all");
+  if(options.agentPolicy!==undefined&&!strategies.includes("agent")) throw new Error("--agent-policy requires --strategy agent, all, or tracks (learn or read-the-room)");
   const fixtureRaw=options.fixture ? fs.readFileSync(options.fixture,"utf8") : null;
   const fixture=fixtureRaw===null ? null : JSON.parse(fixtureRaw);
   if (fixtureRaw!==null && (!fixture || typeof fixture!=="object" || Array.isArray(fixture) || strategies.some(s=>targets.some(day=>s==="agent" ? !Array.isArray(fixture[s]?.[day])||!fixture[s][day].length||fixture[s][day].some((v:unknown)=>typeof v!=="string") : typeof fixture[s]?.[day]!=="string")))) throw new Error("Fixture must map each strategy/day to a raw response string (agent: a nonempty array of raw action strings)");
