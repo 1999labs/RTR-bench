@@ -3,28 +3,78 @@ import { readJson, writeJson } from "./run-records.ts";
 import type { Request, Attempt } from "./model-client.ts";
 
 const units=(usd:number)=>Math.ceil(usd*1e9);
-export type SpendingPolicy={version:"reserved-context-v1";limitUsd:number;providerTag:string;contextTokens:number;inputUsdPerToken:number;outputUsdPerToken:number};
+type SpendingBounds={limitUsd:number;providerTag:string;contextTokens:number;inputUsdPerToken:number;outputUsdPerToken:number};
+export type SpendingPolicy=SpendingBounds & ({version:"reserved-context-v1"}|{
+  version:"reserved-text-v2";model:string;temperatureSupported:boolean;maxCompletionTokens:number;pricing:Record<string,unknown>;
+});
 type Entry={reservedUnits:number;chargedUnits:number|null;at:string;costBasis?:string};
 type Ledger={policy:SpendingPolicy;entries:Entry[]};
 export class SpendingLimitError extends Error {}
 
-export async function discoverSpendingPolicy(model:string,provider:string,limitUsd:number):Promise<SpendingPolicy> {
+const record=(value:unknown):value is Record<string,unknown>=>value!==null&&typeof value==="object"&&!Array.isArray(value);
+const rate=(value:unknown)=>{
+  if((typeof value!=="number"&&typeof value!=="string")||(typeof value==="string"&&!value.trim())) throw new Error("Invalid catalog rate");
+  const n=Number(value);
+  if(!Number.isFinite(n)||n<0) throw new Error("Invalid catalog rate");
+  return n;
+};
+
+// Only text token charges can be incurred by the v2 request shape below. Cache
+// writes are conservatively covered even though explicit caching is not enabled.
+function textPrices(pricing:unknown) {
+  if(!record(pricing)) throw new Error("Invalid catalog pricing");
+  const {overrides=[],...base}=pricing;
+  if(!Array.isArray(overrides)) throw new Error("Invalid pricing tiers");
+  const tiers=[base,...overrides.map(tier=>{
+    if(!record(tier)||!Number.isSafeInteger(tier.min_prompt_tokens)||Number(tier.min_prompt_tokens)<0||"overrides" in tier) throw new Error("Invalid pricing tier");
+    const {min_prompt_tokens,...prices}=tier;
+    return {...base,...prices};
+  })];
+  const known=new Set(["prompt","completion","input_cache_read","input_cache_write","input_cache_write_1h","internal_reasoning","discount","request","image","audio","input_audio_cache","web_search"]);
+  let input=0,output=0;
+  for(const tier of tiers) {
+    for(const [key,value] of Object.entries(tier)) {
+      const n=rate(value);
+      if((!known.has(key)||key==="request")&&n!==0) throw new Error("Unbudgeted catalog charge");
+    }
+    if(rate(tier.prompt)<=0||rate(tier.completion)<=0) throw new Error("Missing token prices");
+    input=Math.max(input,...["prompt","input_cache_read","input_cache_write","input_cache_write_1h"].map(k=>rate(tier[k]??0)));
+    // Reasoning is part of output usage, not a second copy of those tokens.
+    output=Math.max(output,rate(tier.completion),rate(tier.internal_reasoning??0));
+  }
+  return {inputUsdPerToken:input,outputUsdPerToken:output};
+}
+
+// Catalog object ordering must not create a new run instead of resuming it.
+function orderedPricing(pricing:Record<string,unknown>):Record<string,unknown> {
+  return Object.fromEntries(Object.keys(pricing).sort().map(key=>[key,key==="overrides"
+    ? (pricing[key] as Record<string,unknown>[]).map(orderedPricing).sort((a,b)=>Number(a.min_prompt_tokens)-Number(b.min_prompt_tokens)||JSON.stringify(a).localeCompare(JSON.stringify(b)))
+    : pricing[key]]));
+}
+
+export async function discoverSpendingPolicy(model:string,provider:string,limitUsd:number,fetcher:typeof fetch=fetch):Promise<SpendingPolicy> {
   if(!Number.isFinite(limitUsd)||limitUsd<=0) throw new Error("--max-usd must be positive");
   if(!provider) throw new Error("--max-usd requires --provider");
-  const response=await fetch(`https://openrouter.ai/api/v1/models/${model}/endpoints`);
+  const response=await fetcher(`https://openrouter.ai/api/v1/models/${model}/endpoints`);
   if(!response.ok) throw new Error(`Provider catalog HTTP ${response.status}`);
   const json=await response.json();
+  if(!Array.isArray(json?.data?.endpoints)) throw new Error("Invalid provider catalog");
   const endpoints=json.data.endpoints.filter((e:any)=>e.status===0&&(e.provider_name?.toLowerCase()===provider.toLowerCase()||e.tag===provider));
-  const suitable=endpoints.filter((e:any)=>{
+  const suitable=endpoints.flatMap((e:any)=>{
     const p=e.pricing;
-    return Number.isInteger(e.context_length)&&e.context_length>0&&Number(p?.prompt)>0&&Number(p?.completion)>0&&
-      Number(p?.input_cache_read??0)<=Number(p.prompt)&&Number(p?.request??0)===0&&
-      Object.entries(p??{}).every(([key,value])=>["prompt","completion","input_cache_read","discount"].includes(key)||Number(value)===0)&&
-      e.supported_parameters?.includes("max_tokens")&&e.supported_parameters?.includes("temperature");
-  }).sort((a:any,b:any)=>Number(a.pricing.prompt)-Number(b.pricing.prompt)||String(a.tag).localeCompare(String(b.tag)));
-  const endpoint=suitable[0];
-  if(!endpoint?.tag) throw new Error("No suitable fixed-price endpoint supports the spending guard");
-  return {version:"reserved-context-v1",limitUsd,providerTag:endpoint.tag,contextTokens:endpoint.context_length,inputUsdPerToken:Number(endpoint.pricing.prompt),outputUsdPerToken:Number(endpoint.pricing.completion)};
+    if(!Number.isSafeInteger(e.context_length)||e.context_length<1||typeof e.tag!=="string"||!e.tag||!Array.isArray(e.supported_parameters)||!e.supported_parameters.includes("max_tokens")) return [];
+    try {
+      const prices=textPrices(p),temperatureSupported=e.supported_parameters.includes("temperature");
+      const common={limitUsd,providerTag:e.tag,contextTokens:e.context_length};
+      const legacy=temperatureSupported&&Number(p.input_cache_read??0)<=Number(p.prompt)&&Object.entries(p).every(([key,value])=>["prompt","completion","input_cache_read","discount"].includes(key)||Number(value)===0);
+      if(legacy) return [{version:"reserved-context-v1",...common,inputUsdPerToken:Number(p.prompt),outputUsdPerToken:Number(p.completion)} as SpendingPolicy];
+      const maxCompletionTokens=e.max_completion_tokens??e.context_length;
+      if(!Number.isSafeInteger(maxCompletionTokens)||maxCompletionTokens<1) return [];
+      return [{version:"reserved-text-v2",...common,...prices,model,temperatureSupported,maxCompletionTokens,pricing:orderedPricing(p)} as SpendingPolicy];
+    } catch { return []; }
+  }).sort((a:SpendingPolicy,b:SpendingPolicy)=>a.inputUsdPerToken-b.inputUsdPerToken||a.providerTag.localeCompare(b.providerTag));
+  if(!suitable.length) throw new Error("No suitable text endpoint supports the spending guard");
+  return suitable[0];
 }
 
 export function spendingProvider(policy:SpendingPolicy) {
@@ -34,7 +84,11 @@ export function spendingProvider(policy:SpendingPolicy) {
 // The caller holds the run lock. Persist before dispatch and retain the entire
 // reservation when a request's cost is unknown, including interrupted calls.
 export function openSpendingLedger(file:string,policy:SpendingPolicy) {
-  if(policy.version!=="reserved-context-v1"||!Number.isFinite(policy.limitUsd)||policy.limitUsd<=0||!Number.isInteger(policy.contextTokens)||policy.contextTokens<1||!policy.providerTag||[policy.inputUsdPerToken,policy.outputUsdPerToken].some(p=>!Number.isFinite(p)||p<=0)) throw new Error("Invalid spending policy");
+  if(!["reserved-context-v1","reserved-text-v2"].includes(policy.version)||!Number.isFinite(policy.limitUsd)||policy.limitUsd<=0||!Number.isSafeInteger(policy.contextTokens)||policy.contextTokens<1||!policy.providerTag||[policy.inputUsdPerToken,policy.outputUsdPerToken].some(p=>!Number.isFinite(p)||p<=0)) throw new Error("Invalid spending policy");
+  if(policy.version==="reserved-text-v2") {
+    const prices=textPrices(policy.pricing);
+    if(!policy.model||typeof policy.temperatureSupported!=="boolean"||!Number.isSafeInteger(policy.maxCompletionTokens)||policy.maxCompletionTokens<1||prices.inputUsdPerToken!==policy.inputUsdPerToken||prices.outputUsdPerToken!==policy.outputUsdPerToken) throw new Error("Invalid text spending policy");
+  }
   const ledger=fs.existsSync(file)?readJson<Ledger>(file):{policy,entries:[]};
   if(JSON.stringify(ledger.policy)!==JSON.stringify(policy)) throw new Error("Spending ledger policy mismatch");
   const accounted=()=>ledger.entries.reduce((s,e)=>s+(e.chargedUnits??e.reservedUnits),0);
@@ -43,7 +97,13 @@ export function openSpendingLedger(file:string,policy:SpendingPolicy) {
   return {
     reserve(request:Request) {
       if(JSON.stringify(request.provider)!==JSON.stringify(spendingProvider(policy))) throw new Error("Request must use the budget's pinned provider and price ceiling");
-      if(!Number.isInteger(request.max_tokens)||request.max_tokens<=0) throw new Error("Budgeted requests require a finite output limit");
+      if(!Number.isSafeInteger(request.max_tokens)||request.max_tokens<=0) throw new Error("Budgeted requests require a finite output limit");
+      if(policy.version==="reserved-text-v2") {
+        const allowed=["model","messages","temperature","max_tokens","usage","provider"];
+        if(Object.keys(request).some(k=>!allowed.includes(k))||request.model!==policy.model||!Array.isArray(request.messages)||request.messages.some(m=>!record(m)||Object.keys(m).some(k=>!["role","content"].includes(k))||!["system","user","assistant"].includes(m.role)||typeof m.content!=="string")||!record(request.usage)||Object.keys(request.usage).some(k=>k!=="include")||request.usage.include!==true) throw new Error("Budgeted v2 requests must use plain text without tools, plugins, caching controls, or extra parameters");
+        if(!policy.temperatureSupported&&"temperature" in request) throw new Error("Endpoint does not support temperature");
+        if(request.max_tokens>policy.maxCompletionTokens) throw new Error("Output limit exceeds the endpoint maximum");
+      }
       // Reject oversized messages before relying on the endpoint context bound.
       if(Buffer.byteLength(JSON.stringify(request.messages),"utf8")+1024*request.messages.length>policy.contextTokens) throw new SpendingLimitError("Request is too large for the conservative spending guard");
       const reservedUnits=units(policy.contextTokens*policy.inputUsdPerToken+request.max_tokens*policy.outputUsdPerToken);

@@ -34,7 +34,7 @@ export function agentMessages(episode:Episode,config:RoomConfig):Message[] {
   return [{role:"system",content:getAgentPolicy(config.agentPolicy).system},{role:"user",content:JSON.stringify({...episode.agent.observe(),maxModelCalls:config.maxModelCalls})}];
 }
 export function agentRequest(config:RoomConfig,messages:Message[]):Request {
-  const request:Request={model:config.model,messages:structuredClone(messages),temperature:config.settings.temperature,max_tokens:config.settings.maxTokens,usage:{include:true}};
+  const request:Request={model:config.model,messages:structuredClone(messages),...(config.settings.temperature===null?{}:{temperature:config.settings.temperature}),max_tokens:config.settings.maxTokens,usage:{include:true}};
   if(config.provider) request.provider={order:[config.provider],allow_fallbacks:false};
   if(config.spending) request.provider=spendingProvider(config.spending);
   return request;

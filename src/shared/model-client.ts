@@ -1,6 +1,6 @@
 export type Message = { role: "system" | "user" | "assistant"; content: string };
 export type Request = {
-  model: string; messages: Message[]; temperature: number;
+  model: string; messages: Message[]; temperature?: number;
   max_tokens: number; usage: { include: boolean };
   provider?: { order: string[]; allow_fallbacks: boolean; max_price?: {prompt:number;completion:number;request:number} };
 };

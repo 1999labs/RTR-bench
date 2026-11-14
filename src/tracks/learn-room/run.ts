@@ -21,7 +21,7 @@ export type RoomConfig = {
   replicate?:string;
   agentPolicy?:AgentPolicyName;
   model: string; provider: string | null; mode: "fixture" | "api"; fixtureHash: string | null;
-  settings: {temperature:number;maxTokens:number;maxAttempts:number;timeoutMs:number;apiUrl:string;retryPolicy?:string};
+  settings: {temperature:number|null;maxTokens:number;maxAttempts:number;timeoutMs:number;apiUrl:string;retryPolicy?:string};
 };
 export type RoomManifest = {id:string;createdAt:string;config:RoomConfig;status:"incomplete"|"complete";completedAt?:string};
 export type EpisodeRecord = {day:number;strategy:Strategy;request:Request;attempts:Attempt[];agentCalls?:AgentCall[];terminal:boolean;trace:TraceEntry[];outcome:Outcome|null};
@@ -33,7 +33,7 @@ export function prepareEpisode(config: RoomConfig, strategy: Strategy, day: numb
   const reference = data.windows.filter(w=>config.reference.includes(w.day));
   const episode = createEpisode(target,reference,{budget:strategy==="none" ? 0 : config.budget,maxActions:config.maxActions,aliases:data.split.grouping.aliases});
   const messages = strategy==="agent" ? agentMessages(episode,config) : prepareStrategy(episode.agent,strategy,config.seed);
-  const request: Request = {model:config.model,messages,temperature:config.settings.temperature,max_tokens:config.settings.maxTokens,usage:{include:true}};
+  const request: Request = {model:config.model,messages,...(config.settings.temperature===null?{}:{temperature:config.settings.temperature}),max_tokens:config.settings.maxTokens,usage:{include:true}};
   if (config.provider) request.provider={order:[config.provider],allow_fallbacks:false};
   if (config.spending) request.provider=spendingProvider(config.spending);
   return {episode,request};
@@ -76,6 +76,7 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   const spending=options.spending??(options.maxUsd!==undefined?await discoverSpendingPolicy(model,options.provider??"",options.maxUsd):undefined);
   const config: RoomConfig={track:"learn-room",version:"learn-room-runner-v2",scorerVersion:DISTRIBUTION_VERSION,environmentVersion:ENVIRONMENT_VERSION,strategyVersion:STRATEGY_VERSION,similarityVersion:SIMILARITY_VERSION,agentVersion:AGENT_VERSION,agentPromptHash:policy.promptHash,maxModelCalls,promptHash:PROMPT_HASH,evidenceInstruction:EVIDENCE_INSTRUCTION,datasetHash:data.datasetHash,splitHash:data.splitHash,partition,targets,reference:data.split.reference,strategies,budget,maxActions:MAX_ACTIONS,seed,model,provider:options.provider??null,mode:fixture?"fixture":"api",fixtureHash:fixtureRaw===null?null:digest(fixtureRaw),settings:{temperature:0,maxTokens,maxAttempts:MAX_ATTEMPTS,timeoutMs:TIMEOUT_MS,apiUrl:API_URL}};
   if(spending) config.spending=spending;
+  if(spending?.version==="reserved-text-v2"&&!spending.temperatureSupported) config.settings.temperature=null;
   config.version="learn-room-runner-v3";
   config.settings.retryPolicy="retry-after-v1";
   if(options.replicate!==undefined) config.replicate=options.replicate;

@@ -48,13 +48,31 @@ The full comparison includes randomly selected examples and examples selected by
 
 ## Quickstart
 
-You need Node.js 22.18 or newer and an OpenRouter API key with available credits. Use the source checkout for Predict and Learn; the [Development setup](#development) below includes the dataset and required commands.
+You need [Node.js](https://nodejs.org/) 22.18 or newer, [Git](https://git-scm.com/), and an OpenRouter API key with available credits. Node runs the benchmark on your computer; OpenRouter connects it to the model you want to evaluate. The dataset is included, and no GPU or database setup is needed.
 
-From the repository directory, add your API key and run a five-target development pilot:
+### 1. Download and set up the benchmark
 
 ```bash
-echo 'OPENROUTER_API_KEY=sk-or-your-key' > .env
+git clone https://github.com/1999labs/RTR-bench
+cd RTR-bench
+npm ci
+```
 
+Run these commands in Terminal. They download the project, move into its folder, and install its supporting software. Keep Terminal in this folder for the commands below. If you already have a checkout, use that folder instead of cloning another copy.
+
+### 2. Add your OpenRouter API key
+
+Create a file named `.env` in the project folder and add this line, replacing `sk-or-your-key` with your own key:
+
+```text
+OPENROUTER_API_KEY=sk-or-your-key
+```
+
+The benchmark reads this file when it starts. The key connects requests to your OpenRouter account; the file is excluded from Git.
+
+### 3. Run a small development evaluation
+
+```bash
 node src/cli.ts read-the-room z-ai/glm-5.3-flash \
   --provider Relace \
   --split development \
@@ -62,17 +80,21 @@ node src/cli.ts read-the-room z-ai/glm-5.3-flash \
   --max-usd 0.25
 ```
 
-Replace `sk-or-your-key` with your OpenRouter API key. To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID and select a serving provider. Use `read-the-room` for both tracks, `predict` for Predict alone, or `learn` for Learn alone. Add `--controls` to `read-the-room` to include randomly selected and text-similarity examples.
+Here, `node src/cli.ts` starts the benchmark, and `read-the-room` selects both Predict and Learn. This command evaluates five development prompts using GLM 5.3 Flash through Relace, with a $0.25 spending cap. The backslashes let one command continue across several lines.
+
+To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID and select a serving provider. Use `predict` for Predict alone or `learn` for Learn alone. Add `--controls` to `read-the-room` to include randomly selected and text-similarity examples.
 
 The new commands default to 4,000 output tokens per response; Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
 
-The command prints the scores and Learn’s gain over Predict, and saves requests, responses, action traces, and reports under `results/learn-room/`. The spending limit applies to this run’s API usage and persists across resumes. Provider availability and pricing can change.
+The command prints the scores and Learn’s gain over Predict, and saves requests, responses, action traces, and reports under `results/learn-room/`. Open the printed `report.html` path in a browser to inspect the results. The spending limit applies to this run’s API usage and persists across resumes; a run stops incomplete if the cap is insufficient. Provider availability and pricing can change.
 
 To list available model IDs and token prices:
 
 ```bash
 node src/cli.ts catalog --limit 20
 ```
+
+### 4. Run the final evaluation
 
 Once the settings are fixed, evaluate all 45 final targets with both comparison controls, matching the conditions in the results table:
 
@@ -106,6 +128,20 @@ A development pilot checks the setup and is not comparable with final evaluation
 | openai/gpt-oss-120b | TBD | TBD | TBD | TBD | TBD |
 
 ## Optional usage
+
+### Run the npm release
+
+Version 0.2.0 packages the same Predict and Learn commands and the frozen dataset. With Node.js installed, you can use `npx` to download and run that release without cloning the repository or running `npm ci`. From a folder where you want to save results, create the `.env` file described above, then run:
+
+```bash
+npx rtr-bench@0.2.0 read-the-room z-ai/glm-5.3-flash \
+  --provider Relace \
+  --split development \
+  --limit 5 \
+  --max-usd 0.25
+```
+
+For the other model-evaluation commands below, replace `node src/cli.ts` with `npx rtr-bench@0.2.0`. Results are saved in your current folder's `results/learn-room/` directory. The synthetic examples below use fixture paths from the source checkout. npm releases are published separately from GitHub updates; version 0.1.5 does not contain Predict and Learn.
 
 ### Run one track
 
@@ -164,12 +200,9 @@ The current client uses OpenRouter. Direct connections to other hosted or local 
 
 ## Development
 
-To modify the benchmark or run the repository’s source code, use the setup below. These commands run TypeScript directly and require Node.js 22.18 or newer.
+After the [Quickstart setup](#quickstart), use these commands from the project folder to check changes and build the distributable program. Source commands run TypeScript directly and require Node.js 22.18 or newer.
 
 ```bash
-git clone https://github.com/1999labs/RTR-bench
-cd RTR-bench
-npm ci
 npm test
 npm run build
 
@@ -179,7 +212,7 @@ node src/cli.ts read-the-room \
   --limit 5
 ```
 
-This setup verifies the implementation and generates a synthetic report without making model API calls. For paid runs, add your OpenRouter key and use the Quickstart commands.
+`npm test` checks the implementation. `npm run build` bundles the source into `dist/cli.js`, the program included in the npm package. The fixture command generates a synthetic report without making model API calls. For paid runs, use the Quickstart commands. See the [npm release instructions](docs/npm-release.md) for packaging and publishing.
 
 Rebuilding the original dataset requires the project’s database connection and the configuration in `scripts/export.mjs`. The exported dataset is already included, so running the benchmark does not require database access. The Hugging Face export and validator preserve the frozen source data and split assignments.
 
