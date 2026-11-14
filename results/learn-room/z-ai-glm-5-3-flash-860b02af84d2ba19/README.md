@@ -1,5 +1,7 @@
 # GLM 5.3 Flash: transfer-check-v1 development pilot
 
+**Follow-up:** the two recommended repeats are now complete. See the [three-run policy comparison](../comparisons/glm-5-3-flash-policy-repeats/README.md) for current findings and next steps. The original single-run analysis below is retained as recorded.
+
 Completed November 13, 2026 (America/New_York). Model `z-ai/glm-5.3-flash`, pinned to Relace (`relace/fp4`), all 30 development targets, all four strategies, 4,000 output tokens, and a fresh $0.125 cap. The only agent change was the optional `transfer-check-v1` evidence-use instruction. All 120 predictions were valid. The 45 final evaluation targets remain untouched.
 
 The new agent scored **85.85/100**, compared with **83.66** averaged across the three earlier default-policy runs. It improved on that target-level historical mean for 21 targets and worsened on nine. Its score exceeds the best of those three earlier agent runs (84.53), but one new run does not establish a repeatable policy improvement.

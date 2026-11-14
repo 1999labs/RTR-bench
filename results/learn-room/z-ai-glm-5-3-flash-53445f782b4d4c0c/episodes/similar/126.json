@@ -1,0 +1,605 @@
+{
+  "day": 126,
+  "strategy": "similar",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"ALTRUISM\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":93,\"prompt\":\"SOCIALISM\",\"distribution\":{\"performed+uniting\":0.1423611111111111,\"honest+uniting\":0.10069444444444445,\"performed+dividing\":0.4479166666666667,\"honest+dividing\":0.3090277777777778},\"submissions\":288},{\"id\":6,\"prompt\":\"CAPITALISM\",\"distribution\":{\"performed+uniting\":0.11888111888111888,\"honest+uniting\":0.1048951048951049,\"performed+dividing\":0.16783216783216784,\"honest+dividing\":0.6083916083916084},\"submissions\":143},{\"id\":24,\"prompt\":\"DONALD TRUMP\",\"distribution\":{\"performed+uniting\":0.0027100271002710027,\"honest+uniting\":0,\"performed+dividing\":0.13821138211382114,\"honest+dividing\":0.8590785907859079},\"submissions\":738}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T02:34:06.114Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.40, \"honest+uniting\": 0.30, \"performed+dividing\": 0.15, \"honest+dividing\": 0.15}",
+      "response": {
+        "id": "gen-1794623646-mjhJVZnUiJVYf394FUWx",
+        "object": "chat.completion",
+        "created": 1794623646,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.40, \"honest+uniting\": 0.30, \"performed+dividing\": 0.15, \"honest+dividing\": 0.15}",
+              "refusal": null,
+              "reasoning": "The task: predict distribution for \"ALTRUISM\" in a Mixed Messages generative art project. The quadrants are:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n- SOCIALISM: performed+uniting 0.142, honest+uniting 0.101, performed+dividing 0.448, honest+dividing 0.309 (n=288)\n- CAPITALISM: performed+uniting 0.119, honest+uniting 0.105, performed+dividing 0.168, honest+dividing 0.608 (n=143)\n- DONALD TRUMP: performed+uniting 0.003, honest+uniting 0, performed+dividing 0.138, honest+dividing 0.859 (n=738)\n\nThese examples are all politically charged, negatively-viewed concepts. The audience seems cynical — they tend to interpret things as performed (fake) and dividing. But ALTRUISM is a positive concept. The audience's interpretations are subjective.\n\nFor a positive word like ALTRUISM, the audience might interpret it more positively: honest+uniting (bringing us together authentically) seems like the natural reading of altruism. But given the cynical pattern of this audience (they saw socialism as mostly performed+dividing, capitalism as honest+dividing, Trump as honest+dividing), there might be skepticism about altruism being \"performed\" — i.e., performative altruism, virtue signaling. That's a common critique: \"performative altruism.\"\n\nSo plausible distribution: honest+uniting highest, but performed+uniting substantial (virtue signaling, performative charity). Dividing quadrants lower since altruism isn't inherently divisive, though some might say altruism can be condescending or create division.\n\nLet me think about the audience pattern. The three examples are all things the audience likely views negatively. The audience skews toward \"dividing\" interpretations. But altruism is genuinely positive. The word itself means selfless concern for others. The natural mapping: altruism brings people together authentically → honest+uniting. But cynics might say much altruism is performative → performed+uniting.\n\nI'd estimate something like:\n- honest+uniting: 0.45-0.55\n- performed+uniting: 0.30-0.40\n- performed+dividing: 0.05-0.10\n- honest+dividing: 0.05-0.10\n\nGiven the audience's cynicism (they gave even socialism high performed+dividing), maybe performed+uniting is higher. Performative altruism is a big cultural talking point (celebrity charity, virtue signaling). So maybe:\n\n- performed+uniting: 0.35\n- honest+uniting: 0.45\n- performed+dividing: 0.10\n- honest+dividing: 0.10\n\nHmm, but the audience gave Trump honest+dividing 0.859 — they see him as authentically divisive. For altruism, \"fracturing us, truthfully\" — could altruism authentically divide? Some might say altruism creates moral hierarchies, savior complexes... but that's a stretch. \"Exploiting our divisions, deliberately\" — altruism exploiting divisions? Less likely.\n\nI'll go with:\n- performed+uniting: 0.33\n- honest+uniting: 0.47\n- performed+dividing: 0.10\n- honest+dividing: 0.10\n\nSum = 1.000. Let me pick: 0.33 + 0.47 + 0.10 + 0.10 = 1.00. Good.\n\nActually, considering the audience's strong cynicism bias, maybe performed+uniting should be closer to honest+uniting. The examples show the audience rarely uses honest+uniting (0.10, 0.105, 0.0). Interesting — honest+uniting is consistently the lowest in all three examples! That's a strong pattern. This audience rarely sees things as authentically uniting.\n\nSo for altruism, maybe performed+uniting dominates: performative altruism, virtue signaling. The audience might say altruism is mostly fake unity. So:\n\n- performed+uniting: 0.45\n- honest+uniting: 0.25\n- performed+dividing: 0.15\n- honest+dividing: 0.15\n\nHmm. The pattern: honest+uniting is lowest in all examples. But altruism is the most \"uniting\" concept of the four words. The uniting quadrants should dominate for altruism. Within uniting, given the audience's cynicism, performed+uniting might edge out honest+uniting.\n\nLet me settle:\n- performed+uniting: 0.40\n- honest+uniting: 0.30\n- performed+dividing: 0.15\n- honest+dividing: 0.15\n\nSum = 1.000. That seems reasonable. Or maybe honest+uniting slightly higher than performed+uniting since altruism's core meaning is genuine. But the audience's demonstrated bias against honest+uniting (never above 0.105) suggests performed+uniting wins.\n\nFinal:\n{\"performed+uniting\": 0.40, \"honest+uniting\": 0.30, \"performed+dividing\": 0.15, \"honest+dividing\": 0.15}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "The task: predict distribution for \"ALTRUISM\" in a Mixed Messages generative art project. The quadrants are:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n- SOCIALISM: performed+uniting 0.142, honest+uniting 0.101, performed+dividing 0.448, honest+dividing 0.309 (n=288)\n- CAPITALISM: performed+uniting 0.119, honest+uniting 0.105, performed+dividing 0.168, honest+dividing 0.608 (n=143)\n- DONALD TRUMP: performed+uniting 0.003, honest+uniting 0, performed+dividing 0.138, honest+dividing 0.859 (n=738)\n\nThese examples are all politically charged, negatively-viewed concepts. The audience seems cynical — they tend to interpret things as performed (fake) and dividing. But ALTRUISM is a positive concept. The audience's interpretations are subjective.\n\nFor a positive word like ALTRUISM, the audience might interpret it more positively: honest+uniting (bringing us together authentically) seems like the natural reading of altruism. But given the cynical pattern of this audience (they saw socialism as mostly performed+dividing, capitalism as honest+dividing, Trump as honest+dividing), there might be skepticism about altruism being \"performed\" — i.e., performative altruism, virtue signaling. That's a common critique: \"performative altruism.\"\n\nSo plausible distribution: honest+uniting highest, but performed+uniting substantial (virtue signaling, performative charity). Dividing quadrants lower since altruism isn't inherently divisive, though some might say altruism can be condescending or create division.\n\nLet me think about the audience pattern. The three examples are all things the audience likely views negatively. The audience skews toward \"dividing\" interpretations. But altruism is genuinely positive. The word itself means selfless concern for others. The natural mapping: altruism brings people together authentically → honest+uniting. But cynics might say much altruism is performative → performed+uniting.\n\nI'd estimate something like:\n- honest+uniting: 0.45-0.55\n- performed+uniting: 0.30-0.40\n- performed+dividing: 0.05-0.10\n- honest+dividing: 0.05-0.10\n\nGiven the audience's cynicism (they gave even socialism high performed+dividing), maybe performed+uniting is higher. Performative altruism is a big cultural talking point (celebrity charity, virtue signaling). So maybe:\n\n- performed+uniting: 0.35\n- honest+uniting: 0.45\n- performed+dividing: 0.10\n- honest+dividing: 0.10\n\nHmm, but the audience gave Trump honest+dividing 0.859 — they see him as authentically divisive. For altruism, \"fracturing us, truthfully\" — could altruism authentically divide? Some might say altruism creates moral hierarchies, savior complexes... but that's a stretch. \"Exploiting our divisions, deliberately\" — altruism exploiting divisions? Less likely.\n\nI'll go with:\n- performed+uniting: 0.33\n- honest+uniting: 0.47\n- performed+dividing: 0.10\n- honest+dividing: 0.10\n\nSum = 1.000. Let me pick: 0.33 + 0.47 + 0.10 + 0.10 = 1.00. Good.\n\nActually, considering the audience's strong cynicism bias, maybe performed+uniting should be closer to honest+uniting. The examples show the audience rarely uses honest+uniting (0.10, 0.105, 0.0). Interesting — honest+uniting is consistently the lowest in all three examples! That's a strong pattern. This audience rarely sees things as authentically uniting.\n\nSo for altruism, maybe performed+uniting dominates: performative altruism, virtue signaling. The audience might say altruism is mostly fake unity. So:\n\n- performed+uniting: 0.45\n- honest+uniting: 0.25\n- performed+dividing: 0.15\n- honest+dividing: 0.15\n\nHmm. The pattern: honest+uniting is lowest in all examples. But altruism is the most \"uniting\" concept of the four words. The uniting quadrants should dominate for altruism. Within uniting, given the audience's cynicism, performed+uniting might edge out honest+uniting.\n\nLet me settle:\n- performed+uniting: 0.40\n- honest+uniting: 0.30\n- performed+dividing: 0.15\n- honest+dividing: 0.15\n\nSum = 1.000. That seems reasonable. Or maybe honest+uniting slightly higher than performed+uniting since altruism's core meaning is genuine. But the audience's demonstrated bias against honest+uniting (never above 0.105) suggests performed+uniting wins.\n\nFinal:\n{\"performed+uniting\": 0.40, \"honest+uniting\": 0.30, \"performed+dividing\": 0.15, \"honest+dividing\": 0.15}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 534,
+          "completion_tokens": 1275,
+          "total_tokens": 1809,
+          "cost": 0.0001212666,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001212666,
+            "upstream_inference_prompt_cost": 0.0000213066,
+            "upstream_inference_completions_cost": 0.00009996
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1145,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 534,
+        "completion_tokens": 1275,
+        "total_tokens": 1809,
+        "cost": 0.0001212666,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001212666,
+          "upstream_inference_prompt_cost": 0.0000213066,
+          "upstream_inference_completions_cost": 0.00009996
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1145,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T02:34:13.267Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 93
+      },
+      "observation": {
+        "ok": true,
+        "id": 93,
+        "prompt": "SOCIALISM",
+        "distribution": {
+          "performed+uniting": 0.1423611111111111,
+          "honest+uniting": 0.10069444444444445,
+          "performed+dividing": 0.4479166666666667,
+          "honest+dividing": 0.3090277777777778
+        },
+        "submissions": 288,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 6
+      },
+      "observation": {
+        "ok": true,
+        "id": 6,
+        "prompt": "CAPITALISM",
+        "distribution": {
+          "performed+uniting": 0.11888111888111888,
+          "honest+uniting": 0.1048951048951049,
+          "performed+dividing": 0.16783216783216784,
+          "honest+dividing": 0.6083916083916084
+        },
+        "submissions": 143,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 24
+      },
+      "observation": {
+        "ok": true,
+        "id": 24,
+        "prompt": "DONALD TRUMP",
+        "distribution": {
+          "performed+uniting": 0.0027100271002710027,
+          "honest+uniting": 0,
+          "performed+dividing": 0.13821138211382114,
+          "honest+dividing": 0.8590785907859079
+        },
+        "submissions": 738,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.4,
+          "honest+uniting": 0.3,
+          "performed+dividing": 0.15,
+          "honest+dividing": 0.15
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.4,
+      "honest+uniting": 0.3,
+      "performed+dividing": 0.15,
+      "honest+dividing": 0.15
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.3288176267737012,
+    "score": 83.55911866131494,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

@@ -66,7 +66,7 @@ The intended behavior is selective transfer rather than blanket distrust of refe
 
 The original audit produced this proposal without implementing a policy or running additional model experiments.
 
-**Subsequent implementation:** the optional `transfer-check-v1` policy and offline fixture coverage are now implemented; see the [policy documentation](../../../../docs/learn-room.md). The original proposal above is retained as the audit record. A [first live development pilot](../../z-ai-glm-5-3-flash-860b02af84d2ba19/README.md) is complete; its results are exploratory and the original policy remains the default.
+**Subsequent implementation:** the optional `transfer-check-v1` policy and offline fixture coverage are now implemented; see the [policy documentation](../../../../docs/learn-room.md). The original proposal above is retained as the audit record. The [first live development pilot](../../z-ai-glm-5-3-flash-860b02af84d2ba19/README.md) and two repeats are complete; see the [three-run policy comparison](../glm-5-3-flash-policy-repeats/README.md). The new agent averaged 85.67 versus 83.66 for the original, but still trailed no examples in each run. Results remain exploratory and the original policy remains the default.
 
 ## Reproduce the audit
 
