@@ -1,10 +1,10 @@
-// Scatter chart for the README table: score against cost per full run.
-// Reads the Results table so the chart and the table can never disagree.
+// Historical scatter chart: original dominant-quadrant score against cost.
+// Reads the archived Results table; Predict/Learn use chart-tracks.py.
 // Usage: node scripts/chart.mjs  ->  results/leaderboard-scatter.svg
 
 import fs from "node:fs";
 
-const README = "README.md";
+const README = "results/history/original-benchmark/README.md";
 const OUT_SVG = "results/leaderboard-scatter.svg";
 
 function readTable() {
