@@ -1,0 +1,607 @@
+{
+  "day": 102,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"MINIMUM WAGE\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":42,\"prompt\":\"PATRONAGE\",\"distribution\":{\"performed+uniting\":0.12605042016806722,\"honest+uniting\":0.6470588235294118,\"performed+dividing\":0.11764705882352941,\"honest+dividing\":0.1092436974789916},\"submissions\":119},{\"id\":87,\"prompt\":\"SAME-SEX MARRIAGE\",\"distribution\":{\"performed+uniting\":0.02654867256637168,\"honest+uniting\":0.6194690265486725,\"performed+dividing\":0.02654867256637168,\"honest+dividing\":0.3274336283185841},\"submissions\":113},{\"id\":52,\"prompt\":\"ETHEREUM\",\"distribution\":{\"performed+uniting\":0.11654135338345864,\"honest+uniting\":0.12406015037593984,\"performed+dividing\":0.12030075187969924,\"honest+dividing\":0.6390977443609023},\"submissions\":266}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "gmicloud/bf16"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.14,
+        "completion": 0.58,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T22:59:44.394Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.090,\"honest+uniting\":0.390,\"performed+dividing\":0.090,\"honest+dividing\":0.430}",
+      "response": {
+        "id": "gen-1794697184-mUQO35pac8cD5Unc9qvS",
+        "object": "chat.completion",
+        "created": 1794697184,
+        "model": "tencent/hy3",
+        "provider": "GMICloud",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.090,\"honest+uniting\":0.390,\"performed+dividing\":0.090,\"honest+dividing\":0.430}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"MINIMUM WAGE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. PATRONAGE: performed+uniting 0.126, honest+uniting 0.647, performed+dividing 0.118, honest+dividing 0.109. Submissions 119. So mostly honest+uniting (64.7%), low others.\n2. SAME-SEX MARRIAGE: performed+uniting 0.0265, honest+uniting 0.619, performed+dividing 0.0265, honest+dividing 0.327. Submissions 113. So honest+uniting majority (62%), but significant honest+dividing (33%), low performed.\n3. ETHEREUM: performed+uniting 0.1165, honest+uniting 0.124, performed+dividing 0.120, honest+dividing 0.639. Submissions 266. So mostly honest+dividing (64%), others roughly equal ~12%.\n\nWe need to estimate for \"MINIMUM WAGE\". Minimum wage is a political/economic topic. Likely to be divisive. In the examples, topics that are more neutral or positive (patronage? maybe ambiguous but seems uniting) gave honest+uniting. Same-sex marriage gave honest+uniting but also honest+dividing (since it's a divisive issue but also unifying for supporters). Ethereum (a cryptocurrency, maybe tech/financial, perhaps fracturing). Minimum wage is a classic divisive political issue: some see it as bringing workers together (uniting) authentically, others see it as dividing (employers vs workers, or harmful policy). Also could be performed (political rhetoric creating false unity or exploiting divisions).\n\nWe need to infer from audience's interpretations. The audience seems to assign high honest+uniting for patronage and same-sex marriage, but high honest+dividing for ethereum. Minimum wage might be like same-sex marriage: a social issue with both sides. But minimum wage is more economic, maybe less identity-based. Could be more dividing. Let's think: The audience might view minimum wage as a topic that politicians use to create false unity (performed+uniting) or exploit divisions (performed+dividing). Or authentically fracturing us (honest+dividing) because it's a real conflict of interest. Or authentically bringing us together (honest+uniting) if they see it as workers' rights solidarity.\n\nGiven the examples: For PATRONAGE (maybe a word about support/clientelism) they saw mostly honest uniting (maybe ironic? but data says). For SAME-SEX MARRIAGE, honest uniting 62%, honest dividing 33%. For ETHEREUM, honest dividing 64%, others ~12%. So the audience tends to pick honest categories over performed (performed are low in all examples: max performed+uniting 0.126, performed+dividing max 0.120). So performed categories are generally small (around 0.02-0.12). Honest categories dominate.\n\nThus for MINIMUM WAGE, we should assign small probabilities to performed ones, and split honest between uniting and dividing. Which way? Minimum wage could be seen as a labor issue that unites workers (honest+uniting) or divides society (honest+dividing). Considering it's a policy debate with real conflict, likely honest+dividing is significant. But also there is a social justice angle that brings people together. Could be similar to same-sex marriage but maybe more economic, so perhaps more dividing. Let's approximate: honest+uniting maybe 0.5, honest+dividing 0.4, performed+uniting 0.05, performed+dividing 0.05? But need sum to 1.\n\nLook at patterns: In SAME-SEX MARRIAGE, performed both ~0.0265, honest uniting 0.619, honest dividing 0.327. So performed are very low (2.6% each). In PATRONAGE, performed are ~0.126 and 0.118, honest uniting high 0.647, honest dividing 0.109. In ETHEREUM, performed ~0.116 and 0.120, honest uniting 0.124, honest dividing 0.639.\n\nSo performed categories are not always tiny; in PATRONAGE and ETHEREUM they are ~0.12 each, while in SAME-SEX MARRIAGE they are ~0.027. Why? Possibly because same-sex marriage is a more heartfelt issue, less performative? Or the audience viewed it as less about performance. Minimum wage might be similar to ethereum? Both economic? Ethereum is crypto, minimum wage is wage policy. Could be seen as more performative (politicians pandering). So performed might be moderate.\n\nWe need a single JSON object. Let's decide: Minimum wage is a political football. Likely interpretations:\n- performed+uniting: politicians claiming they care about workers, fake unity -> maybe 0.15\n- honest+uniting: genuine solidarity among workers -> maybe 0.35\n- performed+dividing: cynical exploitation of business vs worker divide -> maybe 0.15\n- honest+dividing: real economic division, truthfully fracturing -> maybe 0.35\n\nBut sum = 1.0. Could also be more dividing: honest+dividing 0.45, honest+uniting 0.30, performed each 0.125? That sums 1.0? 0.125+0.30+0.125+0.45 = 1.0. That matches pattern of ethereum where honest dividing high, performed moderate, honest uniting low. But minimum wage might have more uniting than ethereum.\n\nAlternatively, look at average of examples? Not good. Let's think of the word \"MINIMUM WAGE\": It's a phrase that could be interpreted as a baseline, something that unites? The audience of Mixed Messages might be art participants, likely left-leaning? Not sure. The examples: PATRONAGE (maybe they saw as uniting authentically? weird). SAME-SEX MARRIAGE (uniting authentically majority). ETHEREUM (dividing honestly). So maybe topics that are about identity/rights tend to uniting; topics about money/tech tend to dividing. Minimum wage is about money and workers, could go either way. But it's also a worker rights issue, so maybe uniting like same-sex marriage but economic. I'd lean honest+uniting around 0.5, honest+dividing around 0.35, performed each around 0.075. Sum: 0.075+0.5+0.075+0.35 = 1.0. That gives performed low-ish but not as low as same-sex marriage.\n\nBut we need at least three decimal places when needed. We can produce something like:\n{\"performed+uniting\":0.08,\"honest+uniting\":0.52,\"performed+dividing\":0.08,\"honest+dividing\":0.32} sum=1.0. But we should maybe use more precise.\n\nGiven the instruction: \"A sum differing from 1 by at most 0.001 will be normalized.\" So we can give approximate.\n\nI'll choose:\nperformed+uniting: 0.08\nhonest+uniting: 0.50\nperformed+dividing: 0.10\nhonest+dividing: 0.32\nSum = 1.00. But let's adjust to match slightly more nuanced: from examples, performed+uniting and performed+dividing are often roughly equal. In PATRONAGE: 0.126 vs 0.118; ETHEREUM: 0.1165 vs 0.1203; SAME-SEX: 0.0265 vs 0.0265. So keep them equal. Let's set both performed to 0.09. Then honest uniting + honest dividing = 0.82. Split: maybe honest uniting 0.45, honest dividing 0.37. Sum = 0.09+0.45+0.09+0.37 = 1.00. That seems plausible.\n\nBut maybe honest dividing should be higher because minimum wage is contentious. Let's set honest dividing 0.43, honest uniting 0.39, performed each 0.09 -> sum 1.0. That gives more dividing.\n\nI'll go with:\n{\"performed+uniting\":0.09,\"honest+uniting\":0.39,\"performed+dividing\":0.09,\"honest+dividing\":0.43}\n\nCheck sum: 0.09+0.39=0.48, +0.09=0.57, +0.43=1.00. Good.\n\nBut we could also use three decimals: 0.090, 0.390, 0.090, 0.430.\n\nThe instruction: \"Use at least three decimal places when needed.\" So we can write 0.09 is fine? It says at least three decimal places when needed. To be safe, use 0.090, 0.390, etc. But 0.09 is same as 0.090; but they said at least three decimal places when needed. I'll output with three decimals: 0.090, 0.390, 0.090, 0.430.\n\nAlternatively, maybe more like same-sex marriage but with higher performed? I'll stick with above.\n\nNo prose, just JSON.\n\nThus final answer: {\"performed+uniting\":0.090,\"honest+uniting\":0.390,\"performed+dividing\":0.090,\"honest+dividing\":0.430}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"MINIMUM WAGE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. PATRONAGE: performed+uniting 0.126, honest+uniting 0.647, performed+dividing 0.118, honest+dividing 0.109. Submissions 119. So mostly honest+uniting (64.7%), low others.\n2. SAME-SEX MARRIAGE: performed+uniting 0.0265, honest+uniting 0.619, performed+dividing 0.0265, honest+dividing 0.327. Submissions 113. So honest+uniting majority (62%), but significant honest+dividing (33%), low performed.\n3. ETHEREUM: performed+uniting 0.1165, honest+uniting 0.124, performed+dividing 0.120, honest+dividing 0.639. Submissions 266. So mostly honest+dividing (64%), others roughly equal ~12%.\n\nWe need to estimate for \"MINIMUM WAGE\". Minimum wage is a political/economic topic. Likely to be divisive. In the examples, topics that are more neutral or positive (patronage? maybe ambiguous but seems uniting) gave honest+uniting. Same-sex marriage gave honest+uniting but also honest+dividing (since it's a divisive issue but also unifying for supporters). Ethereum (a cryptocurrency, maybe tech/financial, perhaps fracturing). Minimum wage is a classic divisive political issue: some see it as bringing workers together (uniting) authentically, others see it as dividing (employers vs workers, or harmful policy). Also could be performed (political rhetoric creating false unity or exploiting divisions).\n\nWe need to infer from audience's interpretations. The audience seems to assign high honest+uniting for patronage and same-sex marriage, but high honest+dividing for ethereum. Minimum wage might be like same-sex marriage: a social issue with both sides. But minimum wage is more economic, maybe less identity-based. Could be more dividing. Let's think: The audience might view minimum wage as a topic that politicians use to create false unity (performed+uniting) or exploit divisions (performed+dividing). Or authentically fracturing us (honest+dividing) because it's a real conflict of interest. Or authentically bringing us together (honest+uniting) if they see it as workers' rights solidarity.\n\nGiven the examples: For PATRONAGE (maybe a word about support/clientelism) they saw mostly honest uniting (maybe ironic? but data says). For SAME-SEX MARRIAGE, honest uniting 62%, honest dividing 33%. For ETHEREUM, honest dividing 64%, others ~12%. So the audience tends to pick honest categories over performed (performed are low in all examples: max performed+uniting 0.126, performed+dividing max 0.120). So performed categories are generally small (around 0.02-0.12). Honest categories dominate.\n\nThus for MINIMUM WAGE, we should assign small probabilities to performed ones, and split honest between uniting and dividing. Which way? Minimum wage could be seen as a labor issue that unites workers (honest+uniting) or divides society (honest+dividing). Considering it's a policy debate with real conflict, likely honest+dividing is significant. But also there is a social justice angle that brings people together. Could be similar to same-sex marriage but maybe more economic, so perhaps more dividing. Let's approximate: honest+uniting maybe 0.5, honest+dividing 0.4, performed+uniting 0.05, performed+dividing 0.05? But need sum to 1.\n\nLook at patterns: In SAME-SEX MARRIAGE, performed both ~0.0265, honest uniting 0.619, honest dividing 0.327. So performed are very low (2.6% each). In PATRONAGE, performed are ~0.126 and 0.118, honest uniting high 0.647, honest dividing 0.109. In ETHEREUM, performed ~0.116 and 0.120, honest uniting 0.124, honest dividing 0.639.\n\nSo performed categories are not always tiny; in PATRONAGE and ETHEREUM they are ~0.12 each, while in SAME-SEX MARRIAGE they are ~0.027. Why? Possibly because same-sex marriage is a more heartfelt issue, less performative? Or the audience viewed it as less about performance. Minimum wage might be similar to ethereum? Both economic? Ethereum is crypto, minimum wage is wage policy. Could be seen as more performative (politicians pandering). So performed might be moderate.\n\nWe need a single JSON object. Let's decide: Minimum wage is a political football. Likely interpretations:\n- performed+uniting: politicians claiming they care about workers, fake unity -> maybe 0.15\n- honest+uniting: genuine solidarity among workers -> maybe 0.35\n- performed+dividing: cynical exploitation of business vs worker divide -> maybe 0.15\n- honest+dividing: real economic division, truthfully fracturing -> maybe 0.35\n\nBut sum = 1.0. Could also be more dividing: honest+dividing 0.45, honest+uniting 0.30, performed each 0.125? That sums 1.0? 0.125+0.30+0.125+0.45 = 1.0. That matches pattern of ethereum where honest dividing high, performed moderate, honest uniting low. But minimum wage might have more uniting than ethereum.\n\nAlternatively, look at average of examples? Not good. Let's think of the word \"MINIMUM WAGE\": It's a phrase that could be interpreted as a baseline, something that unites? The audience of Mixed Messages might be art participants, likely left-leaning? Not sure. The examples: PATRONAGE (maybe they saw as uniting authentically? weird). SAME-SEX MARRIAGE (uniting authentically majority). ETHEREUM (dividing honestly). So maybe topics that are about identity/rights tend to uniting; topics about money/tech tend to dividing. Minimum wage is about money and workers, could go either way. But it's also a worker rights issue, so maybe uniting like same-sex marriage but economic. I'd lean honest+uniting around 0.5, honest+dividing around 0.35, performed each around 0.075. Sum: 0.075+0.5+0.075+0.35 = 1.0. That gives performed low-ish but not as low as same-sex marriage.\n\nBut we need at least three decimal places when needed. We can produce something like:\n{\"performed+uniting\":0.08,\"honest+uniting\":0.52,\"performed+dividing\":0.08,\"honest+dividing\":0.32} sum=1.0. But we should maybe use more precise.\n\nGiven the instruction: \"A sum differing from 1 by at most 0.001 will be normalized.\" So we can give approximate.\n\nI'll choose:\nperformed+uniting: 0.08\nhonest+uniting: 0.50\nperformed+dividing: 0.10\nhonest+dividing: 0.32\nSum = 1.00. But let's adjust to match slightly more nuanced: from examples, performed+uniting and performed+dividing are often roughly equal. In PATRONAGE: 0.126 vs 0.118; ETHEREUM: 0.1165 vs 0.1203; SAME-SEX: 0.0265 vs 0.0265. So keep them equal. Let's set both performed to 0.09. Then honest uniting + honest dividing = 0.82. Split: maybe honest uniting 0.45, honest dividing 0.37. Sum = 0.09+0.45+0.09+0.37 = 1.00. That seems plausible.\n\nBut maybe honest dividing should be higher because minimum wage is contentious. Let's set honest dividing 0.43, honest uniting 0.39, performed each 0.09 -> sum 1.0. That gives more dividing.\n\nI'll go with:\n{\"performed+uniting\":0.09,\"honest+uniting\":0.39,\"performed+dividing\":0.09,\"honest+dividing\":0.43}\n\nCheck sum: 0.09+0.39=0.48, +0.09=0.57, +0.43=1.00. Good.\n\nBut we could also use three decimals: 0.090, 0.390, 0.090, 0.430.\n\nThe instruction: \"Use at least three decimal places when needed.\" So we can write 0.09 is fine? It says at least three decimal places when needed. To be safe, use 0.090, 0.390, etc. But 0.09 is same as 0.090; but they said at least three decimal places when needed. I'll output with three decimals: 0.090, 0.390, 0.090, 0.430.\n\nAlternatively, maybe more like same-sex marriage but with higher performed? I'll stick with above.\n\nNo prose, just JSON.\n\nThus final answer: {\"performed+uniting\":0.090,\"honest+uniting\":0.390,\"performed+dividing\":0.090,\"honest+dividing\":0.430}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 506,
+          "completion_tokens": 2242,
+          "total_tokens": 2748,
+          "cost": 0.0013712,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0013712,
+            "upstream_inference_prompt_cost": 0.00007084,
+            "upstream_inference_completions_cost": 0.00130036
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2199,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "GMICloud",
+      "usage": {
+        "prompt_tokens": 506,
+        "completion_tokens": 2242,
+        "total_tokens": 2748,
+        "cost": 0.0013712,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0013712,
+          "upstream_inference_prompt_cost": 0.00007084,
+          "upstream_inference_completions_cost": 0.00130036
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2199,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 8,
+      "finishedAt": "2026-11-14T23:00:11.534Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 42
+      },
+      "observation": {
+        "ok": true,
+        "id": 42,
+        "prompt": "PATRONAGE",
+        "distribution": {
+          "performed+uniting": 0.12605042016806722,
+          "honest+uniting": 0.6470588235294118,
+          "performed+dividing": 0.11764705882352941,
+          "honest+dividing": 0.1092436974789916
+        },
+        "submissions": 119,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 87
+      },
+      "observation": {
+        "ok": true,
+        "id": 87,
+        "prompt": "SAME-SEX MARRIAGE",
+        "distribution": {
+          "performed+uniting": 0.02654867256637168,
+          "honest+uniting": 0.6194690265486725,
+          "performed+dividing": 0.02654867256637168,
+          "honest+dividing": 0.3274336283185841
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 52
+      },
+      "observation": {
+        "ok": true,
+        "id": 52,
+        "prompt": "ETHEREUM",
+        "distribution": {
+          "performed+uniting": 0.11654135338345864,
+          "honest+uniting": 0.12406015037593984,
+          "performed+dividing": 0.12030075187969924,
+          "honest+dividing": 0.6390977443609023
+        },
+        "submissions": 266,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.09,
+          "honest+uniting": 0.39,
+          "performed+dividing": 0.09,
+          "honest+dividing": 0.43
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.09,
+      "honest+uniting": 0.39,
+      "performed+dividing": 0.09,
+      "honest+dividing": 0.43
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.2209094174063871,
+    "score": 88.95452912968065,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

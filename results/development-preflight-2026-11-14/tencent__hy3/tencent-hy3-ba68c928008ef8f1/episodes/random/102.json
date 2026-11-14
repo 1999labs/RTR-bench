@@ -1,0 +1,607 @@
+{
+  "day": 102,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"MINIMUM WAGE\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":65,\"prompt\":\"CANNABIS\",\"distribution\":{\"performed+uniting\":0.20761245674740483,\"honest+uniting\":0.2560553633217993,\"performed+dividing\":0.314878892733564,\"honest+dividing\":0.22145328719723184},\"submissions\":289},{\"id\":79,\"prompt\":\"LAS VEGAS\",\"distribution\":{\"performed+uniting\":0.11711711711711711,\"honest+uniting\":0.26126126126126126,\"performed+dividing\":0.2702702702702703,\"honest+dividing\":0.35135135135135137},\"submissions\":111},{\"id\":48,\"prompt\":\"NON-FUNGIBLE TOKENS\",\"distribution\":{\"performed+uniting\":0.015444015444015444,\"honest+uniting\":0.021235521235521235,\"performed+dividing\":0.9498069498069498,\"honest+dividing\":0.013513513513513514},\"submissions\":518}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "gmicloud/bf16"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.14,
+        "completion": 0.58,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T22:58:13.631Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.130,\"honest+uniting\":0.220,\"performed+dividing\":0.400,\"honest+dividing\":0.250}",
+      "response": {
+        "id": "gen-1794697093-cHrCKRsUotKaEpaNPQvR",
+        "object": "chat.completion",
+        "created": 1794697093,
+        "model": "tencent/hy3",
+        "provider": "GMICloud",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.130,\"honest+uniting\":0.220,\"performed+dividing\":0.400,\"honest+dividing\":0.250}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"MINIMUM WAGE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"CANNABIS\": dist: performed+uniting 0.2076, honest+uniting 0.2561, performed+dividing 0.3149, honest+dividing 0.2215. Submissions 289.\n2. \"LAS VEGAS\": dist: performed+uniting 0.1171, honest+uniting 0.2613, performed+dividing 0.2703, honest+dividing 0.3514. Submissions 111.\n3. \"NON-FUNGIBLE TOKENS\": dist: performed+uniting 0.0154, honest+uniting 0.0212, performed+dividing 0.9498, honest+dividing 0.0135. Submissions 518.\n\nWe need to estimate share for \"MINIMUM WAGE\". This is a political/economic term. Likely to be divisive. In the examples, \"NON-FUNGIBLE TOKENS\" (NFTs) is highly performed+dividing (exploiting divisions deliberately) at ~0.95. That suggests a topic that is controversial, maybe scammy, divisive. Minimum wage is also a political topic, often dividing people (e.g., left vs right, workers vs business). Could be similar to NFTs? But not exactly a scam; it's a policy. Could be more balanced between dividing and uniting? Let's think.\n\nThe quadrants: performed+uniting (false unity), honest+uniting (authentic together), performed+dividing (exploiting divisions deliberately), honest+dividing (truthfully fracturing). For minimum wage, people might see it as something that honestly divides us (different interests) or performed dividing (politicians exploiting divisions). Or maybe honest uniting (workers coming together) or performed uniting (false sense of unity like \"we all support families\").\n\nWe need to infer from audience's interpretations. The examples: Cannabis: relatively spread, with performed dividing highest (0.315), honest uniting second (0.256), honest dividing 0.221, performed uniting 0.208. So cannabis is somewhat divisive but also uniting. Las Vegas: honest dividing highest (0.351), performed dividing 0.270, honest uniting 0.261, performed uniting low 0.117. So Las Vegas is more about fracturing truthfully (maybe gambling, excess) and some dividing. NFTs: almost all performed dividing (0.95) - clearly the audience sees NFTs as a deliberate exploitation of divisions (maybe scam, hype).\n\nMinimum wage: likely a mix of dividing and uniting. It's a labor issue. Could be seen as honest uniting (workers solidarity) or performed uniting (political rhetoric \"we care about workers\"). But given the political climate, it might be performed dividing (exploiting class divisions) or honest dividing (real economic splits). I'd guess it's more dividing than uniting. Perhaps similar to cannabis but with higher dividing? Or like a policy topic, maybe more like NFTs but not as extreme? NFTs is a specific hyped controversial asset. Minimum wage is a long-standing debate. Might be more balanced.\n\nWe need to produce probabilities sum to 1. Let's consider the average of examples? But they vary. Could use some reasoning: Minimum wage is a \"word\" that likely triggers political interpretations. The audience seems to assign high performed dividing to things perceived as manipulative (NFTs). Minimum wage might be seen as a genuine issue (honest dividing) or performed dividing (politicians using it). I'd estimate: performed+uniting low (maybe 0.1), honest+uniting moderate (0.2), performed+dividing high (0.4), honest+dividing moderate (0.3). Or maybe performed dividing even higher.\n\nLook at Las Vegas: honest dividing 0.35, performed dividing 0.27. For minimum wage, maybe performed dividing is higher because of political exploitation. So maybe performed dividing 0.45, honest dividing 0.25, honest uniting 0.20, performed uniting 0.10. Sum = 1.0.\n\nAlternatively, could be like cannabis but with more dividing: cannabis had performed div 0.315, honest div 0.221, honest uniting 0.256, performed uniting 0.208. For minimum wage, maybe performed div up to 0.4, honest div 0.25, honest uniting 0.2, performed uniting 0.15. Sum 1.0.\n\nWe need at least three decimal places when needed. Provide numbers like 0.150, etc.\n\nWe should not include other keys. Return only JSON object.\n\nLet's decide: I'll go with:\nperformed+uniting: 0.120\nhonest+uniting: 0.210\nperformed+dividing: 0.430\nhonest+dividing: 0.240\n\nSum = 1.000. That seems plausible.\n\nBut maybe we can calibrate with examples: NFTs extremely performed dividing; minimum wage not that extreme. Las Vegas had honest dividing highest. Cannabis had performed dividing highest. So minimum wage likely performed dividing highest. I'll set performed dividing 0.42, honest dividing 0.28, honest uniting 0.20, performed uniting 0.10. Sum = 1.00.\n\nLet's use 0.100, 0.200, 0.420, 0.280.\n\nBut we need at least three decimals if needed; we can write 0.1 as 0.100? It's fine.\n\nI'll output: {\"performed+uniting\":0.100,\"honest+uniting\":0.200,\"performed+dividing\":0.420,\"honest+dividing\":0.280}\n\nCheck sum: 1.0. Good.\n\nBut maybe we should consider that \"minimum wage\" could evoke \"honest uniting\" (workers coming together) more. However, the audience's interpretations are cynical? NFTs almost all performed dividing. They might see minimum wage as a tool of division by politicians. I'll stick with above.\n\nAlternatively, we could compute a simple average of the three examples: \npu: (0.2076+0.1171+0.0154)/3 = 0.3401/3=0.1134\nhu: (0.2561+0.2613+0.0212)/3 = 0.5386/3=0.1795\npd: (0.3149+0.2703+0.9498)/3 = 1.535/3=0.5117\nhd: (0.2215+0.3514+0.0135)/3 = 0.5864/3=0.1955\nSum = 1.0 approx. That yields pu 0.113, hu 0.180, pd 0.512, hd 0.195. That's plausible: performed dividing dominates due to NFT influence. But minimum wage is not NFT; maybe we should weight less on NFT? But we only have three examples. The task says \"Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we can use them as evidence that this audience tends to see topics as performed dividing especially for controversial ones. Minimum wage is controversial, so maybe performed dividing is high but not 0.95. The average of cannabis and las vegas (excluding NFT) gives: pu (0.2076+0.1171)/2=0.162, hu (0.2561+0.2613)/2=0.2587, pd (0.3149+0.2703)/2=0.2926, hd (0.2215+0.3514)/2=0.2865. Sum ~1.0. That's more balanced. Which is more appropriate? Minimum wage is a social/political topic like cannabis (social drug) and las vegas (city of vice). NFT is a financial fad. So maybe minimum wage is between cannabis and las vegas, leaning slightly more dividing. So pu ~0.15, hu ~0.25, pd ~0.35, hd ~0.25. Sum 1.0.\n\nLet's pick: performed+uniting: 0.150, honest+uniting: 0.250, performed+dividing: 0.350, honest+dividing: 0.250. That sums to 1.0. But we need three decimals: 0.150, 0.250, 0.350, 0.250.\n\nI think that's reasonable. However, the audience might be more cynical: performed dividing higher. I'll adjust to 0.130, 0.220, 0.400, 0.250 => sum 1.000. That's fine.\n\nI'll go with: {\"performed+uniting\":0.130,\"honest+uniting\":0.220,\"performed+dividing\":0.400,\"honest+dividing\":0.250}\n\nCheck sum: 0.130+0.220=0.350; +0.400=0.750; +0.250=1.000.\n\nI'll output exactly that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"MINIMUM WAGE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"CANNABIS\": dist: performed+uniting 0.2076, honest+uniting 0.2561, performed+dividing 0.3149, honest+dividing 0.2215. Submissions 289.\n2. \"LAS VEGAS\": dist: performed+uniting 0.1171, honest+uniting 0.2613, performed+dividing 0.2703, honest+dividing 0.3514. Submissions 111.\n3. \"NON-FUNGIBLE TOKENS\": dist: performed+uniting 0.0154, honest+uniting 0.0212, performed+dividing 0.9498, honest+dividing 0.0135. Submissions 518.\n\nWe need to estimate share for \"MINIMUM WAGE\". This is a political/economic term. Likely to be divisive. In the examples, \"NON-FUNGIBLE TOKENS\" (NFTs) is highly performed+dividing (exploiting divisions deliberately) at ~0.95. That suggests a topic that is controversial, maybe scammy, divisive. Minimum wage is also a political topic, often dividing people (e.g., left vs right, workers vs business). Could be similar to NFTs? But not exactly a scam; it's a policy. Could be more balanced between dividing and uniting? Let's think.\n\nThe quadrants: performed+uniting (false unity), honest+uniting (authentic together), performed+dividing (exploiting divisions deliberately), honest+dividing (truthfully fracturing). For minimum wage, people might see it as something that honestly divides us (different interests) or performed dividing (politicians exploiting divisions). Or maybe honest uniting (workers coming together) or performed uniting (false sense of unity like \"we all support families\").\n\nWe need to infer from audience's interpretations. The examples: Cannabis: relatively spread, with performed dividing highest (0.315), honest uniting second (0.256), honest dividing 0.221, performed uniting 0.208. So cannabis is somewhat divisive but also uniting. Las Vegas: honest dividing highest (0.351), performed dividing 0.270, honest uniting 0.261, performed uniting low 0.117. So Las Vegas is more about fracturing truthfully (maybe gambling, excess) and some dividing. NFTs: almost all performed dividing (0.95) - clearly the audience sees NFTs as a deliberate exploitation of divisions (maybe scam, hype).\n\nMinimum wage: likely a mix of dividing and uniting. It's a labor issue. Could be seen as honest uniting (workers solidarity) or performed uniting (political rhetoric \"we care about workers\"). But given the political climate, it might be performed dividing (exploiting class divisions) or honest dividing (real economic splits). I'd guess it's more dividing than uniting. Perhaps similar to cannabis but with higher dividing? Or like a policy topic, maybe more like NFTs but not as extreme? NFTs is a specific hyped controversial asset. Minimum wage is a long-standing debate. Might be more balanced.\n\nWe need to produce probabilities sum to 1. Let's consider the average of examples? But they vary. Could use some reasoning: Minimum wage is a \"word\" that likely triggers political interpretations. The audience seems to assign high performed dividing to things perceived as manipulative (NFTs). Minimum wage might be seen as a genuine issue (honest dividing) or performed dividing (politicians using it). I'd estimate: performed+uniting low (maybe 0.1), honest+uniting moderate (0.2), performed+dividing high (0.4), honest+dividing moderate (0.3). Or maybe performed dividing even higher.\n\nLook at Las Vegas: honest dividing 0.35, performed dividing 0.27. For minimum wage, maybe performed dividing is higher because of political exploitation. So maybe performed dividing 0.45, honest dividing 0.25, honest uniting 0.20, performed uniting 0.10. Sum = 1.0.\n\nAlternatively, could be like cannabis but with more dividing: cannabis had performed div 0.315, honest div 0.221, honest uniting 0.256, performed uniting 0.208. For minimum wage, maybe performed div up to 0.4, honest div 0.25, honest uniting 0.2, performed uniting 0.15. Sum 1.0.\n\nWe need at least three decimal places when needed. Provide numbers like 0.150, etc.\n\nWe should not include other keys. Return only JSON object.\n\nLet's decide: I'll go with:\nperformed+uniting: 0.120\nhonest+uniting: 0.210\nperformed+dividing: 0.430\nhonest+dividing: 0.240\n\nSum = 1.000. That seems plausible.\n\nBut maybe we can calibrate with examples: NFTs extremely performed dividing; minimum wage not that extreme. Las Vegas had honest dividing highest. Cannabis had performed dividing highest. So minimum wage likely performed dividing highest. I'll set performed dividing 0.42, honest dividing 0.28, honest uniting 0.20, performed uniting 0.10. Sum = 1.00.\n\nLet's use 0.100, 0.200, 0.420, 0.280.\n\nBut we need at least three decimals if needed; we can write 0.1 as 0.100? It's fine.\n\nI'll output: {\"performed+uniting\":0.100,\"honest+uniting\":0.200,\"performed+dividing\":0.420,\"honest+dividing\":0.280}\n\nCheck sum: 1.0. Good.\n\nBut maybe we should consider that \"minimum wage\" could evoke \"honest uniting\" (workers coming together) more. However, the audience's interpretations are cynical? NFTs almost all performed dividing. They might see minimum wage as a tool of division by politicians. I'll stick with above.\n\nAlternatively, we could compute a simple average of the three examples: \npu: (0.2076+0.1171+0.0154)/3 = 0.3401/3=0.1134\nhu: (0.2561+0.2613+0.0212)/3 = 0.5386/3=0.1795\npd: (0.3149+0.2703+0.9498)/3 = 1.535/3=0.5117\nhd: (0.2215+0.3514+0.0135)/3 = 0.5864/3=0.1955\nSum = 1.0 approx. That yields pu 0.113, hu 0.180, pd 0.512, hd 0.195. That's plausible: performed dividing dominates due to NFT influence. But minimum wage is not NFT; maybe we should weight less on NFT? But we only have three examples. The task says \"Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we can use them as evidence that this audience tends to see topics as performed dividing especially for controversial ones. Minimum wage is controversial, so maybe performed dividing is high but not 0.95. The average of cannabis and las vegas (excluding NFT) gives: pu (0.2076+0.1171)/2=0.162, hu (0.2561+0.2613)/2=0.2587, pd (0.3149+0.2703)/2=0.2926, hd (0.2215+0.3514)/2=0.2865. Sum ~1.0. That's more balanced. Which is more appropriate? Minimum wage is a social/political topic like cannabis (social drug) and las vegas (city of vice). NFT is a financial fad. So maybe minimum wage is between cannabis and las vegas, leaning slightly more dividing. So pu ~0.15, hu ~0.25, pd ~0.35, hd ~0.25. Sum 1.0.\n\nLet's pick: performed+uniting: 0.150, honest+uniting: 0.250, performed+dividing: 0.350, honest+dividing: 0.250. That sums to 1.0. But we need three decimals: 0.150, 0.250, 0.350, 0.250.\n\nI think that's reasonable. However, the audience might be more cynical: performed dividing higher. I'll adjust to 0.130, 0.220, 0.400, 0.250 => sum 1.000. That's fine.\n\nI'll go with: {\"performed+uniting\":0.130,\"honest+uniting\":0.220,\"performed+dividing\":0.400,\"honest+dividing\":0.250}\n\nCheck sum: 0.130+0.220=0.350; +0.400=0.750; +0.250=1.000.\n\nI'll output exactly that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 508,
+          "completion_tokens": 2152,
+          "total_tokens": 2660,
+          "cost": 0.00131928,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00131928,
+            "upstream_inference_prompt_cost": 0.00007112,
+            "upstream_inference_completions_cost": 0.00124816
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2109,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "GMICloud",
+      "usage": {
+        "prompt_tokens": 508,
+        "completion_tokens": 2152,
+        "total_tokens": 2660,
+        "cost": 0.00131928,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00131928,
+          "upstream_inference_prompt_cost": 0.00007112,
+          "upstream_inference_completions_cost": 0.00124816
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2109,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 5,
+      "finishedAt": "2026-11-14T22:58:45.412Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 65
+      },
+      "observation": {
+        "ok": true,
+        "id": 65,
+        "prompt": "CANNABIS",
+        "distribution": {
+          "performed+uniting": 0.20761245674740483,
+          "honest+uniting": 0.2560553633217993,
+          "performed+dividing": 0.314878892733564,
+          "honest+dividing": 0.22145328719723184
+        },
+        "submissions": 289,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 79
+      },
+      "observation": {
+        "ok": true,
+        "id": 79,
+        "prompt": "LAS VEGAS",
+        "distribution": {
+          "performed+uniting": 0.11711711711711711,
+          "honest+uniting": 0.26126126126126126,
+          "performed+dividing": 0.2702702702702703,
+          "honest+dividing": 0.35135135135135137
+        },
+        "submissions": 111,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 48
+      },
+      "observation": {
+        "ok": true,
+        "id": 48,
+        "prompt": "NON-FUNGIBLE TOKENS",
+        "distribution": {
+          "performed+uniting": 0.015444015444015444,
+          "honest+uniting": 0.021235521235521235,
+          "performed+dividing": 0.9498069498069498,
+          "honest+dividing": 0.013513513513513514
+        },
+        "submissions": 518,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.13,
+          "honest+uniting": 0.22,
+          "performed+dividing": 0.4,
+          "honest+dividing": 0.25
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.13,
+      "honest+uniting": 0.22,
+      "performed+dividing": 0.4,
+      "honest+dividing": 0.25
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.3579336598306295,
+    "score": 82.10331700846852,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

@@ -1,0 +1,607 @@
+{
+  "day": 101,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"THE CIA\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":1,\"prompt\":\"THE INTERNET\",\"distribution\":{\"performed+uniting\":0.32608695652173914,\"honest+uniting\":0.06521739130434782,\"performed+dividing\":0.5543478260869565,\"honest+dividing\":0.05434782608695652},\"submissions\":92},{\"id\":35,\"prompt\":\"THE WORLD CUP\",\"distribution\":{\"performed+uniting\":0.8992805755395683,\"honest+uniting\":0.03597122302158273,\"performed+dividing\":0.02877697841726619,\"honest+dividing\":0.03597122302158273},\"submissions\":139},{\"id\":20,\"prompt\":\"THE STOCK MARKET\",\"distribution\":{\"performed+uniting\":0.09433962264150944,\"honest+uniting\":0,\"performed+dividing\":0.8490566037735849,\"honest+dividing\":0.05660377358490566},\"submissions\":53}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "gmicloud/bf16"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.14,
+        "completion": 0.58,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T22:59:14.350Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.160,\"honest+uniting\":0.030,\"performed+dividing\":0.750,\"honest+dividing\":0.060}",
+      "response": {
+        "id": "gen-1794697154-EhY5rFAjQe54eBXZ9OP8",
+        "object": "chat.completion",
+        "created": 1794697154,
+        "model": "tencent/hy3",
+        "provider": "GMICloud",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.160,\"honest+uniting\":0.030,\"performed+dividing\":0.750,\"honest+dividing\":0.060}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"THE CIA\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054. Submissions 92. So audience sees internet mostly as dividing (performed dividing high) and some performed uniting.\n2. \"THE WORLD CUP\": performed+uniting 0.899, honest+uniting 0.036, performed+dividing 0.029, honest+dividing 0.036. Submissions 139. So world cup is seen as creating false unity (performed uniting) overwhelmingly.\n3. \"THE STOCK MARKET\": performed+uniting 0.094, honest+uniting 0, performed+dividing 0.849, honest+dividing 0.057. Submissions 53. Stock market seen as exploiting divisions deliberately.\n\nNow we need to estimate for \"THE CIA\". The CIA is a secretive intelligence agency, often associated with conspiracy, covert operations, destabilization, propaganda, surveillance, maybe sometimes bringing people together? Usually public perception of CIA is negative: involved in coups, dividing nations, exploiting divisions, maybe creating false unity (e.g., propaganda, false flag, fake consensus). But also could be seen as fracturing us truthfully? Honest dividing? That seems less likely: CIA is not honest about dividing; it's more clandestine, so performed dividing (deliberate exploitation of divisions) seems high. Performed uniting could be some propaganda or false unity. Honest uniting unlikely. Honest dividing unlikely because they are not truthful.\n\nCompare with INTERNET and STOCK MARKET: both have high performed dividing (0.554, 0.849). INTERNET also has moderate performed uniting (0.326). STOCK MARKET has low performed uniting (0.094). CIA might be similar to stock market or internet? CIA is an organization that works in shadows, manipulates. So performed dividing likely high. Performed uniting maybe moderate? Could be some false unity (e.g., national security rhetoric). But given the examples, for entities that are manipulative and divisive (stock market, internet), performed dividing dominates. For a celebratory event (world cup), performed uniting dominates.\n\nCIA is not a celebratory event. So likely performed dividing high. Let's assign probabilities: performed+dividing maybe ~0.7? performed+uniting maybe ~0.2? honest+uniting ~0.02? honest+dividing ~0.08? Need sum to 1.\n\nLook at patterns: For INTERNET: p+u 0.326, h+u 0.065, p+d 0.554, h+d 0.054. Sum 1. For STOCK MARKET: p+u 0.094, h+u 0, p+d 0.849, h+d 0.057. So honest categories are small (0-0.065). So for CIA, honest ones should be small. p+u and p+d are the main.\n\nCIA might be seen even more negatively than stock market? Stock market p+d 0.849. CIA could be 0.8+ p+d. But maybe some p+u because of patriotism? Let's think: The prompt is \"THE CIA\". In generative art audience, maybe they are cynical. They might see CIA as creating false unity (e.g., \"we're all Americans\" propaganda) but more likely exploiting divisions (covert ops). I'd estimate p+d around 0.75, p+u around 0.15, h+u around 0.02, h+d around 0.08? But h+d is \"fracturing us, truthfully\" - CIA doesn't do truthfully, so maybe lower, like 0.03. But in examples, h+d is around 0.05-0.06 for internet and stock market, and 0.036 for world cup. So h+d is consistently ~0.05. h+u is ~0.06 for internet, 0 for stock, 0.036 for world cup. So maybe h+u ~0.03, h+d ~0.05.\n\nThen p+u + p+d = 1 - 0.08 = 0.92. For stock market p+u 0.094, p+d 0.849 (ratio ~1:9). For internet p+u 0.326, p+d 0.554 (ratio ~1:1.7). CIA might be between? Since CIA is an intelligence agency, maybe more like stock market (manipulative, not uniting). But maybe slightly more uniting than stock market because of flag-waving. Let's set p+u = 0.15, p+d = 0.77. Then sum: 0.15+0.03+0.77+0.05 = 1.00. That works.\n\nBut we need at least three decimal places when needed. We can output something like:\n{\"performed+uniting\":0.150,\"honest+uniting\":0.030,\"performed+dividing\":0.770,\"honest+dividing\":0.050}\n\nCheck sum: 0.15+0.03=0.18, +0.77=0.95, +0.05=1.00. Good.\n\nBut maybe we should be more precise: Use examples to infer base rates. Average of p+d across three: (0.554+0.029+0.849)/3 = 1.432/3=0.477. But that's dominated by world cup low. Actually world cup is outlier. For non-celebratory: internet and stock market average p+d = (0.554+0.849)/2=0.7015; p+u = (0.326+0.094)/2=0.21; h+u = (0.065+0)/2=0.0325; h+d = (0.054+0.057)/2=0.0555. So for CIA, maybe similar to those two: p+d ~0.70, p+u ~0.21, h+u ~0.03, h+d ~0.06. Sum = 1.00. Let's compute: 0.21+0.03+0.70+0.06 = 1.00. That's plausible.\n\nBut CIA might be even more divisive than internet, less than stock market? Stock market p+d 0.849, internet 0.554. CIA maybe 0.75. So p+u 0.16, h+u 0.03, h+d 0.06 => sum 1.00. Let's do 0.16+0.03+0.75+0.06 = 1.00.\n\nI'll go with something like:\n{\"performed+uniting\":0.160,\"honest+uniting\":0.030,\"performed+dividing\":0.750,\"honest+dividing\":0.060}\n\nBut need to ensure sum exactly 1. 0.16+0.03=0.19, +0.75=0.94, +0.06=1.00. Good.\n\nAlternatively, use 0.17, 0.02, 0.75, 0.06 = 1.00. But honest+uniting in examples not zero except stock market; internet had 0.065, world cup 0.036. So 0.02 is fine.\n\nI think a reasonable prediction: performed+dividing high, performed+uniting moderate-low, honest small.\n\nLet's output exactly the JSON object, no other text.\n\n{\"performed+uniting\":0.160,\"honest+uniting\":0.030,\"performed+dividing\":0.750,\"honest+dividing\":0.060}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"THE CIA\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054. Submissions 92. So audience sees internet mostly as dividing (performed dividing high) and some performed uniting.\n2. \"THE WORLD CUP\": performed+uniting 0.899, honest+uniting 0.036, performed+dividing 0.029, honest+dividing 0.036. Submissions 139. So world cup is seen as creating false unity (performed uniting) overwhelmingly.\n3. \"THE STOCK MARKET\": performed+uniting 0.094, honest+uniting 0, performed+dividing 0.849, honest+dividing 0.057. Submissions 53. Stock market seen as exploiting divisions deliberately.\n\nNow we need to estimate for \"THE CIA\". The CIA is a secretive intelligence agency, often associated with conspiracy, covert operations, destabilization, propaganda, surveillance, maybe sometimes bringing people together? Usually public perception of CIA is negative: involved in coups, dividing nations, exploiting divisions, maybe creating false unity (e.g., propaganda, false flag, fake consensus). But also could be seen as fracturing us truthfully? Honest dividing? That seems less likely: CIA is not honest about dividing; it's more clandestine, so performed dividing (deliberate exploitation of divisions) seems high. Performed uniting could be some propaganda or false unity. Honest uniting unlikely. Honest dividing unlikely because they are not truthful.\n\nCompare with INTERNET and STOCK MARKET: both have high performed dividing (0.554, 0.849). INTERNET also has moderate performed uniting (0.326). STOCK MARKET has low performed uniting (0.094). CIA might be similar to stock market or internet? CIA is an organization that works in shadows, manipulates. So performed dividing likely high. Performed uniting maybe moderate? Could be some false unity (e.g., national security rhetoric). But given the examples, for entities that are manipulative and divisive (stock market, internet), performed dividing dominates. For a celebratory event (world cup), performed uniting dominates.\n\nCIA is not a celebratory event. So likely performed dividing high. Let's assign probabilities: performed+dividing maybe ~0.7? performed+uniting maybe ~0.2? honest+uniting ~0.02? honest+dividing ~0.08? Need sum to 1.\n\nLook at patterns: For INTERNET: p+u 0.326, h+u 0.065, p+d 0.554, h+d 0.054. Sum 1. For STOCK MARKET: p+u 0.094, h+u 0, p+d 0.849, h+d 0.057. So honest categories are small (0-0.065). So for CIA, honest ones should be small. p+u and p+d are the main.\n\nCIA might be seen even more negatively than stock market? Stock market p+d 0.849. CIA could be 0.8+ p+d. But maybe some p+u because of patriotism? Let's think: The prompt is \"THE CIA\". In generative art audience, maybe they are cynical. They might see CIA as creating false unity (e.g., \"we're all Americans\" propaganda) but more likely exploiting divisions (covert ops). I'd estimate p+d around 0.75, p+u around 0.15, h+u around 0.02, h+d around 0.08? But h+d is \"fracturing us, truthfully\" - CIA doesn't do truthfully, so maybe lower, like 0.03. But in examples, h+d is around 0.05-0.06 for internet and stock market, and 0.036 for world cup. So h+d is consistently ~0.05. h+u is ~0.06 for internet, 0 for stock, 0.036 for world cup. So maybe h+u ~0.03, h+d ~0.05.\n\nThen p+u + p+d = 1 - 0.08 = 0.92. For stock market p+u 0.094, p+d 0.849 (ratio ~1:9). For internet p+u 0.326, p+d 0.554 (ratio ~1:1.7). CIA might be between? Since CIA is an intelligence agency, maybe more like stock market (manipulative, not uniting). But maybe slightly more uniting than stock market because of flag-waving. Let's set p+u = 0.15, p+d = 0.77. Then sum: 0.15+0.03+0.77+0.05 = 1.00. That works.\n\nBut we need at least three decimal places when needed. We can output something like:\n{\"performed+uniting\":0.150,\"honest+uniting\":0.030,\"performed+dividing\":0.770,\"honest+dividing\":0.050}\n\nCheck sum: 0.15+0.03=0.18, +0.77=0.95, +0.05=1.00. Good.\n\nBut maybe we should be more precise: Use examples to infer base rates. Average of p+d across three: (0.554+0.029+0.849)/3 = 1.432/3=0.477. But that's dominated by world cup low. Actually world cup is outlier. For non-celebratory: internet and stock market average p+d = (0.554+0.849)/2=0.7015; p+u = (0.326+0.094)/2=0.21; h+u = (0.065+0)/2=0.0325; h+d = (0.054+0.057)/2=0.0555. So for CIA, maybe similar to those two: p+d ~0.70, p+u ~0.21, h+u ~0.03, h+d ~0.06. Sum = 1.00. Let's compute: 0.21+0.03+0.70+0.06 = 1.00. That's plausible.\n\nBut CIA might be even more divisive than internet, less than stock market? Stock market p+d 0.849, internet 0.554. CIA maybe 0.75. So p+u 0.16, h+u 0.03, h+d 0.06 => sum 1.00. Let's do 0.16+0.03+0.75+0.06 = 1.00.\n\nI'll go with something like:\n{\"performed+uniting\":0.160,\"honest+uniting\":0.030,\"performed+dividing\":0.750,\"honest+dividing\":0.060}\n\nBut need to ensure sum exactly 1. 0.16+0.03=0.19, +0.75=0.94, +0.06=1.00. Good.\n\nAlternatively, use 0.17, 0.02, 0.75, 0.06 = 1.00. But honest+uniting in examples not zero except stock market; internet had 0.065, world cup 0.036. So 0.02 is fine.\n\nI think a reasonable prediction: performed+dividing high, performed+uniting moderate-low, honest small.\n\nLet's output exactly the JSON object, no other text.\n\n{\"performed+uniting\":0.160,\"honest+uniting\":0.030,\"performed+dividing\":0.750,\"honest+dividing\":0.060}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 494,
+          "completion_tokens": 1831,
+          "total_tokens": 2325,
+          "cost": 0.00113114,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00113114,
+            "upstream_inference_prompt_cost": 0.00006916,
+            "upstream_inference_completions_cost": 0.00106198
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1788,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "GMICloud",
+      "usage": {
+        "prompt_tokens": 494,
+        "completion_tokens": 1831,
+        "total_tokens": 2325,
+        "cost": 0.00113114,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00113114,
+          "upstream_inference_prompt_cost": 0.00006916,
+          "upstream_inference_completions_cost": 0.00106198
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1788,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 7,
+      "finishedAt": "2026-11-14T22:59:44.386Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 1
+      },
+      "observation": {
+        "ok": true,
+        "id": 1,
+        "prompt": "THE INTERNET",
+        "distribution": {
+          "performed+uniting": 0.32608695652173914,
+          "honest+uniting": 0.06521739130434782,
+          "performed+dividing": 0.5543478260869565,
+          "honest+dividing": 0.05434782608695652
+        },
+        "submissions": 92,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 35
+      },
+      "observation": {
+        "ok": true,
+        "id": 35,
+        "prompt": "THE WORLD CUP",
+        "distribution": {
+          "performed+uniting": 0.8992805755395683,
+          "honest+uniting": 0.03597122302158273,
+          "performed+dividing": 0.02877697841726619,
+          "honest+dividing": 0.03597122302158273
+        },
+        "submissions": 139,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 20
+      },
+      "observation": {
+        "ok": true,
+        "id": 20,
+        "prompt": "THE STOCK MARKET",
+        "distribution": {
+          "performed+uniting": 0.09433962264150944,
+          "honest+uniting": 0,
+          "performed+dividing": 0.8490566037735849,
+          "honest+dividing": 0.05660377358490566
+        },
+        "submissions": 53,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.16,
+          "honest+uniting": 0.03,
+          "performed+dividing": 0.75,
+          "honest+dividing": 0.06
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.16,
+      "honest+uniting": 0.03,
+      "performed+dividing": 0.75,
+      "honest+dividing": 0.06
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.015525114111062723,
+    "score": 99.22374429444686,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

@@ -1,0 +1,607 @@
+{
+  "day": 100,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"INSTAGRAM\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":17,\"prompt\":\"THE AMERICAN DREAM\",\"distribution\":{\"performed+uniting\":0.2621359223300971,\"honest+uniting\":0.23300970873786409,\"performed+dividing\":0.20388349514563106,\"honest+dividing\":0.30097087378640774},\"submissions\":103},{\"id\":45,\"prompt\":\"STATUS\",\"distribution\":{\"performed+uniting\":0.34408602150537637,\"honest+uniting\":0,\"performed+dividing\":0.5913978494623656,\"honest+dividing\":0.06451612903225806},\"submissions\":93},{\"id\":1,\"prompt\":\"THE INTERNET\",\"distribution\":{\"performed+uniting\":0.32608695652173914,\"honest+uniting\":0.06521739130434782,\"performed+dividing\":0.5543478260869565,\"honest+dividing\":0.05434782608695652},\"submissions\":92}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "gmicloud/bf16"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.14,
+        "completion": 0.58,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T22:58:45.424Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.347,\"honest+uniting\":0.017,\"performed+dividing\":0.576,\"honest+dividing\":0.060}",
+      "response": {
+        "id": "gen-1794697125-jOZz74SRkJx4r47hFD3p",
+        "object": "chat.completion",
+        "created": 1794697125,
+        "model": "tencent/hy3",
+        "provider": "GMICloud",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.347,\"honest+uniting\":0.017,\"performed+dividing\":0.576,\"honest+dividing\":0.060}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"INSTAGRAM\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"THE AMERICAN DREAM\": performed+uniting 0.262, honest+uniting 0.233, performed+dividing 0.204, honest+dividing 0.301. Sum = 1.0 (approx). Submissions 103.\n2. \"STATUS\": performed+uniting 0.344, honest+uniting 0.0, performed+dividing 0.591, honest+dividing 0.0645. Sum = 0.344+0+0.591+0.0645 = 0.9995 ~1. Submissions 93.\n3. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.0652, performed+dividing 0.554, honest+dividing 0.0543. Sum = 0.326+0.0652+0.554+0.0543 = 0.9995 ~1. Submissions 92.\n\nWe need to estimate for \"INSTAGRAM\". Instagram is a social media platform, like \"THE INTERNET\" but more specific. It's about sharing photos, connecting, but also performative, fake lives, division (envy, comparison), etc. The audience seems to be critical of social media / status / internet. For \"THE INTERNET\", they gave high performed+dividing (0.554), moderate performed+uniting (0.326), low honest+uniting (0.065), low honest+dividing (0.054). For \"STATUS\", performed+dividing even higher (0.591), performed+uniting 0.344, honest+uniting 0, honest+dividing 0.0645. For \"THE AMERICAN DREAM\", more balanced with honest+dividing highest (0.301) and performed+uniting 0.262, honest+uniting 0.233, performed+dividing 0.204.\n\nInstagram is a platform that is inherently about performing (showing curated life) and can create false unity (performed+uniting) but also exploit divisions (comparison, jealousy) -> performed+dividing. It might also bring people together authentically (honest+uniting) but likely low. Honest+dividing? Possibly some truthful fracturing (like it really does divide us by lifestyle, but truthfully?) Might be low.\n\nGiven the pattern for internet-related and status: performed+dividing is largest, performed+uniting second, honest ones very low. Instagram is similar to THE INTERNET but maybe even more performative and status-driven (like STATUS). So we could blend THE INTERNET and STATUS. For STATUS: perf+unit 0.344, perf+div 0.591, honest+unit 0, honest+div 0.0645. For INTERNET: perf+unit 0.326, perf+div 0.554, honest+unit 0.065, honest+div 0.054. Average: perf+unit ~0.335, perf+div ~0.5725, honest+unit ~0.0326, honest+div ~0.059. But we need sum to 1. Let's compute: 0.335+0.5725+0.0326+0.059 = 0.9991. Good.\n\nBut maybe Instagram is more about performed+uniting (false unity) because it's about appearing connected, while also dividing. Could be similar to THE INTERNET but slightly more performed+uniting. Or maybe more like STATUS because Instagram is status showcase. So perhaps perf+div higher, honest+unit near zero.\n\nWe should produce a JSON object with four keys, probabilities sum to 1, at least three decimals when needed.\n\nLet's decide: \nperformed+uniting: 0.34\nhonest+uniting: 0.02 (maybe not zero but low)\nperformed+dividing: 0.58\nhonest+dividing: 0.06\n\nSum = 0.34+0.02+0.58+0.06 = 1.00. That's fine. But we need at least three decimal places when needed; we can use 0.340, 0.020, 0.580, 0.060. Or more precise: 0.342, 0.018, 0.580, 0.060 = 1.000. Let's look at historical: they used many decimals. We can do something like:\nperformed+uniting: 0.337\nhonest+uniting: 0.021\nperformed+dividing: 0.582\nhonest+dividing: 0.060\nSum = 1.000.\n\nAlternatively, we could mimic the exact style: for INTERNET: 0.326086..., 0.065217..., 0.554347..., 0.054347... That's 92 submissions: 30/92=0.32608, 6/92=0.06521, 51/92=0.55434, 5/92=0.05434. For STATUS: 93 submissions: 32/93=0.344086, 0/93=0, 55/93=0.591397, 6/93=0.064516. For AMERICAN DREAM: 103 submissions: 27/103=0.2621359, 24/103=0.2330097, 21/103=0.2038835, 31/103=0.3009708.\n\nIf we imagine Instagram submissions maybe around 100. Let's hypothesize counts: performed+uniting: 34, honest+uniting: 2, performed+dividing: 58, honest+dividing: 6 => total 100. Probabilities: 0.34, 0.02, 0.58, 0.06. That's clean.\n\nBut to be safe with \"at least three decimal places when needed\", we can output 0.340, 0.020, 0.580, 0.060. However, the examples used more decimals; but it's not required to match exactly. The instruction: \"Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can use 0.34, but that's two decimals; \"at least three decimal places when needed\" might imply if the number is not terminating at three decimals we need three, but 0.34 is exactly 0.340, so we can write 0.340 to be safe. I'll write with three decimals: 0.340, 0.020, 0.580, 0.060. Sum = 1.000.\n\nBut maybe we want to be more nuanced: Instagram is a subset of internet, maybe more performed+uniting than general internet because it's specifically a social network that pretends to connect. So 0.35, 0.02, 0.57, 0.06 = 1.00. Let's do 0.350, 0.020, 0.570, 0.060.\n\nOr use 0.345, 0.015, 0.580, 0.060 = 1.000. I'll go with something plausible: performed+uniting 0.347, honest+uniting 0.017, performed+dividing 0.576, honest+dividing 0.060 = 1.000. That gives three decimals.\n\nLet's check sum: 0.347+0.017=0.364; +0.576=0.940; +0.060=1.000. Good.\n\nI'll output exactly:\n{\"performed+uniting\":0.347,\"honest+uniting\":0.017,\"performed+dividing\":0.576,\"honest+dividing\":0.060}\n\nBut ensure no spaces? The prompt shows format with spaces after colon? It shows: {\"performed+uniting\": <probability>, ...} but we can include spaces or not. Usually JSON can have spaces. The examples have no spaces? Actually examples: {\"performed+uniting\":0.2621359223300971,\"honest+uniting\":0.23300970873786409,...} no spaces. I'll output without spaces after colon to match compact style. But it's fine.\n\nI'll produce: {\"performed+uniting\":0.347,\"honest+uniting\":0.017,\"performed+dividing\":0.576,\"honest+dividing\":0.060}\n\nWait, is honest+uniting maybe 0? In STATUS it was 0. For Instagram, maybe some authentic connection (like keeping in touch with friends) so not zero but low. I'll keep 0.017.\n\nAlternatively, we could set honest+uniting to 0.0? But they said probabilities between 0 and 1; 0 is allowed. But to be safe, small positive.\n\nI'll finalize with that.\n\nNo prose, no code fences. Single JSON object only.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"INSTAGRAM\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"THE AMERICAN DREAM\": performed+uniting 0.262, honest+uniting 0.233, performed+dividing 0.204, honest+dividing 0.301. Sum = 1.0 (approx). Submissions 103.\n2. \"STATUS\": performed+uniting 0.344, honest+uniting 0.0, performed+dividing 0.591, honest+dividing 0.0645. Sum = 0.344+0+0.591+0.0645 = 0.9995 ~1. Submissions 93.\n3. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.0652, performed+dividing 0.554, honest+dividing 0.0543. Sum = 0.326+0.0652+0.554+0.0543 = 0.9995 ~1. Submissions 92.\n\nWe need to estimate for \"INSTAGRAM\". Instagram is a social media platform, like \"THE INTERNET\" but more specific. It's about sharing photos, connecting, but also performative, fake lives, division (envy, comparison), etc. The audience seems to be critical of social media / status / internet. For \"THE INTERNET\", they gave high performed+dividing (0.554), moderate performed+uniting (0.326), low honest+uniting (0.065), low honest+dividing (0.054). For \"STATUS\", performed+dividing even higher (0.591), performed+uniting 0.344, honest+uniting 0, honest+dividing 0.0645. For \"THE AMERICAN DREAM\", more balanced with honest+dividing highest (0.301) and performed+uniting 0.262, honest+uniting 0.233, performed+dividing 0.204.\n\nInstagram is a platform that is inherently about performing (showing curated life) and can create false unity (performed+uniting) but also exploit divisions (comparison, jealousy) -> performed+dividing. It might also bring people together authentically (honest+uniting) but likely low. Honest+dividing? Possibly some truthful fracturing (like it really does divide us by lifestyle, but truthfully?) Might be low.\n\nGiven the pattern for internet-related and status: performed+dividing is largest, performed+uniting second, honest ones very low. Instagram is similar to THE INTERNET but maybe even more performative and status-driven (like STATUS). So we could blend THE INTERNET and STATUS. For STATUS: perf+unit 0.344, perf+div 0.591, honest+unit 0, honest+div 0.0645. For INTERNET: perf+unit 0.326, perf+div 0.554, honest+unit 0.065, honest+div 0.054. Average: perf+unit ~0.335, perf+div ~0.5725, honest+unit ~0.0326, honest+div ~0.059. But we need sum to 1. Let's compute: 0.335+0.5725+0.0326+0.059 = 0.9991. Good.\n\nBut maybe Instagram is more about performed+uniting (false unity) because it's about appearing connected, while also dividing. Could be similar to THE INTERNET but slightly more performed+uniting. Or maybe more like STATUS because Instagram is status showcase. So perhaps perf+div higher, honest+unit near zero.\n\nWe should produce a JSON object with four keys, probabilities sum to 1, at least three decimals when needed.\n\nLet's decide: \nperformed+uniting: 0.34\nhonest+uniting: 0.02 (maybe not zero but low)\nperformed+dividing: 0.58\nhonest+dividing: 0.06\n\nSum = 0.34+0.02+0.58+0.06 = 1.00. That's fine. But we need at least three decimal places when needed; we can use 0.340, 0.020, 0.580, 0.060. Or more precise: 0.342, 0.018, 0.580, 0.060 = 1.000. Let's look at historical: they used many decimals. We can do something like:\nperformed+uniting: 0.337\nhonest+uniting: 0.021\nperformed+dividing: 0.582\nhonest+dividing: 0.060\nSum = 1.000.\n\nAlternatively, we could mimic the exact style: for INTERNET: 0.326086..., 0.065217..., 0.554347..., 0.054347... That's 92 submissions: 30/92=0.32608, 6/92=0.06521, 51/92=0.55434, 5/92=0.05434. For STATUS: 93 submissions: 32/93=0.344086, 0/93=0, 55/93=0.591397, 6/93=0.064516. For AMERICAN DREAM: 103 submissions: 27/103=0.2621359, 24/103=0.2330097, 21/103=0.2038835, 31/103=0.3009708.\n\nIf we imagine Instagram submissions maybe around 100. Let's hypothesize counts: performed+uniting: 34, honest+uniting: 2, performed+dividing: 58, honest+dividing: 6 => total 100. Probabilities: 0.34, 0.02, 0.58, 0.06. That's clean.\n\nBut to be safe with \"at least three decimal places when needed\", we can output 0.340, 0.020, 0.580, 0.060. However, the examples used more decimals; but it's not required to match exactly. The instruction: \"Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can use 0.34, but that's two decimals; \"at least three decimal places when needed\" might imply if the number is not terminating at three decimals we need three, but 0.34 is exactly 0.340, so we can write 0.340 to be safe. I'll write with three decimals: 0.340, 0.020, 0.580, 0.060. Sum = 1.000.\n\nBut maybe we want to be more nuanced: Instagram is a subset of internet, maybe more performed+uniting than general internet because it's specifically a social network that pretends to connect. So 0.35, 0.02, 0.57, 0.06 = 1.00. Let's do 0.350, 0.020, 0.570, 0.060.\n\nOr use 0.345, 0.015, 0.580, 0.060 = 1.000. I'll go with something plausible: performed+uniting 0.347, honest+uniting 0.017, performed+dividing 0.576, honest+dividing 0.060 = 1.000. That gives three decimals.\n\nLet's check sum: 0.347+0.017=0.364; +0.576=0.940; +0.060=1.000. Good.\n\nI'll output exactly:\n{\"performed+uniting\":0.347,\"honest+uniting\":0.017,\"performed+dividing\":0.576,\"honest+dividing\":0.060}\n\nBut ensure no spaces? The prompt shows format with spaces after colon? It shows: {\"performed+uniting\": <probability>, ...} but we can include spaces or not. Usually JSON can have spaces. The examples have no spaces? Actually examples: {\"performed+uniting\":0.2621359223300971,\"honest+uniting\":0.23300970873786409,...} no spaces. I'll output without spaces after colon to match compact style. But it's fine.\n\nI'll produce: {\"performed+uniting\":0.347,\"honest+uniting\":0.017,\"performed+dividing\":0.576,\"honest+dividing\":0.060}\n\nWait, is honest+uniting maybe 0? In STATUS it was 0. For Instagram, maybe some authentic connection (like keeping in touch with friends) so not zero but low. I'll keep 0.017.\n\nAlternatively, we could set honest+uniting to 0.0? But they said probabilities between 0 and 1; 0 is allowed. But to be safe, small positive.\n\nI'll finalize with that.\n\nNo prose, no code fences. Single JSON object only.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 492,
+          "completion_tokens": 2118,
+          "total_tokens": 2610,
+          "cost": 0.00129732,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00129732,
+            "upstream_inference_prompt_cost": 0.00006888,
+            "upstream_inference_completions_cost": 0.00122844
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2075,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "GMICloud",
+      "usage": {
+        "prompt_tokens": 492,
+        "completion_tokens": 2118,
+        "total_tokens": 2610,
+        "cost": 0.00129732,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00129732,
+          "upstream_inference_prompt_cost": 0.00006888,
+          "upstream_inference_completions_cost": 0.00122844
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2075,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 6,
+      "finishedAt": "2026-11-14T22:59:14.340Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 17
+      },
+      "observation": {
+        "ok": true,
+        "id": 17,
+        "prompt": "THE AMERICAN DREAM",
+        "distribution": {
+          "performed+uniting": 0.2621359223300971,
+          "honest+uniting": 0.23300970873786409,
+          "performed+dividing": 0.20388349514563106,
+          "honest+dividing": 0.30097087378640774
+        },
+        "submissions": 103,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 45
+      },
+      "observation": {
+        "ok": true,
+        "id": 45,
+        "prompt": "STATUS",
+        "distribution": {
+          "performed+uniting": 0.34408602150537637,
+          "honest+uniting": 0,
+          "performed+dividing": 0.5913978494623656,
+          "honest+dividing": 0.06451612903225806
+        },
+        "submissions": 93,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 1
+      },
+      "observation": {
+        "ok": true,
+        "id": 1,
+        "prompt": "THE INTERNET",
+        "distribution": {
+          "performed+uniting": 0.32608695652173914,
+          "honest+uniting": 0.06521739130434782,
+          "performed+dividing": 0.5543478260869565,
+          "honest+dividing": 0.05434782608695652
+        },
+        "submissions": 92,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.347,
+          "honest+uniting": 0.017,
+          "performed+dividing": 0.576,
+          "honest+dividing": 0.06
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.347,
+      "honest+uniting": 0.017,
+      "performed+dividing": 0.576,
+      "honest+dividing": 0.06
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.001965684024995991,
+    "score": 99.9017157987502,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

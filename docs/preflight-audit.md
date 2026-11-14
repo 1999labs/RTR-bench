@@ -73,3 +73,5 @@ Provider behavior references: [OpenRouter errors](https://openrouter.ai/docs/api
 ## Pilot prepared after the audit
 
 The [development pilot plan](development-pilot-2026-11-14.json) fixes the ten model/provider pairs, three development targets, protocol, pricing snapshots, and individual spending caps totaling $3.45. MiMo uses the available native `xiaomi/fp8` endpoint. The estimate is approximately $0.19 by repricing the earlier GLM token usage; it is not a guaranteed price. This pilot does not authorize or launch final evaluation.
+
+The pilot subsequently completed: 116/120 predictions were valid for $0.11486105754 in reported cost. MiniMax and DeepSeek exhausted the 4,000-token allowance on four one-shot predictions; all Learn episodes were valid. The full campaign remains on hold pending the token-allowance decision. See the [saved pilot findings](https://github.com/1999labs/RTR-bench/blob/main/results/development-preflight-2026-11-14/README.md).
