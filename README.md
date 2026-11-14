@@ -48,9 +48,20 @@ The full comparison includes randomly selected examples and examples selected by
 
 ## Quickstart
 
-You need [Node.js](https://nodejs.org/) 22.18 or newer, [Git](https://git-scm.com/), and an OpenRouter API key with available credits. Node runs the benchmark on your computer; OpenRouter connects it to the model you want to evaluate. The dataset is included, and no GPU or database setup is needed.
+You need [Node.js](https://nodejs.org/) 22.18 or newer and an OpenRouter API key with available credits. Node runs the benchmark on your computer; OpenRouter connects it to the model you want to evaluate. The dataset is included, and no GPU or database setup is needed.
 
-### 1. Download and set up the benchmark
+### 1. Choose how to run the benchmark
+
+**npm package (simplest).** `npx` downloads and runs the published package for you. You do not need Git, a source checkout, or `npm ci`. Open Terminal and choose a folder for your API key and results, for example:
+
+```bash
+mkdir rtr-results
+cd rtr-results
+```
+
+Predict and Learn require npm release 0.2.0 or newer. The commands below use `npx rtr-bench`; use `npx rtr-bench@0.2.0` to select that exact release. Publishing to npm is separate from updating GitHub.
+
+**GitHub source (for inspecting or changing the code).** With [Git](https://git-scm.com/) installed, download the project and its supporting software:
 
 ```bash
 git clone https://github.com/1999labs/RTR-bench
@@ -58,29 +69,29 @@ cd RTR-bench
 npm ci
 ```
 
-Run these commands in Terminal. They download the project, move into its folder, and install its supporting software. Keep Terminal in this folder for the commands below. If you already have a checkout, use that folder instead of cloning another copy.
+If you already have a checkout, use that folder instead of cloning another copy. For this path, replace `npx rtr-bench` with `node src/cli.ts` in the commands below. Keep Terminal in your chosen folder for the remaining steps.
 
 ### 2. Add your OpenRouter API key
 
-Create a file named `.env` in the project folder and add this line, replacing `sk-or-your-key` with your own key:
+Create a file named `.env` in your chosen folder and add this line, replacing `sk-or-your-key` with your own key:
 
 ```text
 OPENROUTER_API_KEY=sk-or-your-key
 ```
 
-The benchmark reads this file when it starts. The key connects requests to your OpenRouter account; the file is excluded from Git.
+The benchmark reads this file when it starts. The key connects requests to your OpenRouter account. Keep the file private; the source checkout excludes it from Git.
 
 ### 3. Run a small development evaluation
 
 ```bash
-node src/cli.ts read-the-room z-ai/glm-5.3-flash \
+npx rtr-bench read-the-room z-ai/glm-5.3-flash \
   --provider Relace \
   --split development \
   --limit 5 \
   --max-usd 0.25
 ```
 
-Here, `node src/cli.ts` starts the benchmark, and `read-the-room` selects both Predict and Learn. This command evaluates five development prompts using GLM 5.3 Flash through Relace, with a $0.25 spending cap. The backslashes let one command continue across several lines.
+Here, `npx rtr-bench` starts the benchmark, and `read-the-room` selects both Predict and Learn. This command evaluates five development prompts using GLM 5.3 Flash through Relace, with a $0.25 spending cap. The backslashes let one command continue across several lines.
 
 To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID and select a serving provider. Use `predict` for Predict alone or `learn` for Learn alone. Add `--controls` to `read-the-room` to include randomly selected and text-similarity examples.
 
@@ -91,7 +102,7 @@ The command prints the scores and Learn’s gain over Predict, and saves request
 To list available model IDs and token prices:
 
 ```bash
-node src/cli.ts catalog --limit 20
+npx rtr-bench catalog --limit 20
 ```
 
 ### 4. Run the final evaluation
@@ -99,7 +110,7 @@ node src/cli.ts catalog --limit 20
 Once the settings are fixed, evaluate all 45 final targets with both comparison controls, matching the conditions in the results table:
 
 ```bash
-node src/cli.ts read-the-room z-ai/glm-5.3-flash \
+npx rtr-bench read-the-room z-ai/glm-5.3-flash \
   --provider Relace \
   --controls \
   --split evaluation \
@@ -129,19 +140,7 @@ A development pilot checks the setup and is not comparable with final evaluation
 
 ## Optional usage
 
-### Run the npm release
-
-Version 0.2.0 packages the same Predict and Learn commands and the frozen dataset. With Node.js installed, you can use `npx` to download and run that release without cloning the repository or running `npm ci`. From a folder where you want to save results, create the `.env` file described above, then run:
-
-```bash
-npx rtr-bench@0.2.0 read-the-room z-ai/glm-5.3-flash \
-  --provider Relace \
-  --split development \
-  --limit 5 \
-  --max-usd 0.25
-```
-
-For the other model-evaluation commands below, replace `node src/cli.ts` with `npx rtr-bench@0.2.0`. Results are saved in your current folder's `results/learn-room/` directory. The synthetic examples below use fixture paths from the source checkout. npm releases are published separately from GitHub updates; version 0.1.5 does not contain Predict and Learn.
+The examples below use the GitHub source checkout. For model evaluations through the npm package, replace `node src/cli.ts` with `npx rtr-bench`. The synthetic examples use fixture paths from the source checkout.
 
 ### Run one track
 
@@ -200,7 +199,7 @@ The current client uses OpenRouter. Direct connections to other hosted or local 
 
 ## Development
 
-After the [Quickstart setup](#quickstart), use these commands from the project folder to check changes and build the distributable program. Source commands run TypeScript directly and require Node.js 22.18 or newer.
+After the GitHub source setup in [Quickstart](#quickstart), use these commands from the project folder to check changes and build the distributable program. Source commands run TypeScript directly and require Node.js 22.18 or newer.
 
 ```bash
 npm test
