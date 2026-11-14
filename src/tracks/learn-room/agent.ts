@@ -37,6 +37,7 @@ export function agentRequest(config:RoomConfig,messages:Message[]):Request {
   const request:Request={model:config.model,messages:structuredClone(messages),...(config.settings.temperature===null?{}:{temperature:config.settings.temperature}),max_tokens:config.settings.maxTokens,usage:{include:true}};
   if(config.provider) request.provider={order:[config.provider],allow_fallbacks:false};
   if(config.spending) request.provider=spendingProvider(config.spending);
+  if(config.version==="learn-room-runner-v4"&&request.provider) request.provider.require_parameters=true;
   return request;
 }
 export function callFinished(attempts:Attempt[]) {

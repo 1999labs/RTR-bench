@@ -7,7 +7,7 @@ type SpendingBounds={limitUsd:number;providerTag:string;contextTokens:number;inp
 export type SpendingPolicy=SpendingBounds & ({version:"reserved-context-v1"}|{
   version:"reserved-text-v2";model:string;temperatureSupported:boolean;maxCompletionTokens:number;pricing:Record<string,unknown>;
 });
-type Entry={reservedUnits:number;chargedUnits:number|null;at:string;costBasis?:string};
+type Entry={reservedUnits:number;chargedUnits:number|null;at:string;costBasis?:string;requestKey?:string};
 type Ledger={policy:SpendingPolicy;entries:Entry[]};
 export class SpendingLimitError extends Error {}
 
@@ -77,8 +77,8 @@ export async function discoverSpendingPolicy(model:string,provider:string,limitU
   return suitable[0];
 }
 
-export function spendingProvider(policy:SpendingPolicy) {
-  return {order:[policy.providerTag],allow_fallbacks:false,max_price:{prompt:policy.inputUsdPerToken*1e6,completion:policy.outputUsdPerToken*1e6,request:0}};
+export function spendingProvider(policy:SpendingPolicy,requireParameters=false) {
+  return {order:[policy.providerTag],allow_fallbacks:false,max_price:{prompt:policy.inputUsdPerToken*1e6,completion:policy.outputUsdPerToken*1e6,request:0},...(requireParameters?{require_parameters:true as const}:{})};
 }
 
 // The caller holds the run lock. Persist before dispatch and retain the entire
@@ -91,12 +91,14 @@ export function openSpendingLedger(file:string,policy:SpendingPolicy) {
   }
   const ledger=fs.existsSync(file)?readJson<Ledger>(file):{policy,entries:[]};
   if(JSON.stringify(ledger.policy)!==JSON.stringify(policy)) throw new Error("Spending ledger policy mismatch");
+  if(!Array.isArray(ledger.entries)||ledger.entries.some(e=>!Number.isSafeInteger(e.reservedUnits)||e.reservedUnits<0||(e.chargedUnits!==null&&(!Number.isSafeInteger(e.chargedUnits)||e.chargedUnits<0)))) throw new Error("Invalid spending ledger entries");
   const accounted=()=>ledger.entries.reduce((s,e)=>s+(e.chargedUnits??e.reservedUnits),0);
   const save=()=>writeJson(file,ledger);
   save();
   return {
-    reserve(request:Request) {
-      if(JSON.stringify(request.provider)!==JSON.stringify(spendingProvider(policy))) throw new Error("Request must use the budget's pinned provider and price ceiling");
+    reserve(request:Request,requestKey?:string) {
+      if(ledger.entries.some(e=>e.chargedUnits!==null&&e.chargedUnits>e.reservedUnits)) throw new SpendingLimitError("A saved provider charge exceeded its reservation; stopping for review");
+      if(JSON.stringify(request.provider)!==JSON.stringify(spendingProvider(policy,request.provider?.require_parameters===true))) throw new Error("Request must use the budget's pinned provider and price ceiling");
       if(!Number.isSafeInteger(request.max_tokens)||request.max_tokens<=0) throw new Error("Budgeted requests require a finite output limit");
       if(policy.version==="reserved-text-v2") {
         const allowed=["model","messages","temperature","max_tokens","usage","provider"];
@@ -107,10 +109,14 @@ export function openSpendingLedger(file:string,policy:SpendingPolicy) {
       // Reject oversized messages before relying on the endpoint context bound.
       if(Buffer.byteLength(JSON.stringify(request.messages),"utf8")+1024*request.messages.length>policy.contextTokens) throw new SpendingLimitError("Request is too large for the conservative spending guard");
       const reservedUnits=units(policy.contextTokens*policy.inputUsdPerToken+request.max_tokens*policy.outputUsdPerToken);
+      if(!Number.isSafeInteger(reservedUnits)) throw new SpendingLimitError("Reservation exceeds safe accounting precision");
       if(accounted()+reservedUnits>Math.floor(policy.limitUsd*1e9)) throw new SpendingLimitError("Spending limit reached; next request was not sent");
-      ledger.entries.push({reservedUnits,chargedUnits:null,at:new Date().toISOString()});save();return ledger.entries.length-1;
+      if(requestKey&&ledger.entries.some(e=>e.requestKey===requestKey)) throw new SpendingLimitError("Saved reservation has no matching attempt; stopping for review");
+      ledger.entries.push({reservedUnits,chargedUnits:null,at:new Date().toISOString(),...(requestKey?{requestKey}:{})});save();return ledger.entries.length-1;
     },
-    settle(index:number,usage:Record<string,unknown>|null,attempt?:Attempt) {
+    settle(index:number,usage:Record<string,unknown>|null,attempt?:Attempt,requestKey?:string) {
+      const entry=ledger.entries[index];
+      if(!Number.isSafeInteger(index)||!entry||(requestKey!==undefined&&entry.requestKey!==requestKey)) throw new Error("Spending reservation does not match saved attempt");
       const response=attempt?.response as any;
       const rejected=attempt?.httpStatus===429&&response?.error?.code===429&&response?.error?.metadata?.provider_error_code==="rate_limit_exceeded"&&!response?.id&&!response?.choices;
       // OpenRouter pricing: failed model-token attempts are unbilled. Only
@@ -118,8 +124,9 @@ export function openSpendingLedger(file:string,policy:SpendingPolicy) {
       // or empty successful responses. Preserve the basis in the audit ledger.
       const cost=usage?.cost??usage?.total_cost??(rejected?0:null);
       if(typeof cost==="number"&&Number.isFinite(cost)&&cost>=0) {
-        const entry=ledger.entries[index];
-        entry.chargedUnits=units(cost);entry.costBasis=typeof usage?.cost==="number"||typeof usage?.total_cost==="number"?"reported-cost":"unbilled-rate-limit: https://openrouter.ai/pricing";save();
+        const chargedUnits=units(cost);
+        if(!Number.isSafeInteger(chargedUnits)||(entry.chargedUnits!==null&&entry.chargedUnits!==chargedUnits)) throw new Error("Conflicting or invalid saved charge");
+        entry.chargedUnits=chargedUnits;entry.costBasis=typeof usage?.cost==="number"||typeof usage?.total_cost==="number"?"reported-cost":"unbilled-rate-limit: https://openrouter.ai/pricing";save();
         if(entry.chargedUnits>entry.reservedUnits) throw new SpendingLimitError("Provider cost exceeded its reservation; stopping for review");
       }
     },

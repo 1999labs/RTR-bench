@@ -66,7 +66,7 @@ test('interrupted HTTP attempt consumes retry budget, not another agent action; 
   const client=async(request:any)=>{
     calls++;
     if(calls===1) throw new Error('simulate interruption');
-    assert.deepEqual(request.provider,{order:['Mock'],allow_fallbacks:false});
+    assert.deepEqual(request.provider,{order:['Mock'],allow_fallbacks:false,require_parameters:true});
     const feedback=JSON.parse(request.messages.at(-1).content);
     assert.equal('score' in feedback,false);assert.equal('observed' in feedback,false);
     let action:any;

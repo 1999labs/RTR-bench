@@ -90,7 +90,7 @@ test('every strategy and agent turn uses endpoint temperature support, records t
       assert.equal(Object.hasOwn(body,'temperature'),spending.temperatureSupported);
       if(spending.temperatureSupported)assert.equal(body.temperature,0);
       assert.equal(body.max_tokens,4000);
-      assert.deepEqual(body.provider,spendingProvider(spending));
+      assert.deepEqual(body.provider,spendingProvider(spending,true));
       const raw=calls<=3?JSON.stringify(uniform()):calls===4?'{"type":"list_examples"}':JSON.stringify({type:'submit_prediction',prediction:uniform()});
       return new Response(JSON.stringify({choices:[{message:{content:raw}}],usage:{cost:.001},provider:row.endpoint.provider_name}));
     });

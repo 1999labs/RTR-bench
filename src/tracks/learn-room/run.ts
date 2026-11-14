@@ -3,12 +3,12 @@ import path from "node:path";
 import { digest, loadDistributionData, type Partition } from "../../shared/dataset.ts";
 import { DISTRIBUTION_VERSION } from "../../shared/distribution.ts";
 import { readJson, writeJson } from "../../shared/run-records.ts";
-import { requestCompletion, retryDelayMs, MAX_ATTEMPTS, TIMEOUT_MS, API_URL, type Attempt, type Request } from "../../shared/model-client.ts";
+import { requestCompletion, retryDelayMs, isSetupFailure, RunSetupError, MAX_ATTEMPTS, TIMEOUT_MS, API_URL, type Attempt, type Request } from "../../shared/model-client.ts";
 import { PROMPT_HASH } from "../distribution/prompt.ts";
 import { createEpisode, ENVIRONMENT_VERSION, MAX_ACTIONS, type TraceEntry, type Outcome } from "./environment.ts";
 import { prepareStrategy, STRATEGY_VERSION, SIMILARITY_VERSION, EVIDENCE_INSTRUCTION, type Strategy } from "./strategies.ts";
 import { AGENT_VERSION, getAgentPolicy, agentMessages, agentRequest, callFinished, applyAgentCall, enforceAgentLimit, restoreAgent, type AgentCall, type AgentPolicyName } from "./agent.ts";
-import { writeLearnRoomReport } from "./report.ts";
+import { buildLearnRoomReport, writeLearnRoomReport } from "./report.ts";
 import { discoverSpendingPolicy, openSpendingLedger, spendingProvider, SpendingLimitError, type SpendingPolicy } from "../../shared/spending.ts";
 
 export type RoomConfig = {
@@ -23,9 +23,38 @@ export type RoomConfig = {
   model: string; provider: string | null; mode: "fixture" | "api"; fixtureHash: string | null;
   settings: {temperature:number|null;maxTokens:number;maxAttempts:number;timeoutMs:number;apiUrl:string;retryPolicy?:string};
 };
-export type RoomManifest = {id:string;createdAt:string;config:RoomConfig;status:"incomplete"|"complete";completedAt?:string};
+export type RoomManifest = {id:string;createdAt:string;config:RoomConfig;status:"incomplete"|"complete";completedAt?:string;stopReason?:string};
 export type EpisodeRecord = {day:number;strategy:Strategy;request:Request;attempts:Attempt[];agentCalls?:AgentCall[];terminal:boolean;trace:TraceEntry[];outcome:Outcome|null};
 type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all"|"tracks";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;replicate?:string;agentPolicy?:AgentPolicyName;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
+
+// Match user intent before fetching mutable catalog metadata. A price change
+// must never silently create another paid run for an identical command.
+function savedBudgetRun(root:string,config:RoomConfig,limitUsd:number) {
+  const identity=(c:RoomConfig)=>{
+    const {spending,...rest}=structuredClone(c);
+    rest.settings.temperature=0; // The endpoint's temperature capability is frozen with spending.
+    if(rest.version==="learn-room-runner-v3") rest.version="learn-room-runner-v4";
+    return JSON.stringify(rest);
+  };
+  const prefix=config.model.replace(/[^a-zA-Z0-9]+/g,"-").toLowerCase()+"-";
+  const matches:RoomManifest[]=[];
+  for(const entry of fs.existsSync(root)?fs.readdirSync(root,{withFileTypes:true}):[]) {
+    if(!entry.isDirectory()||!entry.name.startsWith(prefix)) continue;
+    const file=path.join(root,entry.name,"manifest.json");
+    if(!fs.existsSync(file)) continue;
+    const saved=readJson<RoomManifest>(file);
+    if(saved.config.spending?.limitUsd!==limitUsd||identity(saved.config)!==identity(config)) continue;
+    if(saved.id!==digest(JSON.stringify(saved.config))||entry.name!==prefix+saved.id.slice(0,16)) throw new Error("Saved run fingerprint mismatch");
+    if(saved.config.version!==config.version&&saved.status!=="complete") throw new Error("An incomplete run from an older runner exists; review it before creating or resuming a paid run");
+    matches.push(saved);
+  }
+  if(matches.length>1) throw new Error("Multiple saved runs match this command; select a separate output directory after reviewing existing spending");
+  return matches[0];
+}
+
+function stopForSetup(attempt:Attempt) {
+  if(isSetupFailure(attempt)) throw new RunSetupError(`API setup failed; run remains incomplete: ${attempt.error??"Inspect the saved API error"}`);
+}
 
 export function prepareEpisode(config: RoomConfig, strategy: Strategy, day: number, data = loadDistributionData()) {
   const target = data.windows.find(w=>w.day===day);
@@ -36,6 +65,7 @@ export function prepareEpisode(config: RoomConfig, strategy: Strategy, day: numb
   const request: Request = {model:config.model,messages,...(config.settings.temperature===null?{}:{temperature:config.settings.temperature}),max_tokens:config.settings.maxTokens,usage:{include:true}};
   if (config.provider) request.provider={order:[config.provider],allow_fallbacks:false};
   if (config.spending) request.provider=spendingProvider(config.spending);
+  if(config.version==="learn-room-runner-v4"&&request.provider) request.provider.require_parameters=true;
   return {episode,request};
 }
 
@@ -73,15 +103,22 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   const model=fixture ? "fixture/synthetic" : options.model;
   if (!model) throw new Error("Specify a model or --fixture <file>");
   if(fixture&&(options.maxUsd!==undefined||options.spending)) throw new Error("Fixture runs do not need a spending policy");
-  const spending=options.spending??(options.maxUsd!==undefined?await discoverSpendingPolicy(model,options.provider??"",options.maxUsd):undefined);
-  const config: RoomConfig={track:"learn-room",version:"learn-room-runner-v2",scorerVersion:DISTRIBUTION_VERSION,environmentVersion:ENVIRONMENT_VERSION,strategyVersion:STRATEGY_VERSION,similarityVersion:SIMILARITY_VERSION,agentVersion:AGENT_VERSION,agentPromptHash:policy.promptHash,maxModelCalls,promptHash:PROMPT_HASH,evidenceInstruction:EVIDENCE_INSTRUCTION,datasetHash:data.datasetHash,splitHash:data.splitHash,partition,targets,reference:data.split.reference,strategies,budget,maxActions:MAX_ACTIONS,seed,model,provider:options.provider??null,mode:fixture?"fixture":"api",fixtureHash:fixtureRaw===null?null:digest(fixtureRaw),settings:{temperature:0,maxTokens,maxAttempts:MAX_ATTEMPTS,timeoutMs:TIMEOUT_MS,apiUrl:API_URL}};
-  if(spending) config.spending=spending;
-  if(spending?.version==="reserved-text-v2"&&!spending.temperatureSupported) config.settings.temperature=null;
-  config.version="learn-room-runner-v3";
+  if(options.maxUsd!==undefined&&(!Number.isFinite(options.maxUsd)||options.maxUsd<=0||!options.provider)) throw new Error("--max-usd must be positive and requires --provider");
+  if(options.maxUsd!==undefined&&options.spending&&options.spending.limitUsd!==options.maxUsd) throw new Error("Spending policy differs from requested budget");
+  let config: RoomConfig={track:"learn-room",version:"learn-room-runner-v4",scorerVersion:DISTRIBUTION_VERSION,environmentVersion:ENVIRONMENT_VERSION,strategyVersion:STRATEGY_VERSION,similarityVersion:SIMILARITY_VERSION,agentVersion:AGENT_VERSION,agentPromptHash:policy.promptHash,maxModelCalls,promptHash:PROMPT_HASH,evidenceInstruction:EVIDENCE_INSTRUCTION,datasetHash:data.datasetHash,splitHash:data.splitHash,partition,targets,reference:data.split.reference,strategies,budget,maxActions:MAX_ACTIONS,seed,model,provider:options.provider??null,mode:fixture?"fixture":"api",fixtureHash:fixtureRaw===null?null:digest(fixtureRaw),settings:{temperature:0,maxTokens,maxAttempts:MAX_ATTEMPTS,timeoutMs:TIMEOUT_MS,apiUrl:API_URL}};
   config.settings.retryPolicy="retry-after-v1";
   if(options.replicate!==undefined) config.replicate=options.replicate;
   if(policy.name!=="default") config.agentPolicy=policy.name;
-  const id=digest(JSON.stringify(config)), dir=path.join(options.output??path.join("results","learn-room"),`${model.replace(/[^a-zA-Z0-9]+/g,"-").toLowerCase()}-${id.slice(0,16)}`);
+  const root=options.output??path.join("results","learn-room");
+  const saved=!options.spending&&options.maxUsd!==undefined?savedBudgetRun(root,config,options.maxUsd):undefined;
+  let spending=options.spending;
+  if(saved) {config=saved.config;spending=config.spending;}
+  else {
+    spending??=options.maxUsd!==undefined?await discoverSpendingPolicy(model,options.provider??"",options.maxUsd):undefined;
+    if(spending) config.spending=spending;
+    if(spending?.version==="reserved-text-v2"&&!spending.temperatureSupported) config.settings.temperature=null;
+  }
+  const id=digest(JSON.stringify(config)), dir=path.join(root,`${model.replace(/[^a-zA-Z0-9]+/g,"-").toLowerCase()}-${id.slice(0,16)}`);
   fs.mkdirSync(dir,{recursive:true});
   const lock=path.join(dir,"run.lock");
   let fd:number;
@@ -91,8 +128,27 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
     const manifestPath=path.join(dir,"manifest.json");
     const manifest:RoomManifest=fs.existsSync(manifestPath)?readJson(manifestPath):{id,createdAt:new Date().toISOString(),config,status:"incomplete"};
     if (manifest.id!==id || JSON.stringify(manifest.config)!==JSON.stringify(config)) throw new Error("Run manifest mismatch");
+    if(spending&&!fs.existsSync(path.join(dir,"spending.json"))&&fs.existsSync(path.join(dir,"episodes"))) throw new Error("Spending ledger is missing for a saved run; refusing to reset its budget");
+    // Validate all existing requests/traces before sending any further requests.
+    if(fs.existsSync(manifestPath)) {
+      const prior=buildLearnRoomReport(dir);
+      if(manifest.status==="complete"&&prior.rows.some(row=>!fs.existsSync(path.join(dir,"episodes",row.strategy,`${row.day}.json`)))) throw new Error("Completed run has missing episodes; refusing to rerun saved evaluation targets");
+    }
     writeJson(manifestPath,manifest);
     const ledger=spending?openSpendingLedger(path.join(dir,"spending.json"),spending):null;
+    // A crash can happen after saving a response but before settling its charge.
+    if(ledger&&config.version==="learn-room-runner-v4") {
+      for(const s of strategies) for(const day of targets) {
+        const file=path.join(dir,"episodes",s,`${day}.json`);
+        if(!fs.existsSync(file)) continue;
+        const rec=readJson<EpisodeRecord>(file);
+        const calls=s==="agent"?rec.agentCalls??[]:[{attempts:rec.attempts}];
+        for(const [turn,call] of calls.entries()) for(const a of call.attempts) {
+          if(a.spendingReservation===undefined) throw new Error("Saved attempt has no spending reservation");
+          ledger.settle(a.spendingReservation,a.usage,a,`${s}/${day}/${turn}/${a.index}`);
+        }
+      }
+    }
     for (const s of strategies) for (const day of targets) {
       const {episode,request}=prepareEpisode(config,s,day,data);
       const file=path.join(dir,"episodes",s,`${day}.json`);
@@ -113,16 +169,21 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
           while(!callFinished(call.attempts)) {
             if(!fixture&&!process.env.OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY is not set");
             if(call.attempts.length&&!fixture) await new Promise(resolve=>setTimeout(resolve,retryDelayMs(call.attempts.at(-1),call.attempts.length)));
-            const reservation=ledger?.reserve(call.request);
+            const requestKey=`${s}/${day}/${rec.agentCalls.length-1}/${call.attempts.length+1}`;
+            const reservation=ledger?.reserve(call.request,requestKey);
             const attempt:Attempt={index:call.attempts.length+1,startedAt:new Date().toISOString(),status:"started",raw:"",response:null,provider:null,usage:null,error:null,retriable:true};
+            if(reservation!==undefined) attempt.spendingReservation=reservation;
             call.attempts.push(attempt);rec.attempts=rec.agentCalls.flatMap(c=>c.attempts);writeJson(file,rec);
             if(fixture) {
               const raw=fixture[s][day][rec.agentCalls.length-1]??"";
               Object.assign(attempt,{status:"response",finishedAt:new Date().toISOString(),raw,response:{fixture:true,content:raw},usage:{total_tokens:0,cost:0},retriable:false});
             } else Object.assign(attempt,await client(call.request,process.env.OPENROUTER_API_KEY!));
+            if(isSetupFailure(attempt)) attempt.retriable=true;
             writeJson(file,rec);
-            if(reservation!==undefined) ledger!.settle(reservation,attempt.usage,attempt);
+            if(reservation!==undefined) ledger!.settle(reservation,attempt.usage,attempt,requestKey);
+            stopForSetup(attempt);
           }
+          if(call.attempts.length) stopForSetup(call.attempts.at(-1)!);
           applyAgentCall(episode,messages,call);call.applied=true;
           enforceAgentLimit(episode,rec.agentCalls,config);
           rec.trace=episode.evaluator.trace();rec.outcome=episode.evaluator.outcome();rec.terminal=!!rec.outcome;
@@ -135,22 +196,31 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
       while (rec.attempts.length<MAX_ATTEMPTS && !(last && (last.status==="response" || (last.status==="error"&&!last.retriable)))) {
         if (!fixture&&!process.env.OPENROUTER_API_KEY) throw new Error("OPENROUTER_API_KEY is not set");
         if (rec.attempts.length && !fixture) await new Promise(resolve=>setTimeout(resolve,retryDelayMs(rec.attempts.at(-1),rec.attempts.length)));
-        const reservation=ledger?.reserve(request);
+        const requestKey=`${s}/${day}/0/${rec.attempts.length+1}`;
+        const reservation=ledger?.reserve(request,requestKey);
         const attempt:Attempt={index:rec.attempts.length+1,startedAt:new Date().toISOString(),status:"started",raw:"",response:null,provider:null,usage:null,error:null,retriable:true};
+        if(reservation!==undefined) attempt.spendingReservation=reservation;
         rec.attempts.push(attempt); writeJson(file,rec);
         if (fixture) Object.assign(attempt,{status:"response",finishedAt:new Date().toISOString(),raw:fixture[s][day],response:{fixture:true,content:fixture[s][day]},usage:{total_tokens:0,cost:0},retriable:false});
         else Object.assign(attempt,await client(request,process.env.OPENROUTER_API_KEY!));
+        if(isSetupFailure(attempt)) attempt.retriable=true;
         writeJson(file,rec); last=attempt;
-        if(reservation!==undefined) ledger!.settle(reservation,attempt.usage,attempt);
+        if(reservation!==undefined) ledger!.settle(reservation,attempt.usage,attempt,requestKey);
+        stopForSetup(attempt);
       }
+      if(last) stopForSetup(last);
       Object.assign(rec,finishEpisode(episode,rec.attempts),{terminal:true}); writeJson(file,rec);
       console.log(`learn-room: ${s} day ${day} ${rec.outcome!.status}, ${rec.outcome!.inspections} inspections`);
     }
-    manifest.status="complete";manifest.completedAt??=new Date().toISOString();writeJson(manifestPath,manifest);
+    manifest.status="complete";delete manifest.stopReason;manifest.completedAt??=new Date().toISOString();writeJson(manifestPath,manifest);
     if(ledger) console.log(`Spending: ${JSON.stringify(ledger.summary())}`);
     return {dir,report:writeLearnRoomReport(dir)};
   } catch(error) {
-    if(error instanceof SpendingLimitError) {writeLearnRoomReport(dir);console.error(`${error.message}. Incomplete report: ${dir}`);}
+    if(error instanceof SpendingLimitError||error instanceof RunSetupError) {
+      const manifest=readJson<RoomManifest>(path.join(dir,"manifest.json"));
+      manifest.status="incomplete";manifest.stopReason=error.message;delete manifest.completedAt;writeJson(path.join(dir,"manifest.json"),manifest);
+      writeLearnRoomReport(dir);console.error(`${error.message}. Incomplete report: ${dir}`);
+    }
     throw error;
   } finally { fs.closeSync(fd);fs.unlinkSync(lock); }
 }

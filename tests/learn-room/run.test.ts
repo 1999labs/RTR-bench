@@ -73,7 +73,7 @@ test('API adapter retry accounting is bounded and malformed predictions are not 
   t.after(()=>{if(old===undefined)delete process.env.OPENROUTER_API_KEY;else process.env.OPENROUTER_API_KEY=old;});
   let calls=0;
   const {dir,report}=await runLearnRoom({model:'mock/model',provider:'Mock',strategy:'random',limit:1,output},async request=>{
-    calls++;assert.deepEqual(request.provider,{order:['Mock'],allow_fallbacks:false});
+    calls++;assert.deepEqual(request.provider,{order:['Mock'],allow_fallbacks:false,require_parameters:true});
     assert.ok(request.messages[1].content.includes('Historical examples'));
     return {status:calls===1?'error':'response',finishedAt:new Date().toISOString(),raw:calls===1?'':'invalid json',response:{},provider:'Mock',usage:{cost:.01,total_tokens:10},error:calls===1?'HTTP 429':null,retriable:calls===1};
   });
