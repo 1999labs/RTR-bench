@@ -73,3 +73,4 @@ This regenerates `analysis.json`, including every target's three scores and pair
 - [Repeat 2 report](../../z-ai-glm-5-3-flash-b9ee92442023a58f/report.html)
 - [Repeat 3 report](../../z-ai-glm-5-3-flash-f2d8814acf8f60fa/report.html)
 - [Aggregate metrics and target-level comparisons](analysis.json)
+- [Offline evidence audit and proposed agent change](audit.md)

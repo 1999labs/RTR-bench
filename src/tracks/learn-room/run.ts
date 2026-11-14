@@ -7,7 +7,7 @@ import { requestCompletion, retryDelayMs, MAX_ATTEMPTS, TIMEOUT_MS, API_URL, typ
 import { PROMPT_HASH } from "../distribution/prompt.ts";
 import { createEpisode, ENVIRONMENT_VERSION, MAX_ACTIONS, type TraceEntry, type Outcome } from "./environment.ts";
 import { prepareStrategy, STRATEGY_VERSION, SIMILARITY_VERSION, EVIDENCE_INSTRUCTION, type Strategy } from "./strategies.ts";
-import { AGENT_VERSION, AGENT_PROMPT_HASH, agentMessages, agentRequest, callFinished, applyAgentCall, enforceAgentLimit, restoreAgent, type AgentCall } from "./agent.ts";
+import { AGENT_VERSION, getAgentPolicy, agentMessages, agentRequest, callFinished, applyAgentCall, enforceAgentLimit, restoreAgent, type AgentCall, type AgentPolicyName } from "./agent.ts";
 import { writeLearnRoomReport } from "./report.ts";
 import { discoverSpendingPolicy, openSpendingLedger, spendingProvider, SpendingLimitError, type SpendingPolicy } from "../../shared/spending.ts";
 
@@ -19,12 +19,13 @@ export type RoomConfig = {
   similarityVersion?:string; agentVersion?:string; agentPromptHash?:string; maxModelCalls?:number;
   spending?:SpendingPolicy;
   replicate?:string;
+  agentPolicy?:AgentPolicyName;
   model: string; provider: string | null; mode: "fixture" | "api"; fixtureHash: string | null;
   settings: {temperature:number;maxTokens:number;maxAttempts:number;timeoutMs:number;apiUrl:string;retryPolicy?:string};
 };
 export type RoomManifest = {id:string;createdAt:string;config:RoomConfig;status:"incomplete"|"complete";completedAt?:string};
 export type EpisodeRecord = {day:number;strategy:Strategy;request:Request;attempts:Attempt[];agentCalls?:AgentCall[];terminal:boolean;trace:TraceEntry[];outcome:Outcome|null};
-type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;replicate?:string;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
+type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;replicate?:string;agentPolicy?:AgentPolicyName;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
 
 export function prepareEpisode(config: RoomConfig, strategy: Strategy, day: number, data = loadDistributionData()) {
   const target = data.windows.find(w=>w.day===day);
@@ -63,6 +64,8 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   if (options.replicate!==undefined && (typeof options.replicate!=="string"||!/^[A-Za-z0-9_-]{1,64}$/.test(options.replicate))) throw new Error("--replicate must contain 1–64 letters, numbers, underscores, or hyphens");
   if (options.limit!==undefined && (!Number.isInteger(options.limit)||options.limit<1)) throw new Error("--limit must be a positive integer");
   const targets=data.split[partition].slice(0,options.limit), strategies: Strategy[]=strategy==="all" ? ["none","random","similar","agent"] : strategy==="both" ? ["none","random"] : [strategy];
+  const policy=getAgentPolicy(options.agentPolicy);
+  if(options.agentPolicy!==undefined&&!strategies.includes("agent")) throw new Error("--agent-policy requires --strategy agent or all");
   const fixtureRaw=options.fixture ? fs.readFileSync(options.fixture,"utf8") : null;
   const fixture=fixtureRaw===null ? null : JSON.parse(fixtureRaw);
   if (fixtureRaw!==null && (!fixture || typeof fixture!=="object" || Array.isArray(fixture) || strategies.some(s=>targets.some(day=>s==="agent" ? !Array.isArray(fixture[s]?.[day])||!fixture[s][day].length||fixture[s][day].some((v:unknown)=>typeof v!=="string") : typeof fixture[s]?.[day]!=="string")))) throw new Error("Fixture must map each strategy/day to a raw response string (agent: a nonempty array of raw action strings)");
@@ -71,11 +74,12 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   if (!model) throw new Error("Specify a model or --fixture <file>");
   if(fixture&&(options.maxUsd!==undefined||options.spending)) throw new Error("Fixture runs do not need a spending policy");
   const spending=options.spending??(options.maxUsd!==undefined?await discoverSpendingPolicy(model,options.provider??"",options.maxUsd):undefined);
-  const config: RoomConfig={track:"learn-room",version:"learn-room-runner-v2",scorerVersion:DISTRIBUTION_VERSION,environmentVersion:ENVIRONMENT_VERSION,strategyVersion:STRATEGY_VERSION,similarityVersion:SIMILARITY_VERSION,agentVersion:AGENT_VERSION,agentPromptHash:AGENT_PROMPT_HASH,maxModelCalls,promptHash:PROMPT_HASH,evidenceInstruction:EVIDENCE_INSTRUCTION,datasetHash:data.datasetHash,splitHash:data.splitHash,partition,targets,reference:data.split.reference,strategies,budget,maxActions:MAX_ACTIONS,seed,model,provider:options.provider??null,mode:fixture?"fixture":"api",fixtureHash:fixtureRaw===null?null:digest(fixtureRaw),settings:{temperature:0,maxTokens,maxAttempts:MAX_ATTEMPTS,timeoutMs:TIMEOUT_MS,apiUrl:API_URL}};
+  const config: RoomConfig={track:"learn-room",version:"learn-room-runner-v2",scorerVersion:DISTRIBUTION_VERSION,environmentVersion:ENVIRONMENT_VERSION,strategyVersion:STRATEGY_VERSION,similarityVersion:SIMILARITY_VERSION,agentVersion:AGENT_VERSION,agentPromptHash:policy.promptHash,maxModelCalls,promptHash:PROMPT_HASH,evidenceInstruction:EVIDENCE_INSTRUCTION,datasetHash:data.datasetHash,splitHash:data.splitHash,partition,targets,reference:data.split.reference,strategies,budget,maxActions:MAX_ACTIONS,seed,model,provider:options.provider??null,mode:fixture?"fixture":"api",fixtureHash:fixtureRaw===null?null:digest(fixtureRaw),settings:{temperature:0,maxTokens,maxAttempts:MAX_ATTEMPTS,timeoutMs:TIMEOUT_MS,apiUrl:API_URL}};
   if(spending) config.spending=spending;
   config.version="learn-room-runner-v3";
   config.settings.retryPolicy="retry-after-v1";
   if(options.replicate!==undefined) config.replicate=options.replicate;
+  if(policy.name!=="default") config.agentPolicy=policy.name;
   const id=digest(JSON.stringify(config)), dir=path.join(options.output??path.join("results","learn-room"),`${model.replace(/[^a-zA-Z0-9]+/g,"-").toLowerCase()}-${id.slice(0,16)}`);
   fs.mkdirSync(dir,{recursive:true});
   const lock=path.join(dir,"run.lock");

@@ -55,6 +55,24 @@ The default maximum is eight model turns, independent of the eight-action enviro
 
 `--max-tokens <positive-integer>` sets the output-token allowance for every baseline request and every agent turn; it defaults to 2,000. It does not change the number of turns. Providers may consume this allowance on reasoning before returning final content. A truncated response follows the existing validation rules: empty baseline content is missing, malformed baseline content is invalid, and empty or malformed agent actions receive bounded feedback. A length stop does not trigger a transport retry. Changing the allowance creates a separate run because `settings.maxTokens` is fingerprinted, and the spending guard reserves the configured output allowance before each attempt. Existing default runs retain their identities and resume behavior.
 
+### Optional agent policy: transfer-check-v1
+
+`--agent-policy default` uses the original agent instructions. Omitting the flag is identical, including the run identity and exact request contents. The original prompt and hash remain unchanged so saved runs continue to replay and resume.
+
+`--agent-policy transfer-check-v1` appends an experimental evidence-use instruction to the original system prompt. It asks the agent to assess transfer separately for performed versus honest and uniting versus dividing, consider differences between an individual and a broader category, preserve alternative interpretations of ambiguous targets, and discount references that support only a weak analogy. It explicitly retains a joint four-quadrant prediction rather than assuming statistical independence between axes. The policy contains no target-specific examples or crowd outcomes.
+
+The flag requires `--strategy agent` or `--strategy all`. It changes only the agent system message; automatic baseline requests, available actions, evidence pool, budgets, generation settings, and scoring are unchanged. The adapter protocol remains `learn-room-agent-v1`. The optional `agentPolicy` field and policy-specific `agentPromptHash` distinguish the new run and are checked during offline replay. Unknown policies and mismatched hashes are rejected rather than falling back. Reports label the selected non-default policy. Explicit `default` is normalized to the original manifest format.
+
+With `--strategy all`, selecting the new policy creates a new run for all four conditions; identical baseline requests are fresh calls in API mode, not automatically reused from an older run. Resume avoids rerolling completed responses only within the matching run configuration.
+
+Exercise the policy offline with the existing fixture scenarios:
+
+```bash
+node src/cli.ts learn-room --fixture tests/fixtures/learn-room-four-strategies.json --strategy all --limit 5 --max-tokens 4000 --agent-policy transfer-check-v1
+```
+
+Fixtures verify prompt routing, unchanged action and inspection limits, failures, early stopping, resume, and isolation of target labels. They cannot show that the instruction improves model behavior. The policy has not yet been evaluated with live model calls. Its motivation and proposed comparison are in the [offline evidence audit](../results/learn-room/comparisons/glm-5-3-flash-4000-repeats/audit.md).
+
 ## Scores and comparison
 
 For each completed episode, use the shared `100 * (1 - error / 2)` score. Invalid and missing predictions receive error 2. There is no inspection or compute penalty. Aggregate targets equally, and keep each track's result separate from the original RTR score.
