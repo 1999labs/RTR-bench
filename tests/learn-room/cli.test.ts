@@ -24,7 +24,7 @@ test('public commands select only the requested tracks and print paired gain onl
   const combined=invoke(t,'read-the-room'),predict=invoke(t,'predict'),learn=invoke(t,'learn');
   for(const [run,strategies] of [[combined,['none','agent']],[predict,['none']],[learn,['agent']]] as const) {
     assert.deepEqual(run.report.manifest.config.strategies,strategies);
-    assert.equal(run.report.manifest.config.settings.maxTokens,4000);
+    assert.equal(run.report.manifest.config.settings.maxTokens,8000);
     assert.equal(run.report.complete,true);
     assert.equal(run.report.rows.length,strategies.length*5);
     assert.ok(run.report.summaries.every(s=>s.apiCalls===0));
@@ -52,7 +52,7 @@ test('public commands select only the requested tracks and print paired gain onl
 });
 
 test('controls command resumes the equivalent explicit legacy protocol without changing its identity',t=>{
-  const legacy=invoke(t,'learn-room',['--strategy','all','--max-tokens','4000','--agent-policy','transfer-check-v1']);
+  const legacy=invoke(t,'learn-room',['--strategy','all','--max-tokens','8000','--agent-policy','transfer-check-v1']);
   const modern=invoke(t,'read-the-room',['--controls'],legacy.output);
   assert.equal(modern.dir,legacy.dir);
   assert.deepEqual(modern.report,legacy.report);
@@ -71,6 +71,18 @@ test('legacy defaults remain unchanged and public defaults can be explicitly ove
   assert.equal(modern.dir,explicit.dir);
   assert.equal(modern.report.manifest.config.settings.maxTokens,1234);
   assert.equal(modern.report.manifest.config.agentPolicy,undefined);
+});
+
+test('explicit 4000-token commands resume prior runs while the new default creates a separate run',t=>{
+  const original=invoke(t,'read-the-room',['--controls','--max-tokens','4000']);
+  const saved=fs.readFileSync(path.join(original.dir,'report.json'),'utf8');
+  const resumed=invoke(t,'read-the-room',['--controls','--max-tokens','4000'],original.output);
+  assert.equal(resumed.dir,original.dir);
+  assert.equal(fs.readFileSync(path.join(resumed.dir,'report.json'),'utf8'),saved);
+  const current=invoke(t,'read-the-room',['--controls'],original.output);
+  assert.notEqual(current.dir,original.dir);
+  assert.equal(current.report.manifest.config.settings.maxTokens,8000);
+  assert.equal(fs.readFileSync(path.join(original.dir,'report.json'),'utf8'),saved);
 });
 
 test('ambiguous or unsupported public flags fail before running any episodes',t=>{

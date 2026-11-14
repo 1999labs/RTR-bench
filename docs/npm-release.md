@@ -1,6 +1,6 @@
 # Publishing RTR-bench 0.2.1
 
-This patch fixes paid-run resume identity, setup-error handling, transient-error retries, and spending-ledger recovery. Pinned providers must support the requested parameters. The runner is version 4; the frozen data, Predict/Learn prompts, evidence rules, and score formula are unchanged. Node.js 22.18 or newer is required. See the [preflight audit](preflight-audit.md).
+This patch fixes paid-run resume identity, setup-error handling, transient-error retries, and spending-ledger recovery. Pinned providers must support the requested parameters. Public commands now default to 8,000 output tokens following development compatibility checks. Resume older 4,000-token runs with an explicit `--max-tokens 4000`. The runner is version 4; the frozen data, Predict/Learn prompts, evidence rules, and score formula are unchanged. Node.js 22.18 or newer is required. See the [preflight audit](preflight-audit.md).
 
 Publishing to npm is separate from committing and pushing to GitHub. These instructions are for the package maintainer, using an npm account with permission to publish `rtr-bench`.
 

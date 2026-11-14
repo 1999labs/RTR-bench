@@ -45,7 +45,7 @@ All 180 predictions are valid. The saved attempts total 347 API calls and $0.031
 
 ## Freeze before the campaign
 
-Use `read-the-room --controls` so each model gets Predict, random examples, similar examples, and Learn on the same 45 evaluation targets. Fix seed 7, evidence budget 3, maximum eight model turns, maximum eight environment actions, 4,000 output tokens per turn, and agent policy `transfer-check-v1`. Keep one predeclared run per model/provider combination. Run models sequentially to make interruptions and per-run budget stops easy to inspect.
+Use `read-the-room --controls` so each model gets Predict, random examples, similar examples, and Learn on the same 45 evaluation targets. The original proposal used 4,000 output tokens per turn. Following the development checks below, the [final plan](final-run-plan-8000.md) supersedes that allowance with 8,000 for every model. Fix seed 7, evidence budget 3, maximum eight model turns, maximum eight environment actions, and agent policy `transfer-check-v1`. Keep one predeclared run per model/provider combination. Run models sequentially to make interruptions and per-run budget stops easy to inspect.
 
 Record the exact model, provider tag, quantization, runner version, pricing/capability snapshot, and spending cap before each run. Include failed model outputs in the scores. Do not increase token limits or change prompts in response to final evaluation scores. Protocol changes prompted by development compatibility failures must be decided and documented before the remaining evaluation runs; assess historical comparability explicitly if such changes are needed.
 
@@ -77,3 +77,5 @@ The [development pilot plan](development-pilot-2026-11-14.json) fixes the ten mo
 The pilot subsequently completed: 116/120 predictions were valid for $0.11486105754 in reported cost. MiniMax and DeepSeek exhausted the 4,000-token allowance on four one-shot predictions; all Learn episodes were valid. The full campaign remains on hold pending the token-allowance decision. See the [saved pilot findings](https://github.com/1999labs/RTR-bench/blob/main/results/development-preflight-2026-11-14/README.md).
 
 An authorized follow-up at 8,000 tokens then produced 24/24 valid predictions across MiniMax and DeepSeek for $0.00999899252, with no truncation. DeepSeek used up to 7,665 output tokens. This was a development check only; CLI defaults and final protocol settings were not changed. See the [8,000-token findings](https://github.com/1999labs/RTR-bench/blob/main/results/development-token-check-8000-2026-11-14/README.md).
+
+The final campaign plan now fixes 8,000 tokens for all eleven models, including a matching GLM Flash rerun. Public command defaults in the prepared 0.2.1 release have been aligned to it. The historical audit and pilot measurements above retain their original settings. No final campaign calls were made while preparing this plan.

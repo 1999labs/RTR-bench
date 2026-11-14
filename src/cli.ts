@@ -63,7 +63,7 @@ if (["read-the-room", "predict", "learn", "learn-room"].includes(cmd)) {
     partition: (flags.split ?? "development") as "development" | "evaluation",
     strategy: strategy as "none" | "random" | "similar" | "agent" | "both" | "all" | "tracks",
     maxModelCalls: flags["max-model-calls"] === undefined ? undefined : Number(flags["max-model-calls"]),
-    maxTokens: flags["max-tokens"] === undefined ? (legacy ? undefined : 4000) : Number(flags["max-tokens"]),
+    maxTokens: flags["max-tokens"] === undefined ? (legacy ? undefined : 8000) : Number(flags["max-tokens"]),
     replicate: flags.replicate as string | undefined,
     agentPolicy: (flags["agent-policy"] ?? (!legacy && cmd !== "predict" ? "transfer-check-v1" : undefined)) as "default" | "transfer-check-v1" | undefined,
     maxUsd: flags["max-usd"] === undefined ? undefined : Number(flags["max-usd"]),

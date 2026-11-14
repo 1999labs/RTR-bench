@@ -4,7 +4,9 @@ Learn the Room is a separate evaluation track built on the [distribution protoco
 
 ## Public commands
 
-Use `node src/cli.ts read-the-room <model>` for Predict (`none`) and Learn (`agent`), `predict <model>` for Predict alone, or `learn <model>` for Learn alone. Add the boolean `--controls` flag to `read-the-room` for all four strategies. These commands default to 4,000 output tokens per response and, when running Learn, `transfer-check-v1`. They share the existing runner, spending enforcement, reports, and `results/learn-room/` storage. Use `--max-usd` and `--provider` for a capped paid run; see the [Quickstart](../README.md#quickstart).
+Use `node src/cli.ts read-the-room <model>` for Predict (`none`) and Learn (`agent`), `predict <model>` for Predict alone, or `learn <model>` for Learn alone. Add the boolean `--controls` flag to `read-the-room` for all four strategies. In version 0.2.1, these commands default to 8,000 output tokens per response and, when running Learn, `transfer-check-v1`. They share the existing runner, spending enforcement, reports, and `results/learn-room/` storage. Use `--max-usd` and `--provider` for a capped paid run; see the [Quickstart](../README.md#quickstart).
+
+To resume an earlier public-command run made at the old default, specify `--max-tokens 4000` and preserve the rest of its original command. Omitting it now selects 8,000 tokens and therefore a different run. The [final campaign plan](final-run-plan-8000.md) pins all settings explicitly.
 
 The legacy `learn-room` command retains its defaults: 2,000 tokens, the original agent policy, and `--strategy both` meaning `none` plus `random`. Its new `--strategy tracks` selects `none` plus `agent`; `--strategy all` still selects all four conditions. New commands do not accept `--strategy`. A combined run reports Learn’s paired gain; Learn alone does not calculate a gain without a Predict baseline. Separate strategy sets have separate run identities and do not share saved predictions or budgets.
 
