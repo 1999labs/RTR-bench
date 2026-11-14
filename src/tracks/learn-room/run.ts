@@ -18,12 +18,13 @@ export type RoomConfig = {
   strategies: Strategy[]; budget: number; maxActions: number; seed: number;
   similarityVersion?:string; agentVersion?:string; agentPromptHash?:string; maxModelCalls?:number;
   spending?:SpendingPolicy;
+  replicate?:string;
   model: string; provider: string | null; mode: "fixture" | "api"; fixtureHash: string | null;
   settings: {temperature:number;maxTokens:number;maxAttempts:number;timeoutMs:number;apiUrl:string;retryPolicy?:string};
 };
 export type RoomManifest = {id:string;createdAt:string;config:RoomConfig;status:"incomplete"|"complete";completedAt?:string};
 export type EpisodeRecord = {day:number;strategy:Strategy;request:Request;attempts:Attempt[];agentCalls?:AgentCall[];terminal:boolean;trace:TraceEntry[];outcome:Outcome|null};
-type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
+type Options = {model?:string;provider?:string;partition?:Partition;limit?:number;strategy?:Strategy|"both"|"all";budget?:number;seed?:number;maxModelCalls?:number;maxTokens?:number;replicate?:string;fixture?:string;output?:string;maxUsd?:number;spending?:SpendingPolicy};
 
 export function prepareEpisode(config: RoomConfig, strategy: Strategy, day: number, data = loadDistributionData()) {
   const target = data.windows.find(w=>w.day===day);
@@ -59,6 +60,7 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   if (!Number.isInteger(maxModelCalls)||maxModelCalls<1||maxModelCalls>8) throw new Error("--max-model-calls must be an integer from 1 to 8");
   const maxTokens=options.maxTokens??2000;
   if (!Number.isSafeInteger(maxTokens)||maxTokens<1) throw new Error("--max-tokens must be a positive safe integer");
+  if (options.replicate!==undefined && (typeof options.replicate!=="string"||!/^[A-Za-z0-9_-]{1,64}$/.test(options.replicate))) throw new Error("--replicate must contain 1–64 letters, numbers, underscores, or hyphens");
   if (options.limit!==undefined && (!Number.isInteger(options.limit)||options.limit<1)) throw new Error("--limit must be a positive integer");
   const targets=data.split[partition].slice(0,options.limit), strategies: Strategy[]=strategy==="all" ? ["none","random","similar","agent"] : strategy==="both" ? ["none","random"] : [strategy];
   const fixtureRaw=options.fixture ? fs.readFileSync(options.fixture,"utf8") : null;
@@ -73,6 +75,7 @@ export async function runLearnRoom(options: Options, client = requestCompletion)
   if(spending) config.spending=spending;
   config.version="learn-room-runner-v3";
   config.settings.retryPolicy="retry-after-v1";
+  if(options.replicate!==undefined) config.replicate=options.replicate;
   const id=digest(JSON.stringify(config)), dir=path.join(options.output??path.join("results","learn-room"),`${model.replace(/[^a-zA-Z0-9]+/g,"-").toLowerCase()}-${id.slice(0,16)}`);
   fs.mkdirSync(dir,{recursive:true});
   const lock=path.join(dir,"run.lock");

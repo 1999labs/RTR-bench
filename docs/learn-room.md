@@ -89,6 +89,15 @@ Budget stops leave the evaluation incomplete and write an incomplete report; the
 
 Identical commands resume saved terminal episodes, including failures. Each agent turn stores its exact request, all attempts, and whether its action has been applied. On resume, the adapter reconstructs prior messages and observations, checks request/trace identity, and applies a durably saved but unapplied response exactly once. It does not rerun completed model turns. Interrupted attempts consume the fixed attempt budget. Atomic record writes and an exclusive run lock prevent partial writes and concurrent writers. Remove a stale lock only after confirming that its recorded process has exited.
 
+Use `--replicate <id>` to record a fresh run at otherwise identical settings. IDs contain 1–64 letters, numbers, underscores, or hyphens. The ID enters the manifest and run fingerprint only; it does not enter model requests, change the random-example seed, or alter evidence selection. Reusing the same ID and settings resumes that replicate without rerolling saved results. Omitting the flag preserves existing run identities. Separate replicates have separate spending ledgers: for a combined budget, assign per-run caps whose sum does not exceed the authorized total. Do not count repeat predictions on the same targets as additional independent target observations.
+
+For example, after authorizing two repeats with a combined $0.25 cap, run each sequentially with its own $0.125 cap:
+
+```bash
+node src/cli.ts learn-room z-ai/glm-5.3-flash --provider Relace --strategy all --split development --limit 30 --max-tokens 4000 --replicate repeat-2 --max-usd 0.125
+node src/cli.ts learn-room z-ai/glm-5.3-flash --provider Relace --strategy all --split development --limit 30 --max-tokens 4000 --replicate repeat-3 --max-usd 0.125
+```
+
 Offline reporting reconstructs evidence access and predictions from the frozen configuration and saved raw responses, verifies the saved request and trace, and recomputes scores rather than trusting cached outcomes. A missing episode file remains pending, with no invented observation trace.
 
 ## Commands
