@@ -1,0 +1,605 @@
+{
+  "day": 127,
+  "strategy": "similar",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"DEFENSE CONTRACTORS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":2,\"prompt\":\"CONTENT CREATORS\",\"distribution\":{\"performed+uniting\":0.1320754716981132,\"honest+uniting\":0.09433962264150944,\"performed+dividing\":0.16981132075471697,\"honest+dividing\":0.6037735849056604},\"submissions\":53},{\"id\":19,\"prompt\":\"EYE CONTACT\",\"distribution\":{\"performed+uniting\":0.13194444444444445,\"honest+uniting\":0.5347222222222222,\"performed+dividing\":0.19444444444444445,\"honest+dividing\":0.1388888888888889},\"submissions\":144},{\"id\":21,\"prompt\":\"CONCESSION SPEECHES\",\"distribution\":{\"performed+uniting\":0.36813186813186816,\"honest+uniting\":0.14835164835164835,\"performed+dividing\":0.13736263736263737,\"honest+dividing\":0.34615384615384615},\"submissions\":182}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T01:42:03.796Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.20, \"honest+uniting\": 0.05, \"performed+dividing\": 0.33, \"honest+dividing\": 0.42}",
+      "response": {
+        "id": "gen-1794620523-p4DGkkWmS1zp0oHkjFAw",
+        "object": "chat.completion",
+        "created": 1794620523,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.20, \"honest+uniting\": 0.05, \"performed+dividing\": 0.33, \"honest+dividing\": 0.42}",
+              "refusal": null,
+              "reasoning": "The task: predict distribution for \"DEFENSE CONTRACTORS\" in a Mixed Messages project where audience interprets words along two axes: performed vs honest, uniting vs dividing.\n\nThe word \"DEFENSE CONTRACTORS\" — audience interpretations. Defense contractors are companies like Lockheed Martin, Raytheon. Common public perception: profit from war, lobbying, exploiting divisions/conflicts, manufacturing enemies. They \"unite\" people through fear? Or divide?\n\nLet me think about the quadrants:\n- performed+uniting: creating false unity among us — e.g., defense contractors claim to protect us, \"defense\" brings unity through patriotism, but it's performed/false unity (rallying around flag, fear-based unity).\n- honest+uniting: bringing us together authentically — unlikely; few would see defense contractors as authentically uniting.\n- performed+dividing: exploiting our divisions deliberately — they profit from conflict, lobby for wars, manufacture threats. This seems like a strong candidate: deliberate exploitation.\n- honest+dividing: fracturing us truthfully — they do divide us (profit from war), and this is their honest nature? Hmm.\n\nThe axes: performed vs honest refers to whether the action is performative/inauthentic vs genuine/honest. Dividing vs uniting refers to effect.\n\nFor \"defense contractors\":\n- performed+uniting: they perform unity (\"we protect freedom, we stand together\") but it's false unity — plausible.\n- performed+dividing: they deliberately exploit divisions (fear, enemies, wars) for profit — very plausible.\n- honest+dividing: they honestly divide — they truly profit from conflict; the division is real and their genuine nature. Also plausible.\n- honest+uniting: unlikely.\n\nLooking at examples:\n- CONTENT CREATORS: honest+dividing dominant (0.604), performed+dividing 0.17, performed+uniting 0.132, honest+uniting 0.094. So this audience tends to see content creators as authentically divisive (trolls, rage-bait? Actually rage-bait is performed... but audience said honest+dividing).\n- EYE CONTACT: honest+uniting dominant (0.535).\n- CONCESSION SPEECHES: performed+uniting (0.368) and honest+dividing (0.346) top.\n\nSo the audience is willing to assign honest+dividing heavily for some prompts. For defense contractors, the cynical read: they profit from war, they need conflict — they divide (us vs them, enemies) and it's their honest business model. Alternatively, they perform unity (\"national defense, protecting our freedoms\") while actually dividing.\n\nWhich is more likely dominant? The phrase \"defense\" itself is a euphemism — performed. Their public messaging is about protection and unity (\"keeping America safe\"), which is performed unity masking profit from division. But the audience might read: they deliberately stoke fear and conflict to sell weapons — performed+dividing (exploiting our divisions deliberately).\n\nHmm. \"performed+dividing: exploiting our divisions, deliberately\" — that maps well to lobbying, stoking fear of enemies, profiting from wars. \"honest+dividing: fracturing us, truthfully\" — they genuinely fracture societies through war profiteering.\n\nGiven the audience's pattern (content creators got honest+dividing 60%), they may similarly give defense contractors honest+dividing as dominant. But defense contractors also have a strong \"performed\" element: the word \"defense\" is itself a performance; they claim to unite/protect.\n\nI'd estimate something like:\n- performed+uniting: 0.20 (false unity via patriotism, \"protecting our freedom\")\n- honest+uniting: 0.05\n- performed+dividing: 0.35 (deliberately exploiting divisions/fear for profit)\n- honest+dividing: 0.40\n\nAlternatively honest+dividing 0.45, performed+dividing 0.30, performed+uniting 0.20, honest+uniting 0.05.\n\nLet me weigh: The audience gave concession speeches performed+uniting 0.37 — concession speeches are literally performances of unity. Defense contractors' unity messaging is less salient than their war profiteering. The dominant cultural narrative: defense contractors profit from war, lobby for conflict, manufacture enemies. That's dividing. Is it performed or honest? Their stated purpose is \"defense\" (protecting us — performed unity?), but their actual effect/motive is profit from conflict (dividing). The question is whether the audience sees the dividing as deliberate performance (exploiting divisions) or their honest nature (they truly are divisive).\n\nGiven \"defense contractors\" as an institution, I think the audience sees them as honestly divisive — war profiteering is their true nature, not a performance. But there's also the \"military-industrial complex needs enemies\" narrative — they deliberately manufacture threats, which is performed+dividing (deliberate exploitation).\n\nI'll go: honest+dividing 0.42, performed+dividing 0.33, performed+uniting 0.20, honest+uniting 0.05. Sum = 1.000.\n\nActually, let me reconsider performed+uniting. Defense contractors market themselves as protectors, \"supporting our troops,\" patriotic unity. That's performed unity. Could be 0.15-0.25. I'll keep 0.20.\n\nFinal: {\"performed+uniting\": 0.20, \"honest+uniting\": 0.05, \"performed+dividing\": 0.33, \"honest+dividing\": 0.42}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "The task: predict distribution for \"DEFENSE CONTRACTORS\" in a Mixed Messages project where audience interprets words along two axes: performed vs honest, uniting vs dividing.\n\nThe word \"DEFENSE CONTRACTORS\" — audience interpretations. Defense contractors are companies like Lockheed Martin, Raytheon. Common public perception: profit from war, lobbying, exploiting divisions/conflicts, manufacturing enemies. They \"unite\" people through fear? Or divide?\n\nLet me think about the quadrants:\n- performed+uniting: creating false unity among us — e.g., defense contractors claim to protect us, \"defense\" brings unity through patriotism, but it's performed/false unity (rallying around flag, fear-based unity).\n- honest+uniting: bringing us together authentically — unlikely; few would see defense contractors as authentically uniting.\n- performed+dividing: exploiting our divisions deliberately — they profit from conflict, lobby for wars, manufacture threats. This seems like a strong candidate: deliberate exploitation.\n- honest+dividing: fracturing us truthfully — they do divide us (profit from war), and this is their honest nature? Hmm.\n\nThe axes: performed vs honest refers to whether the action is performative/inauthentic vs genuine/honest. Dividing vs uniting refers to effect.\n\nFor \"defense contractors\":\n- performed+uniting: they perform unity (\"we protect freedom, we stand together\") but it's false unity — plausible.\n- performed+dividing: they deliberately exploit divisions (fear, enemies, wars) for profit — very plausible.\n- honest+dividing: they honestly divide — they truly profit from conflict; the division is real and their genuine nature. Also plausible.\n- honest+uniting: unlikely.\n\nLooking at examples:\n- CONTENT CREATORS: honest+dividing dominant (0.604), performed+dividing 0.17, performed+uniting 0.132, honest+uniting 0.094. So this audience tends to see content creators as authentically divisive (trolls, rage-bait? Actually rage-bait is performed... but audience said honest+dividing).\n- EYE CONTACT: honest+uniting dominant (0.535).\n- CONCESSION SPEECHES: performed+uniting (0.368) and honest+dividing (0.346) top.\n\nSo the audience is willing to assign honest+dividing heavily for some prompts. For defense contractors, the cynical read: they profit from war, they need conflict — they divide (us vs them, enemies) and it's their honest business model. Alternatively, they perform unity (\"national defense, protecting our freedoms\") while actually dividing.\n\nWhich is more likely dominant? The phrase \"defense\" itself is a euphemism — performed. Their public messaging is about protection and unity (\"keeping America safe\"), which is performed unity masking profit from division. But the audience might read: they deliberately stoke fear and conflict to sell weapons — performed+dividing (exploiting our divisions deliberately).\n\nHmm. \"performed+dividing: exploiting our divisions, deliberately\" — that maps well to lobbying, stoking fear of enemies, profiting from wars. \"honest+dividing: fracturing us, truthfully\" — they genuinely fracture societies through war profiteering.\n\nGiven the audience's pattern (content creators got honest+dividing 60%), they may similarly give defense contractors honest+dividing as dominant. But defense contractors also have a strong \"performed\" element: the word \"defense\" is itself a performance; they claim to unite/protect.\n\nI'd estimate something like:\n- performed+uniting: 0.20 (false unity via patriotism, \"protecting our freedom\")\n- honest+uniting: 0.05\n- performed+dividing: 0.35 (deliberately exploiting divisions/fear for profit)\n- honest+dividing: 0.40\n\nAlternatively honest+dividing 0.45, performed+dividing 0.30, performed+uniting 0.20, honest+uniting 0.05.\n\nLet me weigh: The audience gave concession speeches performed+uniting 0.37 — concession speeches are literally performances of unity. Defense contractors' unity messaging is less salient than their war profiteering. The dominant cultural narrative: defense contractors profit from war, lobby for conflict, manufacture enemies. That's dividing. Is it performed or honest? Their stated purpose is \"defense\" (protecting us — performed unity?), but their actual effect/motive is profit from conflict (dividing). The question is whether the audience sees the dividing as deliberate performance (exploiting divisions) or their honest nature (they truly are divisive).\n\nGiven \"defense contractors\" as an institution, I think the audience sees them as honestly divisive — war profiteering is their true nature, not a performance. But there's also the \"military-industrial complex needs enemies\" narrative — they deliberately manufacture threats, which is performed+dividing (deliberate exploitation).\n\nI'll go: honest+dividing 0.42, performed+dividing 0.33, performed+uniting 0.20, honest+uniting 0.05. Sum = 1.000.\n\nActually, let me reconsider performed+uniting. Defense contractors market themselves as protectors, \"supporting our troops,\" patriotic unity. That's performed unity. Could be 0.15-0.25. I'll keep 0.20.\n\nFinal: {\"performed+uniting\": 0.20, \"honest+uniting\": 0.05, \"performed+dividing\": 0.33, \"honest+dividing\": 0.42}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 545,
+          "completion_tokens": 1239,
+          "total_tokens": 1784,
+          "cost": 0.0001188831,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001188831,
+            "upstream_inference_prompt_cost": 0.0000217455,
+            "upstream_inference_completions_cost": 0.0000971376
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1315,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 545,
+        "completion_tokens": 1239,
+        "total_tokens": 1784,
+        "cost": 0.0001188831,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001188831,
+          "upstream_inference_prompt_cost": 0.0000217455,
+          "upstream_inference_completions_cost": 0.0000971376
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1315,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T01:42:13.308Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 2
+      },
+      "observation": {
+        "ok": true,
+        "id": 2,
+        "prompt": "CONTENT CREATORS",
+        "distribution": {
+          "performed+uniting": 0.1320754716981132,
+          "honest+uniting": 0.09433962264150944,
+          "performed+dividing": 0.16981132075471697,
+          "honest+dividing": 0.6037735849056604
+        },
+        "submissions": 53,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 19
+      },
+      "observation": {
+        "ok": true,
+        "id": 19,
+        "prompt": "EYE CONTACT",
+        "distribution": {
+          "performed+uniting": 0.13194444444444445,
+          "honest+uniting": 0.5347222222222222,
+          "performed+dividing": 0.19444444444444445,
+          "honest+dividing": 0.1388888888888889
+        },
+        "submissions": 144,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 21
+      },
+      "observation": {
+        "ok": true,
+        "id": 21,
+        "prompt": "CONCESSION SPEECHES",
+        "distribution": {
+          "performed+uniting": 0.36813186813186816,
+          "honest+uniting": 0.14835164835164835,
+          "performed+dividing": 0.13736263736263737,
+          "honest+dividing": 0.34615384615384615
+        },
+        "submissions": 182,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.2,
+          "honest+uniting": 0.05,
+          "performed+dividing": 0.33,
+          "honest+dividing": 0.42
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.2,
+      "honest+uniting": 0.05,
+      "performed+dividing": 0.33,
+      "honest+dividing": 0.42
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.3242140362121455,
+    "score": 83.78929818939272,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

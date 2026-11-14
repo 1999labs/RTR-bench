@@ -1,0 +1,605 @@
+{
+  "day": 108,
+  "strategy": "random",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"TOXIC POSITIVITY\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":45,\"prompt\":\"STATUS\",\"distribution\":{\"performed+uniting\":0.34408602150537637,\"honest+uniting\":0,\"performed+dividing\":0.5913978494623656,\"honest+dividing\":0.06451612903225806},\"submissions\":93},{\"id\":15,\"prompt\":\"ART BASEL\",\"distribution\":{\"performed+uniting\":0.37349397590361444,\"honest+uniting\":0.5341365461847389,\"performed+dividing\":0.040160642570281124,\"honest+dividing\":0.05220883534136546},\"submissions\":249},{\"id\":16,\"prompt\":\"TIMES SQUARE\",\"distribution\":{\"performed+uniting\":0.5217391304347826,\"honest+uniting\":0.11956521739130435,\"performed+dividing\":0.1793478260869565,\"honest+dividing\":0.1793478260869565},\"submissions\":184}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T01:36:56.631Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.50, \"honest+uniting\": 0.03, \"performed+dividing\": 0.33, \"honest+dividing\": 0.14}",
+      "response": {
+        "id": "gen-1794620216-TGYeu8x5TCbFClFOEmEi",
+        "object": "chat.completion",
+        "created": 1794620216,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.50, \"honest+uniting\": 0.03, \"performed+dividing\": 0.33, \"honest+dividing\": 0.14}",
+              "refusal": null,
+              "reasoning": "Let me analyze this task. The word is \"TOXIC POSITIVITY\" and I need to predict how an audience would categorize it across four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\n\"Toxic positivity\" is the concept of forced, excessive positivity that dismisses negative emotions. It's inherently about performance — pretending things are fine when they're not. It's often described as creating a false sense of harmony while actually suppressing genuine connection.\n\nLet me look at the historical examples:\n\n1. STATUS (93 submissions): performed+uniting: 0.344, honest+uniting: 0, performed+dividing: 0.591, honest+dividing: 0.065\n   - Status is seen as mostly performed and dividing (status hierarchies divide people), with some performed uniting.\n\n2. ART BASEL (249 submissions): performed+uniting: 0.373, honest+uniting: 0.534, performed+dividing: 0.040, honest+dividing: 0.052\n   - Art Basel is seen as mostly honest+uniting (art brings people together authentically) with significant performed+uniting (the commercial/fancy side is performative).\n\n3. TIMES SQUARE (184 submissions): performed+uniting: 0.522, honest+uniting: 0.120, performed+dividing: 0.179, honest+dividing: 0.179\n   - Times Square is seen as mostly performed+uniting (the spectacle is performative but brings crowds together), with some dividing.\n\nSo the pattern: this audience tends to lean toward \"performed\" for things seen as fake/commercial, and \"uniting\" for things that gather people.\n\n\"Toxic positivity\" — the key insight is that it's explicitly about performance (forced positivity, masking true feelings). The \"toxic\" part suggests harm. Does it unite or divide?\n\nToxic positivity creates a false sense of togetherness (\"we're all fine!\") while actually isolating people who can't express negative emotions. It could be interpreted as:\n- performed+uniting: the false unity of \"good vibes only\" — most likely interpretation\n- performed+dividing: it divides people by dismissing those with real struggles, making them feel alienated\n- honest+dividing: some might say toxic positivity truthfully reveals fractures? Less likely.\n- honest+uniting: very unlikely — toxic positivity is by definition not authentic.\n\nThe word itself contains \"toxic\" which is negative, and \"positivity\" which sounds uniting. The audience might split between seeing it as performed+uniting (false harmony) and performed+dividing (it harms/divides people by suppressing real emotions).\n\nGiven the examples:\n- STATUS had high performed+dividing (0.591) — status divides people through performance\n- TIMES SQUARE had high performed+uniting (0.522)\n- ART BASEL had high honest+uniting\n\nFor TOXIC POSITIVITY, I'd expect:\n- performed+uniting: high — the false unity of forced positivity. Maybe 0.45-0.55\n- performed+dividing: moderate — it divides by invalidating real feelings. Maybe 0.25-0.35\n- honest+dividing: low-moderate — some might see it as honestly fracturing (revealing that the positivity was masking real divisions). Maybe 0.10-0.15\n- honest+uniting: very low — toxic positivity is definitionally inauthentic. Maybe 0.02-0.05\n\nHmm, but wait. Let me think about how participants in this project interpret things. The quadrants are:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\n\"Toxic positivity\" — the phrase itself is a critique. People submitting interpretations might think:\n- Toxic positivity creates false unity → performed+uniting\n- Toxic positivity divides us by shaming negative emotions → performed+dividing or honest+dividing?\n\nActually, \"honest+dividing: fracturing us, truthfully\" — could toxic positivity be seen as truthfully fracturing? That seems contradictory since toxic positivity is about denial, not truth. But some might argue that the toxicity honestly divides people.\n\nThe most natural reading: toxic positivity = performed (it's fake positivity) + it masquerades as uniting (false unity) but actually divides (isolates people). \n\nI'd estimate:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.32\n- honest+dividing: 0.15\n\nHmm, let me reconsider. The audience for STATUS gave 0.591 to performed+dividing — status is performative and divides. For toxic positivity, the \"positivity\" part suggests unity-seeking, but \"toxic\" suggests harm.\n\nActually, thinking about it more: toxic positivity is often criticized for creating a facade of harmony (\"good vibes only\" culture) — that's false unity, performed+uniting. But it's also criticized for isolating people who are struggling — that's dividing.\n\nThe question is whether the audience sees the primary effect as false unity or as division. Given the word emphasizes \"positivity\" (which presents as uniting) with \"toxic\" as the modifier (the toxicity is in how it's performed), I think performed+uniting dominates.\n\nLet me also consider: does \"toxic\" push toward \"dividing\"? The examples show this audience uses performed+dividing heavily for STATUS (a word about hierarchy and competition). Toxic positivity's toxicity could be seen as dividing — it pushes people apart by invalidating struggles.\n\nMy estimate:\n- performed+uniting: 0.48\n- honest+uniting: 0.04\n- performed+dividing: 0.33\n- honest+dividing: 0.15\n\nSum: 1.00\n\nAlternatively:\n- performed+uniting: 0.52\n- honest+uniting: 0.03\n- performed+dividing: 0.30\n- honest+dividing: 0.15\n\nI'll go with something like:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.32\n- honest+dividing: 0.15\n\nSum = 1.00. \n\nActually, let me reconsider honest+dividing. \"Fracturing us, truthfully\" — for toxic positivity, could someone argue it truthfully fractures? The word \"toxic\" is an honest label... Hmm, but the interpretations are about what the word/concept does to \"us\". Toxic positivity doesn't truthfully fracture; it falsely unites while actually dividing. So honest+dividing should be low. Maybe 0.08-0.12.\n\nAnd honest+uniting should be near zero — toxic positivity is definitionally inauthentic. STATUS got 0 for honest+uniting. Toxic positivity might get similarly low, maybe 0.02-0.05. Some participants might not think that deeply and just see \"positivity\" as uniting... but the \"toxic\" qualifier makes honest+uniting implausible. I'll say 0.03.\n\nFinal:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.34\n- honest+dividing: 0.13\n\nSum = 1.00. \n\nHmm, or should performed+dividing be higher? STATUS (a status/competition word) got 0.591 performed+dividing. Toxic positivity is less about competition and more about forced harmony. I think performed+uniting should dominate. Times Square got 0.522 performed+uniting. Toxic positivity is similar in that it's a facade of togetherness.\n\nI'll finalize:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.33\n- honest+dividing: 0.14\n\nSum = 1.00. Good.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me analyze this task. The word is \"TOXIC POSITIVITY\" and I need to predict how an audience would categorize it across four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\n\"Toxic positivity\" is the concept of forced, excessive positivity that dismisses negative emotions. It's inherently about performance — pretending things are fine when they're not. It's often described as creating a false sense of harmony while actually suppressing genuine connection.\n\nLet me look at the historical examples:\n\n1. STATUS (93 submissions): performed+uniting: 0.344, honest+uniting: 0, performed+dividing: 0.591, honest+dividing: 0.065\n   - Status is seen as mostly performed and dividing (status hierarchies divide people), with some performed uniting.\n\n2. ART BASEL (249 submissions): performed+uniting: 0.373, honest+uniting: 0.534, performed+dividing: 0.040, honest+dividing: 0.052\n   - Art Basel is seen as mostly honest+uniting (art brings people together authentically) with significant performed+uniting (the commercial/fancy side is performative).\n\n3. TIMES SQUARE (184 submissions): performed+uniting: 0.522, honest+uniting: 0.120, performed+dividing: 0.179, honest+dividing: 0.179\n   - Times Square is seen as mostly performed+uniting (the spectacle is performative but brings crowds together), with some dividing.\n\nSo the pattern: this audience tends to lean toward \"performed\" for things seen as fake/commercial, and \"uniting\" for things that gather people.\n\n\"Toxic positivity\" — the key insight is that it's explicitly about performance (forced positivity, masking true feelings). The \"toxic\" part suggests harm. Does it unite or divide?\n\nToxic positivity creates a false sense of togetherness (\"we're all fine!\") while actually isolating people who can't express negative emotions. It could be interpreted as:\n- performed+uniting: the false unity of \"good vibes only\" — most likely interpretation\n- performed+dividing: it divides people by dismissing those with real struggles, making them feel alienated\n- honest+dividing: some might say toxic positivity truthfully reveals fractures? Less likely.\n- honest+uniting: very unlikely — toxic positivity is by definition not authentic.\n\nThe word itself contains \"toxic\" which is negative, and \"positivity\" which sounds uniting. The audience might split between seeing it as performed+uniting (false harmony) and performed+dividing (it harms/divides people by suppressing real emotions).\n\nGiven the examples:\n- STATUS had high performed+dividing (0.591) — status divides people through performance\n- TIMES SQUARE had high performed+uniting (0.522)\n- ART BASEL had high honest+uniting\n\nFor TOXIC POSITIVITY, I'd expect:\n- performed+uniting: high — the false unity of forced positivity. Maybe 0.45-0.55\n- performed+dividing: moderate — it divides by invalidating real feelings. Maybe 0.25-0.35\n- honest+dividing: low-moderate — some might see it as honestly fracturing (revealing that the positivity was masking real divisions). Maybe 0.10-0.15\n- honest+uniting: very low — toxic positivity is definitionally inauthentic. Maybe 0.02-0.05\n\nHmm, but wait. Let me think about how participants in this project interpret things. The quadrants are:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\n\"Toxic positivity\" — the phrase itself is a critique. People submitting interpretations might think:\n- Toxic positivity creates false unity → performed+uniting\n- Toxic positivity divides us by shaming negative emotions → performed+dividing or honest+dividing?\n\nActually, \"honest+dividing: fracturing us, truthfully\" — could toxic positivity be seen as truthfully fracturing? That seems contradictory since toxic positivity is about denial, not truth. But some might argue that the toxicity honestly divides people.\n\nThe most natural reading: toxic positivity = performed (it's fake positivity) + it masquerades as uniting (false unity) but actually divides (isolates people). \n\nI'd estimate:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.32\n- honest+dividing: 0.15\n\nHmm, let me reconsider. The audience for STATUS gave 0.591 to performed+dividing — status is performative and divides. For toxic positivity, the \"positivity\" part suggests unity-seeking, but \"toxic\" suggests harm.\n\nActually, thinking about it more: toxic positivity is often criticized for creating a facade of harmony (\"good vibes only\" culture) — that's false unity, performed+uniting. But it's also criticized for isolating people who are struggling — that's dividing.\n\nThe question is whether the audience sees the primary effect as false unity or as division. Given the word emphasizes \"positivity\" (which presents as uniting) with \"toxic\" as the modifier (the toxicity is in how it's performed), I think performed+uniting dominates.\n\nLet me also consider: does \"toxic\" push toward \"dividing\"? The examples show this audience uses performed+dividing heavily for STATUS (a word about hierarchy and competition). Toxic positivity's toxicity could be seen as dividing — it pushes people apart by invalidating struggles.\n\nMy estimate:\n- performed+uniting: 0.48\n- honest+uniting: 0.04\n- performed+dividing: 0.33\n- honest+dividing: 0.15\n\nSum: 1.00\n\nAlternatively:\n- performed+uniting: 0.52\n- honest+uniting: 0.03\n- performed+dividing: 0.30\n- honest+dividing: 0.15\n\nI'll go with something like:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.32\n- honest+dividing: 0.15\n\nSum = 1.00. \n\nActually, let me reconsider honest+dividing. \"Fracturing us, truthfully\" — for toxic positivity, could someone argue it truthfully fractures? The word \"toxic\" is an honest label... Hmm, but the interpretations are about what the word/concept does to \"us\". Toxic positivity doesn't truthfully fracture; it falsely unites while actually dividing. So honest+dividing should be low. Maybe 0.08-0.12.\n\nAnd honest+uniting should be near zero — toxic positivity is definitionally inauthentic. STATUS got 0 for honest+uniting. Toxic positivity might get similarly low, maybe 0.02-0.05. Some participants might not think that deeply and just see \"positivity\" as uniting... but the \"toxic\" qualifier makes honest+uniting implausible. I'll say 0.03.\n\nFinal:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.34\n- honest+dividing: 0.13\n\nSum = 1.00. \n\nHmm, or should performed+dividing be higher? STATUS (a status/competition word) got 0.591 performed+dividing. Toxic positivity is less about competition and more about forced harmony. I think performed+uniting should dominate. Times Square got 0.522 performed+uniting. Toxic positivity is similar in that it's a facade of togetherness.\n\nI'll finalize:\n- performed+uniting: 0.50\n- honest+uniting: 0.03\n- performed+dividing: 0.33\n- honest+dividing: 0.14\n\nSum = 1.00. Good.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 536,
+          "completion_tokens": 1863,
+          "total_tokens": 2399,
+          "cost": 0.0001655448,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 192,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001655448,
+            "upstream_inference_prompt_cost": 0.0000194856,
+            "upstream_inference_completions_cost": 0.0001460592
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1821,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 536,
+        "completion_tokens": 1863,
+        "total_tokens": 2399,
+        "cost": 0.0001655448,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 192,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001655448,
+          "upstream_inference_prompt_cost": 0.0000194856,
+          "upstream_inference_completions_cost": 0.0001460592
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1821,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T01:37:06.545Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 45
+      },
+      "observation": {
+        "ok": true,
+        "id": 45,
+        "prompt": "STATUS",
+        "distribution": {
+          "performed+uniting": 0.34408602150537637,
+          "honest+uniting": 0,
+          "performed+dividing": 0.5913978494623656,
+          "honest+dividing": 0.06451612903225806
+        },
+        "submissions": 93,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 15
+      },
+      "observation": {
+        "ok": true,
+        "id": 15,
+        "prompt": "ART BASEL",
+        "distribution": {
+          "performed+uniting": 0.37349397590361444,
+          "honest+uniting": 0.5341365461847389,
+          "performed+dividing": 0.040160642570281124,
+          "honest+dividing": 0.05220883534136546
+        },
+        "submissions": 249,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 16
+      },
+      "observation": {
+        "ok": true,
+        "id": 16,
+        "prompt": "TIMES SQUARE",
+        "distribution": {
+          "performed+uniting": 0.5217391304347826,
+          "honest+uniting": 0.11956521739130435,
+          "performed+dividing": 0.1793478260869565,
+          "honest+dividing": 0.1793478260869565
+        },
+        "submissions": 184,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.5,
+          "honest+uniting": 0.03,
+          "performed+dividing": 0.33,
+          "honest+dividing": 0.14
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.5,
+      "honest+uniting": 0.03,
+      "performed+dividing": 0.33,
+      "honest+dividing": 0.14
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.48852741602552074,
+    "score": 75.57362919872396,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

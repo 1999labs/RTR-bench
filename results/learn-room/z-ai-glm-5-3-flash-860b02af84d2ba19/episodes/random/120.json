@@ -1,0 +1,605 @@
+{
+  "day": 120,
+  "strategy": "random",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"TOM BRADY\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":61,\"prompt\":\"PROFESSIONAL SPORTS\",\"distribution\":{\"performed+uniting\":0.42424242424242425,\"honest+uniting\":0.47474747474747475,\"performed+dividing\":0.04040404040404041,\"honest+dividing\":0.06060606060606061},\"submissions\":99},{\"id\":85,\"prompt\":\"BARACK OBAMA\",\"distribution\":{\"performed+uniting\":0.10891089108910891,\"honest+uniting\":0.10396039603960396,\"performed+dividing\":0.13366336633663367,\"honest+dividing\":0.6534653465346535},\"submissions\":202},{\"id\":55,\"prompt\":\"PHOEBE GATES\",\"distribution\":{\"performed+uniting\":0.16911764705882354,\"honest+uniting\":0.013235294117647059,\"performed+dividing\":0.7661764705882353,\"honest+dividing\":0.051470588235294115},\"submissions\":680}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T01:37:59.696Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.30, \"honest+uniting\": 0.35, \"performed+dividing\": 0.14, \"honest+dividing\": 0.21}",
+      "response": {
+        "id": "gen-1794620279-IMncPDhTlTzBRmS1dAUb",
+        "object": "chat.completion",
+        "created": 1794620279,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.30, \"honest+uniting\": 0.35, \"performed+dividing\": 0.14, \"honest+dividing\": 0.21}",
+              "refusal": null,
+              "reasoning": "Let me analyze this. The word is \"TOM BRADY\" - the famous NFL quarterback.\n\nThe quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n1. PROFESSIONAL SPORTS: mostly uniting (performed 0.42, honest 0.47), little dividing. Sports seen as uniting.\n2. BARACK OBAMA: mostly honest+dividing (0.65). Interesting - the audience sees Obama as honestly dividing? Perhaps meaning he truthfully fractured us (political polarization).\n3. PHOEBE GATES: mostly performed+dividing (0.77). Phoebe Gates (Bill Gates' daughter) - seen as exploiting divisions deliberately? Perhaps nepotism discourse.\n\nTom Brady: a sports figure. Sports are seen as uniting (from example 1). But Tom Brady is also a polarizing figure - Deflategate, Patriots dynasty, political associations (Trump friendship, MAGA hat in locker). He's a celebrity athlete.\n\nGiven \"PROFESSIONAL SPORTS\" skews uniting (0.42 performed + 0.47 honest = 0.90 uniting), and Tom Brady is a sports figure, I'd expect uniting to dominate. But Brady is a specific person, and person prompts (Obama, Phoebe Gates) skewed dividing. Hmm.\n\nObama: honest+dividing 0.65. Phoebe Gates: performed+dividing 0.77. Both person prompts skewed dividing. But sports category skewed uniting.\n\nTom Brady is both a person and a sports figure. The audience might see him as: a unifying sports icon (honest+uniting - genuinely bringing fans together), or performed+uniting (sports as manufactured unity, spectacle). Or dividing: Patriots fans vs everyone else, cheating scandals (Deflategate) - \"honest+dividing: fracturing us truthfully\" - he genuinely divides fans (love him or hate him).\n\nLet me think about what interpretations people might submit. Mixed Messages asks participants to interpret whether the word unites or divides, and whether that's performed or honest.\n\nFor Tom Brady:\n- Sports bring people together (uniting) - but is it authentic or performed? Sports unity could be seen as genuine fandom community (honest+uniting) or as commercial spectacle (performed+uniting).\n- Brady divides: rival fans hate him, cheating scandals, political associations. Is that honest dividing (he truthfully is polarizing) or performed dividing (deliberately exploiting)?\n\nGiven the sports example heavily favors uniting (90%), and Brady is primarily a sports icon, I'd weight uniting heavily. But person examples favor dividing. Let me blend: maybe 60-70% uniting.\n\nWithin uniting: performed vs honest? Sports example: performed 0.42, honest 0.47 - roughly even, slight honest edge. Brady as GOAT, super Bowl parades, bringing Boston/Tampa together - honest+uniting. But also commercialized celebrity - performed+uniting.\n\nWithin dividing: Brady's controversies (Deflategate) - people might say he \"honestly divides\" (rivalry is real) vs \"performed dividing\" (villain persona is part of the show). Sports villains are somewhat performed - the heel persona. But Deflategate anger was real.\n\nMy estimate:\n- performed+uniting: 0.30\n- honest+uniting: 0.35\n- performed+dividing: 0.15\n- honest+dividing: 0.20\n\nHmm, let me reconsider. The person prompts both had dividing dominant. Obama 0.65 honest+dividing, Phoebe Gates 0.77 performed+dividing. That's a strong pattern for persons. But sports 0.90 uniting. Tom Brady is a sports person.\n\nActually, thinking about how participants in Mixed Messages respond: they see a word and write a message about whether it unites or divides. For Tom Brady, many would say \"sports unite us\" but also \"Brady is polarizing - you either love him or hate him.\" The cheating scandals (Spygate, Deflategate) made him genuinely divisive. Also his Trump friendship divided fans.\n\nI'll go with uniting slightly dominant but dividing substantial:\n- performed+uniting: 0.28\n- honest+uniting: 0.32\n- performed+dividing: 0.16\n- honest+dividing: 0.24\n\nSum = 1.0.\n\nAlternatively weight more toward sports pattern: uniting 0.65-0.70. Let me settle:\n\nperformed+uniting: 0.30\nhonest+uniting: 0.35\nperformed+dividing: 0.14\nhonest+dividing: 0.21\n\nSum = 1.000. That seems reasonable. Sports context pulls uniting; person context pulls dividing; net ~65% uniting.\n\nWithin uniting, sports example was near-even with slight honest edge; I'll keep honest slightly higher.\n\nWithin dividing, Brady's divisiveness is partly genuine (rivalry, scandals) - honest+dividing > performed+dividing.\n\nFinal:\n{\"performed+uniting\": 0.30, \"honest+uniting\": 0.35, \"performed+dividing\": 0.14, \"honest+dividing\": 0.21}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me analyze this. The word is \"TOM BRADY\" - the famous NFL quarterback.\n\nThe quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n1. PROFESSIONAL SPORTS: mostly uniting (performed 0.42, honest 0.47), little dividing. Sports seen as uniting.\n2. BARACK OBAMA: mostly honest+dividing (0.65). Interesting - the audience sees Obama as honestly dividing? Perhaps meaning he truthfully fractured us (political polarization).\n3. PHOEBE GATES: mostly performed+dividing (0.77). Phoebe Gates (Bill Gates' daughter) - seen as exploiting divisions deliberately? Perhaps nepotism discourse.\n\nTom Brady: a sports figure. Sports are seen as uniting (from example 1). But Tom Brady is also a polarizing figure - Deflategate, Patriots dynasty, political associations (Trump friendship, MAGA hat in locker). He's a celebrity athlete.\n\nGiven \"PROFESSIONAL SPORTS\" skews uniting (0.42 performed + 0.47 honest = 0.90 uniting), and Tom Brady is a sports figure, I'd expect uniting to dominate. But Brady is a specific person, and person prompts (Obama, Phoebe Gates) skewed dividing. Hmm.\n\nObama: honest+dividing 0.65. Phoebe Gates: performed+dividing 0.77. Both person prompts skewed dividing. But sports category skewed uniting.\n\nTom Brady is both a person and a sports figure. The audience might see him as: a unifying sports icon (honest+uniting - genuinely bringing fans together), or performed+uniting (sports as manufactured unity, spectacle). Or dividing: Patriots fans vs everyone else, cheating scandals (Deflategate) - \"honest+dividing: fracturing us truthfully\" - he genuinely divides fans (love him or hate him).\n\nLet me think about what interpretations people might submit. Mixed Messages asks participants to interpret whether the word unites or divides, and whether that's performed or honest.\n\nFor Tom Brady:\n- Sports bring people together (uniting) - but is it authentic or performed? Sports unity could be seen as genuine fandom community (honest+uniting) or as commercial spectacle (performed+uniting).\n- Brady divides: rival fans hate him, cheating scandals, political associations. Is that honest dividing (he truthfully is polarizing) or performed dividing (deliberately exploiting)?\n\nGiven the sports example heavily favors uniting (90%), and Brady is primarily a sports icon, I'd weight uniting heavily. But person examples favor dividing. Let me blend: maybe 60-70% uniting.\n\nWithin uniting: performed vs honest? Sports example: performed 0.42, honest 0.47 - roughly even, slight honest edge. Brady as GOAT, super Bowl parades, bringing Boston/Tampa together - honest+uniting. But also commercialized celebrity - performed+uniting.\n\nWithin dividing: Brady's controversies (Deflategate) - people might say he \"honestly divides\" (rivalry is real) vs \"performed dividing\" (villain persona is part of the show). Sports villains are somewhat performed - the heel persona. But Deflategate anger was real.\n\nMy estimate:\n- performed+uniting: 0.30\n- honest+uniting: 0.35\n- performed+dividing: 0.15\n- honest+dividing: 0.20\n\nHmm, let me reconsider. The person prompts both had dividing dominant. Obama 0.65 honest+dividing, Phoebe Gates 0.77 performed+dividing. That's a strong pattern for persons. But sports 0.90 uniting. Tom Brady is a sports person.\n\nActually, thinking about how participants in Mixed Messages respond: they see a word and write a message about whether it unites or divides. For Tom Brady, many would say \"sports unite us\" but also \"Brady is polarizing - you either love him or hate him.\" The cheating scandals (Spygate, Deflategate) made him genuinely divisive. Also his Trump friendship divided fans.\n\nI'll go with uniting slightly dominant but dividing substantial:\n- performed+uniting: 0.28\n- honest+uniting: 0.32\n- performed+dividing: 0.16\n- honest+dividing: 0.24\n\nSum = 1.0.\n\nAlternatively weight more toward sports pattern: uniting 0.65-0.70. Let me settle:\n\nperformed+uniting: 0.30\nhonest+uniting: 0.35\nperformed+dividing: 0.14\nhonest+dividing: 0.21\n\nSum = 1.000. That seems reasonable. Sports context pulls uniting; person context pulls dividing; net ~65% uniting.\n\nWithin uniting, sports example was near-even with slight honest edge; I'll keep honest slightly higher.\n\nWithin dividing, Brady's divisiveness is partly genuine (rivalry, scandals) - honest+dividing > performed+dividing.\n\nFinal:\n{\"performed+uniting\": 0.30, \"honest+uniting\": 0.35, \"performed+dividing\": 0.14, \"honest+dividing\": 0.21}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 559,
+          "completion_tokens": 1233,
+          "total_tokens": 1792,
+          "cost": 0.0001170705,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 192,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001170705,
+            "upstream_inference_prompt_cost": 0.0000204033,
+            "upstream_inference_completions_cost": 0.0000966672
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1171,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 559,
+        "completion_tokens": 1233,
+        "total_tokens": 1792,
+        "cost": 0.0001170705,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 192,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001170705,
+          "upstream_inference_prompt_cost": 0.0000204033,
+          "upstream_inference_completions_cost": 0.0000966672
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1171,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T01:38:08.118Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 61
+      },
+      "observation": {
+        "ok": true,
+        "id": 61,
+        "prompt": "PROFESSIONAL SPORTS",
+        "distribution": {
+          "performed+uniting": 0.42424242424242425,
+          "honest+uniting": 0.47474747474747475,
+          "performed+dividing": 0.04040404040404041,
+          "honest+dividing": 0.06060606060606061
+        },
+        "submissions": 99,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 85
+      },
+      "observation": {
+        "ok": true,
+        "id": 85,
+        "prompt": "BARACK OBAMA",
+        "distribution": {
+          "performed+uniting": 0.10891089108910891,
+          "honest+uniting": 0.10396039603960396,
+          "performed+dividing": 0.13366336633663367,
+          "honest+dividing": 0.6534653465346535
+        },
+        "submissions": 202,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 55
+      },
+      "observation": {
+        "ok": true,
+        "id": 55,
+        "prompt": "PHOEBE GATES",
+        "distribution": {
+          "performed+uniting": 0.16911764705882354,
+          "honest+uniting": 0.013235294117647059,
+          "performed+dividing": 0.7661764705882353,
+          "honest+dividing": 0.051470588235294115
+        },
+        "submissions": 680,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.3,
+          "honest+uniting": 0.35,
+          "performed+dividing": 0.14,
+          "honest+dividing": 0.21
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.30000000000000004,
+      "honest+uniting": 0.35000000000000003,
+      "performed+dividing": 0.14000000000000004,
+      "honest+dividing": 0.21000000000000002
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.4331214843952177,
+    "score": 78.34392578023912,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

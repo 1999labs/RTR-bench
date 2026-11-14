@@ -71,7 +71,7 @@ Exercise the policy offline with the existing fixture scenarios:
 node src/cli.ts learn-room --fixture tests/fixtures/learn-room-four-strategies.json --strategy all --limit 5 --max-tokens 4000 --agent-policy transfer-check-v1
 ```
 
-Fixtures verify prompt routing, unchanged action and inspection limits, failures, early stopping, resume, and isolation of target labels. They cannot show that the instruction improves model behavior. The policy has not yet been evaluated with live model calls. Its motivation and proposed comparison are in the [offline evidence audit](../results/learn-room/comparisons/glm-5-3-flash-4000-repeats/audit.md).
+Fixtures verify prompt routing, unchanged action and inspection limits, failures, early stopping, resume, and isolation of target labels. They cannot show that the instruction improves model behavior. In the [first live development pilot](../results/learn-room/z-ai-glm-5-3-flash-860b02af84d2ba19/README.md), the new agent scored 85.85 versus the default policy's three-run mean of 83.66, but remained below its matching no-example control (86.53). This single-run result requires replication; the original policy remains the default. The motivation is documented in the [offline evidence audit](../results/learn-room/comparisons/glm-5-3-flash-4000-repeats/audit.md).
 
 ## Scores and comparison
 

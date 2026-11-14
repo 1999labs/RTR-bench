@@ -66,7 +66,7 @@ The intended behavior is selective transfer rather than blanket distrust of refe
 
 The original audit produced this proposal without implementing a policy or running additional model experiments.
 
-**Subsequent implementation:** the optional `transfer-check-v1` policy and offline fixture coverage are now implemented; see the [policy documentation](../../../../docs/learn-room.md). The original proposal above is retained as the audit record. No live model experiment has evaluated the new policy yet.
+**Subsequent implementation:** the optional `transfer-check-v1` policy and offline fixture coverage are now implemented; see the [policy documentation](../../../../docs/learn-room.md). The original proposal above is retained as the audit record. A [first live development pilot](../../z-ai-glm-5-3-flash-860b02af84d2ba19/README.md) is complete; its results are exploratory and the original policy remains the default.
 
 ## Reproduce the audit
 
