@@ -48,40 +48,15 @@ The full comparison includes randomly selected examples and examples selected by
 
 ## Quickstart
 
-You need [Node.js](https://nodejs.org/) 22.18 or newer and an OpenRouter API key with available credits. Node runs the benchmark on your computer; OpenRouter connects it to the model you want to evaluate. The dataset is included, and no GPU or database setup is needed.
+Run RTR-bench from Terminal using one of these three commands:
 
-### 1. Choose how to run the benchmark
+| Command | What it runs |
+|---|---|
+| `npx rtr-bench read-the-room <model>` | **Predict and Learn**, plus Learn's gain or loss against Predict |
+| `npx rtr-bench predict <model>` | **Predict only**: predict the crowd's distribution without examples |
+| `npx rtr-bench learn <model>` | **Learn only**: inspect historical examples, then predict; does not calculate Learn gain |
 
-**npm package (simplest).** `npx` downloads and runs the published package for you. You do not need Git, a source checkout, or `npm ci`. Open Terminal and choose a folder for your API key and results, for example:
-
-```bash
-mkdir rtr-results
-cd rtr-results
-```
-
-Predict and Learn require npm release 0.2.0 or newer. The commands below use `npx rtr-bench`; use `npx rtr-bench@0.2.0` to select that exact release. Publishing to npm is separate from updating GitHub.
-
-**GitHub source (for inspecting or changing the code).** With [Git](https://git-scm.com/) installed, download the project and its supporting software:
-
-```bash
-git clone https://github.com/1999labs/RTR-bench
-cd RTR-bench
-npm ci
-```
-
-If you already have a checkout, use that folder instead of cloning another copy. For this path, replace `npx rtr-bench` with `node src/cli.ts` in the commands below. Keep Terminal in your chosen folder for the remaining steps.
-
-### 2. Add your OpenRouter API key
-
-Create a file named `.env` in your chosen folder and add this line, replacing `sk-or-your-key` with your own key:
-
-```text
-OPENROUTER_API_KEY=sk-or-your-key
-```
-
-The benchmark reads this file when it starts. The key connects requests to your OpenRouter account. Keep the file private; the source checkout excludes it from Git.
-
-### 3. Run a small development evaluation
+`<model>` is a placeholder for the model's OpenRouter ID. Each command also needs the provider and run settings. **After the one-time setup below**, this complete example runs both tracks on **five development prompts**, with a **$0.25 spending cap**:
 
 ```bash
 npx rtr-bench read-the-room z-ai/glm-5.3-flash \
@@ -91,23 +66,33 @@ npx rtr-bench read-the-room z-ai/glm-5.3-flash \
   --max-usd 0.25
 ```
 
-Here, `npx rtr-bench` starts the benchmark, and `read-the-room` selects both Predict and Learn. This command evaluates five development prompts using GLM 5.3 Flash through Relace, with a $0.25 spending cap. The backslashes let one command continue across several lines.
+To run only one track, replace `read-the-room` with `predict` or `learn` and keep the rest of the command. `--limit 5` means five target prompts per selected track. The backslashes let one command continue across several lines; copy the whole block into Terminal.
 
-To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID and select a serving provider. Use `predict` for Predict alone or `learn` for Learn alone. Add `--controls` to `read-the-room` to include randomly selected and text-similarity examples.
+### Before your first run
 
-The new commands default to 4,000 output tokens per response; Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
+1. Install [Node.js](https://nodejs.org/) **22.18 or newer**, which includes `npx`. `npx` downloads and starts RTR-bench for you. You do not need to clone GitHub or run `npm install` or `npm ci` for this path. The dataset is included; no GPU or database setup is needed.
+2. Open Terminal in a folder where you want to keep your results. Any folder you choose is fine. Creating a new folder is optional and does not start an evaluation.
+3. Get an [OpenRouter API key](https://openrouter.ai/settings/keys) and add credits to that account. In your chosen folder, create a plain-text file named `.env` containing the line below, replacing `sk-or-your-key` with your key. Keep this file private.
 
-The command prints the scores and Learn’s gain over Predict, and saves requests, responses, action traces, and reports under `results/learn-room/`. Open the printed `report.html` path in a browser to inspect the results. The spending limit applies to this run’s API usage and persists across resumes; a run stops incomplete if the cap is insufficient. Provider availability and pricing can change.
-
-To list available model IDs and token prices:
-
-```bash
-npx rtr-bench catalog --limit 20
+```text
+OPENROUTER_API_KEY=sk-or-your-key
 ```
 
-### 4. Run the final evaluation
+Keep Terminal in that same folder and run the complete command above. The benchmark reads `.env`, sends requests through OpenRouter, and charges your OpenRouter account for model usage. `--max-usd` is a spending limit, not a fixed price; the run stops incomplete if it cannot continue within that limit.
 
-Once the settings are fixed, evaluate all 45 final targets with both comparison controls, matching the conditions in the results table:
+These commands require RTR-bench **0.2.0 or newer** on npm. To select that exact release, replace `npx rtr-bench` with `npx rtr-bench@0.2.0`. GitHub updates and npm releases are published separately.
+
+### Read the results
+
+When the run finishes, Terminal prints each selected track's score and the path to `report.html`. Open that file in a browser to inspect the results. A combined `read-the-room` run also prints Learn's gain or loss against Predict.
+
+The benchmark automatically creates `results/learn-room/` inside your current folder and saves reports, requests, responses, action traces, and spending records there. You do not need to create the results folders yourself.
+
+Running the identical command again resumes its saved run rather than starting a fresh evaluation. Changing the model, selected tracks, target set, or settings creates a separate run and spending ledger. A small development run's predictions and budget are not carried into a larger run.
+
+### Run the final evaluation
+
+Use development prompts to check the setup. Once the settings are fixed, the following command runs **Predict, Learn, and both comparison controls on all 45 final evaluation prompts**, matching the conditions in the results table:
 
 ```bash
 npx rtr-bench read-the-room z-ai/glm-5.3-flash \
@@ -118,9 +103,28 @@ npx rtr-bench read-the-room z-ai/glm-5.3-flash \
   --max-usd 0.25
 ```
 
-Both tracks alone typically use about 270 model calls on 45 targets. A full comparison with `--controls` uses about 360: 45 for Predict, 45 for each automatic control, and approximately five calls per Learn episode. Early stopping can reduce that number; additional agent turns and transport retries can increase it. The first final GLM run used 347 calls.
+`--controls` adds two comparisons: one supplies randomly selected historical examples, and the other supplies examples selected by text similarity. Without this flag, `read-the-room` runs only Predict and Learn. A development run is not comparable with the final evaluation results.
 
-A development pilot checks the setup and is not comparable with final evaluation results. Identical commands resume their saved runs. Changing the target set or settings creates a separate run and spending ledger; a pilot’s predictions and budget are not automatically carried into a larger run.
+To evaluate another model, replace `z-ai/glm-5.3-flash` with its OpenRouter model ID and select a provider that serves it. You can list models and inspect a model's providers with:
+
+```bash
+npx rtr-bench catalog --limit 20
+npx rtr-bench providers z-ai/glm-5.3-flash
+```
+
+Provider availability and pricing can change. Choose a spending cap appropriate for the selected model and provider; $0.25 is the cap for the GLM example, not a recommended budget for every model.
+
+### Use the GitHub source instead (optional)
+
+If you want to inspect or change the code, install [Git](https://git-scm.com/) and run:
+
+```bash
+git clone https://github.com/1999labs/RTR-bench
+cd RTR-bench
+npm ci
+```
+
+These commands download the project, enter its folder, and install its supporting software. If you already have a checkout, use that folder. Create `.env` there as described above, then replace `npx rtr-bench` with `node src/cli.ts` in the evaluation commands. `src/cli.ts` is the source file that starts the benchmark. This is an alternative to the npm path, not an additional setup step.
 
 ## Results
 
@@ -194,6 +198,10 @@ node src/cli.ts providers z-ai/glm-5.3-flash
 Use `--provider` to select a provider from that list. A pinned run refuses to fall back to another provider, and reports name the providers that served the calls. Provider availability can change.
 
 Predict and Learn currently execute requests sequentially. Each Learn episode contains a sequence of decisions, with the next request depending on the previous observation. Time and cost depend on the model, provider, token usage, and number of turns.
+
+On 45 targets, Predict and Learn together typically use about 270 model calls. Adding `--controls` brings that to about 360: 45 for Predict, 45 for each automatic control, and approximately five calls per Learn episode. Early stopping can reduce that number; additional agent turns and transport retries can increase it. The first final GLM run used 347 calls.
+
+The public commands default to 4,000 output tokens per response. Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
 
 The current client uses OpenRouter. Direct connections to other hosted or local endpoints are not yet implemented.
 
