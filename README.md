@@ -96,29 +96,19 @@ A development pilot checks the setup and is not comparable with final evaluation
 
 ## Results
 
-| Model | Provider | Predict | Learn | Learn gain | Cost |
+| Model | Provider | Predict | Learn | Learn gain | Full run cost (including controls) |
 |---|---|---:|---:|---:|---:|
 | z-ai/glm-5.3-flash | Relace (fp4) | 87.93 | 85.57 | −2.37 | $0.03150 |
-
-*Cost includes Predict, Learn, and both comparison controls on all 45 evaluation targets.*
-
-![RTR-bench: Predict and Learn scores against cost](results/predict-learn-scatter.png)
-
-The chart shows each track’s score and its own cost, with the paired change labeled. The comparison controls are included in the table’s full-run cost but not in the chart’s per-track costs. Regenerate the figure with `uv run scripts/chart-tracks.py`.
-
-See the [full evaluation report](results/learn-room/z-ai-glm-5-3-flash-e9d0327447ef1856/README.md) for the saved outputs, control results, uncertainty intervals, and episode traces. Its HTML report allows inspection of each target’s selected examples, predictions, and observed distribution.
-
-GLM 5.3 Flash was tested against all 45 final windows after development settings were fixed. Predict scored 87.93 and Learn scored 85.57, compared with 85.39 for uniform predictions and 85.56 for the constant reference distribution. Learn’s paired gain was −2.37 points, with an exploratory 95% interval of −5.14 to +0.12. All 180 predictions across the four conditions were valid. This is an initial result for one model, not a ranking of models.
-
-Perhaps the value of the benchmark lies more in exposing model behavior than in actually ranking models. RTR-bench asks whether a model can anticipate how a particular crowd interpreted something ambiguous, and whether evidence from that crowd improves its answer. A prediction error identifies a departure from the recorded responses. It does not establish that the model’s interpretation is unreasonable or that the crowd’s interpretation is objectively correct.
-
-Learn improved on Predict for 27 targets and worsened on 18. Its improvements averaged 3.72 points, while its losses averaged 11.50. The larger losses outweighed the more numerous gains. Selecting plausible examples and producing valid probabilities did not translate into better average predictions.
-
-The US Military, Bernie Sanders, and Honor showed the largest gains from Learn, at 11.65, 9.38, and 6.98 points respectively. Big Tobacco, The Olympics, and Jensen Huang showed the largest losses, at 36.49, 25.04, and 20.04 points. These examples describe where the conditions differed; they do not establish which inspected reference caused a change or reveal the model’s internal reasoning.
-
-Across three earlier development runs, the selected Learn policy scored between 85.48 and 85.85, averaging 85.67. Its final score of 85.57 was close to that development mean, but the partitions contain different targets. The development repeats do not establish the variability of the final result, and the final outcomes should not be used to tune a new policy and then presented as an untouched evaluation.
-
-These results return to what makes the source data unusual: the crowd’s answer is a distribution. Predict tests whether a model anticipates that distribution, while Learn asks whether it can use evidence about the audience to improve. My main takeaway from this first run is that additional evidence does not necessarily help, even when the model chooses it itself. Next, I would like to test more models under the same protocol and examine whether they share these patterns. More audiences and future windows would help establish how broadly the findings hold.
+| z-ai/glm-5.3 | TBD | TBD | TBD | TBD | TBD |
+| minimax/minimax-m3.1-flash | TBD | TBD | TBD | TBD | TBD |
+| xiaomi/mimo-v2.6-flash | TBD | TBD | TBD | TBD | TBD |
+| deepseek/deepseek-v4.1-flash-1017 | TBD | TBD | TBD | TBD | TBD |
+| tencent/hy3 | TBD | TBD | TBD | TBD | TBD |
+| google/gemini-3.8-flash | TBD | TBD | TBD | TBD | TBD |
+| openai/gpt-6-luna | TBD | TBD | TBD | TBD | TBD |
+| anthropic/claude-haiku-5.5 | TBD | TBD | TBD | TBD | TBD |
+| thinkingmachines/inkling-small | TBD | TBD | TBD | TBD | TBD |
+| openai/gpt-oss-120b | TBD | TBD | TBD | TBD | TBD |
 
 ## Optional usage
 
