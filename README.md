@@ -128,19 +128,19 @@ These commands download the project, enter its folder, and install its supportin
 
 ## Results
 
-| Model | Provider | Predict | Learn | Learn gain | Full run cost (including controls) |
-|---|---|---:|---:|---:|---:|
-| z-ai/glm-5.3-flash | Relace (fp4) | 87.93 | 85.57 | −2.37 | $0.03150 |
-| z-ai/glm-5.3 | TBD | TBD | TBD | TBD | TBD |
-| minimax/minimax-m3.1-flash | TBD | TBD | TBD | TBD | TBD |
-| xiaomi/mimo-v2.6-flash | TBD | TBD | TBD | TBD | TBD |
-| deepseek/deepseek-v4.1-flash-1017 | TBD | TBD | TBD | TBD | TBD |
-| tencent/hy3 | TBD | TBD | TBD | TBD | TBD |
-| google/gemini-3.8-flash | TBD | TBD | TBD | TBD | TBD |
-| openai/gpt-6-luna | TBD | TBD | TBD | TBD | TBD |
-| anthropic/claude-haiku-5.5 | TBD | TBD | TBD | TBD | TBD |
-| thinkingmachines/inkling-small | TBD | TBD | TBD | TBD | TBD |
-| openai/gpt-oss-120b | TBD | TBD | TBD | TBD | TBD |
+| Model | Provider | Predict | Predict Cost | Learn | Learn Gain | Learn Cost | Total Cost |
+|---|---|---:|---:|---:|---:|---:|---:|
+| glm-5.3-flash | Relace (fp4) | 87.93 | $0.00241 | 85.57 | −2.37 | $0.02039 | $0.03150 |
+| glm-5.3 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| minimax-m3.1-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| mimo-v2.6-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| deepseek-v4.1-flash-1017 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| hy3 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| gemini-3.8-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| gpt-6-luna | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| claude-haiku-5.5 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| inkling-small | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| gpt-oss-120b | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 
 ## Optional usage
 
