@@ -35,7 +35,7 @@ Note that each `Learn` episode starts a fresh conversation. The model receives n
 
 ```text
 Score = 100 × (1 − mean error / 2)
-Learn gain = `Learn` score − `Predict` score
+Learn gain = Learn score − Predict score
 ```
 
 An exact match scores 100. Invalid or missing terminal predictions receive zero and remain in the denominator. Pending targets keep the run incomplete, without an aggregate headline score. Probabilities must be finite values between zero and one; sums within 0.001 of one are normalized.
