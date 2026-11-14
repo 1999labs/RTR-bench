@@ -131,7 +131,7 @@ These commands download the project, enter its folder, and install its supportin
 | Model | Provider | Predict | Predict Cost | Learn | Learn Gain | Learn Cost | Total Cost |
 |---|---|---:|---:|---:|---:|---:|---:|
 | glm-5.3-flash | Relace (fp4) | 87.93 | $0.00241 | 85.57 | −2.37 | $0.02039 | $0.03150 |
-| glm-5.3 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| glm-5.3 | Wafer (fp4) | 86.04 | $0.00551 | 82.87 | −3.17 | $0.03842 | $0.05741 |
 | minimax-m3.1-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | mimo-v2.6-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | deepseek-v4.1-flash-1017 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
@@ -203,7 +203,7 @@ On 45 targets, Predict and Learn together typically use about 270 model calls. A
 
 In version 0.2.1, the public commands default to 8,000 output tokens per response. Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
 
-To resume a run created with the earlier 4,000-token default, repeat its original command with `--max-tokens 4000` explicitly. Changing the allowance creates a separate run. The [final evaluation plan](docs/final-run-plan-8000.md) declares 8,000 tokens for all eleven models, including a new GLM result under that same setting.
+To resume a run created with the earlier 4,000-token default, repeat its original command with `--max-tokens 4000` explicitly. Changing the allowance creates a separate run. The [final evaluation plan](docs/final-run-plan-8000.md) declares 8,000 tokens for all eleven models, including a new GLM result under that same setting. Until that rerun is complete, the `glm-5.3-flash` row retains its earlier 4,000-token result; the new final runs use 8,000. Total Cost includes both controls.
 
 The current client uses OpenRouter. Direct connections to other hosted or local endpoints are not yet implemented.
 
