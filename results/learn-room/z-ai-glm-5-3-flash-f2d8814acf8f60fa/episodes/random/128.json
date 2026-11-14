@@ -1,0 +1,605 @@
+{
+  "day": 128,
+  "strategy": "random",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"PUBLIC APOLOGIES\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":6,\"prompt\":\"CAPITALISM\",\"distribution\":{\"performed+uniting\":0.11888111888111888,\"honest+uniting\":0.1048951048951049,\"performed+dividing\":0.16783216783216784,\"honest+dividing\":0.6083916083916084},\"submissions\":143},{\"id\":9,\"prompt\":\"THE ENHANCED GAMES\",\"distribution\":{\"performed+uniting\":0.02336448598130841,\"honest+uniting\":0.1822429906542056,\"performed+dividing\":0.03271028037383177,\"honest+dividing\":0.7616822429906542},\"submissions\":214},{\"id\":21,\"prompt\":\"CONCESSION SPEECHES\",\"distribution\":{\"performed+uniting\":0.36813186813186816,\"honest+uniting\":0.14835164835164835,\"performed+dividing\":0.13736263736263737,\"honest+dividing\":0.34615384615384615},\"submissions\":182}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T00:50:56.804Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.38, \"honest+uniting\": 0.17, \"performed+dividing\": 0.24, \"honest+dividing\": 0.21}",
+      "response": {
+        "id": "gen-1794617456-w7jxgWMLqs7MOkI2rVBG",
+        "object": "chat.completion",
+        "created": 1794617456,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.38, \"honest+uniting\": 0.17, \"performed+dividing\": 0.24, \"honest+dividing\": 0.21}",
+              "refusal": null,
+              "reasoning": "Let me analyze this task. I need to predict how an audience would interpret \"PUBLIC APOLOGIES\" across four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nLooking at the historical examples:\n1. CAPITALISM: performed+uniting 0.119, honest+uniting 0.105, performed+dividing 0.168, honest+dividing 0.608 — heavily honest+dividing\n2. THE ENHANCED GAMES: performed+uniting 0.023, honest+uniting 0.182, performed+dividing 0.033, honest+dividing 0.762 — heavily honest+dividing\n3. CONCESSION SPEECHES: performed+uniting 0.368, honest+uniting 0.148, performed+dividing 0.137, honest+dividing 0.346 — more mixed, with performed+uniting leading\n\nThis audience seems to lean toward \"honest+dividing\" — they see things as truthfully fracturing. But for topics involving speech acts (concession speeches), \"performed+uniting\" rises.\n\n\"PUBLIC APOLOGIES\" is a speech act, similar to concession speeches. Public apologies are often seen as performative — PR-driven, insincere, designed to restore image. The audience might see them as \"performed\" — creating false unity (performed+uniting) or exploiting divisions (performed+dividing).\n\nPublic apologies: the cynical view is that they're performative, insincere, done for PR. The question is whether they unite (false unity — performed+uniting) or divide (performed+dividing). Also, honest apologies could bring people together (honest+uniting) or honest apologies could fracture (truthfully acknowledging harm divides?).\n\nGiven the audience's strong lean toward honest+dividing in the first two examples, but concession speeches (a similar speech-act genre) showed more performed+uniting...\n\nPublic apologies are quintessentially performative. I'd expect:\n- performed+uniting: high — apologies as PR to restore unity falsely\n- performed+dividing: moderate — apologies that exploit divisions (non-apology apologies that inflame)\n- honest+uniting: moderate — genuine apologies bringing people together\n- honest+dividing: lower — truthful apologies fracturing\n\nLet me think about the audience's pattern. They gave CAPITALISM honest+dividing 0.61, ENHANCED GAMES honest+dividing 0.76, but CONCESSION SPEECHES only 0.35 with performed+uniting 0.37.\n\nFor speech acts, this audience seems to recognize performativity. Public apologies are arguably the most performative genre — celebrity apologies, corporate apologies, political apologies. The dominant interpretation would likely be performed+uniting: apologies designed to create false unity, to make things \"okay\" without genuine change.\n\nBut there's also a strong case for performed+dividing: apologies that are really about scoring points, non-apologies that inflame (\"I'm sorry you were offended\"), apologies that exploit divisions.\n\nAnd honest+uniting: some believe genuine apologies can heal.\n\nHonest+dividing: truthful apologies fracturing — less likely as a dominant reading, though the audience loves honest+dividing.\n\nMy estimate:\n- performed+uniting: 0.40\n- honest+uniting: 0.20\n- performed+dividing: 0.25\n- honest+dividing: 0.15\n\nHmm, let me reconsider. The audience's baseline is heavily honest+dividing (0.61, 0.76). Even concession speeches got 0.35. Maybe for public apologies, honest+dividing gets more than 0.15. The idea: honest apologies truthfully fracture us — naming harms divides. Or \"public apologies\" as a phenomenon truthfully reveal fractures.\n\nActually, let me think about what interpretations people submit. In Mixed Messages, participants submit two-word interpretations. For \"PUBLIC APOLOGIES\":\n- \"performed+uniting\": apologies as theater to restore harmony — very common cynical take\n- \"honest+uniting\": genuine reconciliation\n- \"performed+dividing\": non-apologies, PR stunts that inflame\n- \"honest+dividing\": truth-telling that fractures, accountability that divides\n\nGiven the audience's demonstrated cynicism (honest+dividing dominant), but the performative nature of apologies...\n\nI'll go with:\n- performed+uniting: 0.38\n- honest+uniting: 0.17\n- performed+dividing: 0.24\n- honest+dividing: 0.21\n\nSum = 1.000. Let me check: 0.38 + 0.17 + 0.24 + 0.21 = 1.00. Good.\n\nActually, considering the audience's strong honest+dividing bias, maybe I should bump honest+dividing a bit. But public apologies are so quintessentially \"performed\" that I think performed dominates. The concession speeches example shows that when the topic is a speech act with reconciliatory intent, performed+uniting leads.\n\nFinal:\n- performed+uniting: 0.38\n- honest+uniting: 0.17\n- performed+dividing: 0.24\n- honest+dividing: 0.21",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me analyze this task. I need to predict how an audience would interpret \"PUBLIC APOLOGIES\" across four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nLooking at the historical examples:\n1. CAPITALISM: performed+uniting 0.119, honest+uniting 0.105, performed+dividing 0.168, honest+dividing 0.608 — heavily honest+dividing\n2. THE ENHANCED GAMES: performed+uniting 0.023, honest+uniting 0.182, performed+dividing 0.033, honest+dividing 0.762 — heavily honest+dividing\n3. CONCESSION SPEECHES: performed+uniting 0.368, honest+uniting 0.148, performed+dividing 0.137, honest+dividing 0.346 — more mixed, with performed+uniting leading\n\nThis audience seems to lean toward \"honest+dividing\" — they see things as truthfully fracturing. But for topics involving speech acts (concession speeches), \"performed+uniting\" rises.\n\n\"PUBLIC APOLOGIES\" is a speech act, similar to concession speeches. Public apologies are often seen as performative — PR-driven, insincere, designed to restore image. The audience might see them as \"performed\" — creating false unity (performed+uniting) or exploiting divisions (performed+dividing).\n\nPublic apologies: the cynical view is that they're performative, insincere, done for PR. The question is whether they unite (false unity — performed+uniting) or divide (performed+dividing). Also, honest apologies could bring people together (honest+uniting) or honest apologies could fracture (truthfully acknowledging harm divides?).\n\nGiven the audience's strong lean toward honest+dividing in the first two examples, but concession speeches (a similar speech-act genre) showed more performed+uniting...\n\nPublic apologies are quintessentially performative. I'd expect:\n- performed+uniting: high — apologies as PR to restore unity falsely\n- performed+dividing: moderate — apologies that exploit divisions (non-apology apologies that inflame)\n- honest+uniting: moderate — genuine apologies bringing people together\n- honest+dividing: lower — truthful apologies fracturing\n\nLet me think about the audience's pattern. They gave CAPITALISM honest+dividing 0.61, ENHANCED GAMES honest+dividing 0.76, but CONCESSION SPEECHES only 0.35 with performed+uniting 0.37.\n\nFor speech acts, this audience seems to recognize performativity. Public apologies are arguably the most performative genre — celebrity apologies, corporate apologies, political apologies. The dominant interpretation would likely be performed+uniting: apologies designed to create false unity, to make things \"okay\" without genuine change.\n\nBut there's also a strong case for performed+dividing: apologies that are really about scoring points, non-apologies that inflame (\"I'm sorry you were offended\"), apologies that exploit divisions.\n\nAnd honest+uniting: some believe genuine apologies can heal.\n\nHonest+dividing: truthful apologies fracturing — less likely as a dominant reading, though the audience loves honest+dividing.\n\nMy estimate:\n- performed+uniting: 0.40\n- honest+uniting: 0.20\n- performed+dividing: 0.25\n- honest+dividing: 0.15\n\nHmm, let me reconsider. The audience's baseline is heavily honest+dividing (0.61, 0.76). Even concession speeches got 0.35. Maybe for public apologies, honest+dividing gets more than 0.15. The idea: honest apologies truthfully fracture us — naming harms divides. Or \"public apologies\" as a phenomenon truthfully reveal fractures.\n\nActually, let me think about what interpretations people submit. In Mixed Messages, participants submit two-word interpretations. For \"PUBLIC APOLOGIES\":\n- \"performed+uniting\": apologies as theater to restore harmony — very common cynical take\n- \"honest+uniting\": genuine reconciliation\n- \"performed+dividing\": non-apologies, PR stunts that inflame\n- \"honest+dividing\": truth-telling that fractures, accountability that divides\n\nGiven the audience's demonstrated cynicism (honest+dividing dominant), but the performative nature of apologies...\n\nI'll go with:\n- performed+uniting: 0.38\n- honest+uniting: 0.17\n- performed+dividing: 0.24\n- honest+dividing: 0.21\n\nSum = 1.000. Let me check: 0.38 + 0.17 + 0.24 + 0.21 = 1.00. Good.\n\nActually, considering the audience's strong honest+dividing bias, maybe I should bump honest+dividing a bit. But public apologies are so quintessentially \"performed\" that I think performed dominates. The concession speeches example shows that when the topic is a speech act with reconciliatory intent, performed+uniting leads.\n\nFinal:\n- performed+uniting: 0.38\n- honest+uniting: 0.17\n- performed+dividing: 0.24\n- honest+dividing: 0.21",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 548,
+          "completion_tokens": 1233,
+          "total_tokens": 1781,
+          "cost": 0.0001185324,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001185324,
+            "upstream_inference_prompt_cost": 0.0000218652,
+            "upstream_inference_completions_cost": 0.0000966672
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1201,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 548,
+        "completion_tokens": 1233,
+        "total_tokens": 1781,
+        "cost": 0.0001185324,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001185324,
+          "upstream_inference_prompt_cost": 0.0000218652,
+          "upstream_inference_completions_cost": 0.0000966672
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1201,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T00:51:07.035Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 6
+      },
+      "observation": {
+        "ok": true,
+        "id": 6,
+        "prompt": "CAPITALISM",
+        "distribution": {
+          "performed+uniting": 0.11888111888111888,
+          "honest+uniting": 0.1048951048951049,
+          "performed+dividing": 0.16783216783216784,
+          "honest+dividing": 0.6083916083916084
+        },
+        "submissions": 143,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 9
+      },
+      "observation": {
+        "ok": true,
+        "id": 9,
+        "prompt": "THE ENHANCED GAMES",
+        "distribution": {
+          "performed+uniting": 0.02336448598130841,
+          "honest+uniting": 0.1822429906542056,
+          "performed+dividing": 0.03271028037383177,
+          "honest+dividing": 0.7616822429906542
+        },
+        "submissions": 214,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 21
+      },
+      "observation": {
+        "ok": true,
+        "id": 21,
+        "prompt": "CONCESSION SPEECHES",
+        "distribution": {
+          "performed+uniting": 0.36813186813186816,
+          "honest+uniting": 0.14835164835164835,
+          "performed+dividing": 0.13736263736263737,
+          "honest+dividing": 0.34615384615384615
+        },
+        "submissions": 182,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.38,
+          "honest+uniting": 0.17,
+          "performed+dividing": 0.24,
+          "honest+dividing": 0.21
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.38,
+      "honest+uniting": 0.17,
+      "performed+dividing": 0.24,
+      "honest+dividing": 0.21
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.48528218220908365,
+    "score": 75.73589088954581,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

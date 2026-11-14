@@ -1,0 +1,605 @@
+{
+  "day": 104,
+  "strategy": "similar",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"PRIDE MONTH\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":36,\"prompt\":\"PRISONS\",\"distribution\":{\"performed+uniting\":0.12719298245614036,\"honest+uniting\":0.12280701754385964,\"performed+dividing\":0.14912280701754385,\"honest+dividing\":0.6008771929824561},\"submissions\":228},{\"id\":44,\"prompt\":\"FLOOR PRICES\",\"distribution\":{\"performed+uniting\":0.44623655913978494,\"honest+uniting\":0.010752688172043012,\"performed+dividing\":0.2903225806451613,\"honest+dividing\":0.25268817204301075},\"submissions\":186},{\"id\":98,\"prompt\":\"JOE BIDEN\",\"distribution\":{\"performed+uniting\":0.1322314049586777,\"honest+uniting\":0.09090909090909091,\"performed+dividing\":0.45041322314049587,\"honest+dividing\":0.32644628099173556},\"submissions\":242}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T00:28:46.161Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.34, \"honest+uniting\": 0.13, \"performed+dividing\": 0.17, \"honest+dividing\": 0.36}",
+      "response": {
+        "id": "gen-1794616126-9w80oxmKWPfbtUER6vIy",
+        "object": "chat.completion",
+        "created": 1794616126,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.34, \"honest+uniting\": 0.13, \"performed+dividing\": 0.17, \"honest+dividing\": 0.36}",
+              "refusal": null,
+              "reasoning": "Let me analyze this task. I need to predict how an audience would interpret \"PRIDE MONTH\" in terms of four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nThe historical examples:\n1. PRISONS: honest+dividing dominant (0.60), others fairly even (~0.12-0.15)\n2. FLOOR PRICES: performed+uniting dominant (0.45), performed+dividing (0.29), honest+dividing (0.25), honest+uniting very low (0.01)\n3. JOE BIDEN: performed+dividing dominant (0.45), honest+dividing (0.33), performed+uniting (0.13), honest+uniting (0.09)\n\nThis audience seems to lean toward critical/cynical interpretations. For political topics (Joe Biden), they see performed+dividing. For prisons, honest+dividing (prisons truly fracture us). For floor prices (economic policy), performed+uniting (false unity).\n\nPRIDE MONTH is a cultural/social celebration. How would this audience interpret it?\n\nPride Month is about LGBTQ+ celebration and visibility. Interpretations:\n- honest+uniting: bringing people together authentically — celebrating community, inclusion\n- performed+uniting: corporate rainbow-washing creating false unity — \"rainbow capitalism\" is a common critique\n- performed+dividing: exploiting divisions deliberately — perhaps corporations or politicians using pride to divide\n- honest+dividing: fracturing us truthfully — pride month genuinely divides people (culture war)\n\nGiven the audience's cynical lean (all three examples have low honest+uniting: 0.12, 0.01, 0.09), I'd expect honest+uniting to be lowish but Pride Month is inherently a unifying celebration, so it might be higher than for prisons or Biden.\n\nThe dominant interpretations for Pride Month likely:\n- performed+uniting: rainbow capitalism critique is very common — corporations performing unity. This seems likely to be high.\n- honest+dividing: pride month genuinely divides (culture war polarization) — also plausible.\n- performed+dividing: exploiting divisions — less common critique.\n- honest+uniting: authentic togetherness — the audience seems skeptical of this.\n\nLooking at patterns: political/cultural topics get performed+dividing (Biden) or honest+dividing (prisons). Economic topics get performed+uniting (floor prices).\n\nPride Month is cultural. The audience might see it as:\n- Corporate rainbow-washing (performed+uniting) — very common critique\n- Genuine celebration (honest+uniting) — but audience is cynical\n- Culture war flashpoint (honest+dividing) — pride month does genuinely divide people in society\n- Deliberate exploitation of divisions (performed+dividing)\n\nI'd estimate something like:\n- performed+uniting: 0.35 (rainbow capitalism critique)\n- honest+uniting: 0.20 (some see it as authentic celebration)\n- performed+dividing: 0.15\n- honest+dividing: 0.30\n\nHmm, but the audience's honest+uniting is consistently low (0.09-0.12). Maybe:\n- performed+uniting: 0.38\n- honest+uniting: 0.15\n- performed+dividing: 0.17\n- honest+dividing: 0.30\n\nLet me think about the average of the three examples:\n- performed+uniting: (0.127+0.446+0.132)/3 ≈ 0.235\n- honest+uniting: (0.123+0.011+0.091)/3 ≈ 0.075\n- performed+dividing: (0.149+0.290+0.450)/3 ≈ 0.297\n- honest+dividing: (0.601+0.253+0.326)/3 ≈ 0.393\n\nSo the audience baseline: honest+dividing highest, performed+dividing second, performed+uniting third, honest+uniting lowest.\n\nFor Pride Month specifically, the \"uniting\" dimension might be more salient since it's a celebration. But the audience's cynicism suggests performed+uniting (rainbow capitalism) would be prominent.\n\nPride Month is a divisive culture-war topic in current discourse. Some see it as genuinely divisive (honest+dividing), some as corporate performance (performed+uniting).\n\nMy prediction:\n- performed+uniting: 0.33\n- honest+uniting: 0.14\n- performed+dividing: 0.18\n- honest+dividing: 0.35\n\nSum: 1.00. That seems reasonable.\n\nActually, let me reconsider. Pride Month's most common critiques:\n1. Rainbow capitalism / corporate pandering → performed+uniting\n2. It's genuinely polarizing / forces division → honest+dividing\n3. It's authentic community celebration → honest+uniting\n4. It's weaponized to divide people → performed+dividing\n\nGiven the audience's demonstrated cynicism (honest+uniting always lowest), I'll go:\n- performed+uniting: 0.34\n- honest+uniting: 0.13\n- performed+dividing: 0.17\n- honest+dividing: 0.36\n\nSum = 1.00. \n\nLet me finalize: {\"performed+uniting\": 0.34, \"honest+uniting\": 0.13, \"performed+dividing\": 0.17, \"honest+dividing\": 0.36}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me analyze this task. I need to predict how an audience would interpret \"PRIDE MONTH\" in terms of four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nThe historical examples:\n1. PRISONS: honest+dividing dominant (0.60), others fairly even (~0.12-0.15)\n2. FLOOR PRICES: performed+uniting dominant (0.45), performed+dividing (0.29), honest+dividing (0.25), honest+uniting very low (0.01)\n3. JOE BIDEN: performed+dividing dominant (0.45), honest+dividing (0.33), performed+uniting (0.13), honest+uniting (0.09)\n\nThis audience seems to lean toward critical/cynical interpretations. For political topics (Joe Biden), they see performed+dividing. For prisons, honest+dividing (prisons truly fracture us). For floor prices (economic policy), performed+uniting (false unity).\n\nPRIDE MONTH is a cultural/social celebration. How would this audience interpret it?\n\nPride Month is about LGBTQ+ celebration and visibility. Interpretations:\n- honest+uniting: bringing people together authentically — celebrating community, inclusion\n- performed+uniting: corporate rainbow-washing creating false unity — \"rainbow capitalism\" is a common critique\n- performed+dividing: exploiting divisions deliberately — perhaps corporations or politicians using pride to divide\n- honest+dividing: fracturing us truthfully — pride month genuinely divides people (culture war)\n\nGiven the audience's cynical lean (all three examples have low honest+uniting: 0.12, 0.01, 0.09), I'd expect honest+uniting to be lowish but Pride Month is inherently a unifying celebration, so it might be higher than for prisons or Biden.\n\nThe dominant interpretations for Pride Month likely:\n- performed+uniting: rainbow capitalism critique is very common — corporations performing unity. This seems likely to be high.\n- honest+dividing: pride month genuinely divides (culture war polarization) — also plausible.\n- performed+dividing: exploiting divisions — less common critique.\n- honest+uniting: authentic togetherness — the audience seems skeptical of this.\n\nLooking at patterns: political/cultural topics get performed+dividing (Biden) or honest+dividing (prisons). Economic topics get performed+uniting (floor prices).\n\nPride Month is cultural. The audience might see it as:\n- Corporate rainbow-washing (performed+uniting) — very common critique\n- Genuine celebration (honest+uniting) — but audience is cynical\n- Culture war flashpoint (honest+dividing) — pride month does genuinely divide people in society\n- Deliberate exploitation of divisions (performed+dividing)\n\nI'd estimate something like:\n- performed+uniting: 0.35 (rainbow capitalism critique)\n- honest+uniting: 0.20 (some see it as authentic celebration)\n- performed+dividing: 0.15\n- honest+dividing: 0.30\n\nHmm, but the audience's honest+uniting is consistently low (0.09-0.12). Maybe:\n- performed+uniting: 0.38\n- honest+uniting: 0.15\n- performed+dividing: 0.17\n- honest+dividing: 0.30\n\nLet me think about the average of the three examples:\n- performed+uniting: (0.127+0.446+0.132)/3 ≈ 0.235\n- honest+uniting: (0.123+0.011+0.091)/3 ≈ 0.075\n- performed+dividing: (0.149+0.290+0.450)/3 ≈ 0.297\n- honest+dividing: (0.601+0.253+0.326)/3 ≈ 0.393\n\nSo the audience baseline: honest+dividing highest, performed+dividing second, performed+uniting third, honest+uniting lowest.\n\nFor Pride Month specifically, the \"uniting\" dimension might be more salient since it's a celebration. But the audience's cynicism suggests performed+uniting (rainbow capitalism) would be prominent.\n\nPride Month is a divisive culture-war topic in current discourse. Some see it as genuinely divisive (honest+dividing), some as corporate performance (performed+uniting).\n\nMy prediction:\n- performed+uniting: 0.33\n- honest+uniting: 0.14\n- performed+dividing: 0.18\n- honest+dividing: 0.35\n\nSum: 1.00. That seems reasonable.\n\nActually, let me reconsider. Pride Month's most common critiques:\n1. Rainbow capitalism / corporate pandering → performed+uniting\n2. It's genuinely polarizing / forces division → honest+dividing\n3. It's authentic community celebration → honest+uniting\n4. It's weaponized to divide people → performed+dividing\n\nGiven the audience's demonstrated cynicism (honest+uniting always lowest), I'll go:\n- performed+uniting: 0.34\n- honest+uniting: 0.13\n- performed+dividing: 0.17\n- honest+dividing: 0.36\n\nSum = 1.00. \n\nLet me finalize: {\"performed+uniting\": 0.34, \"honest+uniting\": 0.13, \"performed+dividing\": 0.17, \"honest+dividing\": 0.36}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 545,
+          "completion_tokens": 1303,
+          "total_tokens": 1848,
+          "cost": 0.0001213663,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 256,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001213663,
+            "upstream_inference_prompt_cost": 0.0000192111,
+            "upstream_inference_completions_cost": 0.0001021552
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1189,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 545,
+        "completion_tokens": 1303,
+        "total_tokens": 1848,
+        "cost": 0.0001213663,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 256,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001213663,
+          "upstream_inference_prompt_cost": 0.0000192111,
+          "upstream_inference_completions_cost": 0.0001021552
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1189,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T00:28:57.635Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 36
+      },
+      "observation": {
+        "ok": true,
+        "id": 36,
+        "prompt": "PRISONS",
+        "distribution": {
+          "performed+uniting": 0.12719298245614036,
+          "honest+uniting": 0.12280701754385964,
+          "performed+dividing": 0.14912280701754385,
+          "honest+dividing": 0.6008771929824561
+        },
+        "submissions": 228,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 44
+      },
+      "observation": {
+        "ok": true,
+        "id": 44,
+        "prompt": "FLOOR PRICES",
+        "distribution": {
+          "performed+uniting": 0.44623655913978494,
+          "honest+uniting": 0.010752688172043012,
+          "performed+dividing": 0.2903225806451613,
+          "honest+dividing": 0.25268817204301075
+        },
+        "submissions": 186,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 98
+      },
+      "observation": {
+        "ok": true,
+        "id": 98,
+        "prompt": "JOE BIDEN",
+        "distribution": {
+          "performed+uniting": 0.1322314049586777,
+          "honest+uniting": 0.09090909090909091,
+          "performed+dividing": 0.45041322314049587,
+          "honest+dividing": 0.32644628099173556
+        },
+        "submissions": 242,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.34,
+          "honest+uniting": 0.13,
+          "performed+dividing": 0.17,
+          "honest+dividing": 0.36
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.34,
+      "honest+uniting": 0.13,
+      "performed+dividing": 0.17,
+      "honest+dividing": 0.36
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.08284955304435823,
+    "score": 95.8575223477821,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}
