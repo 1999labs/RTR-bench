@@ -1,5 +1,7 @@
 # GLM 5.3 Flash: three runs per agent policy
 
+**Follow-up:** the proposed final evaluation has now been authorized and completed. See the [45-target final report](../../z-ai-glm-5-3-flash-e9d0327447ef1856/README.md). The development analysis and original proposal below are retained as recorded.
+
 The optional `transfer-check-v1` agent averaged **85.67/100**, versus **83.66** for the original policy, on the same 30 development targets. Each new-policy agent run exceeded the highest observed original-policy score. However, the agent still scored below its matching no-example control in every run. These results support taking the new policy forward as a candidate; they do not demonstrate an average benefit from evidence gathering.
 
 All runs use GLM 5.3 Flash, Relace (`relace/fp4`), 4,000 output tokens, seed 7, the frozen 90-reference pool, and all four strategies. Only the agent system instruction changes between policy groups. Baseline requests and automatic reference selections are identical; baseline responses are generated afresh. Scores measure distribution error, not percentage accuracy. Final evaluation targets were not used.

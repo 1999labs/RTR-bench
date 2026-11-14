@@ -121,6 +121,8 @@ node src/cli.ts learn-room --fixture tests/fixtures/learn-room-four-strategies.j
 
 This makes no API calls and writes a synthetic comparison with browsable episode traces under `results/learn-room/`. See the [Learn the Room protocol](docs/learn-room.md) for the fixed similarity method, interactive action interface, budgets, reproducibility rules, and model-run commands.
 
+The [first final evaluation of both new tracks](results/learn-room/z-ai-glm-5-3-flash-e9d0327447ef1856/README.md) is complete on 45 held-out targets. GLM 5.3 Flash scored **87.93/100** for direct distribution and **85.57/100** with the `transfer-check-v1` agent; all 180 predictions across four conditions were valid. The agent trailed no examples by 2.37 points, with an exploratory paired 95% interval of -5.14 to +0.12. These distribution scores are separate from the original RTR score and are not percentage accuracy; the constant reference-distribution baseline scored 85.56.
+
 Synthetic run directories for both tracks are ignored by Git. Fixture inputs and tests stay tracked; regenerate the reports locally with the commands above. Published benchmark reports remain tracked and are marked as generated in `.gitattributes`.
 
 ### Providers and concurrency

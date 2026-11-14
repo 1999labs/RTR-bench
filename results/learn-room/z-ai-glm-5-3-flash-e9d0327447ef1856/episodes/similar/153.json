@@ -1,0 +1,605 @@
+{
+  "day": 153,
+  "strategy": "similar",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"BIG PHARMA\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":54,\"prompt\":\"GEN ALPHA\",\"distribution\":{\"performed+uniting\":0.2727272727272727,\"honest+uniting\":0.34710743801652894,\"performed+dividing\":0.23140495867768596,\"honest+dividing\":0.1487603305785124},\"submissions\":121},{\"id\":51,\"prompt\":\"BITCOIN\",\"distribution\":{\"performed+uniting\":0.09740259740259741,\"honest+uniting\":0.38961038961038963,\"performed+dividing\":0.3181818181818182,\"honest+dividing\":0.19480519480519481},\"submissions\":154},{\"id\":55,\"prompt\":\"PHOEBE GATES\",\"distribution\":{\"performed+uniting\":0.16911764705882354,\"honest+uniting\":0.013235294117647059,\"performed+dividing\":0.7661764705882353,\"honest+dividing\":0.051470588235294115},\"submissions\":680}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T03:04:02.169Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.20, \"honest+uniting\": 0.06, \"performed+dividing\": 0.50, \"honest+dividing\": 0.24}",
+      "response": {
+        "id": "gen-1794625442-5KgJdXH3DpDH2h5KlZaB",
+        "object": "chat.completion",
+        "created": 1794625442,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.20, \"honest+uniting\": 0.06, \"performed+dividing\": 0.50, \"honest+dividing\": 0.24}",
+              "refusal": null,
+              "reasoning": "The task: predict distribution for \"BIG PHARMA\" in a Mixed Messages generative art project. The quadrants are:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n1. GEN ALPHA: performed+uniting 0.273, honest+uniting 0.347, performed+dividing 0.231, honest+dividing 0.149 (121 submissions)\n2. BITCOIN: performed+uniting 0.097, honest+uniting 0.390, performed+dividing 0.318, honest+dividing 0.195 (154 submissions)\n3. PHOEBE GATES: performed+uniting 0.169, honest+uniting 0.013, performed+dividing 0.766, honest+dividing 0.051 (680 submissions)\n\n\"BIG PHARMA\" — a term that is inherently critical/pejorative. It refers to the pharmaceutical industry, often used in conspiracy-adjacent or critical contexts (e.g., vaccine skepticism, drug pricing critiques). The audience likely interprets \"BIG PHARMA\" as a divisive, performed concept — something that exploits divisions (e.g., anti-vax vs pro-vax, distrust of institutions) deliberately, or perhaps \"honest+dividing\" — truthfully fracturing us (i.e., Big Pharma genuinely divides people, or the term truthfully points to real divisions).\n\nLet me think about how participants interpret these prompts. The project seems to ask people to classify a word/phrase along two axes: performed vs honest (is the unity/division authentic or manufactured?) and uniting vs dividing.\n\n\"BIG PHARMA\" as a phrase: It's a loaded term. It suggests a powerful industry that manipulates public opinion, profits off sickness, etc. Interpretations:\n\n- performed+dividing: Big Pharma deliberately exploits our divisions (e.g., marketing, creating fear, profiting from polarization). This seems like a strong candidate.\n- honest+dividing: Big Pharma truthfully fractures us — i.e., it genuinely divides society (inequities in healthcare access, opioid crisis). Also plausible.\n- performed+uniting: creating false unity — e.g., \"we're all in this together\" pharma ads during COVID, \"Big Pharma unites us against disease\" but falsely. Some might see pharma's public messaging as false unity.\n- honest+uniting: bringing us together authentically — e.g., vaccines genuinely unite us, medicine saves lives. Less likely given the pejorative \"BIG PHARMA\" framing, but some might say pharmaceutical advances genuinely bring people together (eradication of diseases).\n\nCompare with PHOEBE GATES (a person, Bill Gates' daughter) — heavily performed+dividing (0.766). That suggests this audience sees elite/wealthy figures as performed+dividing. BITCOIN — more honest+uniting (0.390) and performed+dividing (0.318). GEN ALPHA — more balanced, leaning honest+uniting.\n\n\"BIG PHARMA\" is an institution/industry, similar to elite entities. The audience likely views it cynically: performed+dividing dominant, with some honest+dividing (real harm), some performed+uniting (false \"health for all\" messaging), little honest+uniting.\n\nMy estimate:\n- performed+dividing: ~0.45-0.55\n- honest+dividing: ~0.20-0.25\n- performed+uniting: ~0.20-0.25\n- honest+uniting: ~0.05-0.10\n\nLet me settle: performed+dividing 0.48, honest+dividing 0.22, performed+uniting 0.23, honest+uniting 0.07. Sum = 1.000.\n\nActually, let me reconsider. The term \"BIG PHARMA\" itself is a critical label. Participants interpreting it might think:\n\n- The phrase creates false unity? Like \"Big Pharma\" as a boogeyman unites conspiracy communities falsely? Hmm, that's a meta-interpretation. The quadrants seem to be about what the word/concept does to \"us\": does it unite or divide, and is that authentic or performed?\n\nFor \"BIG PHARMA\":\n- performed+dividing: pharma exploits divisions deliberately (profiting from fear, politicizing medicine). Strong.\n- honest+dividing: pharma genuinely fractures society (opioid crisis, price gouging creating class divides in healthcare). Also strong.\n- performed+uniting: pharma's marketing creates false unity (\"together we fight disease\" while profiting). Moderate.\n- honest+uniting: vaccines/medicine genuinely bring humanity together. Small but nonzero.\n\nGiven the PHOEBE GATES example where performed+dividing dominated at 0.766 for an elite-adjacent figure, and BITCOIN where honest+uniting led, I think BIG PHARMA will be dominated by performed+dividing but with more honest+dividing than PHOEBE GATES got, because pharma's harms are concrete and documented (opioids, pricing).\n\nFinal:\n- performed+uniting: 0.20\n- honest+uniting: 0.06\n- performed+dividing: 0.50\n- honest+dividing: 0.24\n\nSum = 1.000. Good.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "The task: predict distribution for \"BIG PHARMA\" in a Mixed Messages generative art project. The quadrants are:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHistorical examples:\n1. GEN ALPHA: performed+uniting 0.273, honest+uniting 0.347, performed+dividing 0.231, honest+dividing 0.149 (121 submissions)\n2. BITCOIN: performed+uniting 0.097, honest+uniting 0.390, performed+dividing 0.318, honest+dividing 0.195 (154 submissions)\n3. PHOEBE GATES: performed+uniting 0.169, honest+uniting 0.013, performed+dividing 0.766, honest+dividing 0.051 (680 submissions)\n\n\"BIG PHARMA\" — a term that is inherently critical/pejorative. It refers to the pharmaceutical industry, often used in conspiracy-adjacent or critical contexts (e.g., vaccine skepticism, drug pricing critiques). The audience likely interprets \"BIG PHARMA\" as a divisive, performed concept — something that exploits divisions (e.g., anti-vax vs pro-vax, distrust of institutions) deliberately, or perhaps \"honest+dividing\" — truthfully fracturing us (i.e., Big Pharma genuinely divides people, or the term truthfully points to real divisions).\n\nLet me think about how participants interpret these prompts. The project seems to ask people to classify a word/phrase along two axes: performed vs honest (is the unity/division authentic or manufactured?) and uniting vs dividing.\n\n\"BIG PHARMA\" as a phrase: It's a loaded term. It suggests a powerful industry that manipulates public opinion, profits off sickness, etc. Interpretations:\n\n- performed+dividing: Big Pharma deliberately exploits our divisions (e.g., marketing, creating fear, profiting from polarization). This seems like a strong candidate.\n- honest+dividing: Big Pharma truthfully fractures us — i.e., it genuinely divides society (inequities in healthcare access, opioid crisis). Also plausible.\n- performed+uniting: creating false unity — e.g., \"we're all in this together\" pharma ads during COVID, \"Big Pharma unites us against disease\" but falsely. Some might see pharma's public messaging as false unity.\n- honest+uniting: bringing us together authentically — e.g., vaccines genuinely unite us, medicine saves lives. Less likely given the pejorative \"BIG PHARMA\" framing, but some might say pharmaceutical advances genuinely bring people together (eradication of diseases).\n\nCompare with PHOEBE GATES (a person, Bill Gates' daughter) — heavily performed+dividing (0.766). That suggests this audience sees elite/wealthy figures as performed+dividing. BITCOIN — more honest+uniting (0.390) and performed+dividing (0.318). GEN ALPHA — more balanced, leaning honest+uniting.\n\n\"BIG PHARMA\" is an institution/industry, similar to elite entities. The audience likely views it cynically: performed+dividing dominant, with some honest+dividing (real harm), some performed+uniting (false \"health for all\" messaging), little honest+uniting.\n\nMy estimate:\n- performed+dividing: ~0.45-0.55\n- honest+dividing: ~0.20-0.25\n- performed+uniting: ~0.20-0.25\n- honest+uniting: ~0.05-0.10\n\nLet me settle: performed+dividing 0.48, honest+dividing 0.22, performed+uniting 0.23, honest+uniting 0.07. Sum = 1.000.\n\nActually, let me reconsider. The term \"BIG PHARMA\" itself is a critical label. Participants interpreting it might think:\n\n- The phrase creates false unity? Like \"Big Pharma\" as a boogeyman unites conspiracy communities falsely? Hmm, that's a meta-interpretation. The quadrants seem to be about what the word/concept does to \"us\": does it unite or divide, and is that authentic or performed?\n\nFor \"BIG PHARMA\":\n- performed+dividing: pharma exploits divisions deliberately (profiting from fear, politicizing medicine). Strong.\n- honest+dividing: pharma genuinely fractures society (opioid crisis, price gouging creating class divides in healthcare). Also strong.\n- performed+uniting: pharma's marketing creates false unity (\"together we fight disease\" while profiting). Moderate.\n- honest+uniting: vaccines/medicine genuinely bring humanity together. Small but nonzero.\n\nGiven the PHOEBE GATES example where performed+dividing dominated at 0.766 for an elite-adjacent figure, and BITCOIN where honest+uniting led, I think BIG PHARMA will be dominated by performed+dividing but with more honest+dividing than PHOEBE GATES got, because pharma's harms are concrete and documented (opioids, pricing).\n\nFinal:\n- performed+uniting: 0.20\n- honest+uniting: 0.06\n- performed+dividing: 0.50\n- honest+dividing: 0.24\n\nSum = 1.000. Good.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 551,
+          "completion_tokens": 1241,
+          "total_tokens": 1792,
+          "cost": 0.0001192793,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001192793,
+            "upstream_inference_prompt_cost": 0.0000219849,
+            "upstream_inference_completions_cost": 0.0000972944
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1172,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 551,
+        "completion_tokens": 1241,
+        "total_tokens": 1792,
+        "cost": 0.0001192793,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001192793,
+          "upstream_inference_prompt_cost": 0.0000219849,
+          "upstream_inference_completions_cost": 0.0000972944
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1172,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T03:04:09.767Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 54
+      },
+      "observation": {
+        "ok": true,
+        "id": 54,
+        "prompt": "GEN ALPHA",
+        "distribution": {
+          "performed+uniting": 0.2727272727272727,
+          "honest+uniting": 0.34710743801652894,
+          "performed+dividing": 0.23140495867768596,
+          "honest+dividing": 0.1487603305785124
+        },
+        "submissions": 121,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 51
+      },
+      "observation": {
+        "ok": true,
+        "id": 51,
+        "prompt": "BITCOIN",
+        "distribution": {
+          "performed+uniting": 0.09740259740259741,
+          "honest+uniting": 0.38961038961038963,
+          "performed+dividing": 0.3181818181818182,
+          "honest+dividing": 0.19480519480519481
+        },
+        "submissions": 154,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 55
+      },
+      "observation": {
+        "ok": true,
+        "id": 55,
+        "prompt": "PHOEBE GATES",
+        "distribution": {
+          "performed+uniting": 0.16911764705882354,
+          "honest+uniting": 0.013235294117647059,
+          "performed+dividing": 0.7661764705882353,
+          "honest+dividing": 0.051470588235294115
+        },
+        "submissions": 680,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.2,
+          "honest+uniting": 0.06,
+          "performed+dividing": 0.5,
+          "honest+dividing": 0.24
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.2,
+      "honest+uniting": 0.06,
+      "performed+dividing": 0.5,
+      "honest+dividing": 0.24
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.10926872444680255,
+    "score": 94.53656377765988,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

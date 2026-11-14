@@ -93,6 +93,8 @@ npm test
 npm run build
 ```
 
-## Next implementation milestone
+## Evaluation status
 
-The Learn the Room environment and all four strategies (no examples, random, text similarity, and agent selection) are implemented and verified with fixtures. A live five-target GLM 5.3 Flash pilot completed through Relace with valid predictions in every condition. Its no-examples condition serves as the direct-distribution evaluation without duplicate calls. The pilot also led to spending-reservation enforcement and Retry-After handling in the Learn the Room runner. Inspect development traces and expand the development comparison before freezing final evaluation settings.
+Both tracks have completed development validation and a [first final evaluation](../results/learn-room/z-ai-glm-5-3-flash-e9d0327447ef1856/README.md) on all 45 frozen evaluation targets. GLM 5.3 Flash through Relace scored **87.93/100** for direct distribution prediction, using the identical no-example condition in Learn the Room without duplicate calls. All 45 direct predictions were valid. Uniform and constant reference-distribution baselines scored 85.39 and 85.56, respectively; these scores are not percentage accuracy.
+
+The same run evaluated all three evidence conditions, for 180 valid predictions total. The transfer-check agent scored 85.57; see the linked report for paired comparisons, uncertainty, usage, and the frozen protocol. The original RTR score remains separate. Future models should use the same declared settings; any policy development informed by these final outcomes must disclose that this holdout has been used.
