@@ -1,0 +1,605 @@
+{
+  "day": 115,
+  "strategy": "similar",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"BRAT SUMMER\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":71,\"prompt\":\"DEMOCRATS\",\"distribution\":{\"performed+uniting\":0.22452504317789293,\"honest+uniting\":0.05008635578583765,\"performed+dividing\":0.4386873920552677,\"honest+dividing\":0.2867012089810017},\"submissions\":579},{\"id\":17,\"prompt\":\"THE AMERICAN DREAM\",\"distribution\":{\"performed+uniting\":0.2621359223300971,\"honest+uniting\":0.23300970873786409,\"performed+dividing\":0.20388349514563106,\"honest+dividing\":0.30097087378640774},\"submissions\":103},{\"id\":47,\"prompt\":\"GENERATIVE ART\",\"distribution\":{\"performed+uniting\":0.2490842490842491,\"honest+uniting\":0.6996336996336996,\"performed+dividing\":0,\"honest+dividing\":0.05128205128205128},\"submissions\":273}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 4000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      }
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-14T00:01:27.716Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.34, \"honest+uniting\": 0.41, \"performed+dividing\": 0.17, \"honest+dividing\": 0.08}",
+      "response": {
+        "id": "gen-1794614487-2ormSx8EbzVIYbNXf8pD",
+        "object": "chat.completion",
+        "created": 1794614487,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.34, \"honest+uniting\": 0.41, \"performed+dividing\": 0.17, \"honest+dividing\": 0.08}",
+              "refusal": null,
+              "reasoning": "Let me analyze this task. I need to predict how participants in \"Mixed Messages\" would interpret \"BRAT SUMMER\" across four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\n\"Brat Summer\" is a cultural phenomenon from 2024, associated with Charli XCX's album \"Brat\" and its lime green aesthetic. It became a cultural moment, notably embraced by Kamala Harris's campaign (\"brat\" coconut-palm edit). It's a meme-y, ironic-yet-sincere cultural vibe — messy party girl energy, but also became a political branding tool.\n\nHow would this audience interpret it?\n\nLooking at the historical examples:\n- DEMOCRATS (579 submissions): performed+dividing dominant (0.439), honest+dividing (0.287), performed+uniting (0.225), honest+uniting low (0.050). So political topics skew toward performed/dividing.\n- THE AMERICAN DREAM (103): more mixed, honest+dividing highest (0.301), performed+uniting (0.262), honest+uniting (0.233), performed+dividing (0.204).\n- GENERATIVE ART (273): overwhelmingly honest+uniting (0.700), performed+uniting (0.249), honest+dividing (0.051), performed+dividing 0.\n\n\"BRAT SUMMER\" is a pop culture trend. It's playful, not overtly political. But it did get co-opted by political campaigns (Kamala Harris). The audience seems to be art-interested, possibly skeptical of performance.\n\nBrat summer: is it authentic? It's a marketing-driven cultural moment (album marketing, brand co-optation). Many would see it as performed — a manufactured trend. But is it uniting or dividing? It's mostly a shared cultural vibe — uniting in a sense (everyone participating in the meme). But it's also somewhat exclusionary/ironic — \"brat\" is about being messy, a bit divisive in tone? Actually brat summer was widely seen as a unifying cultural moment of fun.\n\nGiven the audience's pattern: pop culture/art topics → honest+uniting dominant (like generative art). Political topics → performed+dividing dominant.\n\nBRAT SUMMER sits between: it's a cultural trend, but one heavily mediated by marketing and political co-optation. I'd expect:\n- honest+uniting: high-ish — people genuinely enjoyed the shared moment, the fun, the music. Maybe 0.35-0.45.\n- performed+uniting: also significant — it's a manufactured trend, brands jumping on it, false unity via consumerism. Maybe 0.30-0.40.\n- performed+dividing: some — political co-optation (Harris campaign), brand exploitation. Maybe 0.10-0.20.\n- honest+dividing: low — brat isn't really fracturing us truthfully. Maybe 0.05-0.10.\n\nLet me think about the audience's tendencies more. The audience skews cynical about political things (Democrats: performed+dividing 0.44). For American Dream: honest+dividing 0.30 (truthfully fracturing — the dream divides people truthfully). For generative art: honest+uniting 0.70.\n\nBRAT SUMMER is a vibe/aesthetic trend. I think the audience would see it as:\n1. A genuine fun cultural moment (honest+uniting) — significant share\n2. A manufactured/marketed trend (performed+uniting) — significant share\n3. Political co-optation (performed+dividing) — smaller\n4. honest+dividing — smallest\n\nMy estimate:\n- performed+uniting: 0.35\n- honest+uniting: 0.40\n- performed+dividing: 0.17\n- honest+dividing: 0.08\n\nSum = 1.000. \n\nAlternatively, given the audience's cynicism bias (Democrats example), maybe performed+uniting should be higher than honest+uniting? Brat summer was heavily a marketing phenomenon — the album rollout, the memes, brands adopting lime green. The \"brat\" aesthetic was everywhere. Some would say it's manufactured fun. But the music itself resonated authentically with many.\n\nHmm. The generative art example shows this audience gives art/creative things high honest+uniting. Brat summer is music/culture — closer to art than politics. But it's also a trend/hype cycle, which invites \"performed\" readings.\n\nI'll go with:\n- performed+uniting: 0.34\n- honest+uniting: 0.41\n- performed+dividing: 0.17\n- honest+dividing: 0.08\n\nSum = 1.000.\n\nActually, let me reconsider the dividing side. Brat summer did have a political dimension — the Harris campaign embrace. Some participants might see that as performed+dividing (exploiting divisions deliberately — using youth culture for political gain). But honestly, the Harris brat thing was more about uniting/coalescing youth support than dividing. Hmm, but from a cynical view, political branding exploits divisions.\n\nAlso \"brat\" as an attitude is somewhat divisive — being a brat, messy, antagonistic. But honest+dividing (fracturing us truthfully) seems a stretch for a pop trend.\n\nI'll keep dividing low overall: ~0.25 combined.\n\nFinal:\n- performed+uniting: 0.34\n- honest+uniting: 0.41\n- performed+dividing: 0.17\n- honest+dividing: 0.08\n\nSum = 1.000. Good.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me analyze this task. I need to predict how participants in \"Mixed Messages\" would interpret \"BRAT SUMMER\" across four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\n\"Brat Summer\" is a cultural phenomenon from 2024, associated with Charli XCX's album \"Brat\" and its lime green aesthetic. It became a cultural moment, notably embraced by Kamala Harris's campaign (\"brat\" coconut-palm edit). It's a meme-y, ironic-yet-sincere cultural vibe — messy party girl energy, but also became a political branding tool.\n\nHow would this audience interpret it?\n\nLooking at the historical examples:\n- DEMOCRATS (579 submissions): performed+dividing dominant (0.439), honest+dividing (0.287), performed+uniting (0.225), honest+uniting low (0.050). So political topics skew toward performed/dividing.\n- THE AMERICAN DREAM (103): more mixed, honest+dividing highest (0.301), performed+uniting (0.262), honest+uniting (0.233), performed+dividing (0.204).\n- GENERATIVE ART (273): overwhelmingly honest+uniting (0.700), performed+uniting (0.249), honest+dividing (0.051), performed+dividing 0.\n\n\"BRAT SUMMER\" is a pop culture trend. It's playful, not overtly political. But it did get co-opted by political campaigns (Kamala Harris). The audience seems to be art-interested, possibly skeptical of performance.\n\nBrat summer: is it authentic? It's a marketing-driven cultural moment (album marketing, brand co-optation). Many would see it as performed — a manufactured trend. But is it uniting or dividing? It's mostly a shared cultural vibe — uniting in a sense (everyone participating in the meme). But it's also somewhat exclusionary/ironic — \"brat\" is about being messy, a bit divisive in tone? Actually brat summer was widely seen as a unifying cultural moment of fun.\n\nGiven the audience's pattern: pop culture/art topics → honest+uniting dominant (like generative art). Political topics → performed+dividing dominant.\n\nBRAT SUMMER sits between: it's a cultural trend, but one heavily mediated by marketing and political co-optation. I'd expect:\n- honest+uniting: high-ish — people genuinely enjoyed the shared moment, the fun, the music. Maybe 0.35-0.45.\n- performed+uniting: also significant — it's a manufactured trend, brands jumping on it, false unity via consumerism. Maybe 0.30-0.40.\n- performed+dividing: some — political co-optation (Harris campaign), brand exploitation. Maybe 0.10-0.20.\n- honest+dividing: low — brat isn't really fracturing us truthfully. Maybe 0.05-0.10.\n\nLet me think about the audience's tendencies more. The audience skews cynical about political things (Democrats: performed+dividing 0.44). For American Dream: honest+dividing 0.30 (truthfully fracturing — the dream divides people truthfully). For generative art: honest+uniting 0.70.\n\nBRAT SUMMER is a vibe/aesthetic trend. I think the audience would see it as:\n1. A genuine fun cultural moment (honest+uniting) — significant share\n2. A manufactured/marketed trend (performed+uniting) — significant share\n3. Political co-optation (performed+dividing) — smaller\n4. honest+dividing — smallest\n\nMy estimate:\n- performed+uniting: 0.35\n- honest+uniting: 0.40\n- performed+dividing: 0.17\n- honest+dividing: 0.08\n\nSum = 1.000. \n\nAlternatively, given the audience's cynicism bias (Democrats example), maybe performed+uniting should be higher than honest+uniting? Brat summer was heavily a marketing phenomenon — the album rollout, the memes, brands adopting lime green. The \"brat\" aesthetic was everywhere. Some would say it's manufactured fun. But the music itself resonated authentically with many.\n\nHmm. The generative art example shows this audience gives art/creative things high honest+uniting. Brat summer is music/culture — closer to art than politics. But it's also a trend/hype cycle, which invites \"performed\" readings.\n\nI'll go with:\n- performed+uniting: 0.34\n- honest+uniting: 0.41\n- performed+dividing: 0.17\n- honest+dividing: 0.08\n\nSum = 1.000.\n\nActually, let me reconsider the dividing side. Brat summer did have a political dimension — the Harris campaign embrace. Some participants might see that as performed+dividing (exploiting divisions deliberately — using youth culture for political gain). But honestly, the Harris brat thing was more about uniting/coalescing youth support than dividing. Hmm, but from a cynical view, political branding exploits divisions.\n\nAlso \"brat\" as an attitude is somewhat divisive — being a brat, messy, antagonistic. But honest+dividing (fracturing us truthfully) seems a stretch for a pop trend.\n\nI'll keep dividing low overall: ~0.25 combined.\n\nFinal:\n- performed+uniting: 0.34\n- honest+uniting: 0.41\n- performed+dividing: 0.17\n- honest+dividing: 0.08\n\nSum = 1.000. Good.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 544,
+          "completion_tokens": 1307,
+          "total_tokens": 1851,
+          "cost": 0.0001191056,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 512,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001191056,
+            "upstream_inference_prompt_cost": 0.0000166368,
+            "upstream_inference_completions_cost": 0.0001024688
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1249,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 544,
+        "completion_tokens": 1307,
+        "total_tokens": 1851,
+        "cost": 0.0001191056,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 512,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001191056,
+          "upstream_inference_prompt_cost": 0.0000166368,
+          "upstream_inference_completions_cost": 0.0001024688
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1249,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "finishedAt": "2026-11-14T00:01:41.686Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 71
+      },
+      "observation": {
+        "ok": true,
+        "id": 71,
+        "prompt": "DEMOCRATS",
+        "distribution": {
+          "performed+uniting": 0.22452504317789293,
+          "honest+uniting": 0.05008635578583765,
+          "performed+dividing": 0.4386873920552677,
+          "honest+dividing": 0.2867012089810017
+        },
+        "submissions": 579,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 17
+      },
+      "observation": {
+        "ok": true,
+        "id": 17,
+        "prompt": "THE AMERICAN DREAM",
+        "distribution": {
+          "performed+uniting": 0.2621359223300971,
+          "honest+uniting": 0.23300970873786409,
+          "performed+dividing": 0.20388349514563106,
+          "honest+dividing": 0.30097087378640774
+        },
+        "submissions": 103,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 47
+      },
+      "observation": {
+        "ok": true,
+        "id": 47,
+        "prompt": "GENERATIVE ART",
+        "distribution": {
+          "performed+uniting": 0.2490842490842491,
+          "honest+uniting": 0.6996336996336996,
+          "performed+dividing": 0,
+          "honest+dividing": 0.05128205128205128
+        },
+        "submissions": 273,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.34,
+          "honest+uniting": 0.41,
+          "performed+dividing": 0.17,
+          "honest+dividing": 0.08
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.34,
+      "honest+uniting": 0.41,
+      "performed+dividing": 0.17,
+      "honest+dividing": 0.08
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.35029227483090064,
+    "score": 82.48538625845497,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}
