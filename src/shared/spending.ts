@@ -26,8 +26,14 @@ function textPrices(pricing:unknown) {
   const {overrides=[],...base}=pricing;
   if(!Array.isArray(overrides)) throw new Error("Invalid pricing tiers");
   const tiers=[base,...overrides.map(tier=>{
-    if(!record(tier)||!Number.isSafeInteger(tier.min_prompt_tokens)||Number(tier.min_prompt_tokens)<0||"overrides" in tier) throw new Error("Invalid pricing tier");
-    const {min_prompt_tokens,...prices}=tier;
+    if(!record(tier)||"overrides" in tier) throw new Error("Invalid pricing tier");
+    const clockTime=(v:unknown)=>typeof v==="number"&&Number.isSafeInteger(v)&&v>=0&&v<=2359&&v%100<60;
+    const tokenTier=Number.isSafeInteger(tier.min_prompt_tokens)&&Number(tier.min_prompt_tokens)>=0;
+    const timeTier=clockTime(tier.utc_start)&&clockTime(tier.utc_end);
+    if(!(tokenTier||timeTier)||("min_prompt_tokens" in tier&&!tokenTier)||(("utc_start" in tier||"utc_end" in tier)&&!timeTier)) throw new Error("Invalid pricing tier");
+    const {min_prompt_tokens,utc_start,utc_end,...prices}=tier;
+    // Reserve the maximum rate across every tier, including time-of-day
+    // pricing. A request or resumed run may cross a discount boundary.
     return {...base,...prices};
   })];
   const known=new Set(["prompt","completion","input_cache_read","input_cache_write","input_cache_write_1h","internal_reasoning","discount","request","image","audio","input_audio_cache","web_search"]);

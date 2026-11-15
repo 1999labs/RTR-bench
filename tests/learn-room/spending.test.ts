@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import {openSpendingLedger,spendingProvider,SpendingLimitError,type SpendingPolicy} from '../../src/shared/spending.ts';
+import {discoverSpendingPolicy,openSpendingLedger,spendingProvider,SpendingLimitError,type SpendingPolicy} from '../../src/shared/spending.ts';
 import {runLearnRoom} from '../../src/tracks/learn-room/run.ts';
 import {uniform} from '../../src/shared/distribution.ts';
 const policy:SpendingPolicy={version:'reserved-context-v1',limitUsd:.025,providerTag:'mock/endpoint',contextTokens:262000,inputUsdPerToken:.000000075,outputUsdPerToken:.00000025};
@@ -60,4 +60,17 @@ test('retry delay honors provider hints instead of using a shorter backoff',asyn
   const result=await requestCompletion(request,'mock',async()=>new Response(JSON.stringify({error:{code:429}}),{status:429,headers:{'Retry-After':'15'}}));
   assert.equal(result.retryAfterMs,15000);
   assert.equal(retryDelayMs({...result,index:1,startedAt:'test'},1),15000);
+});
+
+test('time-of-day prices reserve the highest rate even across discount boundaries',async t=>{
+  const endpoint={status:0,provider_name:'Tencent',tag:'tencent/fp8',context_length:262144,max_completion_tokens:128000,supported_parameters:['max_tokens','temperature'],pricing:{prompt:'0.0000000825',completion:'0.00000033',input_cache_read:'0.000000020625',overrides:[{utc_start:0,utc_end:1600,prompt:'0.000000132',completion:'0.000000528',input_cache_read:'0.000000033'},{utc_start:1600,utc_end:0,prompt:'0.0000000825',completion:'0.00000033'}]}};
+  const fetcher=async()=>new Response(JSON.stringify({data:{endpoints:[endpoint]}}));
+  const p=await discoverSpendingPolicy('tencent/hy3','tencent/fp8',1,fetcher);
+  assert.equal(p.version,'reserved-text-v2');assert.equal(p.inputUsdPerToken,.000000132);assert.equal(p.outputUsdPerToken,.000000528);
+  const file=path.join(temp(t),'spending.json');const ledger=openSpendingLedger(file,p);
+  const req={...request,model:'tencent/hy3',max_tokens:8000,provider:spendingProvider(p)};
+  ledger.reserve(req);assert.equal(ledger.summary().accountedUsd,Math.ceil((262144*.000000132+8000*.000000528)*1e9)/1e9);
+  assert.equal(openSpendingLedger(file,p).summary().unknownCostRequests,1);
+  endpoint.pricing.overrides[0].utc_end=1660;
+  await assert.rejects(discoverSpendingPolicy('tencent/hy3','tencent/fp8',1,fetcher),/No suitable/);
 });
