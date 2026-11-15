@@ -29,6 +29,7 @@ for(const m of plan.models){
  const none=summaries.find(s=>s.strategy==='none'),agent=summaries.find(s=>s.strategy==='agent');assert.ok(Math.abs(comparison.scoreGain-(agent.score-none.score))<1e-10);
  const attempts=report.rows.flatMap(r=>r.attempts),ledger=JSON.parse(fs.readFileSync(path.join(dir,'spending.json')));assert.equal(ledger.entries.length,attempts.length);
  const accountedUsd=ledger.entries.reduce((n,e)=>n+(e.chargedUnits??e.reservedUnits),0)/1e9;assert.ok(accountedUsd<=m.capUsd);
+ for(const s of summaries)s.unknownChargeReservations=report.rows.filter(r=>r.strategy===s.strategy).flatMap(r=>r.attempts).filter(a=>ledger.entries[a.spendingReservation]?.chargedUnits===null).length;
  const originalReport=fs.readFileSync(path.join(dir,'report.json'),'utf8');assert.deepEqual(JSON.parse(originalReport),report);
  const resumed=await runLearnRoom({model:m.model,provider:m.provider,partition:'evaluation',limit:45,strategy:'all',budget:3,seed:7,maxModelCalls:8,maxTokens:8000,agentPolicy:'transfer-check-v1',maxUsd:m.capUsd,output:modelRoot},never);
  assert.equal(resumed.dir,dir);assert.equal(fs.readFileSync(path.join(dir,'report.json'),'utf8'),originalReport);
