@@ -8,12 +8,13 @@ The point estimates show no average benefit from providing or seeking examples i
 
 ## Results
 
-| Condition | Score / 100 | Target-bootstrap 95% interval | Gain vs no examples |
-|---|---:|---:|---:|
-| No examples / direct distribution | 87.93 | 85.76–89.94 | — |
-| Random examples | 86.47 | 83.12–89.69 | -1.46 |
-| Text-similar examples | 85.43 | 81.88–88.57 | -2.51 |
-| Agent (`transfer-check-v1`) | 85.57 | 82.26–88.59 | -2.37 |
+| Condition | Score / 100 | vs baseline (points) | Valid / 45 | Target-bootstrap 95% interval | Gain vs no examples |
+|---|---:|---:|---:|---|---:|
+| Historical-average baseline | 85.56 | 0.00 | — | — | — |
+| Predict | 87.93 | +2.38 | 45/45 | 85.76 to 89.94 | — |
+| Random examples | 86.47 | +0.92 | 45/45 | 83.12 to 89.69 | −1.46 |
+| Similar examples | 85.43 | −0.13 | 45/45 | 81.88 to 88.57 | −2.51 |
+| Learn | 85.57 | +0.01 | 45/45 | 82.26 to 88.59 | −2.37 |
 
 Scores are transformed squared distribution errors, **not percentage accuracy**. Uniform prediction scores **85.39** and the constant reference-distribution baseline scores **85.56** on this split. The agent is only about 0.01 points above the constant baseline; a mid-80s score alone should not be read as strong performance. Direct distribution is 2.38 points above that baseline.
 

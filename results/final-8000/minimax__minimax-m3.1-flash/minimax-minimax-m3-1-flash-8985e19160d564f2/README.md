@@ -2,12 +2,15 @@
 
 Provider: Inferact vLLM (`inferact-vllm/nvfp4`, nvfp4). All 45 evaluation targets were run in all four conditions under the [frozen campaign plan](../../../../docs/final-run-plan-8000.md).
 
-| Condition | Score / 100 | Valid / 45 | Reported cost |
-|---|---:|---:|---:|
-| none | 86.95313994 | 45 | $0.0174819000 |
-| random | 83.13784686 | 44 | $0.0179921250 |
-| similar | 81.67465450 | 43 | $0.0180580500 |
-| agent | 84.24219982 | 45 | $0.0634455750 |
+| Condition | Score / 100 | vs baseline (points) | Valid / 45 | 95% score interval | Reported cost |
+|---|---:|---:|---:|---|---:|
+| Historical-average baseline | 85.56 | 0.00 | — | — | — |
+| Predict | 86.95313994 | +1.40 | 45/45 | 84.60 to 89.13 | $0.0174819000 |
+| Random examples | 83.13784686 | −2.42 | 44/45 | 77.45 to 87.58 | $0.0179921250 |
+| Similar examples | 81.67465450 | −3.88 | 43/45 | 74.92 to 87.42 | $0.0180580500 |
+| Learn | 84.24219982 | −1.32 | 45/45 | 80.56 to 87.66 | $0.0634455750 |
+
+The historical-average baseline predicts the same distribution for every target, calculated only from reference windows. Uniform prediction scores 85.39. Differences use unrounded scores; failed terminal answers retain zero points. Learn gain measures the overall workflow difference, including answer-completion differences.
 
 Learn gain: -2.71094012 points; exploratory paired 95% interval [-6.13168766197505, 0.5924653725976328]. Total reported cost: $0.1169776500, including controls; 388 HTTP attempts; 26.69 minutes.
 

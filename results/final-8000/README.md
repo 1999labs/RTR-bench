@@ -12,15 +12,35 @@ The [original plan](../../docs/final-run-plan-8000.md) proposed more models; onl
 
 ## Results
 
-| Model | Provider | Predict | Learn | Learn gain | Reported total cost | Valid / 180 |
-|---|---|---:|---:|---:|---:|---:|
-| [glm-5.3](z-ai__glm-5.3/z-ai-glm-5-3-df181956130e550d/README.md) | Wafer (fp4) | 86.04 | 82.87 | -3.17 | $0.05741 | 178 |
-| [minimax-m3.1-flash](minimax__minimax-m3.1-flash/minimax-minimax-m3-1-flash-8985e19160d564f2/README.md) | Inferact vLLM (nvfp4) | 86.95 | 84.24 | -2.71 | $0.11698 | 177 |
-| [mimo-v2.6-flash](xiaomi__mimo-v2.6-flash/xiaomi-mimo-v2-6-flash-0e9297795e7f3f19/README.md) | Xiaomi (fp8) | 86.98 | 83.53 | -3.45 | ≥$0.04005 | 180 |
-| [deepseek-v4.1-flash-1017](deepseek__deepseek-v4.1-flash-1017/deepseek-deepseek-v4-1-flash-1017-08a69325bd0d847d/README.md) | Sail Research (fp4) | 74.82 | 86.75 | +11.93 | ≥$0.10495 | 147 |
-| [hy3](tencent__hy3/tencent-hy3-31d8037571524f82/report.md) | gmicloud/bf16 | Incomplete | Incomplete | — | ≥$0.00252 (partial) | 3 (3 finished) |
+| Model | Track | Score / 100 | vs baseline (points) | Valid / 45 | 95% score interval | Reported track cost |
+|---|---|---:|---:|---:|---|---:|
+| Historical-average baseline | Both | 85.56 | 0.00 | — | — | — |
+| Uniform baseline (25% each) | Both | 85.39 | −0.17 | — | — | — |
+| [glm-5.3](z-ai__glm-5.3/z-ai-glm-5-3-df181956130e550d/README.md) | Predict | 86.04 | +0.48 | 44/45 | 81.23 to 89.68 | $0.00551 |
+| [glm-5.3](z-ai__glm-5.3/z-ai-glm-5-3-df181956130e550d/README.md) | Learn | 82.87 | −2.69 | 44/45 | 77.64 to 87.50 | $0.03842 |
+| [minimax-m3.1-flash](minimax__minimax-m3.1-flash/minimax-minimax-m3-1-flash-8985e19160d564f2/README.md) | Predict | 86.95 | +1.40 | 45/45 | 84.60 to 89.13 | $0.01748 |
+| [minimax-m3.1-flash](minimax__minimax-m3.1-flash/minimax-minimax-m3-1-flash-8985e19160d564f2/README.md) | Learn | 84.24 | −1.32 | 45/45 | 80.56 to 87.66 | $0.06345 |
+| [mimo-v2.6-flash](xiaomi__mimo-v2.6-flash/xiaomi-mimo-v2-6-flash-0e9297795e7f3f19/README.md) | Predict | 86.98 | +1.42 | 45/45 | 84.60 to 89.23 | $0.00390 |
+| [mimo-v2.6-flash](xiaomi__mimo-v2.6-flash/xiaomi-mimo-v2-6-flash-0e9297795e7f3f19/README.md) | Learn | 83.53 | −2.03 | 45/45 | 79.73 to 87.07 | ≥$0.02217 |
+| [deepseek-v4.1-flash-1017](deepseek__deepseek-v4.1-flash-1017/deepseek-deepseek-v4-1-flash-1017-08a69325bd0d847d/README.md) | Predict | 74.82 | −10.74 | 38/45 | 64.93 to 83.79 | ≥$0.02286 |
+| [deepseek-v4.1-flash-1017](deepseek__deepseek-v4.1-flash-1017/deepseek-deepseek-v4-1-flash-1017-08a69325bd0d847d/README.md) | Learn | 86.75 | +1.19 | 45/45 | 83.32 to 90.13 | ≥$0.02614 |
+| [hy3](tencent__hy3/tencent-hy3-31d8037571524f82/README.md) | Predict — incomplete | — | — | 3/45 | — | ≥$0.00252 (partial) |
+| [hy3](tencent__hy3/tencent-hy3-31d8037571524f82/README.md) | Learn — not run | — | — | 0/45 | — | — |
 
-Scores are out of 100 and measure distribution agreement, not percentage accuracy. Failed terminal predictions receive zero and remain in the denominator. Pending targets prevent publication of an aggregate score. Learn gain is Learn minus Predict; controls are included in total cost. No failed answer was rerolled. See the per-model reports for exploratory confidence intervals and episode-level failures.
+The historical-average baseline uses only the 90 reference distributions and ignores the target prompt. Positive differences beat that baseline; negative differences trail it. Baselines are calculated predictions, not model calls, so they have no valid-answer count or API cost. Scores measure distribution agreement, not percentage accuracy. Counts are valid answers out of all 45 declared targets. HY3 has 42 Predict targets and all 45 Learn targets pending; these are not zero-scored failures.
+
+Failed terminal predictions receive zero and stay in the score. No failed answer was rerolled. Intervals describe uncertainty across target groups, not variation across repeated model runs. Track costs exclude the random and similarity controls; the main README's Total Cost includes them.
+
+Learn Gain remains Learn minus Predict: the overall workflow difference, not an isolated measure of learning from evidence. All point differences use unrounded values.
+
+| Model | Learn Gain (points) | Paired 95% interval |
+|---|---:|---|
+| glm-5.3 | −3.17 | −9.10 to +3.09 |
+| minimax-m3.1-flash | −2.71 | −6.13 to +0.59 |
+| mimo-v2.6-flash | −3.45 | −6.63 to −0.45 |
+| deepseek-v4.1-flash-1017 | +11.93 | +2.43 to +22.77 |
+
+DeepSeek returned valid answers for 38/45 Predict targets and 45/45 Learn targets. Its gain includes that completion difference. The proposed [Learn-without-examples control](../../docs/predict-learn-proposal.md) has not been run; no evidence-only gain is claimed.
 
 ## Costs and interruptions
 

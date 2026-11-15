@@ -128,16 +128,19 @@ These commands download the project, enter its folder, and install its supportin
 
 The [selected five-model campaign](results/final-8000/README.md) has four completed runs. HY3 remains incomplete after its provider rejected all three attempts for one prompt; its partial charges and saved records are included in the campaign report.
 
+Scores measure distribution agreement, not percentage accuracy. The historical-average baseline predicts the same four shares for every prompt, using only the 90 reference windows. Counts beneath model scores show valid answers out of 45; failed final answers still score zero. Learn Gain is Learn minus Predict: the overall workflow difference, including differences in answer completion. [Detailed comparisons](results/final-8000/README.md#results) show points above or below the baseline and uncertainty intervals.
+
 ## Results
 
 | Model | Provider | Predict | Predict Cost | Learn | Learn Gain | Learn Cost | Total Cost |
 |---|---|---:|---:|---:|---:|---:|---:|
-| glm-5.3-flash | Relace (fp4) | 87.93 | $0.00241 | 85.57 | −2.37 | $0.02039 | $0.03150 |
-| glm-5.3 | Wafer (fp4) | 86.04 | $0.00551 | 82.87 | −3.17 | $0.03842 | $0.05741 |
-| minimax-m3.1-flash | Inferact vLLM (nvfp4) | 86.95 | $0.01748 | 84.24 | −2.71 | $0.06345 | $0.11698 |
-| mimo-v2.6-flash | Xiaomi (fp8) | 86.98 | $0.00390 | 83.53 | −3.45 | ≥$0.02217 | ≥$0.04005 |
-| deepseek-v4.1-flash-1017 | Sail Research (fp4) | 74.82 | ≥$0.02286 | 86.75 | +11.93 | ≥$0.02614 | ≥$0.10495 |
-| hy3 | GMICloud (bf16) | Incomplete | — | Incomplete | — | — | — |
+| Historical-average baseline | No model | 85.56 | — | 85.56 | — | — | — |
+| glm-5.3-flash | Relace (fp4) | 87.93<br>45/45 valid | $0.00241 | 85.57<br>45/45 valid | −2.37 | $0.02039 | $0.03150 |
+| glm-5.3 | Wafer (fp4) | 86.04<br>44/45 valid | $0.00551 | 82.87<br>44/45 valid | −3.17 | $0.03842 | $0.05741 |
+| minimax-m3.1-flash | Inferact vLLM (nvfp4) | 86.95<br>45/45 valid | $0.01748 | 84.24<br>45/45 valid | −2.71 | $0.06345 | $0.11698 |
+| mimo-v2.6-flash | Xiaomi (fp8) | 86.98<br>45/45 valid | $0.00390 | 83.53<br>45/45 valid | −3.45 | ≥$0.02217 | ≥$0.04005 |
+| deepseek-v4.1-flash-1017 | Sail Research (fp4) | 74.82<br>38/45 valid | ≥$0.02286 | 86.75<br>45/45 valid | +11.93 | ≥$0.02614 | ≥$0.10495 |
+| hy3 | GMICloud (bf16) | Incomplete<br>3/45 valid | — | Not run | — | — | — |
 | gemini-3.8-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | gpt-6-luna | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | claude-haiku-5.5 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |

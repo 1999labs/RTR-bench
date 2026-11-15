@@ -2,12 +2,15 @@
 
 Provider: Sail Research (`sail-research/fp4/us`, fp4). All 45 evaluation targets were run in all four conditions under the [frozen campaign plan](../../../../docs/final-run-plan-8000.md).
 
-| Condition | Score / 100 | Valid / 45 | Reported cost |
-|---|---:|---:|---:|
-| none | 74.81725902 | 38 | ≥$0.0228571855 |
-| random | 62.20354214 | 31 | ≥$0.0286401031 |
-| similar | 64.98243948 | 33 | ≥$0.0273151303 |
-| agent | 86.74674526 | 45 | ≥$0.0261351421 |
+| Condition | Score / 100 | vs baseline (points) | Valid / 45 | 95% score interval | Reported cost |
+|---|---:|---:|---:|---|---:|
+| Historical-average baseline | 85.56 | 0.00 | — | — | — |
+| Predict | 74.81725902 | −10.74 | 38/45 | 64.93 to 83.79 | ≥$0.0228571855 |
+| Random examples | 62.20354214 | −23.35 | 31/45 | 49.40 to 73.99 | ≥$0.0286401031 |
+| Similar examples | 64.98243948 | −20.58 | 33/45 | 52.64 to 76.43 | ≥$0.0273151303 |
+| Learn | 86.74674526 | +1.19 | 45/45 | 83.32 to 90.13 | ≥$0.0261351421 |
+
+The historical-average baseline predicts the same distribution for every target, calculated only from reference windows. Uniform prediction scores 85.39. Differences use unrounded scores; failed terminal answers retain zero points. Learn gain measures the overall workflow difference, including answer-completion differences.
 
 Learn gain: 11.92948624 points; exploratory paired 95% interval [2.428821818523353, 22.766831994932044]. Total reported cost: ≥$0.1049475610, including controls; 369 HTTP attempts; 102.53 minutes including provider backoff and the scheduling pause.
 
