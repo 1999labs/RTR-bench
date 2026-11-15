@@ -21,3 +21,9 @@ node src/cli.ts read-the-room deepseek/deepseek-v4.1-flash-1017 \
 ```
 
 An identical command resumes saved terminal episodes; it does not reroll them. The original $0.50 command addresses the preserved stopped run and should not be used to continue this evaluation. HY3's command and $1 cap are unchanged. No source runner or scoring code was changed during this reallocation.
+
+## Provider-recovery pause
+
+After the budget resume, DeepSeek reached 155 terminal episodes (122 valid) but continued to receive repeated `ttft_deadline_guard` rejections. It was deliberately paused while waiting after a rejection, with no model request in flight. The process exit was confirmed before removing its stale lock. Its current report and every attempt were saved. HY3 was moved ahead in the queue under its unchanged $1 cap; DeepSeek subsequently resumed and completed under its existing $1.20 limit. This changes only scheduling, not model requests, scoring, attempts, or saved outcomes. DeepSeek’s elapsed time includes this deferred interval and should not be interpreted as pure model latency. See [pause record](deepseek-provider-pause.json).
+
+HY3 completed three Predict episodes before GMICloud returned HTTP 400 `unsupported_operation`. Two identical resumes used the remaining saved attempt slots and received the same error. All three attempts and their unknown-charge reservations are retained. HY3 remains incomplete; no provider, prompt, generation setting, or completed answer was changed. DeepSeek resumed after this provider interruption and finished all 180 episodes. HY3 has exhausted the three permitted attempts for that pending prompt; an unchanged command cannot progress further.

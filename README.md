@@ -126,6 +126,8 @@ npm ci
 
 These commands download the project, enter its folder, and install its supporting software. If you already have a checkout, use that folder. Create `.env` there as described above, then replace `npx rtr-bench` with `node src/cli.ts` in the evaluation commands. `src/cli.ts` is the source file that starts the benchmark. This is an alternative to the npm path, not an additional setup step.
 
+The [selected five-model campaign](results/final-8000/README.md) has four completed runs. HY3 remains incomplete after its provider rejected all three attempts for one prompt; its partial charges and saved records are included in the campaign report.
+
 ## Results
 
 | Model | Provider | Predict | Predict Cost | Learn | Learn Gain | Learn Cost | Total Cost |
@@ -134,8 +136,8 @@ These commands download the project, enter its folder, and install its supportin
 | glm-5.3 | Wafer (fp4) | 86.04 | $0.00551 | 82.87 | −3.17 | $0.03842 | $0.05741 |
 | minimax-m3.1-flash | Inferact vLLM (nvfp4) | 86.95 | $0.01748 | 84.24 | −2.71 | $0.06345 | $0.11698 |
 | mimo-v2.6-flash | Xiaomi (fp8) | 86.98 | $0.00390 | 83.53 | −3.45 | ≥$0.02217 | ≥$0.04005 |
-| deepseek-v4.1-flash-1017 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| hy3 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| deepseek-v4.1-flash-1017 | Sail Research (fp4) | 74.82 | ≥$0.02286 | 86.75 | +11.93 | ≥$0.02614 | ≥$0.10495 |
+| hy3 | GMICloud (bf16) | Incomplete | — | Incomplete | — | — | — |
 | gemini-3.8-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | gpt-6-luna | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | claude-haiku-5.5 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
