@@ -47,6 +47,8 @@ The no-example run recovered from one malformed action. The example-enabled run 
 | 108 | TOXIC POSITIVITY | 64.53 | 58.81 | −5.71 | TRAUMA DUMPING (day 64), COMPLIMENTS (day 38), FAMILY DINNERS (day 57) |
 | 109 | DRY JANUARY | 87.45 | 69.16 | −18.30 | SOBRIETY (day 58), ALCOHOL (day 80), FOMO (day 46) |
 
+The two largest losses are examined in [Minimum Wage and Dry January: case studies](case-studies.md), with the inspected distributions and a distinction between observed behavior and interpretation.
+
 ## Verification
 
 The offline analyzer replays saved actions, independently recomputes every score, verifies all settings against the approved plan, reconciles the ledger and combined ceiling, and confirms that completed runs resume without network access or report changes. No saved answers were rerolled.
