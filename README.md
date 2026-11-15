@@ -132,7 +132,7 @@ These commands download the project, enter its folder, and install its supportin
 |---|---|---:|---:|---:|---:|---:|---:|
 | glm-5.3-flash | Relace (fp4) | 87.93 | $0.00241 | 85.57 | −2.37 | $0.02039 | $0.03150 |
 | glm-5.3 | Wafer (fp4) | 86.04 | $0.00551 | 82.87 | −3.17 | $0.03842 | $0.05741 |
-| minimax-m3.1-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| minimax-m3.1-flash | Inferact vLLM (nvfp4) | 86.95 | $0.01748 | 84.24 | −2.71 | $0.06345 | $0.11698 |
 | mimo-v2.6-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | deepseek-v4.1-flash-1017 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 | hy3 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |

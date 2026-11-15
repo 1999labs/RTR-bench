@@ -1,0 +1,641 @@
+{
+  "day": 171,
+  "strategy": "random",
+  "request": {
+    "model": "minimax/minimax-m3.1-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"ANONYMITY\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":18,\"prompt\":\"JACK BUTCHER\",\"distribution\":{\"performed+uniting\":0.355116079105761,\"honest+uniting\":0.6147893379191746,\"performed+dividing\":0.012897678417884782,\"honest+dividing\":0.017196904557179708},\"submissions\":1163},{\"id\":81,\"prompt\":\"BORDER WALLS\",\"distribution\":{\"performed+uniting\":0.0189873417721519,\"honest+uniting\":0.16139240506329114,\"performed+dividing\":0.028481012658227847,\"honest+dividing\":0.7911392405063291},\"submissions\":316},{\"id\":93,\"prompt\":\"SOCIALISM\",\"distribution\":{\"performed+uniting\":0.1423611111111111,\"honest+uniting\":0.10069444444444445,\"performed+dividing\":0.4479166666666667,\"honest+dividing\":0.3090277777777778},\"submissions\":288}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "inferact-vllm/nvfp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.075,
+        "completion": 0.3,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T00:04:32.851Z",
+      "status": "error",
+      "raw": "",
+      "response": {
+        "error": {
+          "message": "Provider returned error",
+          "code": 429,
+          "metadata": {
+            "raw": "minimax/minimax-m3.1-flash is temporarily rate-limited upstream. Please retry shortly, or add your own provider key to use your own limits: https://openrouter.ai/workspaces/default/byok",
+            "provider_name": "Inferact vLLM",
+            "is_byok": false,
+            "provider_error_code": "rate_limit_exceeded",
+            "limit_source": "upstream_provider_shared_pool",
+            "remedy_hint": "Retry shortly, add your own provider key to use your own limits (https://openrouter.ai/workspaces/default/byok), or route to another provider with provider routing: https://openrouter.ai/docs/features/provider-routing.",
+            "retry_after_seconds": 28,
+            "retry_after_seconds_raw": 28,
+            "headers": {
+              "Retry-After": "28"
+            }
+          }
+        },
+        "user_id": "user_3M075pylbVI2WWRU43PrErOGis4"
+      },
+      "provider": null,
+      "usage": null,
+      "error": "HTTP 429: {\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"minimax/minimax-m3.1-flash is temporarily rate-limited upstream. Please retry shortly, or add your own provider key to use your own limits: https://openrouter.ai/workspaces/default/byok\",\"provider_name\":\"Inferact vLLM\",\"is_byok\":false,\"provider_error_code\":\"rate_limit_exceeded\",\"limit_source\":\"upstream_provider_shared_pool\",\"remedy_hint\":\"Retry shortly, add your own provider key to use your own limits (https://openrouter.ai/works",
+      "retriable": true,
+      "spendingReservation": 94,
+      "finishedAt": "2026-11-15T00:04:33.012Z",
+      "httpStatus": 429,
+      "retryAfterMs": 28000
+    },
+    {
+      "index": 2,
+      "startedAt": "2026-11-15T00:05:01.017Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.150, \"honest+uniting\": 0.280, \"performed+dividing\": 0.320, \"honest+dividing\": 0.250}",
+      "response": {
+        "id": "gen-1794701101-CZDgOp2I8WxlT5DKy1sF",
+        "object": "chat.completion",
+        "created": 1794701101,
+        "model": "minimax/minimax-m3.1-flash",
+        "provider": "Inferact vLLM",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.150, \"honest+uniting\": 0.280, \"performed+dividing\": 0.320, \"honest+dividing\": 0.250}",
+              "refusal": null,
+              "reasoning": "The word is \"ANONYMITY.\" It can mean concealing identity, which can protect vulnerable people and enable participation, or it can hide accountability and enable harmful behavior. The audience tends to interpret abstract political concepts through both honest and performed dimensions.\n\nLooking at the examples: Jack Butcher was mostly honest+uniting (0.615), with performed+uniting at 0.355. Border Walls was mostly honest+dividing (0.791). Socialism was mostly performed+dividing (0.448), with honest+dividing at 0.309.\n\nFor anonymity: it could be seen as honest+uniting (protecting people, enabling expression), performed+uniting (masking differences, creating false unity?), performed+dividing (hiding accountability, enabling division), honest+dividing (truthfully revealing divisions, e.g., exposing hidden identities or the fact that institutions are anonymous).\n\nAnonymity is often associated with division and accountability issues. It can be seen as fracturing society truthfully (honest+dividing) because it reveals who holds power, or performed+dividing because it enables harassment and exploitation.\n\nLet me think about the likely audience interpretations. \"ANONYMITY\" — many might say it enables people to come together without prejudice (honest+uniting), or that it protects whistleblowers. Others might say it divides by hiding identity and responsibility (performed+dividing). Some might say it creates false unity by erasing identity (performed+uniting). Honest+dividing might be seen as revealing true divisions by unmasking.\n\nGiven the examples, the distribution tends to be somewhat polarized. For anonymity, I'd guess a mix leaning toward performed+dividing and honest+uniting.\n\nLet me think about the semantics more carefully. The quadrants are about whether the concept performs (is a strategic act) or honestly (is a genuine/truthful expression), and whether it unites or divides.\n\nAnonymity as a concept: it can be a tool for genuine solidarity (people unite behind a cause without identity politics) — honest+uniting. It can be a mask creating false unity — performed+uniting. It can be exploited to divide (doxxing, harassment, scapegoating) — performed+dividing. It can truthfully fracture (revealing that powerful actors are anonymous, exposing hidden divisions) — honest+dividing.\n\nI'd estimate: performed+uniting 0.15, honest+uniting 0.30, performed+dividing 0.30, honest+dividing 0.25.\n\nHmm, but consider the audience's pattern: for \"Jack Butcher\" (a performer known for unity/collaboration), honest+uniting dominated. For \"Border Walls,\" honest+dividing dominated. For \"Socialism,\" performed+dividing dominated.\n\nAnonymity is a practice/condition rather than a person. It has a performative dimension (choosing to be anonymous) and an honest dimension (genuine anonymity, e.g., of marginalized people). I think the audience would see it as both uniting (protection, voice) and dividing (accountability, polarization).\n\nLet me settle on: performed+uniting 0.14, honest+uniting 0.28, performed+dividing 0.33, honest+dividing 0.25.\n\nActually, anonymity is often framed as enabling speech without prejudice — uniting. But also as erasing accountability. I'd lean slightly toward dividing overall. Let me go with 0.15/0.28/0.32/0.25.\n\nSum = 1.00.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "The word is \"ANONYMITY.\" It can mean concealing identity, which can protect vulnerable people and enable participation, or it can hide accountability and enable harmful behavior. The audience tends to interpret abstract political concepts through both honest and performed dimensions.\n\nLooking at the examples: Jack Butcher was mostly honest+uniting (0.615), with performed+uniting at 0.355. Border Walls was mostly honest+dividing (0.791). Socialism was mostly performed+dividing (0.448), with honest+dividing at 0.309.\n\nFor anonymity: it could be seen as honest+uniting (protecting people, enabling expression), performed+uniting (masking differences, creating false unity?), performed+dividing (hiding accountability, enabling division), honest+dividing (truthfully revealing divisions, e.g., exposing hidden identities or the fact that institutions are anonymous).\n\nAnonymity is often associated with division and accountability issues. It can be seen as fracturing society truthfully (honest+dividing) because it reveals who holds power, or performed+dividing because it enables harassment and exploitation.\n\nLet me think about the likely audience interpretations. \"ANONYMITY\" — many might say it enables people to come together without prejudice (honest+uniting), or that it protects whistleblowers. Others might say it divides by hiding identity and responsibility (performed+dividing). Some might say it creates false unity by erasing identity (performed+uniting). Honest+dividing might be seen as revealing true divisions by unmasking.\n\nGiven the examples, the distribution tends to be somewhat polarized. For anonymity, I'd guess a mix leaning toward performed+dividing and honest+uniting.\n\nLet me think about the semantics more carefully. The quadrants are about whether the concept performs (is a strategic act) or honestly (is a genuine/truthful expression), and whether it unites or divides.\n\nAnonymity as a concept: it can be a tool for genuine solidarity (people unite behind a cause without identity politics) — honest+uniting. It can be a mask creating false unity — performed+uniting. It can be exploited to divide (doxxing, harassment, scapegoating) — performed+dividing. It can truthfully fracture (revealing that powerful actors are anonymous, exposing hidden divisions) — honest+dividing.\n\nI'd estimate: performed+uniting 0.15, honest+uniting 0.30, performed+dividing 0.30, honest+dividing 0.25.\n\nHmm, but consider the audience's pattern: for \"Jack Butcher\" (a performer known for unity/collaboration), honest+uniting dominated. For \"Border Walls,\" honest+dividing dominated. For \"Socialism,\" performed+dividing dominated.\n\nAnonymity is a practice/condition rather than a person. It has a performative dimension (choosing to be anonymous) and an honest dimension (genuine anonymity, e.g., of marginalized people). I think the audience would see it as both uniting (protection, voice) and dividing (accountability, polarization).\n\nLet me settle on: performed+uniting 0.14, honest+uniting 0.28, performed+dividing 0.33, honest+dividing 0.25.\n\nActually, anonymity is often framed as enabling speech without prejudice — uniting. But also as erasing accountability. I'd lean slightly toward dividing overall. Let me go with 0.15/0.28/0.32/0.25.\n\nSum = 1.00.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 648,
+          "completion_tokens": 783,
+          "total_tokens": 1431,
+          "cost": 0.0002835,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0002835,
+            "upstream_inference_prompt_cost": 0.0000486,
+            "upstream_inference_completions_cost": 0.0002349
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 734,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Inferact vLLM",
+      "usage": {
+        "prompt_tokens": 648,
+        "completion_tokens": 783,
+        "total_tokens": 1431,
+        "cost": 0.0002835,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0002835,
+          "upstream_inference_prompt_cost": 0.0000486,
+          "upstream_inference_completions_cost": 0.0002349
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 734,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 95,
+      "finishedAt": "2026-11-15T00:05:03.883Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 18
+      },
+      "observation": {
+        "ok": true,
+        "id": 18,
+        "prompt": "JACK BUTCHER",
+        "distribution": {
+          "performed+uniting": 0.355116079105761,
+          "honest+uniting": 0.6147893379191746,
+          "performed+dividing": 0.012897678417884782,
+          "honest+dividing": 0.017196904557179708
+        },
+        "submissions": 1163,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 81
+      },
+      "observation": {
+        "ok": true,
+        "id": 81,
+        "prompt": "BORDER WALLS",
+        "distribution": {
+          "performed+uniting": 0.0189873417721519,
+          "honest+uniting": 0.16139240506329114,
+          "performed+dividing": 0.028481012658227847,
+          "honest+dividing": 0.7911392405063291
+        },
+        "submissions": 316,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 93
+      },
+      "observation": {
+        "ok": true,
+        "id": 93,
+        "prompt": "SOCIALISM",
+        "distribution": {
+          "performed+uniting": 0.1423611111111111,
+          "honest+uniting": 0.10069444444444445,
+          "performed+dividing": 0.4479166666666667,
+          "honest+dividing": 0.3090277777777778
+        },
+        "submissions": 288,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.15,
+          "honest+uniting": 0.28,
+          "performed+dividing": 0.32,
+          "honest+dividing": 0.25
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.15,
+      "honest+uniting": 0.28,
+      "performed+dividing": 0.32,
+      "honest+dividing": 0.25
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.2128154577883472,
+    "score": 89.35922711058264,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}
