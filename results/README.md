@@ -2,6 +2,8 @@
 
 Predict and Learn use saved distribution predictions. Start with the [current campaign results](final-8000/README.md) for scores, historical-baseline comparisons, valid-answer counts, uncertainty, and costs. The earlier [GLM 5.3 Flash evaluation](learn-room/z-ai-glm-5-3-flash-e9d0327447ef1856/README.md) used a 4,000-token allowance; the current campaign uses 8,000.
 
+The [MiMo development comparison](development-evidence-pilot-v1/README.md) tests the same Learn workflow with and without access to historical examples. It is an exploratory ten-target pilot, separate from the final results.
+
 The guide below documents the **original dominant-quadrant benchmark**. Its [archived README](history/original-benchmark/README.md) preserves the eleven-model results and interpretation. Those scores are not directly comparable with Predict and Learn.
 
 Synthetic runs under `distribution/fixture-synthetic-*/` and `learn-room/fixture-synthetic-*/` are local outputs ignored by Git. Their inputs remain in `tests/fixtures/`; use the fixture commands in the main README to regenerate reports. Retained published HTML, charts, and generated summary files are marked as generated in `.gitattributes` so they do not distort GitHub's language statistics. Raw published model responses remain tracked.

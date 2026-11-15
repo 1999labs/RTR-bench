@@ -1,6 +1,6 @@
 # Predict and Learn: proposed revision
 
-Reporting updates are now applied to the published result summaries using saved answers. The additional Learn control and generation settings below remain proposals; the runner, measured scores, and saved runs are unchanged.
+Reporting updates are now applied to the published result summaries using saved answers. The additional Learn control has now been piloted on ten development targets; broader adoption and revised generation settings remain proposals. The runner and prior measured scores are unchanged.
 
 ## Keep the core test
 
@@ -35,4 +35,4 @@ Use the 30 development targets to choose reasoning/output allowances with enough
 
 Give the revised experiment a separate protocol version and result directory. Preserve the current runs under their recorded settings. Existing evaluation outcomes informed this proposal, so further work on those targets is exploratory; stronger confirmation needs fresh targets fixed before their results are examined.
 
-**Next step:** plan a small, budgeted development comparison of Learn with and without access to examples before more final runs.
+**Development pilot completed:** [MiMo with and without examples](../results/development-evidence-pilot-v1/README.md) produced 10/10 valid answers in both conditions. With examples scored 2.12 points lower; the exploratory paired interval includes zero. This small check supports reporting the control separately, not claiming that examples generally help or hurt.

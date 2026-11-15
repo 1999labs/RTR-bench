@@ -1,6 +1,6 @@
 # Small Learn comparison
 
-**Proposed, not run. Maximum new spending: $1 total.**
+**Executed November 15, 2026, after approval.** Both conditions completed under the $1 combined ceiling. [Results and verification](../results/development-evidence-pilot-v1/README.md). The plan below records the settings chosen before execution.
 
 | Item | Plan |
 |---|---|
@@ -33,6 +33,6 @@ Preserve both runs separately. Do not update the final leaderboard or claim a ge
 
 The estimate scales saved MiMo usage at the [currently listed Xiaomi prices](https://openrouter.ai/api/v1/models/xiaomi/mimo-v2.6-flash/endpoints), checked November 15, 2026. The $1 ceiling leaves room for conservative reservations when a timeout's charge is unknown; it is not the expected bill. Stop for review if a condition remains incomplete, a limit is reached, or the provider/settings require changing. Do not automatically raise the cap or switch providers.
 
-The existing CLI supports both conditions with `learn --budget 0` and `learn --budget 3`; no runner change is needed. [Exact settings, target IDs, and command arguments](learn-evidence-pilot-plan.json) are recorded for execution after approval. Check the provider snapshot again before launch; no paid calls have been made for this plan.
+The existing CLI supports both conditions with `learn --budget 0` and `learn --budget 3`; no runner change is needed. [Exact settings, target IDs, and command arguments](learn-evidence-pilot-plan.json) are recorded for execution in the original plan. The launch provider snapshot and execution record are preserved with the results.
 
-**Next step:** run this development comparison with the $1 total ceiling.
+**Outcome:** 10/10 valid answers in each condition; 88.01 without examples and 85.89 with examples. Reported cost: $0.0061787488. These are exploratory results, not a final leaderboard update.
