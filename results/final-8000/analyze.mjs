@@ -6,10 +6,15 @@ const {buildLearnRoomReport}=await import(path.join(root,'src/tracks/learn-room/
 const {runLearnRoom}=await import(path.join(root,'src/tracks/learn-room/run.ts'));
 const {loadDistributionData}=await import(path.join(root,'src/shared/dataset.ts'));const data=loadDistributionData();
 const never=async()=>{throw new Error('Network forbidden during offline verification');};globalThis.fetch=never;
+const amendmentFile=path.join(output,'budget-amendments.json');
+const budgetAmendments=fs.existsSync(amendmentFile)?JSON.parse(fs.readFileSync(amendmentFile)):null;
+if(budgetAmendments)assert.ok(budgetAmendments.combinedAccountingBoundUsd<=budgetAmendments.originalTotalCapUsd);
 const results=[];
 for(const m of plan.models){
  const modelRoot=path.join(output,m.model.replace('/','__'));if(!fs.existsSync(modelRoot))continue;
- const dirs=fs.readdirSync(modelRoot).filter(f=>fs.existsSync(path.join(modelRoot,f,'manifest.json')));assert.equal(dirs.length,1,'Multiple run identities need review');
+ const amendment=budgetAmendments?.amendments.find(a=>a.model===m.model);
+ const dirs=fs.readdirSync(modelRoot).filter(f=>fs.existsSync(path.join(modelRoot,f,'manifest.json'))&&(!amendment||path.resolve(modelRoot,f)===path.resolve(root,amendment.activeDirectory)));assert.equal(dirs.length,1,'Multiple active run identities need review');
+ const effectiveCap=amendment?.capUsd??m.capUsd;
  const dir=path.join(modelRoot,dirs[0]);const manifest=JSON.parse(fs.readFileSync(path.join(dir,'manifest.json')));
  if(manifest.status!=='complete'){console.log('Skipping incomplete',m.model);continue;}
  const report=buildLearnRoomReport(dir),c=report.manifest.config;
@@ -18,7 +23,7 @@ for(const m of plan.models){
  assert.equal(c.datasetHash,plan.protocol.datasetHash);assert.equal(c.splitHash,plan.protocol.splitHash);assert.equal(c.version,plan.runnerVersion);
  assert.deepEqual(c.strategies,plan.protocol.strategies);assert.equal(c.budget,3);assert.equal(c.seed,7);assert.equal(c.maxModelCalls,8);assert.equal(c.maxActions,8);assert.equal(c.agentPolicy,'transfer-check-v1');
  assert.equal(c.settings.maxTokens,8000);assert.equal(c.settings.maxAttempts,3);assert.equal(c.settings.timeoutMs,60000);assert.equal(c.settings.temperature,m.temperatureSupported?0:null);
- assert.equal(c.spending.limitUsd,m.capUsd);assert.equal(c.spending.providerTag,m.provider);
+ assert.equal(c.spending.limitUsd,effectiveCap);assert.equal(c.spending.providerTag,m.provider);
  assert.equal(report.rows.length,180);
  const summaries=report.summaries.map(s=>{
   const rows=report.rows.filter(r=>r.strategy===s.strategy);
@@ -28,13 +33,26 @@ for(const m of plan.models){
  const comparison=report.comparisons.find(c=>c.strategy==='agent'&&c.control==='none');assert.ok(comparison);
  const none=summaries.find(s=>s.strategy==='none'),agent=summaries.find(s=>s.strategy==='agent');assert.ok(Math.abs(comparison.scoreGain-(agent.score-none.score))<1e-10);
  const attempts=report.rows.flatMap(r=>r.attempts),ledger=JSON.parse(fs.readFileSync(path.join(dir,'spending.json')));assert.equal(ledger.entries.length,attempts.length);
- const accountedUsd=ledger.entries.reduce((n,e)=>n+(e.chargedUnits??e.reservedUnits),0)/1e9;assert.ok(accountedUsd<=m.capUsd);
+ if(amendment){
+  const source=path.resolve(root,amendment.sourceDirectory),prior=buildLearnRoomReport(source);
+  assert.equal(prior.manifest.id,amendment.sourceRunId);assert.equal(manifest.id,amendment.activeRunId);
+  const oldConfig=structuredClone(prior.manifest.config),newConfig=structuredClone(c);delete oldConfig.spending.limitUsd;delete newConfig.spending.limitUsd;assert.deepEqual(newConfig,oldConfig);
+  const oldLedger=JSON.parse(fs.readFileSync(path.join(source,'spending.json')));assert.deepEqual(ledger.entries.slice(0,oldLedger.entries.length),oldLedger.entries);
+  for(const oldRow of prior.rows){
+   const relative=path.join('episodes',oldRow.strategy,`${oldRow.day}.json`),oldFile=path.join(source,relative);if(!fs.existsSync(oldFile))continue;
+   const original=JSON.parse(fs.readFileSync(oldFile)),current=JSON.parse(fs.readFileSync(path.join(dir,relative)));
+   if(original.terminal)assert.deepEqual(current,original);
+   else {assert.deepEqual(current.request,original.request);assert.deepEqual(current.attempts.slice(0,original.attempts.length),original.attempts);}
+  }
+ }
+
+ const accountedUsd=ledger.entries.reduce((n,e)=>n+(e.chargedUnits??e.reservedUnits),0)/1e9;assert.ok(accountedUsd<=effectiveCap);
  for(const s of summaries)s.unknownChargeReservations=report.rows.filter(r=>r.strategy===s.strategy).flatMap(r=>r.attempts).filter(a=>ledger.entries[a.spendingReservation]?.chargedUnits===null).length;
  const originalReport=fs.readFileSync(path.join(dir,'report.json'),'utf8');assert.deepEqual(JSON.parse(originalReport),report);
- const resumed=await runLearnRoom({model:m.model,provider:m.provider,partition:'evaluation',limit:45,strategy:'all',budget:3,seed:7,maxModelCalls:8,maxTokens:8000,agentPolicy:'transfer-check-v1',maxUsd:m.capUsd,output:modelRoot},never);
+ const resumed=await runLearnRoom({model:m.model,provider:m.provider,partition:'evaluation',limit:45,strategy:'all',budget:3,seed:7,maxModelCalls:8,maxTokens:8000,agentPolicy:'transfer-check-v1',maxUsd:effectiveCap,output:modelRoot},never);
  assert.equal(resumed.dir,dir);assert.equal(fs.readFileSync(path.join(dir,'report.json'),'utf8'),originalReport);
  const start=Math.min(...attempts.map(a=>Date.parse(a.startedAt))),end=Math.max(...attempts.filter(a=>a.finishedAt).map(a=>Date.parse(a.finishedAt)));
- const result={model:m.model,provider:m.provider,quantization:m.quantization,directory:path.relative(root,dir),summaries,learnGain:comparison.scoreGain,learnGainCI:comparison.scoreGainCI,baselines:report.baselines,valid:summaries.reduce((n,s)=>n+s.valid,0),total:180,apiCalls:attempts.length,reportedCostUsd:summaries.reduce((n,s)=>n+s.costUsd.known,0),accountedUsd,capUsd:m.capUsd,unknownReservations:ledger.entries.filter(e=>e.chargedUnits===null).length,unbilledRateLimits:ledger.entries.filter(e=>e.costBasis?.startsWith('unbilled-rate-limit')).length,apiErrors:attempts.filter(a=>a.status==='error').length,lengthStops:attempts.filter(a=>a.response?.choices?.some(c=>c.finish_reason==='length')).length,maxCompletionTokens:Math.max(...attempts.map(a=>a.usage?.completion_tokens??0)),actualProviders:[...new Set(attempts.flatMap(a=>a.provider?[a.provider]:[]))],elapsedMinutes:(end-start)/60000,offlineResumeVerified:true};
+ const result={model:m.model,provider:m.provider,quantization:m.quantization,directory:path.relative(root,dir),summaries,learnGain:comparison.scoreGain,learnGainCI:comparison.scoreGainCI,baselines:report.baselines,valid:summaries.reduce((n,s)=>n+s.valid,0),total:180,apiCalls:attempts.length,reportedCostUsd:summaries.reduce((n,s)=>n+s.costUsd.known,0),accountedUsd,capUsd:effectiveCap,unknownReservations:ledger.entries.filter(e=>e.chargedUnits===null).length,unbilledRateLimits:ledger.entries.filter(e=>e.costBasis?.startsWith('unbilled-rate-limit')).length,apiErrors:attempts.filter(a=>a.status==='error').length,lengthStops:attempts.filter(a=>a.response?.choices?.some(c=>c.finish_reason==='length')).length,maxCompletionTokens:Math.max(...attempts.map(a=>a.usage?.completion_tokens??0)),actualProviders:[...new Set(attempts.flatMap(a=>a.provider?[a.provider]:[]))],elapsedMinutes:(end-start)/60000,offlineResumeVerified:true};
  results.push(result);console.log(m.model,'verified',result.valid+'/180','cost',result.reportedCostUsd);
 }
 fs.writeFileSync(path.join(output,'verified-results.json'),JSON.stringify({protocol:plan.protocol,results},null,2)+'\n');

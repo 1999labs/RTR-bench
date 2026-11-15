@@ -203,7 +203,7 @@ On 45 targets, Predict and Learn together typically use about 270 model calls. A
 
 In version 0.2.1, the public commands default to 8,000 output tokens per response. Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
 
-To resume a run created with the earlier 4,000-token default, repeat its original command with `--max-tokens 4000` explicitly. Changing the allowance creates a separate run. The [final evaluation plan](docs/final-run-plan-8000.md) declares 8,000 tokens for all eleven models, including a new GLM result under that same setting. Until that rerun is complete, the `glm-5.3-flash` row retains its earlier 4,000-token result; the new final runs use 8,000. Total Cost includes both controls. A ≥ cost is the reported subtotal when an interrupted request has an unresolved charge; its reservation still counts against the spending cap.
+To resume a run created with the earlier 4,000-token default, repeat its original command with `--max-tokens 4000` explicitly. Changing the allowance creates a separate run. The [final evaluation plan](docs/final-run-plan-8000.md) declares 8,000 tokens for all eleven models, including a new GLM result under that same setting. Until that rerun is complete, the `glm-5.3-flash` row retains its earlier 4,000-token result; the new final runs use 8,000. Total Cost includes both controls. A ≥ cost is the reported subtotal when a request has an unresolved charge; its reservation still counts against the spending cap.
 
 The current client uses OpenRouter. Direct connections to other hosted or local endpoints are not yet implemented.
 

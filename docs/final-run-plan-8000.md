@@ -71,3 +71,7 @@ Before publishing scores, replay the saved traces and scoring, inspect failed/pe
 The prepared 0.2.1 public commands (`predict`, `learn`, and `read-the-room`) now default to 8,000 tokens. Legacy command defaults remain unchanged. Resuming an older public-command run requires an explicit `--max-tokens 4000` plus its original other settings. Tests verify that this resumes the old run while the new default creates a separate run without altering the old report. The campaign script pins the allowance explicitly so it does not depend on future default changes.
 
 Verification passed: all 63 automated tests, package build/packing, fresh and resumed synthetic runs of all four public command variants from the extracted package, shell syntax validation, and comparison of every campaign command against the machine-readable plan. No paid calls were made during this preparation.
+
+## Execution budget amendment
+
+During the authorized five-model subset, conservative reservations for DeepSeek provider rejections exhausted its initial $0.50 allowance. Unused allowance from the three completed models was reallocated to a $1.20 DeepSeek cap, keeping the five-model accounting bound below its original $2.75 total. See the [preserved records and exact resume command](https://github.com/1999labs/RTR-bench/blob/main/results/final-8000/budget-amendment.md). The original plan and command script above are historical; use the amendment for DeepSeek continuation. No generation or scoring settings changed.
