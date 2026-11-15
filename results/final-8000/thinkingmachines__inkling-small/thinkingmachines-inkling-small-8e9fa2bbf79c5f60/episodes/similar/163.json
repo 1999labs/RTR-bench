@@ -1,0 +1,607 @@
+{
+  "day": 163,
+  "strategy": "similar",
+  "request": {
+    "model": "thinkingmachines/inkling-small",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"GAME SHOWS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":9,\"prompt\":\"THE ENHANCED GAMES\",\"distribution\":{\"performed+uniting\":0.02336448598130841,\"honest+uniting\":0.1822429906542056,\"performed+dividing\":0.03271028037383177,\"honest+dividing\":0.7616822429906542},\"submissions\":214},{\"id\":8,\"prompt\":\"@SHL0MS\",\"distribution\":{\"performed+uniting\":0.5663311985361391,\"honest+uniting\":0.06404391582799634,\"performed+dividing\":0.0878316559926807,\"honest+dividing\":0.2817932296431839},\"submissions\":1093},{\"id\":87,\"prompt\":\"SAME-SEX MARRIAGE\",\"distribution\":{\"performed+uniting\":0.02654867256637168,\"honest+uniting\":0.6194690265486725,\"performed+dividing\":0.02654867256637168,\"honest+dividing\":0.3274336283185841},\"submissions\":113}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "deepinfra/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.44999999999999996,
+        "completion": 1.2,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T08:03:30.607Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.584, \"honest+uniting\": 0.073, \"performed+dividing\": 0.118, \"honest+dividing\": 0.225}",
+      "response": {
+        "id": "gen-1794729810-5I4eyHPCPc3XAe6dERw2",
+        "object": "chat.completion",
+        "created": 1794729810,
+        "model": "thinkingmachines/inkling-small",
+        "provider": "DeepInfra",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.584, \"honest+uniting\": 0.073, \"performed+dividing\": 0.118, \"honest+dividing\": 0.225}",
+              "refusal": null,
+              "reasoning": "We need parse: word \"GAME SHOWS\". Predict distribution of responses from participants in Mixed Messages, generative art project. Four quadrants: performed+uniting (false unity), honest+uniting (authentic together), performed+dividing (exploiting divisions deliberately), honest+dividing (fracturing truthfully).\n\nWe have historical examples from same audience: id 9 \"THE ENHANCED GAMES\" distribution: performed+uniting 0.023, honest+uniting 0.182, performed+dividing 0.033, honest+dividing 0.762. id 8 \"@SHL0MS\" distribution: 0.566, 0.064, 0.088, 0.282. id 87 \"SAME-SEX MARRIAGE\": 0.027, 0.619, 0.027, 0.327.\n\nThese vary widely based on prompt semantics. We need infer likely interpretation of \"GAME SHOWS\". Likely audience sees game shows as performed/dividing? Or performed/unifying? Let's think.\n\nThe project \"Mixed Messages\" likely asks participants to interpret a word/phrase along axes of performed vs honest and uniting vs dividing. So for each prompt, crowd gives distribution.\n\nWe need estimate for \"GAME SHOWS\". Since it's pop culture, maybe performed+dividing: game shows are performances that exploit divisions? Or performed+uniting: they create false unity, shared spectacle.\n\nLet's examine analogous prompts. \"THE ENHANCED GAMES\" likely similar to game shows? It got high honest+dividing (0.762). That suggests \"enhanced games\" interpreted as honestly dividing, maybe about doping, competition fractures. But \"GAME SHOWS\" is different: likely more about spectacle, entertainment, false unity? Let's think.\n\n\"@SHL0MS\" got high performed+uniting (0.566) and honest+dividing 0.282. Maybe a handle/persona? Not sure.\n\n\"SAME-SEX MARRIAGE\" got high honest+uniting 0.619 and honest+dividing 0.327. So social issue prompts tend to be seen as honest, either uniting or dividing.\n\n\"GAME SHOWS\" is entertainment, likely perceived as performed (not authentic) and maybe uniting (shared experience) or dividing (competition, contestants). Which quadrants?\n\nLet's break down: performed+uniting: creating false unity among us. Game shows are televised spectacles that bring audience together around shared viewing, but it's performed/false. That seems plausible.\n\nperformed+dividing: exploiting our divisions deliberately. Game shows have contestants competing, maybe exploit class/race divisions? But are they deliberately dividing audience? Not sure.\n\nhonest+uniting: bringing us together authentically. Are game shows authentic community? Maybe not.\n\nhonest+dividing: fracturing us truthfully. Maybe game shows reveal true competitive nature, dividing us honestly.\n\nWe need assign probabilities summing to 1.\n\nLet's consider that \"GAME SHOWS\" as a phrase is likely interpreted as \"performed\" because game shows are staged, scripted, fake. So performed+uniting or performed+dividing should be high. Are they uniting or dividing? Audience might watch together, so uniting via shared spectacle but false. So performed+uniting maybe high.\n\nBut \"THE ENHANCED GAMES\" had low performed+uniting (0.023). Why? Because \"enhanced\" suggests doping, so honest+dividing. For \"GAME SHOWS\", the word \"game\" suggests play, but \"shows\" suggests performance.\n\nMaybe the distribution will be similar to \"@SHL0MS\" which is a username? Not helpful.\n\nLet's think about the semantics of the four quadrants in context of \"Mixed Messages\". The project likely examines how language can be interpreted as sincere or performative, unifying or divisive. For entertainment media like game shows, likely seen as performative and unifying (mass entertainment creates collective experience). But also divisive because they promote competition.\n\nWhich is more likely? Let's assign: performed+uniting: 0.45, honest+uniting: 0.05, performed+dividing: 0.40, honest+dividing: 0.10. Sum 1.00.\n\nBut we need at least three decimal places. Let's craft: performed+uniting 0.420, honest+uniting 0.080, performed+dividing 0.380, honest+dividing 0.120. Sum 1.000.\n\nHowever, looking at previous examples, they have quite extreme distributions (one quadrant >0.6). Maybe this audience tends to have strong consensus? The example with 214 submissions had 0.76 in one quadrant. The 1093 submissions had 0.566. The 113 had 0.619. So likely one quadrant dominates.\n\nWhat would be dominant for GAME SHOWS? Likely performed+uniting or performed+dividing. Which one? Let's decide performed+uniting as dominant because game shows are a shared cultural experience, but performed because they are staged. So false unity. Let's say 0.650? But need others sum to 0.35.\n\nLet's choose: performed+uniting: 0.612, honest+uniting: 0.064, performed+dividing: 0.102, honest+dividing: 0.222. Sum = 1.000? 0.612+0.064=0.676, +0.102=0.778, +0.222=1.000. Yes! That mirrors @SHL0MS pattern: high performed+uniting (0.566), low honest+uniting (0.064), performed+dividing (0.088), honest+dividing (0.282). So similar: 0.612, 0.064, 0.102, 0.222.\n\nBut is honest+dividing plausible? Game shows truthfully fracture us? Maybe because they highlight inequality? Not sure.\n\nAlternatively dominant honest+dividing: 0.650? But game shows are not honest.\n\nI think performed+uniting is best. Let's set: 0.58, 0.08, 0.12, 0.22 => sum 1.00.\n\nLet's do more precise: performed+uniting: 0.584, honest+uniting: 0.073, performed+dividing: 0.118, honest+dividing: 0.225. Sum: 0.584+0.073=0.657, +0.118=0.775, +0.225=1.000. Perfect.\n\nThese values are plausible.\n\nCheck sum exactly 1.000. Yes.\n\nReturn as JSON.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need parse: word \"GAME SHOWS\". Predict distribution of responses from participants in Mixed Messages, generative art project. Four quadrants: performed+uniting (false unity), honest+uniting (authentic together), performed+dividing (exploiting divisions deliberately), honest+dividing (fracturing truthfully).\n\nWe have historical examples from same audience: id 9 \"THE ENHANCED GAMES\" distribution: performed+uniting 0.023, honest+uniting 0.182, performed+dividing 0.033, honest+dividing 0.762. id 8 \"@SHL0MS\" distribution: 0.566, 0.064, 0.088, 0.282. id 87 \"SAME-SEX MARRIAGE\": 0.027, 0.619, 0.027, 0.327.\n\nThese vary widely based on prompt semantics. We need infer likely interpretation of \"GAME SHOWS\". Likely audience sees game shows as performed/dividing? Or performed/unifying? Let's think.\n\nThe project \"Mixed Messages\" likely asks participants to interpret a word/phrase along axes of performed vs honest and uniting vs dividing. So for each prompt, crowd gives distribution.\n\nWe need estimate for \"GAME SHOWS\". Since it's pop culture, maybe performed+dividing: game shows are performances that exploit divisions? Or performed+uniting: they create false unity, shared spectacle.\n\nLet's examine analogous prompts. \"THE ENHANCED GAMES\" likely similar to game shows? It got high honest+dividing (0.762). That suggests \"enhanced games\" interpreted as honestly dividing, maybe about doping, competition fractures. But \"GAME SHOWS\" is different: likely more about spectacle, entertainment, false unity? Let's think.\n\n\"@SHL0MS\" got high performed+uniting (0.566) and honest+dividing 0.282. Maybe a handle/persona? Not sure.\n\n\"SAME-SEX MARRIAGE\" got high honest+uniting 0.619 and honest+dividing 0.327. So social issue prompts tend to be seen as honest, either uniting or dividing.\n\n\"GAME SHOWS\" is entertainment, likely perceived as performed (not authentic) and maybe uniting (shared experience) or dividing (competition, contestants). Which quadrants?\n\nLet's break down: performed+uniting: creating false unity among us. Game shows are televised spectacles that bring audience together around shared viewing, but it's performed/false. That seems plausible.\n\nperformed+dividing: exploiting our divisions deliberately. Game shows have contestants competing, maybe exploit class/race divisions? But are they deliberately dividing audience? Not sure.\n\nhonest+uniting: bringing us together authentically. Are game shows authentic community? Maybe not.\n\nhonest+dividing: fracturing us truthfully. Maybe game shows reveal true competitive nature, dividing us honestly.\n\nWe need assign probabilities summing to 1.\n\nLet's consider that \"GAME SHOWS\" as a phrase is likely interpreted as \"performed\" because game shows are staged, scripted, fake. So performed+uniting or performed+dividing should be high. Are they uniting or dividing? Audience might watch together, so uniting via shared spectacle but false. So performed+uniting maybe high.\n\nBut \"THE ENHANCED GAMES\" had low performed+uniting (0.023). Why? Because \"enhanced\" suggests doping, so honest+dividing. For \"GAME SHOWS\", the word \"game\" suggests play, but \"shows\" suggests performance.\n\nMaybe the distribution will be similar to \"@SHL0MS\" which is a username? Not helpful.\n\nLet's think about the semantics of the four quadrants in context of \"Mixed Messages\". The project likely examines how language can be interpreted as sincere or performative, unifying or divisive. For entertainment media like game shows, likely seen as performative and unifying (mass entertainment creates collective experience). But also divisive because they promote competition.\n\nWhich is more likely? Let's assign: performed+uniting: 0.45, honest+uniting: 0.05, performed+dividing: 0.40, honest+dividing: 0.10. Sum 1.00.\n\nBut we need at least three decimal places. Let's craft: performed+uniting 0.420, honest+uniting 0.080, performed+dividing 0.380, honest+dividing 0.120. Sum 1.000.\n\nHowever, looking at previous examples, they have quite extreme distributions (one quadrant >0.6). Maybe this audience tends to have strong consensus? The example with 214 submissions had 0.76 in one quadrant. The 1093 submissions had 0.566. The 113 had 0.619. So likely one quadrant dominates.\n\nWhat would be dominant for GAME SHOWS? Likely performed+uniting or performed+dividing. Which one? Let's decide performed+uniting as dominant because game shows are a shared cultural experience, but performed because they are staged. So false unity. Let's say 0.650? But need others sum to 0.35.\n\nLet's choose: performed+uniting: 0.612, honest+uniting: 0.064, performed+dividing: 0.102, honest+dividing: 0.222. Sum = 1.000? 0.612+0.064=0.676, +0.102=0.778, +0.222=1.000. Yes! That mirrors @SHL0MS pattern: high performed+uniting (0.566), low honest+uniting (0.064), performed+dividing (0.088), honest+dividing (0.282). So similar: 0.612, 0.064, 0.102, 0.222.\n\nBut is honest+dividing plausible? Game shows truthfully fracture us? Maybe because they highlight inequality? Not sure.\n\nAlternatively dominant honest+dividing: 0.650? But game shows are not honest.\n\nI think performed+uniting is best. Let's set: 0.58, 0.08, 0.12, 0.22 => sum 1.00.\n\nLet's do more precise: performed+uniting: 0.584, honest+uniting: 0.073, performed+dividing: 0.118, honest+dividing: 0.225. Sum: 0.584+0.073=0.657, +0.118=0.775, +0.225=1.000. Perfect.\n\nThese values are plausible.\n\nCheck sum exactly 1.000. Yes.\n\nReturn as JSON.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 505,
+          "completion_tokens": 1471,
+          "total_tokens": 1976,
+          "cost": 0.00194765,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 128,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00194765,
+            "upstream_inference_prompt_cost": 0.00018245,
+            "upstream_inference_completions_cost": 0.0017652
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1369,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "DeepInfra",
+      "usage": {
+        "prompt_tokens": 505,
+        "completion_tokens": 1471,
+        "total_tokens": 1976,
+        "cost": 0.00194765,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 128,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00194765,
+          "upstream_inference_prompt_cost": 0.00018245,
+          "upstream_inference_completions_cost": 0.0017652
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1369,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 123,
+      "finishedAt": "2026-11-15T08:03:35.485Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 9
+      },
+      "observation": {
+        "ok": true,
+        "id": 9,
+        "prompt": "THE ENHANCED GAMES",
+        "distribution": {
+          "performed+uniting": 0.02336448598130841,
+          "honest+uniting": 0.1822429906542056,
+          "performed+dividing": 0.03271028037383177,
+          "honest+dividing": 0.7616822429906542
+        },
+        "submissions": 214,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 8
+      },
+      "observation": {
+        "ok": true,
+        "id": 8,
+        "prompt": "@SHL0MS",
+        "distribution": {
+          "performed+uniting": 0.5663311985361391,
+          "honest+uniting": 0.06404391582799634,
+          "performed+dividing": 0.0878316559926807,
+          "honest+dividing": 0.2817932296431839
+        },
+        "submissions": 1093,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 87
+      },
+      "observation": {
+        "ok": true,
+        "id": 87,
+        "prompt": "SAME-SEX MARRIAGE",
+        "distribution": {
+          "performed+uniting": 0.02654867256637168,
+          "honest+uniting": 0.6194690265486725,
+          "performed+dividing": 0.02654867256637168,
+          "honest+dividing": 0.3274336283185841
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.584,
+          "honest+uniting": 0.073,
+          "performed+dividing": 0.118,
+          "honest+dividing": 0.225
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.5840000000000001,
+      "honest+uniting": 0.07300000000000001,
+      "performed+dividing": 0.11800000000000001,
+      "honest+dividing": 0.22500000000000003
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.0342443727515425,
+    "score": 98.28778136242288,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

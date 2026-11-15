@@ -1,0 +1,607 @@
+{
+  "day": 147,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"JOE ROGAN\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":60,\"prompt\":\"REPUBLICANS\",\"distribution\":{\"performed+uniting\":0.071875,\"honest+uniting\":0.128125,\"performed+dividing\":0.4,\"honest+dividing\":0.4},\"submissions\":320},{\"id\":24,\"prompt\":\"DONALD TRUMP\",\"distribution\":{\"performed+uniting\":0.0027100271002710027,\"honest+uniting\":0,\"performed+dividing\":0.13821138211382114,\"honest+dividing\":0.8590785907859079},\"submissions\":738},{\"id\":54,\"prompt\":\"GEN ALPHA\",\"distribution\":{\"performed+uniting\":0.2727272727272727,\"honest+uniting\":0.34710743801652894,\"performed+dividing\":0.23140495867768596,\"honest+dividing\":0.1487603305785124},\"submissions\":121}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:29:06.455Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.080,\"honest+uniting\":0.120,\"performed+dividing\":0.350,\"honest+dividing\":0.450}",
+      "response": {
+        "id": "gen-1794716946-6o95G8uVGasbhALemq36",
+        "object": "chat.completion",
+        "created": 1794716946,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.080,\"honest+uniting\":0.120,\"performed+dividing\":0.350,\"honest+dividing\":0.450}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"JOE ROGAN\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"REPUBLICANS\": performed+uniting: 0.071875, honest+uniting: 0.128125, performed+dividing: 0.4, honest+dividing: 0.4 (sum = 1.0). Submissions 320.\n2. \"DONALD TRUMP\": performed+uniting: 0.00271, honest+uniting: 0, performed+dividing: 0.13821, honest+dividing: 0.85908 (sum ~1.0). Submissions 738.\n3. \"GEN ALPHA\": performed+uniting: 0.2727, honest+uniting: 0.3471, performed+dividing: 0.2314, honest+dividing: 0.1488 (sum ~1.0). Submissions 121.\n\nWe need to estimate for \"JOE ROGAN\". Joe Rogan is a polarizing figure: comedian, podcast host, associated with controversial interviews, sometimes seen as bridging divides (talking to different people) but also criticized for spreading misinformation, platforming controversial figures, possibly exploiting divisions for clicks (performed dividing) or honestly fracturing (honest dividing) due to his views. Compared to Trump (very high honest dividing, low uniting), Republicans (high dividing both performed and honest, low uniting), Gen Alpha (more uniting, less dividing). Joe Rogan is a person, not a political party or generation. He is often seen as someone who \"brings people together\" by having conversations (honest uniting? performed uniting?), but also heavily criticized for dividing by platforming extremists, misinformation, etc. The audience in this project seems to be art participants, likely left-leaning or culturally aware? The Trump example shows huge honest dividing (0.859) and almost no uniting, suggesting they see Trump as fracturing us truthfully. Republicans similarly high dividing (0.8 total). For Rogan, maybe similar but less extreme: he is not a politician but a media figure. Some might see him as authentically bringing together (honest uniting) because he talks to both sides, but others see him as exploiting divisions for profit (performed dividing) or honestly fracturing (honest dividing) due to his influence. Performed uniting might be low (like Trump's near zero, Republicans 0.07). Honest uniting maybe some (like maybe 0.1-0.2). Performed dividing maybe moderate (0.2-0.3). Honest dividing maybe high (0.4-0.6). Let's think.\n\nWe need to output a single JSON object with four keys, probabilities sum to 1. Use at least three decimal places when needed.\n\nWe can base on analogies: Trump: honest dividing 0.859, performed dividing 0.138, performed uniting 0.003, honest uniting 0. So Trump is seen almost entirely as dividing truthfully. Republicans: dividing total 0.8 (0.4 each), uniting total 0.2 (0.07 performed, 0.128 honest). So Republicans slightly more uniting than Trump but still mostly dividing. Gen Alpha: uniting total ~0.62, dividing total ~0.38. So a generation is seen more as uniting.\n\nJoe Rogan is an individual media personality. He might be seen as more like Trump in divisiveness but perhaps less purely honest dividing because some see his \"curiosity\" as bridging. However, the project's audience might be critical: Rogan is often criticized for \"creating false unity\" by pretending to be centrist while amplifying divisive content? That's performed uniting? Or performed dividing? \"Performed+uniting: creating false unity among us\" - that would be like pretending to bring us together but it's fake. Rogan might be seen as doing that: he says he's just asking questions, bringing people together, but actually it's false unity. That could be performed+uniting. Or he could be seen as exploiting divisions deliberately (performed dividing) for fame/money. Honest dividing would be he genuinely fractures us because he truly believes/contributes to fracture. Honest uniting would be he authentically brings us together.\n\nGiven the examples, performed+uniting is low for political negatives (Trump near 0, Republicans 0.07). For Gen Alpha it's 0.27. So performed uniting is higher for less loaded subjects. Rogan is loaded, so performed uniting likely low-moderate. Honest uniting also low for Trump (0), Republicans 0.128, Gen Alpha 0.347. So Rogan maybe between Republicans and Gen Alpha: maybe honest uniting ~0.15? Performed uniting ~0.05? Then dividing: performed dividing maybe 0.25, honest dividing maybe 0.55? Sum: 0.05+0.15+0.25+0.55=1.0.\n\nBut we should consider that Rogan is a podcaster who interviews people across spectrum; some fans think he unites, but the art audience might be cynical. The historical examples: For Trump, honest dividing dominates. For Republicans, both dividing types equal. That suggests that for a political outgroup, they assign dividing. Rogan might be seen as more of a cultural figure, not strictly political, but associated with right-wing talking points. Could be similar to Republicans but slightly more performed uniting because he portrays himself as a unifier. Let's propose:\n\nperformed+uniting: 0.08 (similar to Republicans 0.0719, maybe a bit higher because Rogan explicitly claims to unite)\nhonest+uniting: 0.12 (similar to Republicans 0.128)\nperformed+dividing: 0.30 (higher than Republicans 0.4? Actually Republicans performed dividing 0.4, but maybe Rogan is more deliberately exploiting divisions for clout, so 0.35?)\nhonest+dividing: 0.50 (less than Trump's 0.859, less than Republicans 0.4? Wait Republicans honest dividing 0.4, performed 0.4. If we set honest dividing 0.50, performed dividing 0.30, total dividing 0.80, same as Republicans total dividing. That seems plausible: Rogan is similarly divisive as Republicans overall. But maybe more performed dividing because he's an individual profiting. So performed dividing 0.35, honest dividing 0.45, total 0.80. Then uniting total 0.20: performed uniting 0.08, honest uniting 0.12. Sum = 1.0.\n\nAlternatively, maybe honest dividing is higher because his impact is genuinely fracturing. Look at Trump honest dividing 0.859, performed dividing 0.138. So for Trump, they think he truthfully fractures, not just performing. For Rogan, maybe they think he is less intentionally evil but still fractures honestly? Could be honest dividing 0.6, performed dividing 0.2, uniting 0.2 (0.05 performed, 0.15 honest). That gives 0.05+0.15+0.2+0.6=1.0.\n\nWe need to pick something reasonable. Since the instruction says \"These are this audience's interpretations, not objective labels. Reply with a single JSON object only.\" We should infer from examples. The examples show that for political entities (Republicans, Trump) dividing dominates. For a demographic cohort (Gen Alpha) uniting dominates. Joe Rogan is a specific person, controversial, but not a party. He might be viewed as more like a political figure but slightly less extreme than Trump. So maybe:\n\nperformed+uniting: 0.05\nhonest+uniting: 0.10\nperformed+dividing: 0.25\nhonest+dividing: 0.60\n\nSum = 1.00. Use three decimals: 0.050, 0.100, 0.250, 0.600.\n\nBut we could also mirror Republicans but shift some from performed dividing to honest dividing? Republicans: pu 0.071875, hu 0.128125, pd 0.4, hd 0.4. If we think Rogan is more of a performer (podcast) so performed dividing higher, honest dividing lower? Actually \"performed+dividing: exploiting our divisions, deliberately\" - that fits a media figure who monetizes controversy. So pd might be >0.4, hd <0.4. And pu maybe slightly higher because he performs unity. So pu 0.1, hu 0.1, pd 0.45, hd 0.35 => sum 1.0. That seems plausible.\n\nLet's examine the phrasing: \"performed+uniting: creating false unity among us\" - Rogan might be seen as creating false unity by having \"civil conversations\" that mask deep conflicts. So pu maybe 0.1. \"honest+uniting: bringing us together, authentically\" - some might credit him with authentic bridging, but likely low, hu 0.1. \"performed+dividing: exploiting our divisions, deliberately\" - he deliberately has guests that stir controversy, so pd 0.4. \"honest+dividing: fracturing us, truthfully\" - his words genuinely fracture, hd 0.4. That's exactly Republicans distribution roughly. But maybe Rogan is more performer, so pu up a bit, hu down a bit, pd up, hd down. Let's set:\n\npu: 0.1\nhu: 0.08\npd: 0.42\nhd: 0.40\nSum = 1.0. Use decimals: 0.100, 0.080, 0.420, 0.400.\n\nBut we need at least three decimal places when needed; we can provide 0.100 etc.\n\nAlternatively, we could use the exact Republicans numbers but tweak: pu 0.072, hu 0.128, pd 0.4, hd 0.4 is for Republicans. Rogan might be a bit more pd because individual grifter: pu 0.08, hu 0.10, pd 0.45, hd 0.37 => sum 1.0.\n\nI think a balanced estimate: performed+uniting: 0.08, honest+uniting: 0.12, performed+dividing: 0.35, honest+dividing: 0.45. Sum = 1.0. That gives total dividing 0.80, total uniting 0.20, similar to Republicans but with more honest dividing than performed dividing (like Trump but less extreme). Actually Trump had hd 0.859, pd 0.138. So hd > pd. Republicans had equal. Rogan maybe hd > pd but not as extreme: hd 0.45, pd 0.35. That seems plausible.\n\nLet's finalize with:\n{\"performed+uniting\": 0.080, \"honest+uniting\": 0.120, \"performed+dividing\": 0.350, \"honest+dividing\": 0.450}\n\nCheck sum: 0.08+0.12=0.2, 0.35+0.45=0.8, total 1.0. Good.\n\nWe should output only the JSON object, no prose, no code fences. So exactly:\n{\"performed+uniting\":0.080,\"honest+uniting\":0.120,\"performed+dividing\":0.350,\"honest+dividing\":0.450}\n\nBut ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nWe could also use more decimals: 0.08 is fine as 0.080? It's numeric, 0.08 is same. But instruction: \"Use at least three decimal places when needed.\" It's not needed if trailing zeros not required, but we can provide 0.080 to be safe. However JSON numbers don't retain trailing zeros; but we can write 0.080 as 0.08. It's fine. I'll write 0.08, 0.12, 0.35, 0.45. But to be precise, I'll write 0.080, 0.120, 0.350, 0.450 as numbers (parser will treat as 0.08 etc). That's acceptable.\n\nI'll output:\n{\"performed+uniting\":0.080,\"honest+uniting\":0.120,\"performed+dividing\":0.350,\"honest+dividing\":0.450}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"JOE ROGAN\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"REPUBLICANS\": performed+uniting: 0.071875, honest+uniting: 0.128125, performed+dividing: 0.4, honest+dividing: 0.4 (sum = 1.0). Submissions 320.\n2. \"DONALD TRUMP\": performed+uniting: 0.00271, honest+uniting: 0, performed+dividing: 0.13821, honest+dividing: 0.85908 (sum ~1.0). Submissions 738.\n3. \"GEN ALPHA\": performed+uniting: 0.2727, honest+uniting: 0.3471, performed+dividing: 0.2314, honest+dividing: 0.1488 (sum ~1.0). Submissions 121.\n\nWe need to estimate for \"JOE ROGAN\". Joe Rogan is a polarizing figure: comedian, podcast host, associated with controversial interviews, sometimes seen as bridging divides (talking to different people) but also criticized for spreading misinformation, platforming controversial figures, possibly exploiting divisions for clicks (performed dividing) or honestly fracturing (honest dividing) due to his views. Compared to Trump (very high honest dividing, low uniting), Republicans (high dividing both performed and honest, low uniting), Gen Alpha (more uniting, less dividing). Joe Rogan is a person, not a political party or generation. He is often seen as someone who \"brings people together\" by having conversations (honest uniting? performed uniting?), but also heavily criticized for dividing by platforming extremists, misinformation, etc. The audience in this project seems to be art participants, likely left-leaning or culturally aware? The Trump example shows huge honest dividing (0.859) and almost no uniting, suggesting they see Trump as fracturing us truthfully. Republicans similarly high dividing (0.8 total). For Rogan, maybe similar but less extreme: he is not a politician but a media figure. Some might see him as authentically bringing together (honest uniting) because he talks to both sides, but others see him as exploiting divisions for profit (performed dividing) or honestly fracturing (honest dividing) due to his influence. Performed uniting might be low (like Trump's near zero, Republicans 0.07). Honest uniting maybe some (like maybe 0.1-0.2). Performed dividing maybe moderate (0.2-0.3). Honest dividing maybe high (0.4-0.6). Let's think.\n\nWe need to output a single JSON object with four keys, probabilities sum to 1. Use at least three decimal places when needed.\n\nWe can base on analogies: Trump: honest dividing 0.859, performed dividing 0.138, performed uniting 0.003, honest uniting 0. So Trump is seen almost entirely as dividing truthfully. Republicans: dividing total 0.8 (0.4 each), uniting total 0.2 (0.07 performed, 0.128 honest). So Republicans slightly more uniting than Trump but still mostly dividing. Gen Alpha: uniting total ~0.62, dividing total ~0.38. So a generation is seen more as uniting.\n\nJoe Rogan is an individual media personality. He might be seen as more like Trump in divisiveness but perhaps less purely honest dividing because some see his \"curiosity\" as bridging. However, the project's audience might be critical: Rogan is often criticized for \"creating false unity\" by pretending to be centrist while amplifying divisive content? That's performed uniting? Or performed dividing? \"Performed+uniting: creating false unity among us\" - that would be like pretending to bring us together but it's fake. Rogan might be seen as doing that: he says he's just asking questions, bringing people together, but actually it's false unity. That could be performed+uniting. Or he could be seen as exploiting divisions deliberately (performed dividing) for fame/money. Honest dividing would be he genuinely fractures us because he truly believes/contributes to fracture. Honest uniting would be he authentically brings us together.\n\nGiven the examples, performed+uniting is low for political negatives (Trump near 0, Republicans 0.07). For Gen Alpha it's 0.27. So performed uniting is higher for less loaded subjects. Rogan is loaded, so performed uniting likely low-moderate. Honest uniting also low for Trump (0), Republicans 0.128, Gen Alpha 0.347. So Rogan maybe between Republicans and Gen Alpha: maybe honest uniting ~0.15? Performed uniting ~0.05? Then dividing: performed dividing maybe 0.25, honest dividing maybe 0.55? Sum: 0.05+0.15+0.25+0.55=1.0.\n\nBut we should consider that Rogan is a podcaster who interviews people across spectrum; some fans think he unites, but the art audience might be cynical. The historical examples: For Trump, honest dividing dominates. For Republicans, both dividing types equal. That suggests that for a political outgroup, they assign dividing. Rogan might be seen as more of a cultural figure, not strictly political, but associated with right-wing talking points. Could be similar to Republicans but slightly more performed uniting because he portrays himself as a unifier. Let's propose:\n\nperformed+uniting: 0.08 (similar to Republicans 0.0719, maybe a bit higher because Rogan explicitly claims to unite)\nhonest+uniting: 0.12 (similar to Republicans 0.128)\nperformed+dividing: 0.30 (higher than Republicans 0.4? Actually Republicans performed dividing 0.4, but maybe Rogan is more deliberately exploiting divisions for clout, so 0.35?)\nhonest+dividing: 0.50 (less than Trump's 0.859, less than Republicans 0.4? Wait Republicans honest dividing 0.4, performed 0.4. If we set honest dividing 0.50, performed dividing 0.30, total dividing 0.80, same as Republicans total dividing. That seems plausible: Rogan is similarly divisive as Republicans overall. But maybe more performed dividing because he's an individual profiting. So performed dividing 0.35, honest dividing 0.45, total 0.80. Then uniting total 0.20: performed uniting 0.08, honest uniting 0.12. Sum = 1.0.\n\nAlternatively, maybe honest dividing is higher because his impact is genuinely fracturing. Look at Trump honest dividing 0.859, performed dividing 0.138. So for Trump, they think he truthfully fractures, not just performing. For Rogan, maybe they think he is less intentionally evil but still fractures honestly? Could be honest dividing 0.6, performed dividing 0.2, uniting 0.2 (0.05 performed, 0.15 honest). That gives 0.05+0.15+0.2+0.6=1.0.\n\nWe need to pick something reasonable. Since the instruction says \"These are this audience's interpretations, not objective labels. Reply with a single JSON object only.\" We should infer from examples. The examples show that for political entities (Republicans, Trump) dividing dominates. For a demographic cohort (Gen Alpha) uniting dominates. Joe Rogan is a specific person, controversial, but not a party. He might be viewed as more like a political figure but slightly less extreme than Trump. So maybe:\n\nperformed+uniting: 0.05\nhonest+uniting: 0.10\nperformed+dividing: 0.25\nhonest+dividing: 0.60\n\nSum = 1.00. Use three decimals: 0.050, 0.100, 0.250, 0.600.\n\nBut we could also mirror Republicans but shift some from performed dividing to honest dividing? Republicans: pu 0.071875, hu 0.128125, pd 0.4, hd 0.4. If we think Rogan is more of a performer (podcast) so performed dividing higher, honest dividing lower? Actually \"performed+dividing: exploiting our divisions, deliberately\" - that fits a media figure who monetizes controversy. So pd might be >0.4, hd <0.4. And pu maybe slightly higher because he performs unity. So pu 0.1, hu 0.1, pd 0.45, hd 0.35 => sum 1.0. That seems plausible.\n\nLet's examine the phrasing: \"performed+uniting: creating false unity among us\" - Rogan might be seen as creating false unity by having \"civil conversations\" that mask deep conflicts. So pu maybe 0.1. \"honest+uniting: bringing us together, authentically\" - some might credit him with authentic bridging, but likely low, hu 0.1. \"performed+dividing: exploiting our divisions, deliberately\" - he deliberately has guests that stir controversy, so pd 0.4. \"honest+dividing: fracturing us, truthfully\" - his words genuinely fracture, hd 0.4. That's exactly Republicans distribution roughly. But maybe Rogan is more performer, so pu up a bit, hu down a bit, pd up, hd down. Let's set:\n\npu: 0.1\nhu: 0.08\npd: 0.42\nhd: 0.40\nSum = 1.0. Use decimals: 0.100, 0.080, 0.420, 0.400.\n\nBut we need at least three decimal places when needed; we can provide 0.100 etc.\n\nAlternatively, we could use the exact Republicans numbers but tweak: pu 0.072, hu 0.128, pd 0.4, hd 0.4 is for Republicans. Rogan might be a bit more pd because individual grifter: pu 0.08, hu 0.10, pd 0.45, hd 0.37 => sum 1.0.\n\nI think a balanced estimate: performed+uniting: 0.08, honest+uniting: 0.12, performed+dividing: 0.35, honest+dividing: 0.45. Sum = 1.0. That gives total dividing 0.80, total uniting 0.20, similar to Republicans but with more honest dividing than performed dividing (like Trump but less extreme). Actually Trump had hd 0.859, pd 0.138. So hd > pd. Republicans had equal. Rogan maybe hd > pd but not as extreme: hd 0.45, pd 0.35. That seems plausible.\n\nLet's finalize with:\n{\"performed+uniting\": 0.080, \"honest+uniting\": 0.120, \"performed+dividing\": 0.350, \"honest+dividing\": 0.450}\n\nCheck sum: 0.08+0.12=0.2, 0.35+0.45=0.8, total 1.0. Good.\n\nWe should output only the JSON object, no prose, no code fences. So exactly:\n{\"performed+uniting\":0.080,\"honest+uniting\":0.120,\"performed+dividing\":0.350,\"honest+dividing\":0.450}\n\nBut ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nWe could also use more decimals: 0.08 is fine as 0.080? It's numeric, 0.08 is same. But instruction: \"Use at least three decimal places when needed.\" It's not needed if trailing zeros not required, but we can provide 0.080 to be safe. However JSON numbers don't retain trailing zeros; but we can write 0.080 as 0.08. It's fine. I'll write 0.08, 0.12, 0.35, 0.45. But to be precise, I'll write 0.080, 0.120, 0.350, 0.450 as numbers (parser will treat as 0.08 etc). That's acceptable.\n\nI'll output:\n{\"performed+uniting\":0.080,\"honest+uniting\":0.120,\"performed+dividing\":0.350,\"honest+dividing\":0.450}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 481,
+          "completion_tokens": 2894,
+          "total_tokens": 3375,
+          "cost": 0.001591524,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001591524,
+            "upstream_inference_prompt_cost": 0.000063492,
+            "upstream_inference_completions_cost": 0.001528032
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2851,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 481,
+        "completion_tokens": 2894,
+        "total_tokens": 3375,
+        "cost": 0.001591524,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001591524,
+          "upstream_inference_prompt_cost": 0.000063492,
+          "upstream_inference_completions_cost": 0.001528032
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2851,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 62,
+      "finishedAt": "2026-11-15T04:29:39.600Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 60
+      },
+      "observation": {
+        "ok": true,
+        "id": 60,
+        "prompt": "REPUBLICANS",
+        "distribution": {
+          "performed+uniting": 0.071875,
+          "honest+uniting": 0.128125,
+          "performed+dividing": 0.4,
+          "honest+dividing": 0.4
+        },
+        "submissions": 320,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 24
+      },
+      "observation": {
+        "ok": true,
+        "id": 24,
+        "prompt": "DONALD TRUMP",
+        "distribution": {
+          "performed+uniting": 0.0027100271002710027,
+          "honest+uniting": 0,
+          "performed+dividing": 0.13821138211382114,
+          "honest+dividing": 0.8590785907859079
+        },
+        "submissions": 738,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 54
+      },
+      "observation": {
+        "ok": true,
+        "id": 54,
+        "prompt": "GEN ALPHA",
+        "distribution": {
+          "performed+uniting": 0.2727272727272727,
+          "honest+uniting": 0.34710743801652894,
+          "performed+dividing": 0.23140495867768596,
+          "honest+dividing": 0.1487603305785124
+        },
+        "submissions": 121,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.08,
+          "honest+uniting": 0.12,
+          "performed+dividing": 0.35,
+          "honest+dividing": 0.45
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.08,
+      "honest+uniting": 0.12,
+      "performed+dividing": 0.35,
+      "honest+dividing": 0.45
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.2821268698060942,
+    "score": 85.89365650969529,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

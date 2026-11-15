@@ -1,0 +1,607 @@
+{
+  "day": 135,
+  "strategy": "random",
+  "request": {
+    "model": "openai/gpt-oss-120b",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"SITCOMS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":28,\"prompt\":\"CANCEL CULTURE\",\"distribution\":{\"performed+uniting\":0.08823529411764706,\"honest+uniting\":0.014705882352941176,\"performed+dividing\":0.35294117647058826,\"honest+dividing\":0.5441176470588235},\"submissions\":136},{\"id\":2,\"prompt\":\"CONTENT CREATORS\",\"distribution\":{\"performed+uniting\":0.1320754716981132,\"honest+uniting\":0.09433962264150944,\"performed+dividing\":0.16981132075471697,\"honest+dividing\":0.6037735849056604},\"submissions\":53},{\"id\":98,\"prompt\":\"JOE BIDEN\",\"distribution\":{\"performed+uniting\":0.1322314049586777,\"honest+uniting\":0.09090909090909091,\"performed+dividing\":0.45041322314049587,\"honest+dividing\":0.32644628099173556},\"submissions\":242}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "dekallm/bf16"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.03,
+        "completion": 0.18,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T08:20:03.432Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.205,\"honest+uniting\":0.250,\"performed+dividing\":0.300,\"honest+dividing\":0.245}",
+      "response": {
+        "id": "gen-1794730803-qldcDBPvt9pcdO04A5pJ",
+        "object": "chat.completion",
+        "created": 1794730803,
+        "model": "openai/gpt-oss-120b",
+        "provider": "DekaLLM",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.205,\"honest+uniting\":0.250,\"performed+dividing\":0.300,\"honest+dividing\":0.245}",
+              "refusal": null,
+              "reasoning": "We need to predict distribution for prompt \"SITCOMS\". Use historical examples: three prompts with distributions.\n\nWe need to infer likely pattern. Let's examine each:\n\nPrompt \"CANCEL CULTURE\": performed+uniting 0.088, honest+uniting 0.015, performed+dividing 0.353, honest+dividing 0.544. So heavily dividing, especially honest dividing.\n\nPrompt \"CONTENT CREATORS\": performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170, honest+dividing 0.604. Also heavily honest dividing.\n\nPrompt \"JOE BIDEN\": performed+uniting 0.132, honest+uniting 0.091, performed+dividing 0.450, honest+dividing 0.326. More balanced but still dividing overall (0.776 total dividing). Performed dividing higher than honest dividing.\n\nSo overall audience tends to produce dividing responses, especially honest dividing for cultural topics, but for political figure, performed dividing higher.\n\nNow \"SITCOMS\" is a cultural entertainment topic. Likely to evoke nostalgia, unity, but also critique. Could be both uniting and dividing. Might have more honest+uniting? Sitcoms often bring people together, but also can be critiqued for stereotypes (dividing). Might be less political, so perhaps more honest+uniting and performed+uniting than dividing? But previous \"CANCEL CULTURE\" and \"CONTENT CREATORS\" are also cultural topics and were heavily dividing. However those topics are more contentious. Sitcoms maybe less contentious, more nostalgic, could be more uniting.\n\nThus maybe distribution: performed+uniting ~0.20, honest+uniting ~0.25, performed+dividing ~0.30, honest+dividing ~0.25. Sum 1.0.\n\nCheck pattern: dividing still slightly higher than uniting (0.55 vs 0.45). That seems plausible.\n\nWe need at least three decimal places. Provide JSON.\n\nLet's output:\n\n{\"performed+uniting\":0.205,\"honest+uniting\":0.250,\"performed+dividing\":0.300,\"honest+dividing\":0.245}\n\nSum = 1.0.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict distribution for prompt \"SITCOMS\". Use historical examples: three prompts with distributions.\n\nWe need to infer likely pattern. Let's examine each:\n\nPrompt \"CANCEL CULTURE\": performed+uniting 0.088, honest+uniting 0.015, performed+dividing 0.353, honest+dividing 0.544. So heavily dividing, especially honest dividing.\n\nPrompt \"CONTENT CREATORS\": performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170, honest+dividing 0.604. Also heavily honest dividing.\n\nPrompt \"JOE BIDEN\": performed+uniting 0.132, honest+uniting 0.091, performed+dividing 0.450, honest+dividing 0.326. More balanced but still dividing overall (0.776 total dividing). Performed dividing higher than honest dividing.\n\nSo overall audience tends to produce dividing responses, especially honest dividing for cultural topics, but for political figure, performed dividing higher.\n\nNow \"SITCOMS\" is a cultural entertainment topic. Likely to evoke nostalgia, unity, but also critique. Could be both uniting and dividing. Might have more honest+uniting? Sitcoms often bring people together, but also can be critiqued for stereotypes (dividing). Might be less political, so perhaps more honest+uniting and performed+uniting than dividing? But previous \"CANCEL CULTURE\" and \"CONTENT CREATORS\" are also cultural topics and were heavily dividing. However those topics are more contentious. Sitcoms maybe less contentious, more nostalgic, could be more uniting.\n\nThus maybe distribution: performed+uniting ~0.20, honest+uniting ~0.25, performed+dividing ~0.30, honest+dividing ~0.25. Sum 1.0.\n\nCheck pattern: dividing still slightly higher than uniting (0.55 vs 0.45). That seems plausible.\n\nWe need at least three decimal places. Provide JSON.\n\nLet's output:\n\n{\"performed+uniting\":0.205,\"honest+uniting\":0.250,\"performed+dividing\":0.300,\"honest+dividing\":0.245}\n\nSum = 1.0.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 555,
+          "completion_tokens": 529,
+          "total_tokens": 1084,
+          "cost": 0.00011187,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 32,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00011187,
+            "upstream_inference_prompt_cost": 0.00001665,
+            "upstream_inference_completions_cost": 0.00009522
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 484,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "DekaLLM",
+      "usage": {
+        "prompt_tokens": 555,
+        "completion_tokens": 529,
+        "total_tokens": 1084,
+        "cost": 0.00011187,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 32,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00011187,
+          "upstream_inference_prompt_cost": 0.00001665,
+          "upstream_inference_completions_cost": 0.00009522
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 484,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 50,
+      "finishedAt": "2026-11-15T08:20:17.447Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 28
+      },
+      "observation": {
+        "ok": true,
+        "id": 28,
+        "prompt": "CANCEL CULTURE",
+        "distribution": {
+          "performed+uniting": 0.08823529411764706,
+          "honest+uniting": 0.014705882352941176,
+          "performed+dividing": 0.35294117647058826,
+          "honest+dividing": 0.5441176470588235
+        },
+        "submissions": 136,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 2
+      },
+      "observation": {
+        "ok": true,
+        "id": 2,
+        "prompt": "CONTENT CREATORS",
+        "distribution": {
+          "performed+uniting": 0.1320754716981132,
+          "honest+uniting": 0.09433962264150944,
+          "performed+dividing": 0.16981132075471697,
+          "honest+dividing": 0.6037735849056604
+        },
+        "submissions": 53,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 98
+      },
+      "observation": {
+        "ok": true,
+        "id": 98,
+        "prompt": "JOE BIDEN",
+        "distribution": {
+          "performed+uniting": 0.1322314049586777,
+          "honest+uniting": 0.09090909090909091,
+          "performed+dividing": 0.45041322314049587,
+          "honest+dividing": 0.32644628099173556
+        },
+        "submissions": 242,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.205,
+          "honest+uniting": 0.25,
+          "performed+dividing": 0.3,
+          "honest+dividing": 0.245
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.20500000000000002,
+      "honest+uniting": 0.25000000000000006,
+      "performed+dividing": 0.30000000000000004,
+      "honest+dividing": 0.24500000000000002
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.4484340830449828,
+    "score": 77.57829584775087,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

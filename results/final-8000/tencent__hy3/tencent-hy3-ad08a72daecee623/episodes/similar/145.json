@@ -1,0 +1,607 @@
+{
+  "day": 145,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"AI SAFETY\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":7,\"prompt\":\"AI PSYCHOSIS\",\"distribution\":{\"performed+uniting\":0.27586206896551724,\"honest+uniting\":0.014778325123152709,\"performed+dividing\":0.6699507389162561,\"honest+dividing\":0.03940886699507389},\"submissions\":203},{\"id\":58,\"prompt\":\"SOBRIETY\",\"distribution\":{\"performed+uniting\":0.21929824561403508,\"honest+uniting\":0.2777777777777778,\"performed+dividing\":0.23976608187134502,\"honest+dividing\":0.2631578947368421},\"submissions\":342},{\"id\":87,\"prompt\":\"SAME-SEX MARRIAGE\",\"distribution\":{\"performed+uniting\":0.02654867256637168,\"honest+uniting\":0.6194690265486725,\"performed+dividing\":0.02654867256637168,\"honest+dividing\":0.3274336283185841},\"submissions\":113}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:53:06.528Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.350,\"honest+uniting\":0.080,\"performed+dividing\":0.470,\"honest+dividing\":0.100}",
+      "response": {
+        "id": "gen-1794718386-XuHkT0VreY5MYYTsbnLV",
+        "object": "chat.completion",
+        "created": 1794718386,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.350,\"honest+uniting\":0.080,\"performed+dividing\":0.470,\"honest+dividing\":0.100}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"AI SAFETY\" from participants in Mixed Messages, a generative art project. The audience interpretations are not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given three historical examples:\n1. \"AI PSYCHOSIS\": performed+uniting 0.2759, honest+uniting 0.0148, performed+dividing 0.6699, honest+dividing 0.0394. Submissions 203. This suggests for AI-related negative concept (psychosis), the audience sees it as mostly performed dividing (exploiting divisions deliberately) and some performed uniting (false unity), very little honest uniting or honest dividing.\n2. \"SOBRIETY\": performed+uniting 0.2193, honest+uniting 0.2778, performed+dividing 0.2398, honest+dividing 0.2632. More balanced, with honest uniting and honest dividing relatively high.\n3. \"SAME-SEX MARRIAGE\": performed+uniting 0.0265, honest+uniting 0.6195, performed+dividing 0.0265, honest+dividing 0.3274. Strong honest uniting, some honest dividing, almost no performed.\n\nNow we need to estimate for \"AI SAFETY\". AI SAFETY is a topic related to AI, but with a safety connotation, possibly more positive or concerned with protection. However, the audience might be cynical about AI safety as a concept: maybe they see it as performed uniting (false unity, like tech leaders pretending to care) or performed dividing (exploiting divisions about AI fears) or honest dividing (truthfully fracturing us due to real concerns) or honest uniting (authentically bringing us together to address risks).\n\nGiven the AI PSYCHOSIS example, which is also AI-related, the distribution was heavily performed+dividing (0.67) and performed+uniting (0.276). That suggests the audience is skeptical of AI-related topics, seeing them as performative and divisive. AI SAFETY might be similar: people might think it's a buzzword used to exploit divisions (e.g., fearmongering or corporate capture) or to create false unity (e.g., \"we're all in this together\" while not addressing real issues). However, AI SAFETY could also be seen as honestly uniting (people genuinely coming together to make AI safe) or honestly dividing (real fractures about how to do safety). But compared to AI PSYCHOSIS, safety is less alarming, maybe more policy-oriented.\n\nWe should consider the patterns: For AI PSYCHOSIS, honest categories are very low (0.0148 and 0.0394). For SOBRIETY (non-AI, personal), honest categories are high. For SAME-SEX MARRIAGE (social issue), honest uniting dominates. So AI topics seem to trigger performative interpretations. Thus for AI SAFETY, we should expect performed categories to dominate, with perhaps a bit more honest uniting than AI PSYCHOSIS because safety could be seen as a genuine collaborative effort, but still likely performative.\n\nLet's approximate: AI PSYCHOSIS: perf_unite 0.276, perf_div 0.670, honest_unite 0.015, honest_div 0.039. Sum = 1. For AI SAFETY, maybe the \"safety\" aspect reduces the divisive exploitation a bit and increases false unity (like PR around safety) and maybe some honest uniting. Could be something like: performed+uniting 0.35, performed+dividing 0.45, honest+uniting 0.10, honest+dividing 0.10. Or maybe more balanced but still performative majority.\n\nWe need to output a JSON object with four keys, probabilities sum to 1, at least three decimals if needed. We can choose numbers that sum exactly to 1.\n\nLet's think: The audience might interpret \"AI SAFETY\" as a term used by those in power to either unify (we need safe AI) or divide (different views on safety). Given the historical AI example, performed dividing is highest. But safety is less psychotic, so perhaps performed uniting increases. I'll set:\nperformed+uniting: 0.350\nhonest+uniting: 0.080\nperformed+dividing: 0.470\nhonest+dividing: 0.100\nSum = 1.000. That seems plausible.\n\nAlternatively, we could mimic AI PSYCHOSIS but shift some from dividing to uniting: e.g., perf_unite 0.30, perf_div 0.55, honest_unite 0.05, honest_div 0.10 => sum 1.00. But we need at least three decimals? \"Use at least three decimal places when needed.\" That means if we use 0.350 it's three decimals, fine. We can use 0.35 but better to use 0.350 to be safe. But the instruction says \"when needed\" meaning if not integer, use three decimals. I'll use three decimals for all.\n\nLet's do:\n{\"performed+uniting\":0.350,\"honest+uniting\":0.080,\"performed+dividing\":0.470,\"honest+dividing\":0.100}\n\nCheck sum: 0.350+0.080=0.430; +0.470=0.900; +0.100=1.000. Good.\n\nBut maybe we should be closer to AI PSYCHOSIS but adjust for safety: AI safety might be seen as more uniting because it's a common goal. So perf_unite higher, perf_div lower. AI PSYCHOSIS had perf_div 0.67, perf_unite 0.276. Let's set perf_unite 0.40, perf_div 0.45, honest_unite 0.07, honest_div 0.08 => sum 1.00. That gives more uniting. I think 0.4/0.45/0.07/0.08 is fine.\n\nBut we should also consider that \"honest+dividing\" for AI PSYCHOSIS was 0.039, maybe for safety it's a bit higher because real disagreements exist. I'll go with 0.350, 0.080, 0.470, 0.100 as earlier. Or maybe 0.300, 0.100, 0.500, 0.100. I'll choose something that feels like a plausible prediction.\n\nGiven the instruction: \"Predict the distribution of responses from participants... These are this audience's interpretations... Reply with a single JSON object only.\" So we just need to output the JSON.\n\nI'll output:\n{\"performed+uniting\":0.350,\"honest+uniting\":0.080,\"performed+dividing\":0.470,\"honest+dividing\":0.100}\n\nBut to be more precise with three decimals: 0.350, 0.080, 0.470, 0.100 all have three decimals. Good.\n\nAlternatively, we could use 0.2759, 0.0148, 0.6699, 0.0394 as base and adjust: maybe safety increases honest uniting to 0.05, honest dividing to 0.06, performed uniting to 0.30, performed dividing to 0.59. Sum = 1.00. That is also plausible. I'll go with a mix: performed+uniting 0.300, honest+uniting 0.050, performed+dividing 0.590, honest+dividing 0.060. Sum = 1.000. That is close to AI PSYCHOSIS but slightly more honest. But AI safety might be less divisive than psychosis? Actually safety could be divisive along lines of regulation. I'll stick with my first intuitive: 0.35, 0.08, 0.47, 0.10.\n\nI'll output exactly that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"AI SAFETY\" from participants in Mixed Messages, a generative art project. The audience interpretations are not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given three historical examples:\n1. \"AI PSYCHOSIS\": performed+uniting 0.2759, honest+uniting 0.0148, performed+dividing 0.6699, honest+dividing 0.0394. Submissions 203. This suggests for AI-related negative concept (psychosis), the audience sees it as mostly performed dividing (exploiting divisions deliberately) and some performed uniting (false unity), very little honest uniting or honest dividing.\n2. \"SOBRIETY\": performed+uniting 0.2193, honest+uniting 0.2778, performed+dividing 0.2398, honest+dividing 0.2632. More balanced, with honest uniting and honest dividing relatively high.\n3. \"SAME-SEX MARRIAGE\": performed+uniting 0.0265, honest+uniting 0.6195, performed+dividing 0.0265, honest+dividing 0.3274. Strong honest uniting, some honest dividing, almost no performed.\n\nNow we need to estimate for \"AI SAFETY\". AI SAFETY is a topic related to AI, but with a safety connotation, possibly more positive or concerned with protection. However, the audience might be cynical about AI safety as a concept: maybe they see it as performed uniting (false unity, like tech leaders pretending to care) or performed dividing (exploiting divisions about AI fears) or honest dividing (truthfully fracturing us due to real concerns) or honest uniting (authentically bringing us together to address risks).\n\nGiven the AI PSYCHOSIS example, which is also AI-related, the distribution was heavily performed+dividing (0.67) and performed+uniting (0.276). That suggests the audience is skeptical of AI-related topics, seeing them as performative and divisive. AI SAFETY might be similar: people might think it's a buzzword used to exploit divisions (e.g., fearmongering or corporate capture) or to create false unity (e.g., \"we're all in this together\" while not addressing real issues). However, AI SAFETY could also be seen as honestly uniting (people genuinely coming together to make AI safe) or honestly dividing (real fractures about how to do safety). But compared to AI PSYCHOSIS, safety is less alarming, maybe more policy-oriented.\n\nWe should consider the patterns: For AI PSYCHOSIS, honest categories are very low (0.0148 and 0.0394). For SOBRIETY (non-AI, personal), honest categories are high. For SAME-SEX MARRIAGE (social issue), honest uniting dominates. So AI topics seem to trigger performative interpretations. Thus for AI SAFETY, we should expect performed categories to dominate, with perhaps a bit more honest uniting than AI PSYCHOSIS because safety could be seen as a genuine collaborative effort, but still likely performative.\n\nLet's approximate: AI PSYCHOSIS: perf_unite 0.276, perf_div 0.670, honest_unite 0.015, honest_div 0.039. Sum = 1. For AI SAFETY, maybe the \"safety\" aspect reduces the divisive exploitation a bit and increases false unity (like PR around safety) and maybe some honest uniting. Could be something like: performed+uniting 0.35, performed+dividing 0.45, honest+uniting 0.10, honest+dividing 0.10. Or maybe more balanced but still performative majority.\n\nWe need to output a JSON object with four keys, probabilities sum to 1, at least three decimals if needed. We can choose numbers that sum exactly to 1.\n\nLet's think: The audience might interpret \"AI SAFETY\" as a term used by those in power to either unify (we need safe AI) or divide (different views on safety). Given the historical AI example, performed dividing is highest. But safety is less psychotic, so perhaps performed uniting increases. I'll set:\nperformed+uniting: 0.350\nhonest+uniting: 0.080\nperformed+dividing: 0.470\nhonest+dividing: 0.100\nSum = 1.000. That seems plausible.\n\nAlternatively, we could mimic AI PSYCHOSIS but shift some from dividing to uniting: e.g., perf_unite 0.30, perf_div 0.55, honest_unite 0.05, honest_div 0.10 => sum 1.00. But we need at least three decimals? \"Use at least three decimal places when needed.\" That means if we use 0.350 it's three decimals, fine. We can use 0.35 but better to use 0.350 to be safe. But the instruction says \"when needed\" meaning if not integer, use three decimals. I'll use three decimals for all.\n\nLet's do:\n{\"performed+uniting\":0.350,\"honest+uniting\":0.080,\"performed+dividing\":0.470,\"honest+dividing\":0.100}\n\nCheck sum: 0.350+0.080=0.430; +0.470=0.900; +0.100=1.000. Good.\n\nBut maybe we should be closer to AI PSYCHOSIS but adjust for safety: AI safety might be seen as more uniting because it's a common goal. So perf_unite higher, perf_div lower. AI PSYCHOSIS had perf_div 0.67, perf_unite 0.276. Let's set perf_unite 0.40, perf_div 0.45, honest_unite 0.07, honest_div 0.08 => sum 1.00. That gives more uniting. I think 0.4/0.45/0.07/0.08 is fine.\n\nBut we should also consider that \"honest+dividing\" for AI PSYCHOSIS was 0.039, maybe for safety it's a bit higher because real disagreements exist. I'll go with 0.350, 0.080, 0.470, 0.100 as earlier. Or maybe 0.300, 0.100, 0.500, 0.100. I'll choose something that feels like a plausible prediction.\n\nGiven the instruction: \"Predict the distribution of responses from participants... These are this audience's interpretations... Reply with a single JSON object only.\" So we just need to output the JSON.\n\nI'll output:\n{\"performed+uniting\":0.350,\"honest+uniting\":0.080,\"performed+dividing\":0.470,\"honest+dividing\":0.100}\n\nBut to be more precise with three decimals: 0.350, 0.080, 0.470, 0.100 all have three decimals. Good.\n\nAlternatively, we could use 0.2759, 0.0148, 0.6699, 0.0394 as base and adjust: maybe safety increases honest uniting to 0.05, honest dividing to 0.06, performed uniting to 0.30, performed dividing to 0.59. Sum = 1.00. That is also plausible. I'll go with a mix: performed+uniting 0.300, honest+uniting 0.050, performed+dividing 0.590, honest+dividing 0.060. Sum = 1.000. That is close to AI PSYCHOSIS but slightly more honest. But AI safety might be less divisive than psychosis? Actually safety could be divisive along lines of regulation. I'll stick with my first intuitive: 0.35, 0.08, 0.47, 0.10.\n\nI'll output exactly that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 510,
+          "completion_tokens": 1861,
+          "total_tokens": 2371,
+          "cost": 0.001049928,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001049928,
+            "upstream_inference_prompt_cost": 0.00006732,
+            "upstream_inference_completions_cost": 0.000982608
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1818,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 510,
+        "completion_tokens": 1861,
+        "total_tokens": 2371,
+        "cost": 0.001049928,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001049928,
+          "upstream_inference_prompt_cost": 0.00006732,
+          "upstream_inference_completions_cost": 0.000982608
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1818,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 106,
+      "finishedAt": "2026-11-15T04:53:28.368Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 7
+      },
+      "observation": {
+        "ok": true,
+        "id": 7,
+        "prompt": "AI PSYCHOSIS",
+        "distribution": {
+          "performed+uniting": 0.27586206896551724,
+          "honest+uniting": 0.014778325123152709,
+          "performed+dividing": 0.6699507389162561,
+          "honest+dividing": 0.03940886699507389
+        },
+        "submissions": 203,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 58
+      },
+      "observation": {
+        "ok": true,
+        "id": 58,
+        "prompt": "SOBRIETY",
+        "distribution": {
+          "performed+uniting": 0.21929824561403508,
+          "honest+uniting": 0.2777777777777778,
+          "performed+dividing": 0.23976608187134502,
+          "honest+dividing": 0.2631578947368421
+        },
+        "submissions": 342,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 87
+      },
+      "observation": {
+        "ok": true,
+        "id": 87,
+        "prompt": "SAME-SEX MARRIAGE",
+        "distribution": {
+          "performed+uniting": 0.02654867256637168,
+          "honest+uniting": 0.6194690265486725,
+          "performed+dividing": 0.02654867256637168,
+          "honest+dividing": 0.3274336283185841
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.35,
+          "honest+uniting": 0.08,
+          "performed+dividing": 0.47,
+          "honest+dividing": 0.1
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.35000000000000003,
+      "honest+uniting": 0.08000000000000002,
+      "performed+dividing": 0.47000000000000003,
+      "honest+dividing": 0.10000000000000002
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.13669814814814815,
+    "score": 93.16509259259259,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

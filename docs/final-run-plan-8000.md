@@ -1,5 +1,8 @@
 # Final Predict / Learn run plan — 8,000 tokens
 
+**Current execution:** the user subsequently authorized all eleven models under one shared **$10** ceiling. The [shared plan](final-campaign-shared-budget.json) preserves prior costs, replaces the failed HY3 GMICloud route with Tencent, and assigns the remaining shared allowance sequentially. Use `node scripts/run-final-campaign.mjs --run` to resume that saved campaign. The plan and individual caps below are historical; do not use them to launch duplicate runs. See the [final campaign report](../results/final-8000/README.md).
+
+
 **Prepared for approval; no final campaign calls have been made under this plan.** The campaign contains eleven models: the ten remaining models plus a new GLM 5.3 Flash run under the same 8,000-token allowance. All models run sequentially.
 
 ## Scope and fixed settings

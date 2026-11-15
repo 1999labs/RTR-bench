@@ -1,0 +1,607 @@
+{
+  "day": 137,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"NOSTALGIA\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":71,\"prompt\":\"DEMOCRATS\",\"distribution\":{\"performed+uniting\":0.22452504317789293,\"honest+uniting\":0.05008635578583765,\"performed+dividing\":0.4386873920552677,\"honest+dividing\":0.2867012089810017},\"submissions\":579},{\"id\":21,\"prompt\":\"CONCESSION SPEECHES\",\"distribution\":{\"performed+uniting\":0.36813186813186816,\"honest+uniting\":0.14835164835164835,\"performed+dividing\":0.13736263736263737,\"honest+dividing\":0.34615384615384615},\"submissions\":182},{\"id\":98,\"prompt\":\"JOE BIDEN\",\"distribution\":{\"performed+uniting\":0.1322314049586777,\"honest+uniting\":0.09090909090909091,\"performed+dividing\":0.45041322314049587,\"honest+dividing\":0.32644628099173556},\"submissions\":242}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:23:31.038Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.350,\"honest+uniting\":0.170,\"performed+dividing\":0.130,\"honest+dividing\":0.350}",
+      "response": {
+        "id": "gen-1794716611-phq8aIkiAz6sS1umtPB1",
+        "object": "chat.completion",
+        "created": 1794716611,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.350,\"honest+uniting\":0.170,\"performed+dividing\":0.130,\"honest+dividing\":0.350}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"NOSTALGIA\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"DEMOCRATS\": performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867. Submissions 579.\n2. \"CONCESSION SPEECHES\": performed+uniting 0.3681, honest+uniting 0.1484, performed+dividing 0.1374, honest+dividing 0.3462. Submissions 182.\n3. \"JOE BIDEN\": performed+uniting 0.1322, honest+uniting 0.0909, performed+dividing 0.4504, honest+dividing 0.3264. Submissions 242.\n\nWe need to estimate share for \"NOSTALGIA\". Nostalgia is a sentiment, not a political figure or speech. It tends to be about longing for the past, often evoking shared memories (uniting) but can be performed (e.g., fake nostalgia for profit) or honest. It can also divide (e.g., nostalgia for a past that excludes some groups) either performed or honest.\n\nLooking at examples: political terms (DEMOCRATS, JOE BIDEN) have high performed+dividing (0.44, 0.45) and honest+dividing (0.29, 0.33), low honest+uniting (0.05, 0.09), moderate performed+uniting (0.22, 0.13). Concession speeches (a specific rhetorical genre) had higher uniting (performed 0.37, honest 0.15) and lower dividing (performed 0.14, honest 0.35) – interesting: honest+dividing still high (0.35) but performed+dividing low.\n\nNostalgia as a concept might be more like a sentiment that can bring people together authentically (shared memories) but also can be commodified (performed uniting) or can exclude (dividing). Since it's not a political actor, maybe less deliberate exploitation? But nostalgia is often used in advertising, politics to create false unity (performed uniting). Also \"honest dividing\" might be lower because nostalgia isn't typically about fracturing truthfully? But it can be: \"nostalgia fractures us because the past was not good for everyone\" honestly.\n\nWe need to produce a single JSON object with four probabilities summing to 1. Use at least three decimals when needed. We can base on average of examples? But the examples vary. Perhaps we should consider the semantic shift: NOSTALGIA is more like a feeling, maybe closer to CONCESSION SPEECHES in that it's a communicative/experiential thing? Actually concession speeches are performances; nostalgia can be both.\n\nLet's think of the audience's interpretations: They might see nostalgia as \"creating false unity among us\" (performed uniting) because it glosses over differences. Or \"bringing us together authentically\" (honest uniting) because shared past. Or \"exploiting our divisions deliberately\" (performed dividing) maybe less likely. Or \"fracturing us truthfully\" (honest dividing) because it reminds of lost homogeneity that excludes.\n\nFrom the examples, the sum of performed+uniting across three: 0.2245+0.3681+0.1322 = 0.7248 avg 0.2416. Honest+uniting: 0.0501+0.1484+0.0909=0.2894 avg 0.0965. Performed+dividing: 0.4387+0.1374+0.4504=1.0265 avg 0.3422. Honest+dividing: 0.2867+0.3462+0.3264=0.9593 avg 0.3198. So average of the three examples: pu~0.242, hu~0.097, pd~0.342, hd~0.320. That sums to 1.001 approx.\n\nBut NOSTALGIA might be less divisive than political terms. Concession speeches had pd low (0.137) but hd high (0.346). For nostalgia, maybe pu higher, hu higher, pd lower, hd moderate.\n\nWe could guess something like: performed+uniting 0.35, honest+uniting 0.20, performed+dividing 0.15, honest+dividing 0.30. Sum=1.00. That reflects a sentiment that often creates false unity (advertising, cheap nostalgia) and authentically unites (shared memory), but also honestly divides (some left out). Performed dividing maybe less because it's not typically about exploiting divisions deliberately? Though it could be.\n\nAlternatively, look at concession speeches: pu 0.368, hu 0.148, pd 0.137, hd 0.346. That's a template for a rhetorical act that is supposed to unify but may fracture. Nostalgia could be similar: pu 0.35, hu 0.15, pd 0.15, hd 0.35. That sums to 1.0.\n\nBut we need to be informed by historical examples. The examples include political entities with high dividing, and a speech with high uniting. Nostalgia is not a person; it's a concept. Might be between.\n\nWe could compute a weighted average by submissions? Total submissions: 579+182+242=1003. Weighted averages:\npu = (0.2245*579 + 0.3681*182 + 0.1322*242)/1003 = (129.99 + 66.99 + 31.99)/1003 ≈ 228.97/1003 = 0.2284.\nhu = (0.0501*579 + 0.1484*182 + 0.0909*242)/1003 = (29.01 + 27.01 + 21.99)/1003 = 78.01/1003 = 0.0778.\npd = (0.4387*579 + 0.1374*182 + 0.4504*242)/1003 = (253.81 + 24.99 + 109.00)/1003 = 387.8/1003 = 0.3868.\nhd = (0.2867*579 + 0.3462*182 + 0.3264*242)/1003 = (165.99 + 63.01 + 78.99)/1003 = 307.99/1003 = 0.3071.\nSum = 0.2284+0.0778+0.3868+0.3071=1.0001. So weighted avg leans toward political terms because DEMOCRATS and BIDEN have more submissions.\n\nBut NOSTALGIA may not be as politically charged. However the audience might still interpret it politically? The project \"Mixed Messages\" likely uses words and audience interprets in these quadrants. We have only three examples; we must extrapolate.\n\nMaybe we should consider that \"NOSTALGIA\" is more like \"CONCESSION SPEECHES\" in being a cultural/affective artifact rather than a partisan label. But concession speeches are specific events; nostalgia is diffuse.\n\nI think a reasonable prediction: performed+uniting relatively high (false unity), honest+uniting moderate, performed+dividing low-moderate, honest+dividing moderate-high.\n\nLet's set: performed+uniting: 0.32, honest+uniting: 0.18, performed+dividing: 0.12, honest+dividing: 0.38. Sum = 1.00. But check: 0.32+0.18=0.5, 0.12+0.38=0.5.\n\nAlternatively, use concession speeches as closest: pu 0.368, hu 0.148, pd 0.137, hd 0.346. Slightly tweak: maybe honest uniting a bit higher because nostalgia can be more authentically uniting than concession speeches (which are political). So hu 0.18, pu 0.35, pd 0.15, hd 0.32. Sum=1.00.\n\nI'll go with something like:\n{\"performed+uniting\":0.35,\"honest+uniting\":0.18,\"performed+dividing\":0.15,\"honest+dividing\":0.32}\n\nBut need at least three decimal places when needed. These have two; we can add trailing zero or more decimals. Requirement: \"Use at least three decimal places when needed.\" That means if we have e.g., 0.35 we could write 0.350 to have three decimals. Better to provide three decimals: 0.350, 0.180, 0.150, 0.320. Sum = 1.000.\n\nCheck sum: 0.350+0.180=0.530; +0.150=0.680; +0.320=1.000.\n\nAlternatively, we could produce numbers from a soft interpolation: maybe performed+uniting 0.300, honest+uniting 0.200, performed+dividing 0.200, honest+dividing 0.300. But I want to be informed by examples.\n\nLet's examine the examples more: For DEMOCRATS: pu 0.225, hu 0.050, pd 0.439, hd 0.287. For BIDEN: pu 0.132, hu 0.091, pd 0.450, hd 0.326. Both political figures: low honest uniting, high performed dividing, high honest dividing, moderate performed uniting. For CONCESSION SPEECHES: pu 0.368, hu 0.148, pd 0.137, hd 0.346. That's a speech act that is socially expected to unify (hence higher pu, hu) but can also reveal division (hd). Nostalgia as a word might be less about explicit division exploitation, more about warm fuzzy feelings (performed uniting) but also can be exclusionary (honest dividing). So maybe between BIDEN and CONCESSION.\n\nI'll choose: pu 0.33, hu 0.17, pd 0.13, hd 0.37 -> 0.330,0.170,0.130,0.370 sum=1.000.\n\nOr pu 0.340, hu 0.160, pd 0.140, hd 0.360 sum=1.000.\n\nI'll go with 0.340, 0.160, 0.140, 0.360. That's similar to concession but slightly less pu, slightly more pd? Actually concession pd 0.137, here 0.140. Fine.\n\nBut maybe honest dividing should be a bit lower because nostalgia is not as fracturing as concession speeches? Actually concession speeches can expose that the candidate lost, highlighting division; nostalgia might less explicitly fracture. But honest dividing could be about \"nostalgia fractures us because the past wasn't good for all\". Could be moderate.\n\nI'll produce: {\"performed+uniting\":0.350,\"honest+uniting\":0.170,\"performed+dividing\":0.130,\"honest+dividing\":0.350} sum=1.000. That gives hd same as pu.\n\nBut we need to ensure no other keys. Return only JSON object.\n\nI'll output: {\"performed+uniting\":0.350,\"honest+uniting\":0.170,\"performed+dividing\":0.130,\"honest+dividing\":0.350}\n\nCheck sum: 0.35+0.17=0.52, +0.13=0.65, +0.35=1.00. Good.\n\nAlternatively, to be safe with three decimals: 0.350, 0.170, 0.130, 0.350.\n\nI'll output exactly that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"NOSTALGIA\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"DEMOCRATS\": performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867. Submissions 579.\n2. \"CONCESSION SPEECHES\": performed+uniting 0.3681, honest+uniting 0.1484, performed+dividing 0.1374, honest+dividing 0.3462. Submissions 182.\n3. \"JOE BIDEN\": performed+uniting 0.1322, honest+uniting 0.0909, performed+dividing 0.4504, honest+dividing 0.3264. Submissions 242.\n\nWe need to estimate share for \"NOSTALGIA\". Nostalgia is a sentiment, not a political figure or speech. It tends to be about longing for the past, often evoking shared memories (uniting) but can be performed (e.g., fake nostalgia for profit) or honest. It can also divide (e.g., nostalgia for a past that excludes some groups) either performed or honest.\n\nLooking at examples: political terms (DEMOCRATS, JOE BIDEN) have high performed+dividing (0.44, 0.45) and honest+dividing (0.29, 0.33), low honest+uniting (0.05, 0.09), moderate performed+uniting (0.22, 0.13). Concession speeches (a specific rhetorical genre) had higher uniting (performed 0.37, honest 0.15) and lower dividing (performed 0.14, honest 0.35) – interesting: honest+dividing still high (0.35) but performed+dividing low.\n\nNostalgia as a concept might be more like a sentiment that can bring people together authentically (shared memories) but also can be commodified (performed uniting) or can exclude (dividing). Since it's not a political actor, maybe less deliberate exploitation? But nostalgia is often used in advertising, politics to create false unity (performed uniting). Also \"honest dividing\" might be lower because nostalgia isn't typically about fracturing truthfully? But it can be: \"nostalgia fractures us because the past was not good for everyone\" honestly.\n\nWe need to produce a single JSON object with four probabilities summing to 1. Use at least three decimals when needed. We can base on average of examples? But the examples vary. Perhaps we should consider the semantic shift: NOSTALGIA is more like a feeling, maybe closer to CONCESSION SPEECHES in that it's a communicative/experiential thing? Actually concession speeches are performances; nostalgia can be both.\n\nLet's think of the audience's interpretations: They might see nostalgia as \"creating false unity among us\" (performed uniting) because it glosses over differences. Or \"bringing us together authentically\" (honest uniting) because shared past. Or \"exploiting our divisions deliberately\" (performed dividing) maybe less likely. Or \"fracturing us truthfully\" (honest dividing) because it reminds of lost homogeneity that excludes.\n\nFrom the examples, the sum of performed+uniting across three: 0.2245+0.3681+0.1322 = 0.7248 avg 0.2416. Honest+uniting: 0.0501+0.1484+0.0909=0.2894 avg 0.0965. Performed+dividing: 0.4387+0.1374+0.4504=1.0265 avg 0.3422. Honest+dividing: 0.2867+0.3462+0.3264=0.9593 avg 0.3198. So average of the three examples: pu~0.242, hu~0.097, pd~0.342, hd~0.320. That sums to 1.001 approx.\n\nBut NOSTALGIA might be less divisive than political terms. Concession speeches had pd low (0.137) but hd high (0.346). For nostalgia, maybe pu higher, hu higher, pd lower, hd moderate.\n\nWe could guess something like: performed+uniting 0.35, honest+uniting 0.20, performed+dividing 0.15, honest+dividing 0.30. Sum=1.00. That reflects a sentiment that often creates false unity (advertising, cheap nostalgia) and authentically unites (shared memory), but also honestly divides (some left out). Performed dividing maybe less because it's not typically about exploiting divisions deliberately? Though it could be.\n\nAlternatively, look at concession speeches: pu 0.368, hu 0.148, pd 0.137, hd 0.346. That's a template for a rhetorical act that is supposed to unify but may fracture. Nostalgia could be similar: pu 0.35, hu 0.15, pd 0.15, hd 0.35. That sums to 1.0.\n\nBut we need to be informed by historical examples. The examples include political entities with high dividing, and a speech with high uniting. Nostalgia is not a person; it's a concept. Might be between.\n\nWe could compute a weighted average by submissions? Total submissions: 579+182+242=1003. Weighted averages:\npu = (0.2245*579 + 0.3681*182 + 0.1322*242)/1003 = (129.99 + 66.99 + 31.99)/1003 ≈ 228.97/1003 = 0.2284.\nhu = (0.0501*579 + 0.1484*182 + 0.0909*242)/1003 = (29.01 + 27.01 + 21.99)/1003 = 78.01/1003 = 0.0778.\npd = (0.4387*579 + 0.1374*182 + 0.4504*242)/1003 = (253.81 + 24.99 + 109.00)/1003 = 387.8/1003 = 0.3868.\nhd = (0.2867*579 + 0.3462*182 + 0.3264*242)/1003 = (165.99 + 63.01 + 78.99)/1003 = 307.99/1003 = 0.3071.\nSum = 0.2284+0.0778+0.3868+0.3071=1.0001. So weighted avg leans toward political terms because DEMOCRATS and BIDEN have more submissions.\n\nBut NOSTALGIA may not be as politically charged. However the audience might still interpret it politically? The project \"Mixed Messages\" likely uses words and audience interprets in these quadrants. We have only three examples; we must extrapolate.\n\nMaybe we should consider that \"NOSTALGIA\" is more like \"CONCESSION SPEECHES\" in being a cultural/affective artifact rather than a partisan label. But concession speeches are specific events; nostalgia is diffuse.\n\nI think a reasonable prediction: performed+uniting relatively high (false unity), honest+uniting moderate, performed+dividing low-moderate, honest+dividing moderate-high.\n\nLet's set: performed+uniting: 0.32, honest+uniting: 0.18, performed+dividing: 0.12, honest+dividing: 0.38. Sum = 1.00. But check: 0.32+0.18=0.5, 0.12+0.38=0.5.\n\nAlternatively, use concession speeches as closest: pu 0.368, hu 0.148, pd 0.137, hd 0.346. Slightly tweak: maybe honest uniting a bit higher because nostalgia can be more authentically uniting than concession speeches (which are political). So hu 0.18, pu 0.35, pd 0.15, hd 0.32. Sum=1.00.\n\nI'll go with something like:\n{\"performed+uniting\":0.35,\"honest+uniting\":0.18,\"performed+dividing\":0.15,\"honest+dividing\":0.32}\n\nBut need at least three decimal places when needed. These have two; we can add trailing zero or more decimals. Requirement: \"Use at least three decimal places when needed.\" That means if we have e.g., 0.35 we could write 0.350 to have three decimals. Better to provide three decimals: 0.350, 0.180, 0.150, 0.320. Sum = 1.000.\n\nCheck sum: 0.350+0.180=0.530; +0.150=0.680; +0.320=1.000.\n\nAlternatively, we could produce numbers from a soft interpolation: maybe performed+uniting 0.300, honest+uniting 0.200, performed+dividing 0.200, honest+dividing 0.300. But I want to be informed by examples.\n\nLet's examine the examples more: For DEMOCRATS: pu 0.225, hu 0.050, pd 0.439, hd 0.287. For BIDEN: pu 0.132, hu 0.091, pd 0.450, hd 0.326. Both political figures: low honest uniting, high performed dividing, high honest dividing, moderate performed uniting. For CONCESSION SPEECHES: pu 0.368, hu 0.148, pd 0.137, hd 0.346. That's a speech act that is socially expected to unify (hence higher pu, hu) but can also reveal division (hd). Nostalgia as a word might be less about explicit division exploitation, more about warm fuzzy feelings (performed uniting) but also can be exclusionary (honest dividing). So maybe between BIDEN and CONCESSION.\n\nI'll choose: pu 0.33, hu 0.17, pd 0.13, hd 0.37 -> 0.330,0.170,0.130,0.370 sum=1.000.\n\nOr pu 0.340, hu 0.160, pd 0.140, hd 0.360 sum=1.000.\n\nI'll go with 0.340, 0.160, 0.140, 0.360. That's similar to concession but slightly less pu, slightly more pd? Actually concession pd 0.137, here 0.140. Fine.\n\nBut maybe honest dividing should be a bit lower because nostalgia is not as fracturing as concession speeches? Actually concession speeches can expose that the candidate lost, highlighting division; nostalgia might less explicitly fracture. But honest dividing could be about \"nostalgia fractures us because the past wasn't good for all\". Could be moderate.\n\nI'll produce: {\"performed+uniting\":0.350,\"honest+uniting\":0.170,\"performed+dividing\":0.130,\"honest+dividing\":0.350} sum=1.000. That gives hd same as pu.\n\nBut we need to ensure no other keys. Return only JSON object.\n\nI'll output: {\"performed+uniting\":0.350,\"honest+uniting\":0.170,\"performed+dividing\":0.130,\"honest+dividing\":0.350}\n\nCheck sum: 0.35+0.17=0.52, +0.13=0.65, +0.35=1.00. Good.\n\nAlternatively, to be safe with three decimals: 0.350, 0.170, 0.130, 0.350.\n\nI'll output exactly that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 507,
+          "completion_tokens": 2771,
+          "total_tokens": 3278,
+          "cost": 0.001530012,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001530012,
+            "upstream_inference_prompt_cost": 0.000066924,
+            "upstream_inference_completions_cost": 0.001463088
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2728,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 507,
+        "completion_tokens": 2771,
+        "total_tokens": 3278,
+        "cost": 0.001530012,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001530012,
+          "upstream_inference_prompt_cost": 0.000066924,
+          "upstream_inference_completions_cost": 0.001463088
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2728,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 52,
+      "finishedAt": "2026-11-15T04:24:07.741Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 71
+      },
+      "observation": {
+        "ok": true,
+        "id": 71,
+        "prompt": "DEMOCRATS",
+        "distribution": {
+          "performed+uniting": 0.22452504317789293,
+          "honest+uniting": 0.05008635578583765,
+          "performed+dividing": 0.4386873920552677,
+          "honest+dividing": 0.2867012089810017
+        },
+        "submissions": 579,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 21
+      },
+      "observation": {
+        "ok": true,
+        "id": 21,
+        "prompt": "CONCESSION SPEECHES",
+        "distribution": {
+          "performed+uniting": 0.36813186813186816,
+          "honest+uniting": 0.14835164835164835,
+          "performed+dividing": 0.13736263736263737,
+          "honest+dividing": 0.34615384615384615
+        },
+        "submissions": 182,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 98
+      },
+      "observation": {
+        "ok": true,
+        "id": 98,
+        "prompt": "JOE BIDEN",
+        "distribution": {
+          "performed+uniting": 0.1322314049586777,
+          "honest+uniting": 0.09090909090909091,
+          "performed+dividing": 0.45041322314049587,
+          "honest+dividing": 0.32644628099173556
+        },
+        "submissions": 242,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.35,
+          "honest+uniting": 0.17,
+          "performed+dividing": 0.13,
+          "honest+dividing": 0.35
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.35,
+      "honest+uniting": 0.17,
+      "performed+dividing": 0.13,
+      "honest+dividing": 0.35
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.2960583216972209,
+    "score": 85.19708391513896,
+    "winnerCredit": 0.5,
+    "inspections": 3,
+    "actions": 5
+  }
+}

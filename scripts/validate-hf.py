@@ -41,6 +41,12 @@ for name, info in release["files"].items():
     file = package / name
     assert file.stat().st_size == info["bytes"], name
     assert sha(file) == info["sha256"], name
+assert release["cliVersion"] == "0.2.2"
+for name in ["predict-scatter.png", "learn-scatter.png", "predict-learn-scatter.png",
+             "predict-scatter.svg", "learn-scatter.svg", "predict-learn-scatter.svg", "predict-learn-scatter.json"]:
+    assert (package / "results" / name).read_bytes() == (root / "results" / name).read_bytes()
+assert (package / "results/verified-results.json").read_bytes() == (root / "results/final-8000/verified-results.json").read_bytes()
+assert len(read(package / "results/verified-results.json")["results"]) == 11
 actual_files = {p.relative_to(package).as_posix() for p in package.rglob("*") if p.is_file()}
 assert actual_files == set(release["files"]) | {"release.json"}, actual_files
 

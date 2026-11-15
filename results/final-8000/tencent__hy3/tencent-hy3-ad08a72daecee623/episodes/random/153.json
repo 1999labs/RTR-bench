@@ -1,0 +1,607 @@
+{
+  "day": 153,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"BIG PHARMA\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":90,\"prompt\":\"ONE NIGHT STANDS\",\"distribution\":{\"performed+uniting\":0.16262975778546712,\"honest+uniting\":0.14878892733564014,\"performed+dividing\":0.3494809688581315,\"honest+dividing\":0.3391003460207612},\"submissions\":289},{\"id\":22,\"prompt\":\"ART BLOCKS\",\"distribution\":{\"performed+uniting\":0.08615384615384615,\"honest+uniting\":0.10153846153846154,\"performed+dividing\":0.11384615384615385,\"honest+dividing\":0.6984615384615385},\"submissions\":325},{\"id\":72,\"prompt\":\"FOSSIL FUELS\",\"distribution\":{\"performed+uniting\":0.0049261083743842365,\"honest+uniting\":0.0049261083743842365,\"performed+dividing\":0.09359605911330049,\"honest+dividing\":0.896551724137931},\"submissions\":203}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:32:00.429Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.006,\"honest+uniting\":0.006,\"performed+dividing\":0.148,\"honest+dividing\":0.840}",
+      "response": {
+        "id": "gen-1794717120-PSwUnj98iozUnERvY9hS",
+        "object": "chat.completion",
+        "created": 1794717120,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.006,\"honest+uniting\":0.006,\"performed+dividing\":0.148,\"honest+dividing\":0.840}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"BIG PHARMA\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n\n1. \"ONE NIGHT STANDS\": performed+uniting 0.1626, honest+uniting 0.1488, performed+dividing 0.3495, honest+dividing 0.3391. Sum = 1.0 approx. Submissions 289.\n2. \"ART BLOCKS\": performed+uniting 0.0862, honest+uniting 0.1015, performed+dividing 0.1138, honest+dividing 0.6985. Sum = 1.0. Submissions 325.\n3. \"FOSSIL FUELS\": performed+uniting 0.0049, honest+uniting 0.0049, performed+dividing 0.0936, honest+dividing 0.8966. Sum = 1.0. Submissions 203.\n\nWe need to estimate share for \"BIG PHARMA\". The audience seems to associate certain concepts with negative, divisive, truthful fracturing (honest+dividing) heavily when the term is something like \"FOSSIL FUELS\" (climate, corporate evil) or \"ART BLOCKS\" (maybe creative block? but got high honest+dividing 0.698). \"ONE NIGHT STANDS\" got more balanced between performed+dividing and honest+dividing (~0.35 each) and some uniting.\n\nBig Pharma is a term often used to criticize pharmaceutical industry, implying conspiracy, profit-driven, exploitation, division maybe? Typically \"Big Pharma\" is seen as a powerful industry that hides cures, exploits sickness, creates dependency, maybe divides by making profit off illness. The audience likely sees it as fracturing us truthfully (honest+dividing) or exploiting divisions deliberately (performed+dividing). Given \"FOSSIL FUELS\" is similar corporate villain, got huge honest+dividing (0.8966) and some performed+dividing (0.0936), almost no uniting. Big Pharma might be similar: a corrupt industry that fractures society truthfully (e.g., truthfully causing harm, dividing sick from well, profiting). But also \"Big Pharma\" could be seen as creating false unity (e.g., \"we're all in this together\" during pandemic while profiting) - performed+uniting maybe some. But historical examples: For \"FOSSIL FUELS\", performed+uniting near 0.005, honest+uniting near 0.005. For \"ART BLOCKS\", performed+uniting 0.086, honest+uniting 0.101, performed+dividing 0.114, honest+dividing 0.698. So \"ART BLOCKS\" had more uniting (maybe because art blocks are personal, not corporate evil). \"ONE NIGHT STANDS\" had more uniting and dividing balanced.\n\nBig Pharma is a pejorative term for pharmaceutical companies, often associated with conspiracy theories, but also with actual harm. The audience (Mixed Messages participants) seems to interpret words with a cynical lens: they assign high honest+dividing for negative concepts. For \"FOSSIL FUELS\" it's extreme. Big Pharma might be slightly less extreme than fossil fuels? Or similar. Could be around 0.8 honest+dividing, 0.1 performed+dividing, tiny uniting. But we should consider that \"Big Pharma\" might have a bit more performed+uniting because of \"we're all in this together\" messaging from pharma ads. However, the historical examples show that for clearly corporate evil \"FOSSIL FUELS\", uniting is near zero. For \"ART BLOCKS\" (not corporate), uniting is ~0.19 total. For \"ONE NIGHT STANDS\" (social/sexual), uniting ~0.31 total. So the more impersonal corporate/systemic evil, the less uniting. Big Pharma is corporate/systemic, so likely low uniting.\n\nThus we can predict something like:\nperformed+uniting: 0.01\nhonest+uniting: 0.01\nperformed+dividing: 0.15\nhonest+dividing: 0.83\n\nBut we need to sum to 1. Let's look at FOSSIL FUELS: performed+dividing 0.0936, honest+dividing 0.8966. That's 0.9902? Wait sum: 0.0049+0.0049+0.0936+0.8966 = 1.0000 (0.004926*2=0.009852, +0.093596=0.103448, +0.896552=1.000000). So exact.\n\nFor BIG PHARMA, maybe slightly more performed+dividing because pharma actively manipulates (performed) whereas fossil fuels maybe more passively truthfully fracturing? But both are industries. Big Pharma is often accused of deliberately exploiting divisions (e.g., funding studies, lobbying). So performed+dividing could be higher than fossil fuels' 0.0936. Maybe 0.2. Honest+dividing 0.78. Uniting each 0.01. That sums 1.0.\n\nAlternatively, maybe the audience sees \"Big Pharma\" as creating false unity (performed+uniting) like \"we are all patients\" around 0.05, honest+uniting 0.02, performed+dividing 0.25, honest+dividing 0.68. Need to decide.\n\nWe can also think of the phrase \"BIG PHARMA\" itself: it's a conspiracy-theory-tinged term, but also used by left critics. The project asks for interpretations: performed+uniting: creating false unity among us; honest+uniting: bringing us together authentically; performed+dividing: exploiting our divisions deliberately; honest+dividing: fracturing us truthfully.\n\nIf the audience thinks Big Pharma is a real force that fractures society (e.g., opioid crisis, medical inequality), that's honest+dividing (truthfully fracturing). If they think it's deliberately exploiting divisions (e.g., fueling anti-vax vs pro-vax), that's performed+dividing. The \"performed\" suggests insincere, staged. Pharma might stage unity (ads) -> performed+uniting. But historical corporate villain got near zero uniting. So maybe they don't give them credit for any unity.\n\nI'll estimate:\nperformed+uniting: 0.008\nhonest+uniting: 0.008\nperformed+dividing: 0.184\nhonest+dividing: 0.800\n\nSum = 1.000. Use three decimals: 0.008, 0.008, 0.184, 0.800. But need at least three decimal places when needed; we can provide more like 0.008, 0.008, 0.184, 0.800 is three decimals. But to be safe, use 0.008, 0.008, 0.184, 0.800 sums to 1.000. Or 0.010, 0.010, 0.180, 0.800. I'll go with something like fossil fuels but a bit more performed dividing: 0.005, 0.005, 0.150, 0.840? Actually fossil fuels had 0.0049,0.0049,0.0936,0.8966. Big Pharma might be seen as slightly more actively divisive, so performed+dividing up to 0.15, honest+dividing down to 0.84. Uniting same tiny.\n\nLet's set:\nperformed+uniting: 0.006\nhonest+uniting: 0.006\nperformed+dividing: 0.148\nhonest+dividing: 0.840\nSum = 1.000.\n\nBut we should maybe incorporate that \"BIG PHARMA\" is a phrase that includes \"BIG\" like \"BIG OIL\" similar to fossil fuels. So likely similar distribution. I'll produce:\n\n{\"performed+uniting\":0.006,\"honest+uniting\":0.006,\"performed+dividing\":0.148,\"honest+dividing\":0.840}\n\nCheck sum: 0.006+0.006=0.012, +0.148=0.160, +0.840=1.000. Good.\n\nAlternatively, to be more precise: 0.005, 0.005, 0.150, 0.840. That's fine.\n\nI'll output exactly the JSON object. No prose, no code fences.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"BIG PHARMA\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n\n1. \"ONE NIGHT STANDS\": performed+uniting 0.1626, honest+uniting 0.1488, performed+dividing 0.3495, honest+dividing 0.3391. Sum = 1.0 approx. Submissions 289.\n2. \"ART BLOCKS\": performed+uniting 0.0862, honest+uniting 0.1015, performed+dividing 0.1138, honest+dividing 0.6985. Sum = 1.0. Submissions 325.\n3. \"FOSSIL FUELS\": performed+uniting 0.0049, honest+uniting 0.0049, performed+dividing 0.0936, honest+dividing 0.8966. Sum = 1.0. Submissions 203.\n\nWe need to estimate share for \"BIG PHARMA\". The audience seems to associate certain concepts with negative, divisive, truthful fracturing (honest+dividing) heavily when the term is something like \"FOSSIL FUELS\" (climate, corporate evil) or \"ART BLOCKS\" (maybe creative block? but got high honest+dividing 0.698). \"ONE NIGHT STANDS\" got more balanced between performed+dividing and honest+dividing (~0.35 each) and some uniting.\n\nBig Pharma is a term often used to criticize pharmaceutical industry, implying conspiracy, profit-driven, exploitation, division maybe? Typically \"Big Pharma\" is seen as a powerful industry that hides cures, exploits sickness, creates dependency, maybe divides by making profit off illness. The audience likely sees it as fracturing us truthfully (honest+dividing) or exploiting divisions deliberately (performed+dividing). Given \"FOSSIL FUELS\" is similar corporate villain, got huge honest+dividing (0.8966) and some performed+dividing (0.0936), almost no uniting. Big Pharma might be similar: a corrupt industry that fractures society truthfully (e.g., truthfully causing harm, dividing sick from well, profiting). But also \"Big Pharma\" could be seen as creating false unity (e.g., \"we're all in this together\" during pandemic while profiting) - performed+uniting maybe some. But historical examples: For \"FOSSIL FUELS\", performed+uniting near 0.005, honest+uniting near 0.005. For \"ART BLOCKS\", performed+uniting 0.086, honest+uniting 0.101, performed+dividing 0.114, honest+dividing 0.698. So \"ART BLOCKS\" had more uniting (maybe because art blocks are personal, not corporate evil). \"ONE NIGHT STANDS\" had more uniting and dividing balanced.\n\nBig Pharma is a pejorative term for pharmaceutical companies, often associated with conspiracy theories, but also with actual harm. The audience (Mixed Messages participants) seems to interpret words with a cynical lens: they assign high honest+dividing for negative concepts. For \"FOSSIL FUELS\" it's extreme. Big Pharma might be slightly less extreme than fossil fuels? Or similar. Could be around 0.8 honest+dividing, 0.1 performed+dividing, tiny uniting. But we should consider that \"Big Pharma\" might have a bit more performed+uniting because of \"we're all in this together\" messaging from pharma ads. However, the historical examples show that for clearly corporate evil \"FOSSIL FUELS\", uniting is near zero. For \"ART BLOCKS\" (not corporate), uniting is ~0.19 total. For \"ONE NIGHT STANDS\" (social/sexual), uniting ~0.31 total. So the more impersonal corporate/systemic evil, the less uniting. Big Pharma is corporate/systemic, so likely low uniting.\n\nThus we can predict something like:\nperformed+uniting: 0.01\nhonest+uniting: 0.01\nperformed+dividing: 0.15\nhonest+dividing: 0.83\n\nBut we need to sum to 1. Let's look at FOSSIL FUELS: performed+dividing 0.0936, honest+dividing 0.8966. That's 0.9902? Wait sum: 0.0049+0.0049+0.0936+0.8966 = 1.0000 (0.004926*2=0.009852, +0.093596=0.103448, +0.896552=1.000000). So exact.\n\nFor BIG PHARMA, maybe slightly more performed+dividing because pharma actively manipulates (performed) whereas fossil fuels maybe more passively truthfully fracturing? But both are industries. Big Pharma is often accused of deliberately exploiting divisions (e.g., funding studies, lobbying). So performed+dividing could be higher than fossil fuels' 0.0936. Maybe 0.2. Honest+dividing 0.78. Uniting each 0.01. That sums 1.0.\n\nAlternatively, maybe the audience sees \"Big Pharma\" as creating false unity (performed+uniting) like \"we are all patients\" around 0.05, honest+uniting 0.02, performed+dividing 0.25, honest+dividing 0.68. Need to decide.\n\nWe can also think of the phrase \"BIG PHARMA\" itself: it's a conspiracy-theory-tinged term, but also used by left critics. The project asks for interpretations: performed+uniting: creating false unity among us; honest+uniting: bringing us together authentically; performed+dividing: exploiting our divisions deliberately; honest+dividing: fracturing us truthfully.\n\nIf the audience thinks Big Pharma is a real force that fractures society (e.g., opioid crisis, medical inequality), that's honest+dividing (truthfully fracturing). If they think it's deliberately exploiting divisions (e.g., fueling anti-vax vs pro-vax), that's performed+dividing. The \"performed\" suggests insincere, staged. Pharma might stage unity (ads) -> performed+uniting. But historical corporate villain got near zero uniting. So maybe they don't give them credit for any unity.\n\nI'll estimate:\nperformed+uniting: 0.008\nhonest+uniting: 0.008\nperformed+dividing: 0.184\nhonest+dividing: 0.800\n\nSum = 1.000. Use three decimals: 0.008, 0.008, 0.184, 0.800. But need at least three decimal places when needed; we can provide more like 0.008, 0.008, 0.184, 0.800 is three decimals. But to be safe, use 0.008, 0.008, 0.184, 0.800 sums to 1.000. Or 0.010, 0.010, 0.180, 0.800. I'll go with something like fossil fuels but a bit more performed dividing: 0.005, 0.005, 0.150, 0.840? Actually fossil fuels had 0.0049,0.0049,0.0936,0.8966. Big Pharma might be seen as slightly more actively divisive, so performed+dividing up to 0.15, honest+dividing down to 0.84. Uniting same tiny.\n\nLet's set:\nperformed+uniting: 0.006\nhonest+uniting: 0.006\nperformed+dividing: 0.148\nhonest+dividing: 0.840\nSum = 1.000.\n\nBut we should maybe incorporate that \"BIG PHARMA\" is a phrase that includes \"BIG\" like \"BIG OIL\" similar to fossil fuels. So likely similar distribution. I'll produce:\n\n{\"performed+uniting\":0.006,\"honest+uniting\":0.006,\"performed+dividing\":0.148,\"honest+dividing\":0.840}\n\nCheck sum: 0.006+0.006=0.012, +0.148=0.160, +0.840=1.000. Good.\n\nAlternatively, to be more precise: 0.005, 0.005, 0.150, 0.840. That's fine.\n\nI'll output exactly the JSON object. No prose, no code fences.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 508,
+          "completion_tokens": 2033,
+          "total_tokens": 2541,
+          "cost": 0.00114048,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00114048,
+            "upstream_inference_prompt_cost": 0.000067056,
+            "upstream_inference_completions_cost": 0.001073424
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1990,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 508,
+        "completion_tokens": 2033,
+        "total_tokens": 2541,
+        "cost": 0.00114048,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00114048,
+          "upstream_inference_prompt_cost": 0.000067056,
+          "upstream_inference_completions_cost": 0.001073424
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1990,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 68,
+      "finishedAt": "2026-11-15T04:32:30.993Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 90
+      },
+      "observation": {
+        "ok": true,
+        "id": 90,
+        "prompt": "ONE NIGHT STANDS",
+        "distribution": {
+          "performed+uniting": 0.16262975778546712,
+          "honest+uniting": 0.14878892733564014,
+          "performed+dividing": 0.3494809688581315,
+          "honest+dividing": 0.3391003460207612
+        },
+        "submissions": 289,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 22
+      },
+      "observation": {
+        "ok": true,
+        "id": 22,
+        "prompt": "ART BLOCKS",
+        "distribution": {
+          "performed+uniting": 0.08615384615384615,
+          "honest+uniting": 0.10153846153846154,
+          "performed+dividing": 0.11384615384615385,
+          "honest+dividing": 0.6984615384615385
+        },
+        "submissions": 325,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 72
+      },
+      "observation": {
+        "ok": true,
+        "id": 72,
+        "prompt": "FOSSIL FUELS",
+        "distribution": {
+          "performed+uniting": 0.0049261083743842365,
+          "honest+uniting": 0.0049261083743842365,
+          "performed+dividing": 0.09359605911330049,
+          "honest+dividing": 0.896551724137931
+        },
+        "submissions": 203,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.006,
+          "honest+uniting": 0.006,
+          "performed+dividing": 0.148,
+          "honest+dividing": 0.84
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.006,
+      "honest+uniting": 0.006,
+      "performed+dividing": 0.148,
+      "honest+dividing": 0.84
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.9266056183015512,
+    "score": 53.66971908492244,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

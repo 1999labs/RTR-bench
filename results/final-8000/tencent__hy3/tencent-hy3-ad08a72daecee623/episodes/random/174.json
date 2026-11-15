@@ -1,0 +1,607 @@
+{
+  "day": 174,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"GOOGLE\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":87,\"prompt\":\"SAME-SEX MARRIAGE\",\"distribution\":{\"performed+uniting\":0.02654867256637168,\"honest+uniting\":0.6194690265486725,\"performed+dividing\":0.02654867256637168,\"honest+dividing\":0.3274336283185841},\"submissions\":113},{\"id\":19,\"prompt\":\"EYE CONTACT\",\"distribution\":{\"performed+uniting\":0.13194444444444445,\"honest+uniting\":0.5347222222222222,\"performed+dividing\":0.19444444444444445,\"honest+dividing\":0.1388888888888889},\"submissions\":144},{\"id\":77,\"prompt\":\"FLAGS\",\"distribution\":{\"performed+uniting\":0.8398058252427184,\"honest+uniting\":0.05339805825242718,\"performed+dividing\":0.038834951456310676,\"honest+dividing\":0.06796116504854369},\"submissions\":206}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:43:14.746Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.551,\"honest+uniting\":0.149,\"performed+dividing\":0.248,\"honest+dividing\":0.052}",
+      "response": {
+        "id": "gen-1794717794-MN0hfjqISanp4lWJBxsN",
+        "object": "chat.completion",
+        "created": 1794717794,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.551,\"honest+uniting\":0.149,\"performed+dividing\":0.248,\"honest+dividing\":0.052}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"GOOGLE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"SAME-SEX MARRIAGE\": performed+uniting 0.0265, honest+uniting 0.6195, performed+dividing 0.0265, honest+dividing 0.3274. Submissions 113.\n2. \"EYE CONTACT\": performed+uniting 0.1319, honest+uniting 0.5347, performed+dividing 0.1944, honest+dividing 0.1389. Submissions 144.\n3. \"FLAGS\": performed+uniting 0.8398, honest+uniting 0.0534, performed+dividing 0.0388, honest+dividing 0.0680. Submissions 206.\n\nWe need to estimate share for \"GOOGLE\". This is a tech company, search engine, maybe seen as unifying information but also maybe performing unity (like \"Google brings the world's information to you\" but maybe fake? Or dividing? Honest dividing? Let's think about audience's interpretations.\n\nThe examples: \n- SAME-SEX MARRIAGE: mostly honest+uniting (bringing together authentically) and honest+dividing (fracturing truthfully) - seems like a divisive topic but also unifying for some. Performed both low.\n- EYE CONTACT: mostly honest+uniting (over half), then performed+uniting, performed+dividing, honest+dividing moderate. Eye contact is personal connection, authentic unity, but also can be performed (fake) or dividing (avoidance?).\n- FLAGS: heavily performed+uniting (false unity) 0.84, others low. Flags often symbolize national unity but maybe superficial/coerced? So audience sees flags as creating false unity.\n\nNow GOOGLE: a multinational tech company, search engine. It could be seen as:\n- performed+uniting: creating false unity among us (e.g., \"Google connects everyone but actually surveils, divides attention, echo chambers? Or maybe it presents a unified front but exploits?).\n- honest+uniting: bringing us together authentically (access to info, communication, global village).\n- performed+dividing: exploiting our divisions deliberately (e.g., filter bubbles, targeted ads, algorithmic division, profit from polarization).\n- honest+dividing: fracturing us truthfully (maybe it's just a tool that reveals our fragmentation? Or honestly divides by categorizing?).\n\nWe need to infer from audience's pattern. They seem to assign high weight to one quadrant depending on concept. For abstract social concepts (same-sex marriage, eye contact) honest+uniting is high. For symbols like flags, performed+uniting is high. Google is a brand/company, maybe like a flag? It's a corporate entity that might be seen as performing unity (e.g., \"Google: don't be evil\" but actually evil). Or maybe it's seen as performed+dividing because of algorithm radicalization.\n\nWe should consider typical generative art audience (maybe left-leaning, critical of tech). They might view Google as exploiting divisions deliberately (performed+dividing) or creating false unity (performed+uniting). Honest+uniting maybe less because they are skeptical. Honest+dividing maybe some.\n\nLet's look at the numbers: For FLAGS, performed+uniting dominates. For SAME-SEX MARRIAGE, honest+uniting and honest+dividing dominate. For EYE CONTACT, honest+uniting dominates with others moderate.\n\nGoogle as a word: could be associated with \"google it\" = search, knowledge. Might be seen as unifying information (honest+uniting) but also as a monopoly that creates fake unity (performed+uniting). The audience might be cynical: tech giants = performed+uniting (false unity) like flags? But flags got 0.84 performed+uniting. Google might get similar but maybe less extreme because Google also divides via algorithms.\n\nWe need to produce probabilities sum to 1. Let's think of a plausible distribution. Perhaps:\n- performed+uniting: 0.4 (creating false unity, e.g., \"one world under Google\")\n- honest+uniting: 0.2 (some see it as truly connecting)\n- performed+dividing: 0.3 (exploiting divisions for ad revenue)\n- honest+dividing: 0.1 (truthfully fracturing via filter bubbles? but that's maybe performed?)\n\nAlternatively, maybe performed+dividing is high because of \"exploiting our divisions deliberately\" - that's a common critique of social media and search engines. But Google is search, not social media, though YouTube is Google. Still, the word GOOGLE might evoke surveillance capitalism.\n\nWe could also consider that the audience might treat brand names like flags: as symbols of false unity. But Google is not a national flag; it's a corporate logo. Could be performed+uniting high.\n\nLet's examine the historical examples more: They are all nouns/phrases. The distributions vary widely. Without more data, we need to make a reasonable guess. The instruction: \"These are this audience's interpretations, not objective labels.\" So we should simulate what this specific audience would do. The examples show they sometimes heavily favor one quadrant (FLAGS 0.84 performed+uniting; SAME-SEX MARRIAGE 0.62 honest+uniting). For GOOGLE, maybe they'd see it as performed+dividing because of \"don't be evil\" but actually divides? Or performed+uniting because of \"Google\" as a verb meaning to look up, unifying knowledge.\n\nI think a balanced but skeptical view: performed+uniting moderate, performed+dividing moderate, honest+uniting low, honest+dividing low. But we need sum 1.\n\nMaybe: performed+uniting: 0.45, honest+uniting: 0.15, performed+dividing: 0.30, honest+dividing: 0.10. Sum=1.0.\n\nOr we could mimic FLAGS but with more dividing: performed+uniting 0.5, performed+dividing 0.3, honest+uniting 0.15, honest+dividing 0.05.\n\nBut we should also consider that in EYE CONTACT, performed+uniting was 0.13, honest+uniting 0.53. In SAME-SEX, performed+uniting 0.026, honest+uniting 0.619. So performed+uniting is low for those personal/social issues. For FLAGS (symbol) it's high. Google is a symbol/brand, so could be high performed+uniting.\n\nHowever, Google also has a reputation for dividing via algorithms; maybe performed+dividing would be significant. In FLAGS, performed+dividing was only 0.039, honest+dividing 0.068. So for flags, dividing is low. For same-sex, dividing is high (both performed and honest). For eye contact, dividing moderate.\n\nSo concept type matters: \n- Identity/political (same-sex): honest uniting & honest dividing high.\n- Personal interaction (eye contact): honest uniting high, others moderate.\n- National symbol (flags): performed uniting very high, others low.\n\nGoogle: corporate global symbol. Could be like flags: performed uniting high. But also corporate surveillance might trigger performed dividing. I'd guess performed uniting ~0.5, performed dividing ~0.25, honest uniting ~0.15, honest dividing ~0.10.\n\nLet's ensure three decimal places if needed. We'll output JSON only.\n\nWe need to return exactly four keys with numeric probabilities between 0 and 1 sum to 1. We'll choose:\n\n{\n  \"performed+uniting\": 0.500,\n  \"honest+uniting\": 0.150,\n  \"performed+dividing\": 0.250,\n  \"honest+dividing\": 0.100\n}\n\nSum = 1.000. That's fine.\n\nBut maybe we can be more nuanced: 0.478, 0.162, 0.271, 0.089 etc. But simple is okay.\n\nGiven the audience's tendency to extreme in one quadrant (flags 0.84, same-sex 0.62), maybe they'd be extreme on one for Google. Which one? I think performed+uniting is plausible because Google is often presented as \"organizing the world's information\" (unity) but critics say it's superficial. However, performed+dividing is also a strong narrative (filter bubbles). Which is more likely for this art audience? The examples: they gave flags performed+uniting extremely; they might treat Google as a similar \"symbol of false unity\". I'll lean performed+uniting dominant but not as extreme as flags: 0.55. Then performed+dividing 0.25, honest+uniting 0.15, honest+dividing 0.05.\n\nLet's do: 0.550, 0.150, 0.250, 0.050 = 1.0.\n\nBut we need at least three decimal places when needed; we can write 0.55 as 0.550. That's fine.\n\nAlternatively, to be safe, use more decimals: 0.551, 0.149, 0.248, 0.052 = 1.000.\n\nI'll output: {\"performed+uniting\":0.551,\"honest+uniting\":0.149,\"performed+dividing\":0.248,\"honest+dividing\":0.052}\n\nCheck sum: 0.551+0.149=0.700; +0.248=0.948; +0.052=1.000. Good.\n\nNo other text.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"GOOGLE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"SAME-SEX MARRIAGE\": performed+uniting 0.0265, honest+uniting 0.6195, performed+dividing 0.0265, honest+dividing 0.3274. Submissions 113.\n2. \"EYE CONTACT\": performed+uniting 0.1319, honest+uniting 0.5347, performed+dividing 0.1944, honest+dividing 0.1389. Submissions 144.\n3. \"FLAGS\": performed+uniting 0.8398, honest+uniting 0.0534, performed+dividing 0.0388, honest+dividing 0.0680. Submissions 206.\n\nWe need to estimate share for \"GOOGLE\". This is a tech company, search engine, maybe seen as unifying information but also maybe performing unity (like \"Google brings the world's information to you\" but maybe fake? Or dividing? Honest dividing? Let's think about audience's interpretations.\n\nThe examples: \n- SAME-SEX MARRIAGE: mostly honest+uniting (bringing together authentically) and honest+dividing (fracturing truthfully) - seems like a divisive topic but also unifying for some. Performed both low.\n- EYE CONTACT: mostly honest+uniting (over half), then performed+uniting, performed+dividing, honest+dividing moderate. Eye contact is personal connection, authentic unity, but also can be performed (fake) or dividing (avoidance?).\n- FLAGS: heavily performed+uniting (false unity) 0.84, others low. Flags often symbolize national unity but maybe superficial/coerced? So audience sees flags as creating false unity.\n\nNow GOOGLE: a multinational tech company, search engine. It could be seen as:\n- performed+uniting: creating false unity among us (e.g., \"Google connects everyone but actually surveils, divides attention, echo chambers? Or maybe it presents a unified front but exploits?).\n- honest+uniting: bringing us together authentically (access to info, communication, global village).\n- performed+dividing: exploiting our divisions deliberately (e.g., filter bubbles, targeted ads, algorithmic division, profit from polarization).\n- honest+dividing: fracturing us truthfully (maybe it's just a tool that reveals our fragmentation? Or honestly divides by categorizing?).\n\nWe need to infer from audience's pattern. They seem to assign high weight to one quadrant depending on concept. For abstract social concepts (same-sex marriage, eye contact) honest+uniting is high. For symbols like flags, performed+uniting is high. Google is a brand/company, maybe like a flag? It's a corporate entity that might be seen as performing unity (e.g., \"Google: don't be evil\" but actually evil). Or maybe it's seen as performed+dividing because of algorithm radicalization.\n\nWe should consider typical generative art audience (maybe left-leaning, critical of tech). They might view Google as exploiting divisions deliberately (performed+dividing) or creating false unity (performed+uniting). Honest+uniting maybe less because they are skeptical. Honest+dividing maybe some.\n\nLet's look at the numbers: For FLAGS, performed+uniting dominates. For SAME-SEX MARRIAGE, honest+uniting and honest+dividing dominate. For EYE CONTACT, honest+uniting dominates with others moderate.\n\nGoogle as a word: could be associated with \"google it\" = search, knowledge. Might be seen as unifying information (honest+uniting) but also as a monopoly that creates fake unity (performed+uniting). The audience might be cynical: tech giants = performed+uniting (false unity) like flags? But flags got 0.84 performed+uniting. Google might get similar but maybe less extreme because Google also divides via algorithms.\n\nWe need to produce probabilities sum to 1. Let's think of a plausible distribution. Perhaps:\n- performed+uniting: 0.4 (creating false unity, e.g., \"one world under Google\")\n- honest+uniting: 0.2 (some see it as truly connecting)\n- performed+dividing: 0.3 (exploiting divisions for ad revenue)\n- honest+dividing: 0.1 (truthfully fracturing via filter bubbles? but that's maybe performed?)\n\nAlternatively, maybe performed+dividing is high because of \"exploiting our divisions deliberately\" - that's a common critique of social media and search engines. But Google is search, not social media, though YouTube is Google. Still, the word GOOGLE might evoke surveillance capitalism.\n\nWe could also consider that the audience might treat brand names like flags: as symbols of false unity. But Google is not a national flag; it's a corporate logo. Could be performed+uniting high.\n\nLet's examine the historical examples more: They are all nouns/phrases. The distributions vary widely. Without more data, we need to make a reasonable guess. The instruction: \"These are this audience's interpretations, not objective labels.\" So we should simulate what this specific audience would do. The examples show they sometimes heavily favor one quadrant (FLAGS 0.84 performed+uniting; SAME-SEX MARRIAGE 0.62 honest+uniting). For GOOGLE, maybe they'd see it as performed+dividing because of \"don't be evil\" but actually divides? Or performed+uniting because of \"Google\" as a verb meaning to look up, unifying knowledge.\n\nI think a balanced but skeptical view: performed+uniting moderate, performed+dividing moderate, honest+uniting low, honest+dividing low. But we need sum 1.\n\nMaybe: performed+uniting: 0.45, honest+uniting: 0.15, performed+dividing: 0.30, honest+dividing: 0.10. Sum=1.0.\n\nOr we could mimic FLAGS but with more dividing: performed+uniting 0.5, performed+dividing 0.3, honest+uniting 0.15, honest+dividing 0.05.\n\nBut we should also consider that in EYE CONTACT, performed+uniting was 0.13, honest+uniting 0.53. In SAME-SEX, performed+uniting 0.026, honest+uniting 0.619. So performed+uniting is low for those personal/social issues. For FLAGS (symbol) it's high. Google is a symbol/brand, so could be high performed+uniting.\n\nHowever, Google also has a reputation for dividing via algorithms; maybe performed+dividing would be significant. In FLAGS, performed+dividing was only 0.039, honest+dividing 0.068. So for flags, dividing is low. For same-sex, dividing is high (both performed and honest). For eye contact, dividing moderate.\n\nSo concept type matters: \n- Identity/political (same-sex): honest uniting & honest dividing high.\n- Personal interaction (eye contact): honest uniting high, others moderate.\n- National symbol (flags): performed uniting very high, others low.\n\nGoogle: corporate global symbol. Could be like flags: performed uniting high. But also corporate surveillance might trigger performed dividing. I'd guess performed uniting ~0.5, performed dividing ~0.25, honest uniting ~0.15, honest dividing ~0.10.\n\nLet's ensure three decimal places if needed. We'll output JSON only.\n\nWe need to return exactly four keys with numeric probabilities between 0 and 1 sum to 1. We'll choose:\n\n{\n  \"performed+uniting\": 0.500,\n  \"honest+uniting\": 0.150,\n  \"performed+dividing\": 0.250,\n  \"honest+dividing\": 0.100\n}\n\nSum = 1.000. That's fine.\n\nBut maybe we can be more nuanced: 0.478, 0.162, 0.271, 0.089 etc. But simple is okay.\n\nGiven the audience's tendency to extreme in one quadrant (flags 0.84, same-sex 0.62), maybe they'd be extreme on one for Google. Which one? I think performed+uniting is plausible because Google is often presented as \"organizing the world's information\" (unity) but critics say it's superficial. However, performed+dividing is also a strong narrative (filter bubbles). Which is more likely for this art audience? The examples: they gave flags performed+uniting extremely; they might treat Google as a similar \"symbol of false unity\". I'll lean performed+uniting dominant but not as extreme as flags: 0.55. Then performed+dividing 0.25, honest+uniting 0.15, honest+dividing 0.05.\n\nLet's do: 0.550, 0.150, 0.250, 0.050 = 1.0.\n\nBut we need at least three decimal places when needed; we can write 0.55 as 0.550. That's fine.\n\nAlternatively, to be safe, use more decimals: 0.551, 0.149, 0.248, 0.052 = 1.000.\n\nI'll output: {\"performed+uniting\":0.551,\"honest+uniting\":0.149,\"performed+dividing\":0.248,\"honest+dividing\":0.052}\n\nCheck sum: 0.551+0.149=0.700; +0.248=0.948; +0.052=1.000. Good.\n\nNo other text.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 502,
+          "completion_tokens": 2255,
+          "total_tokens": 2757,
+          "cost": 0.001256904,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001256904,
+            "upstream_inference_prompt_cost": 0.000066264,
+            "upstream_inference_completions_cost": 0.00119064
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2212,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 502,
+        "completion_tokens": 2255,
+        "total_tokens": 2757,
+        "cost": 0.001256904,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001256904,
+          "upstream_inference_prompt_cost": 0.000066264,
+          "upstream_inference_completions_cost": 0.00119064
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2212,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 89,
+      "finishedAt": "2026-11-15T04:43:42.353Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 87
+      },
+      "observation": {
+        "ok": true,
+        "id": 87,
+        "prompt": "SAME-SEX MARRIAGE",
+        "distribution": {
+          "performed+uniting": 0.02654867256637168,
+          "honest+uniting": 0.6194690265486725,
+          "performed+dividing": 0.02654867256637168,
+          "honest+dividing": 0.3274336283185841
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 19
+      },
+      "observation": {
+        "ok": true,
+        "id": 19,
+        "prompt": "EYE CONTACT",
+        "distribution": {
+          "performed+uniting": 0.13194444444444445,
+          "honest+uniting": 0.5347222222222222,
+          "performed+dividing": 0.19444444444444445,
+          "honest+dividing": 0.1388888888888889
+        },
+        "submissions": 144,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 77
+      },
+      "observation": {
+        "ok": true,
+        "id": 77,
+        "prompt": "FLAGS",
+        "distribution": {
+          "performed+uniting": 0.8398058252427184,
+          "honest+uniting": 0.05339805825242718,
+          "performed+dividing": 0.038834951456310676,
+          "honest+dividing": 0.06796116504854369
+        },
+        "submissions": 206,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.551,
+          "honest+uniting": 0.149,
+          "performed+dividing": 0.248,
+          "honest+dividing": 0.052
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.551,
+      "honest+uniting": 0.149,
+      "performed+dividing": 0.248,
+      "honest+dividing": 0.052
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.49400488677867055,
+    "score": 75.29975566106647,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

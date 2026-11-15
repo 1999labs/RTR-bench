@@ -1,0 +1,607 @@
+{
+  "day": 141,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"HILLARY CLINTON\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":60,\"prompt\":\"REPUBLICANS\",\"distribution\":{\"performed+uniting\":0.071875,\"honest+uniting\":0.128125,\"performed+dividing\":0.4,\"honest+dividing\":0.4},\"submissions\":320},{\"id\":71,\"prompt\":\"DEMOCRATS\",\"distribution\":{\"performed+uniting\":0.22452504317789293,\"honest+uniting\":0.05008635578583765,\"performed+dividing\":0.4386873920552677,\"honest+dividing\":0.2867012089810017},\"submissions\":579},{\"id\":56,\"prompt\":\"BURNING MAN\",\"distribution\":{\"performed+uniting\":0.8966666666666666,\"honest+uniting\":0.03666666666666667,\"performed+dividing\":0.02666666666666667,\"honest+dividing\":0.04},\"submissions\":300}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:25:47.266Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.180,\"honest+uniting\":0.030,\"performed+dividing\":0.470,\"honest+dividing\":0.320}",
+      "response": {
+        "id": "gen-1794716747-XlS9EKxX7e9cTiNj3rKN",
+        "object": "chat.completion",
+        "created": 1794716747,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.180,\"honest+uniting\":0.030,\"performed+dividing\":0.470,\"honest+dividing\":0.320}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"HILLARY CLINTON\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"REPUBLICANS\": performed+uniting 0.071875, honest+uniting 0.128125, performed+dividing 0.4, honest+dividing 0.4 (sum=1.0). Submissions 320.\n2. \"DEMOCRATS\": performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867 (sum ~1.0). Submissions 579.\n3. \"BURNING MAN\": performed+uniting 0.8967, honest+uniting 0.0367, performed+dividing 0.0267, honest+dividing 0.04 (sum=1.0). Submissions 300.\n\nWe need to estimate for \"HILLARY CLINTON\". She is a Democratic politician, former Secretary of State, former First Lady, former Senator, presidential candidate (2016). The audience seems to be politically aware, maybe from a generative art project (maybe left-leaning? Not sure). The examples: REPUBLICANS got high dividing (performed+dividing 0.4, honest+dividing 0.4) and low uniting. DEMOCRATS got high performed+dividing (0.4387) and honest+dividing (0.2867) and some performed+uniting (0.2245) but low honest+uniting. So both major parties are seen as dividing, with Republicans more honestly dividing? Actually Republicans: performed+dividing 0.4, honest+dividing 0.4 (both equal). Democrats: performed+dividing 0.4387 (higher performed), honest+dividing 0.2867 (lower honest), and performed+uniting 0.2245 (higher than Republicans' 0.0719). So Democrats are seen as more performatively uniting and performatively dividing, less honestly dividing.\n\nHillary Clinton is a specific Democrat, associated with the Democratic party, but also a controversial figure. She might be seen similarly to Democrats but perhaps more negatively? She is often criticized for being divisive, or for \"creating false unity\" (e.g., \"basket of deplorables\" maybe not uniting). She might be seen as performing unity (e.g., campaign rhetoric) but actually dividing. Or as exploiting divisions deliberately (performed+dividing). Also possibly honest+dividing? Unlikely, as she tries to appear uniting. So probably high performed+dividing, some performed+uniting, low honest+uniting, moderate honest+dividing.\n\nCompare to DEMOCRATS: performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867. For Hillary, maybe performed+uniting slightly lower or similar? She is a specific individual, maybe more performed+dividing higher because she's a lightning rod. Could be performed+dividing ~0.5, performed+uniting ~0.15, honest+dividing ~0.3, honest+uniting ~0.05. Or maybe honest+dividing higher because some see her as genuinely fracturing (e.g., her candidacy caused divisions). But the audience's interpretations are subjective.\n\nWe need to produce a single JSON object with four keys, probabilities sum to 1. Use at least three decimals when needed.\n\nWe can base on the DEMOCRATS example as closest analog. But also consider REPUBLICANS. Hillary is a Democrat, so DEMOCRATS is more relevant. However, she is a person, not a party. Burning Man is an event, got huge performed+uniting (0.8967) because maybe it's about community? Not relevant.\n\nThus, for Hillary Clinton, I'd predict something like:\nperformed+uniting: 0.18 (a bit lower than Democrats' 0.2245 because she's more divisive than the party as a brand? Or maybe higher because she tries to unite but fake? Actually \"performing false unity\" could be high for a politician. But Democrats as a party might be seen as trying to unite coalitions, while Hillary specifically might be seen as less uniting. I'll set 0.15.)\nhonest+uniting: 0.04 (even lower than Democrats' 0.05)\nperformed+dividing: 0.48 (higher than Democrats' 0.4387)\nhonest+dividing: 0.33 (a bit higher than 0.2867)\n\nSum: 0.15+0.04+0.48+0.33 = 1.00. That works.\n\nBut we need at least three decimal places when needed. We can use 0.150, 0.040, 0.480, 0.330. Or more precise: 0.15, 0.04, 0.48, 0.33 sum exactly 1. But to be safe, use 0.150, 0.040, 0.480, 0.330.\n\nAlternatively, we could interpolate between REPUBLICANS and DEMOCRATS? Hillary is a Democrat but maybe viewed by this audience (which might be left-leaning art project) with some skepticism. The project \"Mixed Messages\" might be from a context like a workshop where participants assign meanings. Hard to know.\n\nGiven the examples, the sums are exact. I'll produce:\n\n{\"performed+uniting\":0.150,\"honest+uniting\":0.040,\"performed+dividing\":0.480,\"honest+dividing\":0.330}\n\nCheck sum: 0.150+0.040=0.190; +0.480=0.670; +0.330=1.000. Good.\n\nBut maybe we should consider that Hillary Clinton is a woman, former candidate, and might evoke \"honest+dividing\" as some see her as genuinely causing fractures in the left (e.g., Bernie supporters). Could be higher honest+dividing. But performed+dividing also high. I'll keep as above.\n\nAlternatively, we could mimic DEMOCRATS but shift: performed+uniting 0.20, honest+uniting 0.05, performed+dividing 0.45, honest+dividing 0.30. Sum=1.00. That is also plausible.\n\nWhich is better? The instruction: \"Historical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we should use them as evidence. The word is a proper noun of a political figure from Democratic party. The DEMOCRATS distribution is the most directly relevant. But as a person, maybe more polarizing: performed+dividing might be higher, performed+uniting lower. So I'll adjust: performed+uniting 0.18, honest+uniting 0.03, performed+dividing 0.47, honest+dividing 0.32. Sum=1.00. Use decimals: 0.180, 0.030, 0.470, 0.320.\n\nI'll go with 0.180, 0.030, 0.470, 0.320.\n\nBut to be safe with three decimals: 0.180, 0.030, 0.470, 0.320 sum = 1.000.\n\nAlternatively, use 0.179, 0.031, 0.469, 0.321? Not needed.\n\nI'll output exactly: {\"performed+uniting\":0.180,\"honest+uniting\":0.030,\"performed+dividing\":0.470,\"honest+dividing\":0.320}\n\nNo other text.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"HILLARY CLINTON\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"REPUBLICANS\": performed+uniting 0.071875, honest+uniting 0.128125, performed+dividing 0.4, honest+dividing 0.4 (sum=1.0). Submissions 320.\n2. \"DEMOCRATS\": performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867 (sum ~1.0). Submissions 579.\n3. \"BURNING MAN\": performed+uniting 0.8967, honest+uniting 0.0367, performed+dividing 0.0267, honest+dividing 0.04 (sum=1.0). Submissions 300.\n\nWe need to estimate for \"HILLARY CLINTON\". She is a Democratic politician, former Secretary of State, former First Lady, former Senator, presidential candidate (2016). The audience seems to be politically aware, maybe from a generative art project (maybe left-leaning? Not sure). The examples: REPUBLICANS got high dividing (performed+dividing 0.4, honest+dividing 0.4) and low uniting. DEMOCRATS got high performed+dividing (0.4387) and honest+dividing (0.2867) and some performed+uniting (0.2245) but low honest+uniting. So both major parties are seen as dividing, with Republicans more honestly dividing? Actually Republicans: performed+dividing 0.4, honest+dividing 0.4 (both equal). Democrats: performed+dividing 0.4387 (higher performed), honest+dividing 0.2867 (lower honest), and performed+uniting 0.2245 (higher than Republicans' 0.0719). So Democrats are seen as more performatively uniting and performatively dividing, less honestly dividing.\n\nHillary Clinton is a specific Democrat, associated with the Democratic party, but also a controversial figure. She might be seen similarly to Democrats but perhaps more negatively? She is often criticized for being divisive, or for \"creating false unity\" (e.g., \"basket of deplorables\" maybe not uniting). She might be seen as performing unity (e.g., campaign rhetoric) but actually dividing. Or as exploiting divisions deliberately (performed+dividing). Also possibly honest+dividing? Unlikely, as she tries to appear uniting. So probably high performed+dividing, some performed+uniting, low honest+uniting, moderate honest+dividing.\n\nCompare to DEMOCRATS: performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867. For Hillary, maybe performed+uniting slightly lower or similar? She is a specific individual, maybe more performed+dividing higher because she's a lightning rod. Could be performed+dividing ~0.5, performed+uniting ~0.15, honest+dividing ~0.3, honest+uniting ~0.05. Or maybe honest+dividing higher because some see her as genuinely fracturing (e.g., her candidacy caused divisions). But the audience's interpretations are subjective.\n\nWe need to produce a single JSON object with four keys, probabilities sum to 1. Use at least three decimals when needed.\n\nWe can base on the DEMOCRATS example as closest analog. But also consider REPUBLICANS. Hillary is a Democrat, so DEMOCRATS is more relevant. However, she is a person, not a party. Burning Man is an event, got huge performed+uniting (0.8967) because maybe it's about community? Not relevant.\n\nThus, for Hillary Clinton, I'd predict something like:\nperformed+uniting: 0.18 (a bit lower than Democrats' 0.2245 because she's more divisive than the party as a brand? Or maybe higher because she tries to unite but fake? Actually \"performing false unity\" could be high for a politician. But Democrats as a party might be seen as trying to unite coalitions, while Hillary specifically might be seen as less uniting. I'll set 0.15.)\nhonest+uniting: 0.04 (even lower than Democrats' 0.05)\nperformed+dividing: 0.48 (higher than Democrats' 0.4387)\nhonest+dividing: 0.33 (a bit higher than 0.2867)\n\nSum: 0.15+0.04+0.48+0.33 = 1.00. That works.\n\nBut we need at least three decimal places when needed. We can use 0.150, 0.040, 0.480, 0.330. Or more precise: 0.15, 0.04, 0.48, 0.33 sum exactly 1. But to be safe, use 0.150, 0.040, 0.480, 0.330.\n\nAlternatively, we could interpolate between REPUBLICANS and DEMOCRATS? Hillary is a Democrat but maybe viewed by this audience (which might be left-leaning art project) with some skepticism. The project \"Mixed Messages\" might be from a context like a workshop where participants assign meanings. Hard to know.\n\nGiven the examples, the sums are exact. I'll produce:\n\n{\"performed+uniting\":0.150,\"honest+uniting\":0.040,\"performed+dividing\":0.480,\"honest+dividing\":0.330}\n\nCheck sum: 0.150+0.040=0.190; +0.480=0.670; +0.330=1.000. Good.\n\nBut maybe we should consider that Hillary Clinton is a woman, former candidate, and might evoke \"honest+dividing\" as some see her as genuinely causing fractures in the left (e.g., Bernie supporters). Could be higher honest+dividing. But performed+dividing also high. I'll keep as above.\n\nAlternatively, we could mimic DEMOCRATS but shift: performed+uniting 0.20, honest+uniting 0.05, performed+dividing 0.45, honest+dividing 0.30. Sum=1.00. That is also plausible.\n\nWhich is better? The instruction: \"Historical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we should use them as evidence. The word is a proper noun of a political figure from Democratic party. The DEMOCRATS distribution is the most directly relevant. But as a person, maybe more polarizing: performed+dividing might be higher, performed+uniting lower. So I'll adjust: performed+uniting 0.18, honest+uniting 0.03, performed+dividing 0.47, honest+dividing 0.32. Sum=1.00. Use decimals: 0.180, 0.030, 0.470, 0.320.\n\nI'll go with 0.180, 0.030, 0.470, 0.320.\n\nBut to be safe with three decimals: 0.180, 0.030, 0.470, 0.320 sum = 1.000.\n\nAlternatively, use 0.179, 0.031, 0.469, 0.321? Not needed.\n\nI'll output exactly: {\"performed+uniting\":0.180,\"honest+uniting\":0.030,\"performed+dividing\":0.470,\"honest+dividing\":0.320}\n\nNo other text.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 482,
+          "completion_tokens": 1828,
+          "total_tokens": 2310,
+          "cost": 0.001028808,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001028808,
+            "upstream_inference_prompt_cost": 0.000063624,
+            "upstream_inference_completions_cost": 0.000965184
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1785,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 482,
+        "completion_tokens": 1828,
+        "total_tokens": 2310,
+        "cost": 0.001028808,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001028808,
+          "upstream_inference_prompt_cost": 0.000063624,
+          "upstream_inference_completions_cost": 0.000965184
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1785,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 56,
+      "finishedAt": "2026-11-15T04:26:09.929Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 60
+      },
+      "observation": {
+        "ok": true,
+        "id": 60,
+        "prompt": "REPUBLICANS",
+        "distribution": {
+          "performed+uniting": 0.071875,
+          "honest+uniting": 0.128125,
+          "performed+dividing": 0.4,
+          "honest+dividing": 0.4
+        },
+        "submissions": 320,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 71
+      },
+      "observation": {
+        "ok": true,
+        "id": 71,
+        "prompt": "DEMOCRATS",
+        "distribution": {
+          "performed+uniting": 0.22452504317789293,
+          "honest+uniting": 0.05008635578583765,
+          "performed+dividing": 0.4386873920552677,
+          "honest+dividing": 0.2867012089810017
+        },
+        "submissions": 579,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 56
+      },
+      "observation": {
+        "ok": true,
+        "id": 56,
+        "prompt": "BURNING MAN",
+        "distribution": {
+          "performed+uniting": 0.8966666666666666,
+          "honest+uniting": 0.03666666666666667,
+          "performed+dividing": 0.02666666666666667,
+          "honest+dividing": 0.04
+        },
+        "submissions": 300,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.18,
+          "honest+uniting": 0.03,
+          "performed+dividing": 0.47,
+          "honest+dividing": 0.32
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.18,
+      "honest+uniting": 0.03,
+      "performed+dividing": 0.47,
+      "honest+dividing": 0.32
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.15319612499601012,
+    "score": 92.34019375019949,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

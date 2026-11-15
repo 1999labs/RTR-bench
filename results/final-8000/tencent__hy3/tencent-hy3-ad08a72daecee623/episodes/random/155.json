@@ -1,0 +1,607 @@
+{
+  "day": 155,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"CHILD PROTECTIVE SERVICES\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":74,\"prompt\":\"INITIAL PUBLIC OFFERINGS\",\"distribution\":{\"performed+uniting\":0.4732142857142857,\"honest+uniting\":0.0625,\"performed+dividing\":0.4017857142857143,\"honest+dividing\":0.0625},\"submissions\":112},{\"id\":29,\"prompt\":\"RHIZOME\",\"distribution\":{\"performed+uniting\":0.15328467153284672,\"honest+uniting\":0.7980535279805353,\"performed+dividing\":0.0024330900243309003,\"honest+dividing\":0.046228710462287104},\"submissions\":411},{\"id\":81,\"prompt\":\"BORDER WALLS\",\"distribution\":{\"performed+uniting\":0.0189873417721519,\"honest+uniting\":0.16139240506329114,\"performed+dividing\":0.028481012658227847,\"honest+dividing\":0.7911392405063291},\"submissions\":316}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:33:23.916Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.080,\"honest+uniting\":0.220,\"performed+dividing\":0.020,\"honest+dividing\":0.680}",
+      "response": {
+        "id": "gen-1794717203-9XnoMuKYwfTxqgS4aWg2",
+        "object": "chat.completion",
+        "created": 1794717203,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.080,\"honest+uniting\":0.220,\"performed+dividing\":0.020,\"honest+dividing\":0.680}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"CHILD PROTECTIVE SERVICES\" from participants in Mixed Messages, a generative art project. The audience interpretations are in four quadrants: performed+uniting, honest+uniting, performed+dividing, honest+dividing.\n\nWe have historical examples:\n1. \"INITIAL PUBLIC OFFERINGS\": performed+uniting 0.473, honest+uniting 0.0625, performed+dividing 0.402, honest+dividing 0.0625. Submissions 112. So for IPO, high performed (uniting+dividing) ~0.875, low honest ~0.125. Specifically performed uniting and performed dividing both high, honest low.\n2. \"RHIZOME\": performed+uniting 0.153, honest+uniting 0.798, performed+dividing 0.0024, honest+dividing 0.0462. Submissions 411. So for RHIZOME, mostly honest+uniting (authentic togetherness), low performed, low dividing.\n3. \"BORDER WALLS\": performed+uniting 0.019, honest+uniting 0.161, performed+dividing 0.0285, honest+dividing 0.791. Submissions 316. So for BORDER WALLS, mostly honest+dividing (fracturing truthfully), some honest uniting, low performed.\n\nWe need to estimate for \"CHILD PROTECTIVE SERVICES\". This is a term that likely evokes government intervention, family separation, protection of children, possibly controversial: some see as protecting children (uniting? maybe uniting child with safe environment? or dividing family truthfully? performed? maybe performative?).\n\nWe need to infer the audience's likely interpretations. The audience seems to interpret words in a political/social commentary way. For \"INITIAL PUBLIC OFFERINGS\" (finance, maybe capitalism) they saw performed unity/division (fake). For \"RHIZOME\" (botanical/philosophical, Deleuze/Guattari) they saw honest unity (connecting). For \"BORDER WALLS\" (divisive political) they saw honest dividing (actual fracturing).\n\n\"CHILD PROTECTIVE SERVICES\" (CPS) is a government agency that removes children from families deemed unsafe. It can be seen as:\n- performed+uniting: creating false unity among us? Maybe pretending to protect children while unifying society superficially? Or maybe CPS creates false unity by claiming to save children but actually? Not sure.\n- honest+uniting: bringing us together authentically? Perhaps because protecting children is a shared value, uniting communities? Or reunifying families? CPS sometimes aims to reunify families, which is honest uniting.\n- performed+dividing: exploiting our divisions deliberately? CPS might be seen as weaponized to divide families, maybe performatively dividing (like targeting certain groups)? Or exploiting divisions (e.g., racial divisions) for political gain?\n- honest+dividing: fracturing us truthfully? CPS does remove children, fracturing families, truthfully (it's a real function). Could be seen as honestly dividing families.\n\nGiven the examples: words with negative/concrete institutional power (BORDER WALLS) -> honest dividing dominant. Word with abstract/network (RHIZOME) -> honest uniting. Word with financial/capitalist (IPO) -> performed uniting/dividing high.\n\nCPS is a state institution that intervenes in families. It could be analogous to BORDER WALLS in that it's a government enforcement that separates (fractures). But it also purports to protect, which could be performed unity (fake care). The audience might be cynical about institutions, so likely high honest dividing (truthfully fracturing families) or performed dividing (exploiting divisions). But BORDER WALLS got 0.791 honest dividing, 0.161 honest uniting, low performed. CPS might be similar: it fractures families truthfully (honest dividing). However, CPS also has a mandate to protect children, which could be seen as uniting (child with safety). But the audience may view it as oppressive.\n\nLet's think of the quadrants definitions:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nFor CPS: \"creating false unity among us\" might be like performative activism about protecting children while not addressing root causes. \"bringing us together authentically\" maybe shared community care for children. \"exploiting our divisions deliberately\" maybe CPS used to target marginalized groups, exacerbating class/race divides for political points. \"fracturing us truthfully\" maybe it literally removes kids from parents, breaking families.\n\nGiven the historical patterns: The audience seems to assign based on the concept's inherent nature. IPO: financial instrument, seen as fake (performed) and both uniting/dividing (market). RHIZOME: organic connection, honest uniting. BORDER WALLS: physical barrier, honest dividing.\n\nCPS: It's a service, not a wall. It claims to protect, but effect is removal. Could be seen as \"honest dividing\" because it truthfully fractures families (like border walls fracture). But border walls are more clearly dividing. CPS might have more ambiguity: some see as helpful (uniting). But the audience in this project might lean critical. The examples show that for a clearly divisive object (border walls) they gave honest dividing 0.79. For a more neutral/positive concept (rhizome) honest uniting 0.80. For a capitalist concept (IPO) performed both ~0.47 and 0.40.\n\nCPS is a government agency with mixed perception. Could be similar to IPO? Both are institutions of power. IPO is market, CPS is state. But IPO distribution: performed uniting 0.473, performed dividing 0.402, honest each 0.0625. That's almost entirely performed (fake) and split between uniting/dividing. Could CPS be seen as performed? Possibly: CPS performs unity (saying they protect children) but also performs division (tearing families apart for show?). But the honest categories were very low. That seems like a cynical view of IPO as purely performative capitalism.\n\nWould the audience view CPS similarly? Maybe not, because CPS has a humanitarian veneer but actual harm. Could be performed uniting high (fake care) and honest dividing moderate (real harm). Or performed dividing high (deliberate exploitation). Let's examine the submissions counts: IPO 112, RHIZOME 411, BORDER WALLS 316. So larger samples for the latter two. The predictions should be based on likely audience.\n\nWe need to output a single JSON object with four probabilities summing to 1. We can choose values.\n\nLet's reason qualitatively:\n- \"CHILD PROTECTIVE SERVICES\" likely evokes child removal, family separation. That is fracturing. Is it truthful? Yes, it does fracture families as a function. So honest+dividing should be significant.\n- But it also claims to protect, which could be seen as false unity (performed+uniting): pretending we're all caring while ignoring systemic issues.\n- Could also be performed+dividing: deliberately exploiting divisions (e.g., class, race) by targeting poor families.\n- honest+uniting: maybe some see as authentically bringing children to safety, but less likely dominant.\n\nCompare to BORDER WALLS: honest dividing 0.791, honest uniting 0.161, performed uniting 0.019, performed dividing 0.028. So for a stark divider, they gave almost all honest dividing, some honest uniting (maybe because walls also define sides? or maybe some see as protecting?). For CPS, maybe not as stark as wall, but still fracturing. Could be honest dividing around 0.5-0.7, with some performed uniting (fake care) around 0.2-0.3, and small others.\n\nBut also note IPO had high performed both. That suggests for financial/abstract systems they see as fake. CPS is a state agency, maybe more like border walls (state coercion) -> honest dividing.\n\nHowever, CPS is not as universally recognized as a divider as a wall. There is a narrative of \"protecting children\" that could lead to performed uniting. The audience might be art project participants who are politically aware, perhaps left-leaning, critical of carceral systems. They might view CPS as part of the carceral state, fracturing families (honest dividing) but also with a performative veneer (performed uniting). So maybe honest dividing 0.55, performed uniting 0.30, performed dividing 0.10, honest uniting 0.05. Or something.\n\nWe need to produce numbers with at least three decimals if needed. Sum to 1.\n\nLet's look at the example distributions more closely:\nIPO: performed+uniting 0.473214..., honest+uniting 0.0625, performed+dividing 0.401785..., honest+dividing 0.0625. So performed total = 0.875, honest total = 0.125. Uniting total = 0.5357, dividing total = 0.4643.\nRHIZOME: performed+uniting 0.15328, honest+uniting 0.79805, performed+dividing 0.00243, honest+dividing 0.04623. Honest total = 0.84428, performed total = 0.1557. Uniting total = 0.9513, dividing total = 0.0487.\nBORDER WALLS: performed+uniting 0.01899, honest+uniting 0.16139, performed+dividing 0.02848, honest+dividing 0.79114. Honest total = 0.9525, performed total = 0.0475. Uniting total = 0.1804, dividing total = 0.8196.\n\nSo the audience tends to pick either honest or performed as a dimension, and either uniting or dividing as another, with strong correlation based on prompt. For RHIZOME: honest+uniting overwhelming. For BORDER WALLS: honest+dividing overwhelming. For IPO: performed+ both roughly equal, honest low.\n\nThus for CPS, we need to decide which quadrant is dominant. CPS is a protective service but results in division. It could be seen as honest+dividing (like border walls) because it truthfully fractures families. But it also has a \"protective\" name that could be performed+uniting (fake unity). The audience might split between honest dividing and performed uniting. Maybe similar to IPO but with honest dividing instead of performed dividing? Or maybe like border walls but with some performed uniting.\n\nGiven that border walls is a physical division, CPS is a bureaucratic division. I'd guess the dominant is honest+dividing, but with a notable performed+uniting because of the \"protective\" framing. Let's assign:\nhonest+dividing: 0.65\nperformed+uniting: 0.25\nhonest+uniting: 0.05\nperformed+dividing: 0.05\nSum = 1.0. But we need at least three decimals if needed; we can use 0.650, 0.250, 0.050, 0.050. But better to have more precise like 0.651, 0.247, 0.052, 0.050? Sum must be 1. Let's do 0.650, 0.250, 0.050, 0.050 exactly sums to 1. But maybe we want to reflect uncertainty: 0.62, 0.28, 0.06, 0.04 = 1.00.\n\nAlternatively, maybe they see CPS as performed+dividing: exploiting divisions deliberately (e.g., taking kids from minorities). That could be high. But border walls performed dividing was low (0.028). So when something is honestly dividing, they don't also see performed dividing much. For IPO, performed dividing high because it's not honestly dividing? Actually IPO might honestly unite? Not sure.\n\nI think the safest is to model after BORDER WALLS but with some performed uniting because CPS has a caring facade. So:\nhonest+dividing: 0.70\nperformed+uniting: 0.20\nhonest+uniting: 0.07\nperformed+dividing: 0.03\nSum = 1.00. That mirrors border walls numbers somewhat: border walls had honest dividing 0.791, honest uniting 0.161, performed uniting 0.019, performed dividing 0.028. So if we shift some from honest uniting to performed uniting (since CPS has more fake care aspect), we get: honest dividing 0.70, performed uniting 0.20, honest uniting 0.07, performed dividing 0.03. That sums 1.0.\n\nBut maybe performed uniting should be higher, like 0.30, honest dividing 0.60, honest uniting 0.05, performed dividing 0.05.\n\nLet's consider the phrase \"CHILD PROTECTIVE SERVICES\" - the word \"PROTECTIVE\" suggests uniting? But the audience interpretations are about \"us\" (society). \"creating false unity among us\" could be like performative solidarity about protecting children. \"bringing us together authentically\" could be real community protection. \"exploiting our divisions deliberately\" maybe using child protection as pretext to police communities. \"fracturing us truthfully\" removing children.\n\nI'll go with a distribution that emphasizes honest dividing but acknowledges performed uniting:\n{\n  \"performed+uniting\": 0.278,\n  \"honest+uniting\": 0.072,\n  \"performed+dividing\": 0.048,\n  \"honest+dividing\": 0.602\n}\nSum = 0.278+0.072=0.35, +0.048=0.398, +0.602=1.000. Good.\n\nBut we could also make performed+uniting a bit higher, like 0.35, honest dividing 0.55, others small. Let's see if any example had performed uniting >0.15 except IPO. RHIZOME had 0.153 performed uniting but honest uniting dominant. So performed uniting can be moderate when honest uniting also present, but here we want honest dividing dominant. In border walls performed uniting only 0.019. So maybe the audience doesn't mix performed uniting with honest dividing much. They tend to be consistent on honest vs performed dimension. In border walls, honest total 0.952, performed total 0.048. In rhizome, honest total 0.844, performed 0.156. In IPO, performed total 0.875, honest 0.125. So the dimension is strongly correlated: either mostly honest or mostly performed. So for CPS, we should decide: is the audience likely to see CPS as honest or performed? Given it's a real government function that does fracture families, they might see it as honest (like border walls). So honest total should be high (~0.9). Then within honest, dividing vs uniting: border walls honest dividing 0.791/0.952 = 0.83 of honest, honest uniting 0.161/0.952=0.17. For CPS, maybe honest dividing is less extreme because CPS has a protective intent, so honest uniting could be higher, say honest dividing 0.75 of total, honest uniting 0.25 of total. With honest total 0.90, we get honest dividing 0.675, honest uniting 0.225, performed total 0.10 split maybe performed uniting 0.08, performed dividing 0.02. That yields:\nhonest+dividing: 0.675\nhonest+uniting: 0.225\nperformed+uniting: 0.080\nperformed+dividing: 0.020\nSum = 1.000.\n\nThat seems plausible: mostly honest, with dividing dominant but some uniting because of protection narrative.\n\nAlternatively, if they see CPS as performative (like IPO), then performed total high. But CPS is not a market instrument; it's a state agency with tangible effects. Border walls is also state, honest. So likely honest.\n\nThus I'll choose:\n{\n  \"performed+uniting\": 0.085,\n  \"honest+uniting\": 0.215,\n  \"performed+dividing\": 0.025,\n  \"honest+dividing\": 0.675\n}\nSum = 0.085+0.215=0.3, +0.025=0.325, +0.675=1.0.\n\nBut we need at least three decimals if needed; these are three decimals. Good.\n\nWe could also use the exact style: they used many decimals in examples. But we can use three.\n\nI'll output exactly the JSON object, no prose, no code fences.\n\nLet's double-check the keys: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll produce:\n{\"performed+uniting\":0.085,\"honest+uniting\":0.215,\"performed+dividing\":0.025,\"honest+dividing\":0.675}\n\nBut maybe we want to be closer to border walls shift: border walls honest uniting 0.161, honest dividing 0.791. For CPS, maybe honest uniting 0.25, honest dividing 0.70, performed uniting 0.05, performed dividing 0.00? But need sum 1. Let's do 0.05, 0.25, 0.02, 0.68 = 1.0. I'll go with 0.08, 0.22, 0.02, 0.68? Actually 0.08+0.22=0.30, +0.02=0.32, +0.68=1.00. That's fine.\n\nI'll pick: {\"performed+uniting\":0.080,\"honest+uniting\":0.220,\"performed+dividing\":0.020,\"honest+dividing\":0.680}\n\nBut to add a bit more nuance, maybe 0.073, 0.227, 0.027, 0.673 sum 1.000. I'll just use 0.08,0.22,0.02,0.68.\n\nMake sure no extra spaces? The examples had spaces after colon? They had {\"performed+uniting\":0.473...,\"honest+uniting\":0.0625,...} no spaces. I'll output compact JSON.\n\nFinal answer: {\"performed+uniting\":0.08,\"honest+uniting\":0.22,\"performed+dividing\":0.02,\"honest+dividing\":0.68} but need three decimals? \"Use at least three decimal places when needed.\" 0.08 is two decimals, but it's exact; we can write 0.080 to be safe. I'll write 0.080, 0.220, 0.020, 0.680.\n\nThus: {\"performed+uniting\":0.080,\"honest+uniting\":0.220,\"performed+dividing\":0.020,\"honest+dividing\":0.680}\n\nCheck sum: 0.080+0.220=0.300, +0.020=0.320, +0.680=1.000. Good.\n\nI'll output that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"CHILD PROTECTIVE SERVICES\" from participants in Mixed Messages, a generative art project. The audience interpretations are in four quadrants: performed+uniting, honest+uniting, performed+dividing, honest+dividing.\n\nWe have historical examples:\n1. \"INITIAL PUBLIC OFFERINGS\": performed+uniting 0.473, honest+uniting 0.0625, performed+dividing 0.402, honest+dividing 0.0625. Submissions 112. So for IPO, high performed (uniting+dividing) ~0.875, low honest ~0.125. Specifically performed uniting and performed dividing both high, honest low.\n2. \"RHIZOME\": performed+uniting 0.153, honest+uniting 0.798, performed+dividing 0.0024, honest+dividing 0.0462. Submissions 411. So for RHIZOME, mostly honest+uniting (authentic togetherness), low performed, low dividing.\n3. \"BORDER WALLS\": performed+uniting 0.019, honest+uniting 0.161, performed+dividing 0.0285, honest+dividing 0.791. Submissions 316. So for BORDER WALLS, mostly honest+dividing (fracturing truthfully), some honest uniting, low performed.\n\nWe need to estimate for \"CHILD PROTECTIVE SERVICES\". This is a term that likely evokes government intervention, family separation, protection of children, possibly controversial: some see as protecting children (uniting? maybe uniting child with safe environment? or dividing family truthfully? performed? maybe performative?).\n\nWe need to infer the audience's likely interpretations. The audience seems to interpret words in a political/social commentary way. For \"INITIAL PUBLIC OFFERINGS\" (finance, maybe capitalism) they saw performed unity/division (fake). For \"RHIZOME\" (botanical/philosophical, Deleuze/Guattari) they saw honest unity (connecting). For \"BORDER WALLS\" (divisive political) they saw honest dividing (actual fracturing).\n\n\"CHILD PROTECTIVE SERVICES\" (CPS) is a government agency that removes children from families deemed unsafe. It can be seen as:\n- performed+uniting: creating false unity among us? Maybe pretending to protect children while unifying society superficially? Or maybe CPS creates false unity by claiming to save children but actually? Not sure.\n- honest+uniting: bringing us together authentically? Perhaps because protecting children is a shared value, uniting communities? Or reunifying families? CPS sometimes aims to reunify families, which is honest uniting.\n- performed+dividing: exploiting our divisions deliberately? CPS might be seen as weaponized to divide families, maybe performatively dividing (like targeting certain groups)? Or exploiting divisions (e.g., racial divisions) for political gain?\n- honest+dividing: fracturing us truthfully? CPS does remove children, fracturing families, truthfully (it's a real function). Could be seen as honestly dividing families.\n\nGiven the examples: words with negative/concrete institutional power (BORDER WALLS) -> honest dividing dominant. Word with abstract/network (RHIZOME) -> honest uniting. Word with financial/capitalist (IPO) -> performed uniting/dividing high.\n\nCPS is a state institution that intervenes in families. It could be analogous to BORDER WALLS in that it's a government enforcement that separates (fractures). But it also purports to protect, which could be performed unity (fake care). The audience might be cynical about institutions, so likely high honest dividing (truthfully fracturing families) or performed dividing (exploiting divisions). But BORDER WALLS got 0.791 honest dividing, 0.161 honest uniting, low performed. CPS might be similar: it fractures families truthfully (honest dividing). However, CPS also has a mandate to protect children, which could be seen as uniting (child with safety). But the audience may view it as oppressive.\n\nLet's think of the quadrants definitions:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nFor CPS: \"creating false unity among us\" might be like performative activism about protecting children while not addressing root causes. \"bringing us together authentically\" maybe shared community care for children. \"exploiting our divisions deliberately\" maybe CPS used to target marginalized groups, exacerbating class/race divides for political points. \"fracturing us truthfully\" maybe it literally removes kids from parents, breaking families.\n\nGiven the historical patterns: The audience seems to assign based on the concept's inherent nature. IPO: financial instrument, seen as fake (performed) and both uniting/dividing (market). RHIZOME: organic connection, honest uniting. BORDER WALLS: physical barrier, honest dividing.\n\nCPS: It's a service, not a wall. It claims to protect, but effect is removal. Could be seen as \"honest dividing\" because it truthfully fractures families (like border walls fracture). But border walls are more clearly dividing. CPS might have more ambiguity: some see as helpful (uniting). But the audience in this project might lean critical. The examples show that for a clearly divisive object (border walls) they gave honest dividing 0.79. For a more neutral/positive concept (rhizome) honest uniting 0.80. For a capitalist concept (IPO) performed both ~0.47 and 0.40.\n\nCPS is a government agency with mixed perception. Could be similar to IPO? Both are institutions of power. IPO is market, CPS is state. But IPO distribution: performed uniting 0.473, performed dividing 0.402, honest each 0.0625. That's almost entirely performed (fake) and split between uniting/dividing. Could CPS be seen as performed? Possibly: CPS performs unity (saying they protect children) but also performs division (tearing families apart for show?). But the honest categories were very low. That seems like a cynical view of IPO as purely performative capitalism.\n\nWould the audience view CPS similarly? Maybe not, because CPS has a humanitarian veneer but actual harm. Could be performed uniting high (fake care) and honest dividing moderate (real harm). Or performed dividing high (deliberate exploitation). Let's examine the submissions counts: IPO 112, RHIZOME 411, BORDER WALLS 316. So larger samples for the latter two. The predictions should be based on likely audience.\n\nWe need to output a single JSON object with four probabilities summing to 1. We can choose values.\n\nLet's reason qualitatively:\n- \"CHILD PROTECTIVE SERVICES\" likely evokes child removal, family separation. That is fracturing. Is it truthful? Yes, it does fracture families as a function. So honest+dividing should be significant.\n- But it also claims to protect, which could be seen as false unity (performed+uniting): pretending we're all caring while ignoring systemic issues.\n- Could also be performed+dividing: deliberately exploiting divisions (e.g., class, race) by targeting poor families.\n- honest+uniting: maybe some see as authentically bringing children to safety, but less likely dominant.\n\nCompare to BORDER WALLS: honest dividing 0.791, honest uniting 0.161, performed uniting 0.019, performed dividing 0.028. So for a stark divider, they gave almost all honest dividing, some honest uniting (maybe because walls also define sides? or maybe some see as protecting?). For CPS, maybe not as stark as wall, but still fracturing. Could be honest dividing around 0.5-0.7, with some performed uniting (fake care) around 0.2-0.3, and small others.\n\nBut also note IPO had high performed both. That suggests for financial/abstract systems they see as fake. CPS is a state agency, maybe more like border walls (state coercion) -> honest dividing.\n\nHowever, CPS is not as universally recognized as a divider as a wall. There is a narrative of \"protecting children\" that could lead to performed uniting. The audience might be art project participants who are politically aware, perhaps left-leaning, critical of carceral systems. They might view CPS as part of the carceral state, fracturing families (honest dividing) but also with a performative veneer (performed uniting). So maybe honest dividing 0.55, performed uniting 0.30, performed dividing 0.10, honest uniting 0.05. Or something.\n\nWe need to produce numbers with at least three decimals if needed. Sum to 1.\n\nLet's look at the example distributions more closely:\nIPO: performed+uniting 0.473214..., honest+uniting 0.0625, performed+dividing 0.401785..., honest+dividing 0.0625. So performed total = 0.875, honest total = 0.125. Uniting total = 0.5357, dividing total = 0.4643.\nRHIZOME: performed+uniting 0.15328, honest+uniting 0.79805, performed+dividing 0.00243, honest+dividing 0.04623. Honest total = 0.84428, performed total = 0.1557. Uniting total = 0.9513, dividing total = 0.0487.\nBORDER WALLS: performed+uniting 0.01899, honest+uniting 0.16139, performed+dividing 0.02848, honest+dividing 0.79114. Honest total = 0.9525, performed total = 0.0475. Uniting total = 0.1804, dividing total = 0.8196.\n\nSo the audience tends to pick either honest or performed as a dimension, and either uniting or dividing as another, with strong correlation based on prompt. For RHIZOME: honest+uniting overwhelming. For BORDER WALLS: honest+dividing overwhelming. For IPO: performed+ both roughly equal, honest low.\n\nThus for CPS, we need to decide which quadrant is dominant. CPS is a protective service but results in division. It could be seen as honest+dividing (like border walls) because it truthfully fractures families. But it also has a \"protective\" name that could be performed+uniting (fake unity). The audience might split between honest dividing and performed uniting. Maybe similar to IPO but with honest dividing instead of performed dividing? Or maybe like border walls but with some performed uniting.\n\nGiven that border walls is a physical division, CPS is a bureaucratic division. I'd guess the dominant is honest+dividing, but with a notable performed+uniting because of the \"protective\" framing. Let's assign:\nhonest+dividing: 0.65\nperformed+uniting: 0.25\nhonest+uniting: 0.05\nperformed+dividing: 0.05\nSum = 1.0. But we need at least three decimals if needed; we can use 0.650, 0.250, 0.050, 0.050. But better to have more precise like 0.651, 0.247, 0.052, 0.050? Sum must be 1. Let's do 0.650, 0.250, 0.050, 0.050 exactly sums to 1. But maybe we want to reflect uncertainty: 0.62, 0.28, 0.06, 0.04 = 1.00.\n\nAlternatively, maybe they see CPS as performed+dividing: exploiting divisions deliberately (e.g., taking kids from minorities). That could be high. But border walls performed dividing was low (0.028). So when something is honestly dividing, they don't also see performed dividing much. For IPO, performed dividing high because it's not honestly dividing? Actually IPO might honestly unite? Not sure.\n\nI think the safest is to model after BORDER WALLS but with some performed uniting because CPS has a caring facade. So:\nhonest+dividing: 0.70\nperformed+uniting: 0.20\nhonest+uniting: 0.07\nperformed+dividing: 0.03\nSum = 1.00. That mirrors border walls numbers somewhat: border walls had honest dividing 0.791, honest uniting 0.161, performed uniting 0.019, performed dividing 0.028. So if we shift some from honest uniting to performed uniting (since CPS has more fake care aspect), we get: honest dividing 0.70, performed uniting 0.20, honest uniting 0.07, performed dividing 0.03. That sums 1.0.\n\nBut maybe performed uniting should be higher, like 0.30, honest dividing 0.60, honest uniting 0.05, performed dividing 0.05.\n\nLet's consider the phrase \"CHILD PROTECTIVE SERVICES\" - the word \"PROTECTIVE\" suggests uniting? But the audience interpretations are about \"us\" (society). \"creating false unity among us\" could be like performative solidarity about protecting children. \"bringing us together authentically\" could be real community protection. \"exploiting our divisions deliberately\" maybe using child protection as pretext to police communities. \"fracturing us truthfully\" removing children.\n\nI'll go with a distribution that emphasizes honest dividing but acknowledges performed uniting:\n{\n  \"performed+uniting\": 0.278,\n  \"honest+uniting\": 0.072,\n  \"performed+dividing\": 0.048,\n  \"honest+dividing\": 0.602\n}\nSum = 0.278+0.072=0.35, +0.048=0.398, +0.602=1.000. Good.\n\nBut we could also make performed+uniting a bit higher, like 0.35, honest dividing 0.55, others small. Let's see if any example had performed uniting >0.15 except IPO. RHIZOME had 0.153 performed uniting but honest uniting dominant. So performed uniting can be moderate when honest uniting also present, but here we want honest dividing dominant. In border walls performed uniting only 0.019. So maybe the audience doesn't mix performed uniting with honest dividing much. They tend to be consistent on honest vs performed dimension. In border walls, honest total 0.952, performed total 0.048. In rhizome, honest total 0.844, performed 0.156. In IPO, performed total 0.875, honest 0.125. So the dimension is strongly correlated: either mostly honest or mostly performed. So for CPS, we should decide: is the audience likely to see CPS as honest or performed? Given it's a real government function that does fracture families, they might see it as honest (like border walls). So honest total should be high (~0.9). Then within honest, dividing vs uniting: border walls honest dividing 0.791/0.952 = 0.83 of honest, honest uniting 0.161/0.952=0.17. For CPS, maybe honest dividing is less extreme because CPS has a protective intent, so honest uniting could be higher, say honest dividing 0.75 of total, honest uniting 0.25 of total. With honest total 0.90, we get honest dividing 0.675, honest uniting 0.225, performed total 0.10 split maybe performed uniting 0.08, performed dividing 0.02. That yields:\nhonest+dividing: 0.675\nhonest+uniting: 0.225\nperformed+uniting: 0.080\nperformed+dividing: 0.020\nSum = 1.000.\n\nThat seems plausible: mostly honest, with dividing dominant but some uniting because of protection narrative.\n\nAlternatively, if they see CPS as performative (like IPO), then performed total high. But CPS is not a market instrument; it's a state agency with tangible effects. Border walls is also state, honest. So likely honest.\n\nThus I'll choose:\n{\n  \"performed+uniting\": 0.085,\n  \"honest+uniting\": 0.215,\n  \"performed+dividing\": 0.025,\n  \"honest+dividing\": 0.675\n}\nSum = 0.085+0.215=0.3, +0.025=0.325, +0.675=1.0.\n\nBut we need at least three decimals if needed; these are three decimals. Good.\n\nWe could also use the exact style: they used many decimals in examples. But we can use three.\n\nI'll output exactly the JSON object, no prose, no code fences.\n\nLet's double-check the keys: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll produce:\n{\"performed+uniting\":0.085,\"honest+uniting\":0.215,\"performed+dividing\":0.025,\"honest+dividing\":0.675}\n\nBut maybe we want to be closer to border walls shift: border walls honest uniting 0.161, honest dividing 0.791. For CPS, maybe honest uniting 0.25, honest dividing 0.70, performed uniting 0.05, performed dividing 0.00? But need sum 1. Let's do 0.05, 0.25, 0.02, 0.68 = 1.0. I'll go with 0.08, 0.22, 0.02, 0.68? Actually 0.08+0.22=0.30, +0.02=0.32, +0.68=1.00. That's fine.\n\nI'll pick: {\"performed+uniting\":0.080,\"honest+uniting\":0.220,\"performed+dividing\":0.020,\"honest+dividing\":0.680}\n\nBut to add a bit more nuance, maybe 0.073, 0.227, 0.027, 0.673 sum 1.000. I'll just use 0.08,0.22,0.02,0.68.\n\nMake sure no extra spaces? The examples had spaces after colon? They had {\"performed+uniting\":0.473...,\"honest+uniting\":0.0625,...} no spaces. I'll output compact JSON.\n\nFinal answer: {\"performed+uniting\":0.08,\"honest+uniting\":0.22,\"performed+dividing\":0.02,\"honest+dividing\":0.68} but need three decimals? \"Use at least three decimal places when needed.\" 0.08 is two decimals, but it's exact; we can write 0.080 to be safe. I'll write 0.080, 0.220, 0.020, 0.680.\n\nThus: {\"performed+uniting\":0.080,\"honest+uniting\":0.220,\"performed+dividing\":0.020,\"honest+dividing\":0.680}\n\nCheck sum: 0.080+0.220=0.300, +0.020=0.320, +0.680=1.000. Good.\n\nI'll output that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 501,
+          "completion_tokens": 4434,
+          "total_tokens": 4935,
+          "cost": 0.002407284,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.002407284,
+            "upstream_inference_prompt_cost": 0.000066132,
+            "upstream_inference_completions_cost": 0.002341152
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 4391,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 501,
+        "completion_tokens": 4434,
+        "total_tokens": 4935,
+        "cost": 0.002407284,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.002407284,
+          "upstream_inference_prompt_cost": 0.000066132,
+          "upstream_inference_completions_cost": 0.002341152
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 4391,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 70,
+      "finishedAt": "2026-11-15T04:34:23.632Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 74
+      },
+      "observation": {
+        "ok": true,
+        "id": 74,
+        "prompt": "INITIAL PUBLIC OFFERINGS",
+        "distribution": {
+          "performed+uniting": 0.4732142857142857,
+          "honest+uniting": 0.0625,
+          "performed+dividing": 0.4017857142857143,
+          "honest+dividing": 0.0625
+        },
+        "submissions": 112,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 29
+      },
+      "observation": {
+        "ok": true,
+        "id": 29,
+        "prompt": "RHIZOME",
+        "distribution": {
+          "performed+uniting": 0.15328467153284672,
+          "honest+uniting": 0.7980535279805353,
+          "performed+dividing": 0.0024330900243309003,
+          "honest+dividing": 0.046228710462287104
+        },
+        "submissions": 411,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 81
+      },
+      "observation": {
+        "ok": true,
+        "id": 81,
+        "prompt": "BORDER WALLS",
+        "distribution": {
+          "performed+uniting": 0.0189873417721519,
+          "honest+uniting": 0.16139240506329114,
+          "performed+dividing": 0.028481012658227847,
+          "honest+dividing": 0.7911392405063291
+        },
+        "submissions": 316,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.08,
+          "honest+uniting": 0.22,
+          "performed+dividing": 0.02,
+          "honest+dividing": 0.68
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.08,
+      "honest+uniting": 0.22,
+      "performed+dividing": 0.02,
+      "honest+dividing": 0.68
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.03895002245990603,
+    "score": 98.0524988770047,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

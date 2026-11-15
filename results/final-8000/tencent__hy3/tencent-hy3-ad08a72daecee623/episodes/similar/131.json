@@ -1,0 +1,607 @@
+{
+  "day": 131,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"WELFARE\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":16,\"prompt\":\"TIMES SQUARE\",\"distribution\":{\"performed+uniting\":0.5217391304347826,\"honest+uniting\":0.11956521739130435,\"performed+dividing\":0.1793478260869565,\"honest+dividing\":0.1793478260869565},\"submissions\":184},{\"id\":28,\"prompt\":\"CANCEL CULTURE\",\"distribution\":{\"performed+uniting\":0.08823529411764706,\"honest+uniting\":0.014705882352941176,\"performed+dividing\":0.35294117647058826,\"honest+dividing\":0.5441176470588235},\"submissions\":136},{\"id\":1,\"prompt\":\"THE INTERNET\",\"distribution\":{\"performed+uniting\":0.32608695652173914,\"honest+uniting\":0.06521739130434782,\"performed+dividing\":0.5543478260869565,\"honest+dividing\":0.05434782608695652},\"submissions\":92}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:44:29.309Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.180,\"honest+uniting\":0.050,\"performed+dividing\":0.420,\"honest+dividing\":0.350}",
+      "response": {
+        "id": "gen-1794717869-Seyhzt0Qv0AGyr5ORHBS",
+        "object": "chat.completion",
+        "created": 1794717869,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.180,\"honest+uniting\":0.050,\"performed+dividing\":0.420,\"honest+dividing\":0.350}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"WELFARE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"TIMES SQUARE\": performed+uniting 0.522, honest+uniting 0.120, performed+dividing 0.179, honest+dividing 0.179 (submissions 184)\n2. \"CANCEL CULTURE\": performed+uniting 0.088, honest+uniting 0.015, performed+dividing 0.353, honest+dividing 0.544 (submissions 136)\n3. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054 (submissions 92)\n\nWe need to estimate share for \"WELFARE\". The word welfare can be interpreted in various ways. It's a politically charged term in US context: social welfare, welfare state, public assistance. Often used to divide (e.g., welfare queens, dependency, etc.) or unite (caring for each other). Could be performed uniting (false unity: pretending we care, performative solidarity), honest uniting (authentic community support), performed dividing (deliberately exploiting divisions about welfare dependency), honest dividing (truthfully fracturing us, e.g., reality of inequality splits us).\n\nWe need to infer from audience's prior patterns. The examples show different words yield different distributions. TIMES SQUARE is a place, maybe associated with performed uniting (tourist unity, spectacle) high. CANCEL CULTURE is divisive, high honest dividing and performed dividing. THE INTERNET is more performed dividing (exploiting divisions) high, low honest dividing.\n\nWELFARE: likely more like CANCEL CULTURE? Both are social/political concepts. Welfare is often a wedge issue. Might have high performed dividing and honest dividing. But also maybe some performed uniting (e.g., \"we're all in this together\" rhetoric). Honest uniting likely low.\n\nLet's think about typical interpretations from such generative art audience (maybe politically aware, left-leaning? Mixed Messages project by something? Possibly from a game where people interpret words into quadrants). The examples: TIMES SQUARE: performed uniting dominant (52%) - maybe because it's a gathering place but fake unity. CANCEL CULTURE: honest dividing dominant (54%) and performed dividing 35% - people see cancel culture as truly fracturing us, and also performatively exploiting divisions. THE INTERNET: performed dividing dominant 55%, honest dividing low 5% - internet exploits divisions deliberately but doesn't truthfully fracture? Or maybe honest dividing low because internet connects? Not sure.\n\nFor WELFARE, we can consider it as a concept that is about care but politically contested. Could be: performed uniting (e.g., political rhetoric of caring, unity) moderate; honest uniting (actual community support) low; performed dividing (politicians exploiting welfare dependency narratives) high; honest dividing (welfare system actually fractures society by stigmatizing) maybe moderate.\n\nWe need to produce probabilities sum to 1. Let's try to approximate based on similarity to CANCEL CULTURE and THE INTERNET. Welfare is like a policy topic, maybe similar to cancel culture in being divisive. But welfare also has a positive connotation of well-being. Might get more performed uniting than cancel culture (which had 0.088). Cancel culture is almost purely dividing. Welfare might have some uniting.\n\nMaybe we can set: performed+uniting: 0.25, honest+uniting: 0.05, performed+dividing: 0.35, honest+dividing: 0.35. Sum = 1.0. But need at least three decimals if needed. Could do 0.250, 0.050, 0.350, 0.350.\n\nBut let's examine historical averages: \nAverage performed+uniting: (0.522+0.088+0.326)/3 = 0.312\nAverage honest+uniting: (0.120+0.015+0.065)/3 = 0.0667\nAverage performed+dividing: (0.179+0.353+0.554)/3 = 0.362\nAverage honest+dividing: (0.179+0.544+0.054)/3 = 0.259\n\nIf we just use average, we get approx 0.312, 0.067, 0.362, 0.259 sum=1.000. But word-specific should adjust.\n\nWELFARE likely more dividing than average because it's a political wedge. So boost dividing at expense of uniting. Maybe performed+uniting lower than avg, honest+uniting similar low, performed+dividing higher, honest+dividing maybe moderate-high.\n\nCompare to CANCEL CULTURE: both negative-ish? Welfare can be seen as helpful, so maybe not as negative as cancel culture. THE INTERNET is neutral/negative. TIMES SQUARE positive spectacle.\n\nMaybe we can set: performed+uniting: 0.20, honest+uniting: 0.07, performed+dividing: 0.43, honest+dividing: 0.30. Sum = 1.00.\n\nOr performed+uniting: 0.18, honest+uniting: 0.06, performed+dividing: 0.46, honest+dividing: 0.30.\n\nWe need to be plausible. The instruction: \"predict the distribution of responses from participants... These are this audience's interpretations, not objective labels.\" Use historical examples to inform. So we should infer from examples. The examples show that for concrete place (TIMES SQUARE) performed uniting high. For abstract social phenomena (CANCEL CULTURE, THE INTERNET) dividing dominates. WELFARE is abstract social policy, so dividing likely dominates. Between performed vs honest dividing: CANCEL CULTURE had honest dividing highest (0.544) and performed dividing 0.353; THE INTERNET had performed dividing highest (0.554) and honest dividing low (0.054). Why difference? Possibly because cancel culture is seen as truly fracturing us (honest), while internet is seen as deliberately exploiting divisions for engagement (performed). Welfare could be seen as honestly fracturing (system stigmatizes, creates class divide) or performed dividing (politicians use it to divide). Might be mix.\n\nMaybe welfare is more like cancel culture: a moralized issue that honestly divides. But also welfare is often used as a political tool (performed dividing). Could be both around 0.35-0.4 each.\n\nLet's pick: performed+uniting: 0.15 (some performative unity like \"we care\"), honest+uniting: 0.05 (little authentic unity), performed+dividing: 0.40, honest+dividing: 0.40. Sum = 1.00. But we need three decimals: 0.150, 0.050, 0.400, 0.400.\n\nAlternatively, to be more nuanced: 0.176, 0.059, 0.382, 0.383 (sum 1.000). But we can just choose simple.\n\nGiven the audience seems to assign low honest+uniting across all examples (0.12, 0.015, 0.065). So keep honest+uniting very low, maybe 0.04-0.07.\n\nPerformed+uniting for TIMES SQUARE high, for others low (0.088, 0.326). For welfare maybe around 0.2.\n\nThus: performed+uniting: 0.200, honest+uniting: 0.060, performed+dividing: 0.370, honest+dividing: 0.370. Sum = 1.000.\n\nBut we could also lean more to performed dividing because welfare debates are often cynical. Let's do: performed+uniting: 0.180, honest+uniting: 0.050, performed+dividing: 0.420, honest+dividing: 0.350. Sum = 1.000.\n\nI'll go with something like:\n{\"performed+uniting\":0.180,\"honest+uniting\":0.050,\"performed+dividing\":0.420,\"honest+dividing\":0.350}\n\nCheck sum: 0.18+0.05=0.23; +0.42=0.65; +0.35=1.00. Good.\n\nBut maybe we should incorporate that honest dividing for welfare might be slightly higher than performed? Not sure. Could swap: honest+dividing 0.420, performed+dividing 0.350. Which is more plausible? Cancel culture honest>performed; internet performed>honest. Welfare as a state system might be seen as honestly fracturing (truthfully fracturing us) because it creates dependency divide. But also political rhetoric exploits. I'd say both near equal.\n\nI'll produce a clean JSON with three decimals: 0.180, 0.050, 0.420, 0.350.\n\nMake sure no prose, no code fences. Single JSON object only.\n\nThus final answer: {\"performed+uniting\":0.180,\"honest+uniting\":0.050,\"performed+dividing\":0.420,\"honest+dividing\":0.350}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"WELFARE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"TIMES SQUARE\": performed+uniting 0.522, honest+uniting 0.120, performed+dividing 0.179, honest+dividing 0.179 (submissions 184)\n2. \"CANCEL CULTURE\": performed+uniting 0.088, honest+uniting 0.015, performed+dividing 0.353, honest+dividing 0.544 (submissions 136)\n3. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054 (submissions 92)\n\nWe need to estimate share for \"WELFARE\". The word welfare can be interpreted in various ways. It's a politically charged term in US context: social welfare, welfare state, public assistance. Often used to divide (e.g., welfare queens, dependency, etc.) or unite (caring for each other). Could be performed uniting (false unity: pretending we care, performative solidarity), honest uniting (authentic community support), performed dividing (deliberately exploiting divisions about welfare dependency), honest dividing (truthfully fracturing us, e.g., reality of inequality splits us).\n\nWe need to infer from audience's prior patterns. The examples show different words yield different distributions. TIMES SQUARE is a place, maybe associated with performed uniting (tourist unity, spectacle) high. CANCEL CULTURE is divisive, high honest dividing and performed dividing. THE INTERNET is more performed dividing (exploiting divisions) high, low honest dividing.\n\nWELFARE: likely more like CANCEL CULTURE? Both are social/political concepts. Welfare is often a wedge issue. Might have high performed dividing and honest dividing. But also maybe some performed uniting (e.g., \"we're all in this together\" rhetoric). Honest uniting likely low.\n\nLet's think about typical interpretations from such generative art audience (maybe politically aware, left-leaning? Mixed Messages project by something? Possibly from a game where people interpret words into quadrants). The examples: TIMES SQUARE: performed uniting dominant (52%) - maybe because it's a gathering place but fake unity. CANCEL CULTURE: honest dividing dominant (54%) and performed dividing 35% - people see cancel culture as truly fracturing us, and also performatively exploiting divisions. THE INTERNET: performed dividing dominant 55%, honest dividing low 5% - internet exploits divisions deliberately but doesn't truthfully fracture? Or maybe honest dividing low because internet connects? Not sure.\n\nFor WELFARE, we can consider it as a concept that is about care but politically contested. Could be: performed uniting (e.g., political rhetoric of caring, unity) moderate; honest uniting (actual community support) low; performed dividing (politicians exploiting welfare dependency narratives) high; honest dividing (welfare system actually fractures society by stigmatizing) maybe moderate.\n\nWe need to produce probabilities sum to 1. Let's try to approximate based on similarity to CANCEL CULTURE and THE INTERNET. Welfare is like a policy topic, maybe similar to cancel culture in being divisive. But welfare also has a positive connotation of well-being. Might get more performed uniting than cancel culture (which had 0.088). Cancel culture is almost purely dividing. Welfare might have some uniting.\n\nMaybe we can set: performed+uniting: 0.25, honest+uniting: 0.05, performed+dividing: 0.35, honest+dividing: 0.35. Sum = 1.0. But need at least three decimals if needed. Could do 0.250, 0.050, 0.350, 0.350.\n\nBut let's examine historical averages: \nAverage performed+uniting: (0.522+0.088+0.326)/3 = 0.312\nAverage honest+uniting: (0.120+0.015+0.065)/3 = 0.0667\nAverage performed+dividing: (0.179+0.353+0.554)/3 = 0.362\nAverage honest+dividing: (0.179+0.544+0.054)/3 = 0.259\n\nIf we just use average, we get approx 0.312, 0.067, 0.362, 0.259 sum=1.000. But word-specific should adjust.\n\nWELFARE likely more dividing than average because it's a political wedge. So boost dividing at expense of uniting. Maybe performed+uniting lower than avg, honest+uniting similar low, performed+dividing higher, honest+dividing maybe moderate-high.\n\nCompare to CANCEL CULTURE: both negative-ish? Welfare can be seen as helpful, so maybe not as negative as cancel culture. THE INTERNET is neutral/negative. TIMES SQUARE positive spectacle.\n\nMaybe we can set: performed+uniting: 0.20, honest+uniting: 0.07, performed+dividing: 0.43, honest+dividing: 0.30. Sum = 1.00.\n\nOr performed+uniting: 0.18, honest+uniting: 0.06, performed+dividing: 0.46, honest+dividing: 0.30.\n\nWe need to be plausible. The instruction: \"predict the distribution of responses from participants... These are this audience's interpretations, not objective labels.\" Use historical examples to inform. So we should infer from examples. The examples show that for concrete place (TIMES SQUARE) performed uniting high. For abstract social phenomena (CANCEL CULTURE, THE INTERNET) dividing dominates. WELFARE is abstract social policy, so dividing likely dominates. Between performed vs honest dividing: CANCEL CULTURE had honest dividing highest (0.544) and performed dividing 0.353; THE INTERNET had performed dividing highest (0.554) and honest dividing low (0.054). Why difference? Possibly because cancel culture is seen as truly fracturing us (honest), while internet is seen as deliberately exploiting divisions for engagement (performed). Welfare could be seen as honestly fracturing (system stigmatizes, creates class divide) or performed dividing (politicians use it to divide). Might be mix.\n\nMaybe welfare is more like cancel culture: a moralized issue that honestly divides. But also welfare is often used as a political tool (performed dividing). Could be both around 0.35-0.4 each.\n\nLet's pick: performed+uniting: 0.15 (some performative unity like \"we care\"), honest+uniting: 0.05 (little authentic unity), performed+dividing: 0.40, honest+dividing: 0.40. Sum = 1.00. But we need three decimals: 0.150, 0.050, 0.400, 0.400.\n\nAlternatively, to be more nuanced: 0.176, 0.059, 0.382, 0.383 (sum 1.000). But we can just choose simple.\n\nGiven the audience seems to assign low honest+uniting across all examples (0.12, 0.015, 0.065). So keep honest+uniting very low, maybe 0.04-0.07.\n\nPerformed+uniting for TIMES SQUARE high, for others low (0.088, 0.326). For welfare maybe around 0.2.\n\nThus: performed+uniting: 0.200, honest+uniting: 0.060, performed+dividing: 0.370, honest+dividing: 0.370. Sum = 1.000.\n\nBut we could also lean more to performed dividing because welfare debates are often cynical. Let's do: performed+uniting: 0.180, honest+uniting: 0.050, performed+dividing: 0.420, honest+dividing: 0.350. Sum = 1.000.\n\nI'll go with something like:\n{\"performed+uniting\":0.180,\"honest+uniting\":0.050,\"performed+dividing\":0.420,\"honest+dividing\":0.350}\n\nCheck sum: 0.18+0.05=0.23; +0.42=0.65; +0.35=1.00. Good.\n\nBut maybe we should incorporate that honest dividing for welfare might be slightly higher than performed? Not sure. Could swap: honest+dividing 0.420, performed+dividing 0.350. Which is more plausible? Cancel culture honest>performed; internet performed>honest. Welfare as a state system might be seen as honestly fracturing (truthfully fracturing us) because it creates dependency divide. But also political rhetoric exploits. I'd say both near equal.\n\nI'll produce a clean JSON with three decimals: 0.180, 0.050, 0.420, 0.350.\n\nMake sure no prose, no code fences. Single JSON object only.\n\nThus final answer: {\"performed+uniting\":0.180,\"honest+uniting\":0.050,\"performed+dividing\":0.420,\"honest+dividing\":0.350}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 504,
+          "completion_tokens": 2169,
+          "total_tokens": 2673,
+          "cost": 0.00121176,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00121176,
+            "upstream_inference_prompt_cost": 0.000066528,
+            "upstream_inference_completions_cost": 0.001145232
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2126,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 504,
+        "completion_tokens": 2169,
+        "total_tokens": 2673,
+        "cost": 0.00121176,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00121176,
+          "upstream_inference_prompt_cost": 0.000066528,
+          "upstream_inference_completions_cost": 0.001145232
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2126,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 91,
+      "finishedAt": "2026-11-15T04:45:00.000Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 16
+      },
+      "observation": {
+        "ok": true,
+        "id": 16,
+        "prompt": "TIMES SQUARE",
+        "distribution": {
+          "performed+uniting": 0.5217391304347826,
+          "honest+uniting": 0.11956521739130435,
+          "performed+dividing": 0.1793478260869565,
+          "honest+dividing": 0.1793478260869565
+        },
+        "submissions": 184,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 28
+      },
+      "observation": {
+        "ok": true,
+        "id": 28,
+        "prompt": "CANCEL CULTURE",
+        "distribution": {
+          "performed+uniting": 0.08823529411764706,
+          "honest+uniting": 0.014705882352941176,
+          "performed+dividing": 0.35294117647058826,
+          "honest+dividing": 0.5441176470588235
+        },
+        "submissions": 136,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 1
+      },
+      "observation": {
+        "ok": true,
+        "id": 1,
+        "prompt": "THE INTERNET",
+        "distribution": {
+          "performed+uniting": 0.32608695652173914,
+          "honest+uniting": 0.06521739130434782,
+          "performed+dividing": 0.5543478260869565,
+          "honest+dividing": 0.05434782608695652
+        },
+        "submissions": 92,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.18,
+          "honest+uniting": 0.05,
+          "performed+dividing": 0.42,
+          "honest+dividing": 0.35
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.18000000000000002,
+      "honest+uniting": 0.05000000000000001,
+      "performed+dividing": 0.42000000000000004,
+      "honest+dividing": 0.35000000000000003
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.034688888888888894,
+    "score": 98.26555555555555,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

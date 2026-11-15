@@ -80,7 +80,7 @@ OPENROUTER_API_KEY=sk-or-your-key
 
 Keep Terminal in that same folder and run the complete command above. The benchmark reads `.env`, sends requests through OpenRouter, and charges your OpenRouter account for model usage. `--max-usd` is a spending limit, not a fixed price; the run stops incomplete if it cannot continue within that limit.
 
-These commands require RTR-bench **0.2.0 or newer** on npm. To select that exact release, replace `npx rtr-bench` with `npx rtr-bench@0.2.0`. GitHub updates and npm releases are published separately.
+Use RTR-bench **0.2.2** for the current runner and defaults. To select that exact release, replace `npx rtr-bench` with `npx rtr-bench@0.2.2`. GitHub updates and npm releases are published separately.
 
 ### Read the results
 
@@ -126,26 +126,38 @@ npm ci
 
 These commands download the project, enter its folder, and install its supporting software. If you already have a checkout, use that folder. Create `.env` there as described above, then replace `npx rtr-bench` with `node src/cli.ts` in the evaluation commands. `src/cli.ts` is the source file that starts the benchmark. This is an alternative to the npm path, not an additional setup step.
 
-The [selected five-model campaign](results/final-8000/README.md) has four completed runs. HY3 remains incomplete after its provider rejected all three attempts for one prompt; its partial charges and saved records are included in the campaign report.
-
-Scores measure distribution agreement, not percentage accuracy. The historical-average baseline predicts the same four shares for every prompt, using only the 90 reference windows. Counts beneath model scores show valid answers out of 45; failed final answers still score zero. Learn Gain is Learn minus Predict: the overall workflow difference, including differences in answer completion. [Detailed comparisons](results/final-8000/README.md#results) show points above or below the baseline and uncertainty intervals.
-
 ## Results
+
+All eleven models use the same 45 evaluation targets and 8,000-token response allowance. Scores measure distribution agreement, not percentage accuracy. Counts show valid answers; failed terminal answers score zero and were not rerolled. [Verification, intervals, and raw records](https://github.com/1999labs/RTR-bench/tree/main/results/final-8000).
 
 | Model | Provider | Predict | Predict Cost | Learn | Learn Gain | Learn Cost | Total Cost |
 |---|---|---:|---:|---:|---:|---:|---:|
 | Historical-average baseline | No model | 85.56 | — | 85.56 | — | — | — |
-| glm-5.3-flash | Relace (fp4) | 87.93<br>45/45 valid | $0.00241 | 85.57<br>45/45 valid | −2.37 | $0.02039 | $0.03150 |
+| glm-5.3-flash | Relace (fp4) | 87.66<br>45/45 valid | $0.00223 | 86.00<br>45/45 valid | −1.66 | $0.02315 | $0.03363 |
 | glm-5.3 | Wafer (fp4) | 86.04<br>44/45 valid | $0.00551 | 82.87<br>44/45 valid | −3.17 | $0.03842 | $0.05741 |
 | minimax-m3.1-flash | Inferact vLLM (nvfp4) | 86.95<br>45/45 valid | $0.01748 | 84.24<br>45/45 valid | −2.71 | $0.06345 | $0.11698 |
 | mimo-v2.6-flash | Xiaomi (fp8) | 86.98<br>45/45 valid | $0.00390 | 83.53<br>45/45 valid | −3.45 | ≥$0.02217 | ≥$0.04005 |
 | deepseek-v4.1-flash-1017 | Sail Research (fp4) | 74.82<br>38/45 valid | ≥$0.02286 | 86.75<br>45/45 valid | +11.93 | ≥$0.02614 | ≥$0.10495 |
-| hy3 | GMICloud (bf16) | Incomplete<br>3/45 valid | — | Not run | — | — | — |
-| gemini-3.8-flash | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| gpt-6-luna | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| claude-haiku-5.5 | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| inkling-small | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| gpt-oss-120b | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| hy3 | Tencent (fp8) | 86.14<br>45/45 valid | $0.03331 | 83.58<br>45/45 valid | −2.56 | $0.12577 | ≥$0.27726 |
+| gemini-3.8-flash | Google AI Studio | 86.48<br>45/45 valid | $0.10883 | 87.94<br>45/45 valid | +1.46 | $0.47906 | $0.89724 |
+| gpt-6-luna | OpenAI (Flex) | 85.99<br>44/45 valid | $0.00286 | 82.75<br>44/45 valid | −3.24 | $0.01475 | $0.02883 |
+| claude-haiku-5.5 | Anthropic | 86.35<br>45/45 valid | $0.00504 | 86.79<br>45/45 valid | +0.44 | $0.05925 | $0.07958 |
+| inkling-small | DeepInfra (fp4) | 86.57<br>45/45 valid | $0.02011 | 82.06<br>44/45 valid | −4.51 | $0.12605 | $0.22916 |
+| gpt-oss-120b | DekaLLM (bf16) | 86.53<br>45/45 valid | $0.00291 | 82.84<br>45/45 valid | −3.68 | ≥$0.03264 | ≥$0.04415 |
+
+Predict Cost and Learn Cost cover their respective 45-target tracks. Total Cost also includes the random and text-similarity controls. A **≥** marks a known subtotal with unresolved charges; conservative reservations remain in the spending ledger. The plots use those same subtotals, so affected cost positions and the purple Pareto frontier are provisional. The dashed guide shows the best observed score available at each budget; GLM Flash is the sole Predict frontier model. Higher scores and lower costs are better. In the combined plot, **P = Predict** and **L = Learn**.
+
+![RTR-Bench (Predict)](results/predict-scatter.png)
+
+![RTR-Bench (Learn)](results/learn-scatter.png)
+
+![RTR-Bench (Learn + Predict)](results/predict-learn-scatter.png)
+
+### Findings
+
+**glm-5.3-flash led Predict at 87.66; gemini-3.8-flash led Learn at 87.94.** 10 of 11 models beat the 85.56 historical-average baseline on Predict, and 4 did on Learn. That baseline uses the same reference-derived distribution for every target; uniform predictions score 85.39. Scores in the mid-80s therefore indicate closeness to a simple baseline, not 80%-plus classification accuracy.
+
+Learn scored lower than Predict for 8 of 11 models, so gathering examples did not consistently improve this workflow. DeepSeek's +11.93-point gain includes an answer-completion difference: 38/45 valid Predict answers versus 45/45 Learn answers. It should not be read as a pure benefit from historical evidence. These are single runs on 45 targets from one audience; small rank differences and evidence-only explanations remain uncertain.
 
 ## Optional usage
 
@@ -206,9 +218,9 @@ Predict and Learn currently execute requests sequentially. Each Learn episode co
 
 On 45 targets, Predict and Learn together typically use about 270 model calls. Adding `--controls` brings that to about 360: 45 for Predict, 45 for each automatic control, and approximately five calls per Learn episode. Early stopping can reduce that number; additional agent turns and transport retries can increase it. The first final GLM run used 347 calls.
 
-In version 0.2.1, the public commands default to 8,000 output tokens per response. Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
+Since version 0.2.1, the public commands default to 8,000 output tokens per response. Learn uses the published `transfer-check-v1` policy, up to three inspected examples, and eight model turns. Advanced runs can override `--max-tokens` and, for Learn, `--agent-policy`.
 
-To resume a run created with the earlier 4,000-token default, repeat its original command with `--max-tokens 4000` explicitly. Changing the allowance creates a separate run. The [final evaluation plan](docs/final-run-plan-8000.md) declares 8,000 tokens for all eleven models, including a new GLM result under that same setting. Until that rerun is complete, the `glm-5.3-flash` row retains its earlier 4,000-token result; the new final runs use 8,000. Total Cost includes both controls. A ≥ cost is the reported subtotal when a request has an unresolved charge; its reservation still counts against the spending cap.
+To resume a run created with the earlier 4,000-token default, repeat its original command with `--max-tokens 4000` explicitly. Changing the allowance creates a separate run. The [final campaign](results/final-8000/README.md) uses 8,000 tokens for all eleven models. The earlier 4,000-token GLM Flash run remains archived and is excluded from the current table. The [shared budget plan](docs/final-campaign-shared-budget.json) records the campaign’s $10 ceiling, preserved prior costs, and provider snapshots.
 
 The current client uses OpenRouter. Direct connections to other hosted or local endpoints are not yet implemented.
 

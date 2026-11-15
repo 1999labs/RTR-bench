@@ -1,0 +1,607 @@
+{
+  "day": 163,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"GAME SHOWS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":63,\"prompt\":\"DISNEY WORLD\",\"distribution\":{\"performed+uniting\":0.7,\"honest+uniting\":0.2,\"performed+dividing\":0.05,\"honest+dividing\":0.05},\"submissions\":140},{\"id\":54,\"prompt\":\"GEN ALPHA\",\"distribution\":{\"performed+uniting\":0.2727272727272727,\"honest+uniting\":0.34710743801652894,\"performed+dividing\":0.23140495867768596,\"honest+dividing\":0.1487603305785124},\"submissions\":121},{\"id\":2,\"prompt\":\"CONTENT CREATORS\",\"distribution\":{\"performed+uniting\":0.1320754716981132,\"honest+uniting\":0.09433962264150944,\"performed+dividing\":0.16981132075471697,\"honest+dividing\":0.6037735849056604},\"submissions\":53}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:38:20.110Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.450,\"honest+uniting\":0.150,\"performed+dividing\":0.350,\"honest+dividing\":0.050}",
+      "response": {
+        "id": "gen-1794717500-lyXIYfYHNsImjho6aUSy",
+        "object": "chat.completion",
+        "created": 1794717500,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.450,\"honest+uniting\":0.150,\"performed+dividing\":0.350,\"honest+dividing\":0.050}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"GAME SHOWS\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants: performed+uniting (creating false unity), honest+uniting (bringing us together authentically), performed+dividing (exploiting divisions deliberately), honest+dividing (fracturing us truthfully). We have historical examples: DISNEY WORLD, GEN ALPHA, CONTENT CREATORS. We need to estimate share for GAME SHOWS.\n\nWe should consider the nature of \"GAME SHOWS\". Game shows are typically televised competitions where contestants play games for prizes. They often have a performative aspect: they are entertainment, scripted to some extent, with hosts creating excitement, audience engagement, sometimes fake tension or unity (e.g., \"we're all in this together\" but actually competitive). They can be seen as uniting people in shared viewing experience (honest+uniting? maybe watching together). But also they are competitive, dividing contestants, maybe exploiting divisions for drama (performed+dividing). Honest+dividing? Perhaps they truthfully fracture us by highlighting winners/losers, capitalism, etc.\n\nLook at historical examples:\n- DISNEY WORLD: performed+uniting 0.7 (high, false unity among us, maybe Disney creates fake happiness/togetherness), honest+uniting 0.2, performed+dividing 0.05, honest+dividing 0.05. So for a brand associated with family fun, fake unity dominates.\n- GEN ALPHA: performed+uniting 0.273, honest+uniting 0.347 (more authentic unity? maybe kids together), performed+dividing 0.231, honest+dividing 0.149. More balanced, slightly more honest uniting.\n- CONTENT CREATORS: performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170, honest+dividing 0.604 (high honest dividing: fracturing us truthfully, maybe influencers actually divide society). So for content creators, the audience sees them as honestly divisive.\n\nNow GAME SHOWS: likely similar to entertainment medium. Could be seen as performed uniting (fake smiles, forced camaraderie) but also competitive dividing. Game shows often have a host that unites viewers (\"let's play!\") but it's a show, so performed. They also create division among contestants (competition) but that's the format; is it performed dividing? Possibly exploiting divisions deliberately for entertainment. Honest dividing? Maybe they reveal real societal divides (class, luck). Honest uniting? Perhaps people genuinely bond watching.\n\nWe need to assign probabilities summing to 1. We can base on average of examples? But the prompts differ. We can infer from the concept: Game shows are a type of media/entertainment like Disney World (entertainment) but more competitive. Disney World is a place of escapism, high performed unity. Game shows might be less about unity, more about competition. Compare to Content Creators (social media) which is divisive. Game shows are older media, maybe less divisive than influencers but still performative.\n\nMaybe we can think of the audience's cynicism: They might see game shows as creating false unity (performed+uniting) because they pretend we're all having fun while it's a cutthroat competition. Or they might see them as performed dividing (exploiting divisions for ratings). Honest dividing could be lower because it's a game, not real fracture. Honest uniting maybe moderate.\n\nLet's approximate: performed+uniting maybe 0.4, honest+uniting 0.2, performed+dividing 0.3, honest+dividing 0.1. Sum=1.0. But we need at least three decimals if needed.\n\nAlternatively, look at the examples: For Disney (entertainment, family): performed uniting high. For Gen Alpha (generation): more even, honest uniting highest. For Content Creators (media figures): honest dividing highest. Game shows are a media format, like a mix of Disney (entertainment) and content creators (performative). So maybe performed uniting moderate, performed dividing moderate, honest dividing lower, honest uniting low-moderate.\n\nWe could set: performed+uniting: 0.45, honest+uniting: 0.15, performed+dividing: 0.30, honest+dividing: 0.10. Sum=1.0.\n\nBut we should consider that game shows are explicitly competitive, so dividing may be higher. In the examples, performed dividing for Disney is low (0.05) because Disney is about unity; for Gen Alpha it's 0.231; for Content Creators 0.17 (but honest dividing huge). So game shows might have performed dividing around 0.25-0.35. Performed uniting maybe 0.35-0.5. Honest uniting maybe 0.1-0.2. Honest dividing maybe 0.05-0.15.\n\nWe need a single JSON object. Let's pick numbers: \nperformed+uniting: 0.42\nhonest+uniting: 0.18\nperformed+dividing: 0.32\nhonest+dividing: 0.08\nSum = 1.00. That's fine.\n\nBut maybe we should be more precise: 0.420, 0.180, 0.320, 0.080.\n\nAlternatively, we could use the historical average across all three examples? Let's compute average distributions:\nDisney: p+u 0.7, h+u 0.2, p+d 0.05, h+d 0.05\nGenAlpha: p+u 0.2727, h+u 0.3471, p+d 0.2314, h+d 0.1488\nContent: p+u 0.1321, h+u 0.0943, p+d 0.1698, h+d 0.6038\nSum p+u = 0.7+0.2727+0.1321=1.1048 /3 = 0.3683\nh+u = 0.2+0.3471+0.0943=0.6414 /3 = 0.2138\np+d = 0.05+0.2314+0.1698=0.4512 /3 = 0.1504\nh+d = 0.05+0.1488+0.6038=0.8026 /3 = 0.2675\nSum = 1.0? 0.3683+0.2138=0.5821; +0.1504=0.7325; +0.2675=1.0. So average is p+u 0.368, h+u 0.214, p+d 0.150, h+d 0.268. That's dominated by content creators' honest dividing. But game shows are not exactly like those. However, the instruction says \"Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we can use them as prior but adjust for prompt.\n\nGame shows are more like Disney (entertainment) than content creators (divisive). So maybe weight Disney more. If we take Disney and Gen Alpha mix: Disney p+u high, Gen Alpha more balanced. Game shows maybe between.\n\nI'll go with a reasoned estimate: performed+uniting 0.4, honest+uniting 0.2, performed+dividing 0.3, honest+dividing 0.1. That sums to 1. Use three decimals: 0.400, 0.200, 0.300, 0.100.\n\nBut maybe honest+dividing should be a bit higher because game shows reveal real competition divides. Let's do 0.38, 0.17, 0.35, 0.10 = 1.00. Or 0.35, 0.15, 0.40, 0.10.\n\nI think a plausible distribution: game shows are performative uniting (host brings everyone together) but also performative dividing (contestants compete). The honest axes are less because it's a show, not real life. So performed axes sum to ~0.7-0.8. Among performed, uniting maybe slightly more than dividing because the show frames it as fun. So p+u 0.45, p+d 0.35, h+u 0.15, h+d 0.05. Sum=1.0. That seems plausible.\n\nCheck with Disney: p+u 0.7, p+d 0.05 (Disney not dividing). Game shows have division, so p+d higher. So 0.45/0.35 is okay.\n\nI'll output: {\"performed+uniting\":0.45,\"honest+uniting\":0.15,\"performed+dividing\":0.35,\"honest+dividing\":0.05}\n\nBut need at least three decimals when needed. These are two decimals, but it's fine? \"Use at least three decimal places when needed.\" It means if the number is not terminating at two decimals, use three. But we can use three to be safe: 0.450, 0.150, 0.350, 0.050. That sums to 1.000.\n\nI'll produce exactly: {\"performed+uniting\":0.450,\"honest+uniting\":0.150,\"performed+dividing\":0.350,\"honest+dividing\":0.050}\n\nNo other text.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"GAME SHOWS\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants: performed+uniting (creating false unity), honest+uniting (bringing us together authentically), performed+dividing (exploiting divisions deliberately), honest+dividing (fracturing us truthfully). We have historical examples: DISNEY WORLD, GEN ALPHA, CONTENT CREATORS. We need to estimate share for GAME SHOWS.\n\nWe should consider the nature of \"GAME SHOWS\". Game shows are typically televised competitions where contestants play games for prizes. They often have a performative aspect: they are entertainment, scripted to some extent, with hosts creating excitement, audience engagement, sometimes fake tension or unity (e.g., \"we're all in this together\" but actually competitive). They can be seen as uniting people in shared viewing experience (honest+uniting? maybe watching together). But also they are competitive, dividing contestants, maybe exploiting divisions for drama (performed+dividing). Honest+dividing? Perhaps they truthfully fracture us by highlighting winners/losers, capitalism, etc.\n\nLook at historical examples:\n- DISNEY WORLD: performed+uniting 0.7 (high, false unity among us, maybe Disney creates fake happiness/togetherness), honest+uniting 0.2, performed+dividing 0.05, honest+dividing 0.05. So for a brand associated with family fun, fake unity dominates.\n- GEN ALPHA: performed+uniting 0.273, honest+uniting 0.347 (more authentic unity? maybe kids together), performed+dividing 0.231, honest+dividing 0.149. More balanced, slightly more honest uniting.\n- CONTENT CREATORS: performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170, honest+dividing 0.604 (high honest dividing: fracturing us truthfully, maybe influencers actually divide society). So for content creators, the audience sees them as honestly divisive.\n\nNow GAME SHOWS: likely similar to entertainment medium. Could be seen as performed uniting (fake smiles, forced camaraderie) but also competitive dividing. Game shows often have a host that unites viewers (\"let's play!\") but it's a show, so performed. They also create division among contestants (competition) but that's the format; is it performed dividing? Possibly exploiting divisions deliberately for entertainment. Honest dividing? Maybe they reveal real societal divides (class, luck). Honest uniting? Perhaps people genuinely bond watching.\n\nWe need to assign probabilities summing to 1. We can base on average of examples? But the prompts differ. We can infer from the concept: Game shows are a type of media/entertainment like Disney World (entertainment) but more competitive. Disney World is a place of escapism, high performed unity. Game shows might be less about unity, more about competition. Compare to Content Creators (social media) which is divisive. Game shows are older media, maybe less divisive than influencers but still performative.\n\nMaybe we can think of the audience's cynicism: They might see game shows as creating false unity (performed+uniting) because they pretend we're all having fun while it's a cutthroat competition. Or they might see them as performed dividing (exploiting divisions for ratings). Honest dividing could be lower because it's a game, not real fracture. Honest uniting maybe moderate.\n\nLet's approximate: performed+uniting maybe 0.4, honest+uniting 0.2, performed+dividing 0.3, honest+dividing 0.1. Sum=1.0. But we need at least three decimals if needed.\n\nAlternatively, look at the examples: For Disney (entertainment, family): performed uniting high. For Gen Alpha (generation): more even, honest uniting highest. For Content Creators (media figures): honest dividing highest. Game shows are a media format, like a mix of Disney (entertainment) and content creators (performative). So maybe performed uniting moderate, performed dividing moderate, honest dividing lower, honest uniting low-moderate.\n\nWe could set: performed+uniting: 0.45, honest+uniting: 0.15, performed+dividing: 0.30, honest+dividing: 0.10. Sum=1.0.\n\nBut we should consider that game shows are explicitly competitive, so dividing may be higher. In the examples, performed dividing for Disney is low (0.05) because Disney is about unity; for Gen Alpha it's 0.231; for Content Creators 0.17 (but honest dividing huge). So game shows might have performed dividing around 0.25-0.35. Performed uniting maybe 0.35-0.5. Honest uniting maybe 0.1-0.2. Honest dividing maybe 0.05-0.15.\n\nWe need a single JSON object. Let's pick numbers: \nperformed+uniting: 0.42\nhonest+uniting: 0.18\nperformed+dividing: 0.32\nhonest+dividing: 0.08\nSum = 1.00. That's fine.\n\nBut maybe we should be more precise: 0.420, 0.180, 0.320, 0.080.\n\nAlternatively, we could use the historical average across all three examples? Let's compute average distributions:\nDisney: p+u 0.7, h+u 0.2, p+d 0.05, h+d 0.05\nGenAlpha: p+u 0.2727, h+u 0.3471, p+d 0.2314, h+d 0.1488\nContent: p+u 0.1321, h+u 0.0943, p+d 0.1698, h+d 0.6038\nSum p+u = 0.7+0.2727+0.1321=1.1048 /3 = 0.3683\nh+u = 0.2+0.3471+0.0943=0.6414 /3 = 0.2138\np+d = 0.05+0.2314+0.1698=0.4512 /3 = 0.1504\nh+d = 0.05+0.1488+0.6038=0.8026 /3 = 0.2675\nSum = 1.0? 0.3683+0.2138=0.5821; +0.1504=0.7325; +0.2675=1.0. So average is p+u 0.368, h+u 0.214, p+d 0.150, h+d 0.268. That's dominated by content creators' honest dividing. But game shows are not exactly like those. However, the instruction says \"Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we can use them as prior but adjust for prompt.\n\nGame shows are more like Disney (entertainment) than content creators (divisive). So maybe weight Disney more. If we take Disney and Gen Alpha mix: Disney p+u high, Gen Alpha more balanced. Game shows maybe between.\n\nI'll go with a reasoned estimate: performed+uniting 0.4, honest+uniting 0.2, performed+dividing 0.3, honest+dividing 0.1. That sums to 1. Use three decimals: 0.400, 0.200, 0.300, 0.100.\n\nBut maybe honest+dividing should be a bit higher because game shows reveal real competition divides. Let's do 0.38, 0.17, 0.35, 0.10 = 1.00. Or 0.35, 0.15, 0.40, 0.10.\n\nI think a plausible distribution: game shows are performative uniting (host brings everyone together) but also performative dividing (contestants compete). The honest axes are less because it's a show, not real life. So performed axes sum to ~0.7-0.8. Among performed, uniting maybe slightly more than dividing because the show frames it as fun. So p+u 0.45, p+d 0.35, h+u 0.15, h+d 0.05. Sum=1.0. That seems plausible.\n\nCheck with Disney: p+u 0.7, p+d 0.05 (Disney not dividing). Game shows have division, so p+d higher. So 0.45/0.35 is okay.\n\nI'll output: {\"performed+uniting\":0.45,\"honest+uniting\":0.15,\"performed+dividing\":0.35,\"honest+dividing\":0.05}\n\nBut need at least three decimals when needed. These are two decimals, but it's fine? \"Use at least three decimal places when needed.\" It means if the number is not terminating at two decimals, use three. But we can use three to be safe: 0.450, 0.150, 0.350, 0.050. That sums to 1.000.\n\nI'll produce exactly: {\"performed+uniting\":0.450,\"honest+uniting\":0.150,\"performed+dividing\":0.350,\"honest+dividing\":0.050}\n\nNo other text.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 484,
+          "completion_tokens": 2160,
+          "total_tokens": 2644,
+          "cost": 0.001204368,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001204368,
+            "upstream_inference_prompt_cost": 0.000063888,
+            "upstream_inference_completions_cost": 0.00114048
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2117,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 484,
+        "completion_tokens": 2160,
+        "total_tokens": 2644,
+        "cost": 0.001204368,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001204368,
+          "upstream_inference_prompt_cost": 0.000063888,
+          "upstream_inference_completions_cost": 0.00114048
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2117,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 78,
+      "finishedAt": "2026-11-15T04:38:40.467Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 63
+      },
+      "observation": {
+        "ok": true,
+        "id": 63,
+        "prompt": "DISNEY WORLD",
+        "distribution": {
+          "performed+uniting": 0.7,
+          "honest+uniting": 0.2,
+          "performed+dividing": 0.05,
+          "honest+dividing": 0.05
+        },
+        "submissions": 140,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 54
+      },
+      "observation": {
+        "ok": true,
+        "id": 54,
+        "prompt": "GEN ALPHA",
+        "distribution": {
+          "performed+uniting": 0.2727272727272727,
+          "honest+uniting": 0.34710743801652894,
+          "performed+dividing": 0.23140495867768596,
+          "honest+dividing": 0.1487603305785124
+        },
+        "submissions": 121,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 2
+      },
+      "observation": {
+        "ok": true,
+        "id": 2,
+        "prompt": "CONTENT CREATORS",
+        "distribution": {
+          "performed+uniting": 0.1320754716981132,
+          "honest+uniting": 0.09433962264150944,
+          "performed+dividing": 0.16981132075471697,
+          "honest+dividing": 0.6037735849056604
+        },
+        "submissions": 53,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.45,
+          "honest+uniting": 0.15,
+          "performed+dividing": 0.35,
+          "honest+dividing": 0.05
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.45,
+      "honest+uniting": 0.15,
+      "performed+dividing": 0.35,
+      "honest+dividing": 0.05
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.10562949242141867,
+    "score": 94.71852537892906,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

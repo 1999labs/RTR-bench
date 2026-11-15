@@ -1,0 +1,607 @@
+{
+  "day": 132,
+  "strategy": "random",
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"THE OLYMPICS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":73,\"prompt\":\"SCREEN TIME\",\"distribution\":{\"performed+uniting\":0.11945392491467577,\"honest+uniting\":0.06825938566552901,\"performed+dividing\":0.689419795221843,\"honest+dividing\":0.12286689419795221},\"submissions\":293},{\"id\":50,\"prompt\":\"TRIBUTE LABS\",\"distribution\":{\"performed+uniting\":0.18654434250764526,\"honest+uniting\":0.6116207951070336,\"performed+dividing\":0.0061162079510703364,\"honest+dividing\":0.19571865443425077},\"submissions\":327},{\"id\":87,\"prompt\":\"SAME-SEX MARRIAGE\",\"distribution\":{\"performed+uniting\":0.02654867256637168,\"honest+uniting\":0.6194690265486725,\"performed+dividing\":0.02654867256637168,\"honest+dividing\":0.3274336283185841},\"submissions\":113}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "relace/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.0399,
+        "completion": 0.0784,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T06:05:40.068Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.43, \"honest+uniting\": 0.30, \"performed+dividing\": 0.13, \"honest+dividing\": 0.14}",
+      "response": {
+        "id": "gen-1794722740-uD2GPS6qDy2GNleQUrMH",
+        "object": "chat.completion",
+        "created": 1794722740,
+        "model": "z-ai/glm-5.3-flash",
+        "provider": "Relace",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.43, \"honest+uniting\": 0.30, \"performed+dividing\": 0.13, \"honest+dividing\": 0.14}",
+              "refusal": null,
+              "reasoning": "Let me analyze this task. I need to predict how an audience of a generative art project (\"Mixed Messages\") would interpret the word \"THE OLYMPICS\" across four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nThe examples given:\n1. SCREEN TIME (293 submissions): mostly performed+dividing (0.689), then honest+dividing (0.123), performed+uniting (0.119), honest+uniting (0.068). So screen time is seen as divisive, mostly performed (fake/exploitative).\n\n2. TRIBUTE LABS (327 submissions): mostly honest+uniting (0.612), then honest+dividing (0.196), performed+uniting (0.187), performed+dividing (0.006). Seen as authentic and uniting.\n\n3. SAME-SEX MARRIAGE (113 submissions): mostly honest+uniting (0.619), honest+dividing (0.327), small performed shares. Seen as authentic, mostly uniting but some honest division.\n\nNow for \"THE OLYMPICS\": The Olympics are classically framed as \"bringing the world together\" — but there's a strong cynical reading that it's a performed unity: corporate spectacle, nationalism, commercialization, IOC corruption, hosting controversies, \"sportswashing.\" The audience of this project seems to be skeptical/critical (given SCREEN TIME got 69% performed+dividing).\n\nThe Olympics is a quintessential case of \"performed unity\" — the idea that the Olympics create a false sense of global togetherness while actually being commercialized, nationalistic, etc. So I'd expect performed+uniting to be the dominant quadrant.\n\nBut there's also an honest+uniting reading: genuine moments of human achievement, international cooperation, athletes coming together. Some might see it as authentically bringing people together.\n\nDividing readings: The Olympics can divide via nationalism (us vs. them competition), excluding cities/countries, boycotts. performed+dividing: exploiting divisions deliberately — e.g., using the games for propaganda (1936 Berlin), sportswashing (Beijing, Sochi). honest+dividing: truthfully fracturing — the Olympics genuinely reveal national rivalries, inequality between nations.\n\nGiven the audience's pattern: they seem to lean toward \"honest\" for things with genuine human significance (same-sex marriage, tribute labs) and \"performed\" for commercialized/technological things (screen time).\n\nThe Olympics is a mass-media commercial spectacle but also has genuine human elements. I'd guess:\n\n- performed+uniting: highest, maybe 0.40-0.50 — the classic \"false unity\" critique of the Olympics\n- honest+uniting: substantial, maybe 0.25-0.35 — genuine coming together\n- performed+dividing: moderate, maybe 0.10-0.15 — propaganda, sportswashing\n- honest+dividing: moderate, maybe 0.10-0.15 — nationalism genuinely divides\n\nLet me think about the audience more. The Mixed Messages project — this seems to be a project where people interpret words through a lens of unity/division and honesty/performance. The examples show:\n\n- SCREEN TIME: heavily performed+dividing (0.689). Total performed = 0.809, total dividing = 0.812.\n- TRIBUTE LABS: heavily honest+uniting (0.612). Total honest = 0.807, total uniting = 0.798.\n- SAME-SEX MARRIAGE: honest+uniting (0.619) + honest+dividing (0.327). Total honest = 0.947, total uniting = 0.646.\n\nSo this audience tends to pick one dominant quadrant. For the Olympics, the dominant cultural critique is \"performed unity\" — the spectacle of togetherness that masks commercialism and nationalism. But there's also genuine athletic achievement.\n\nI'd predict:\n- performed+uniting: ~0.45\n- honest+uniting: ~0.30\n- performed+dividing: ~0.12\n- honest+dividing: ~0.13\n\nHmm, let me reconsider. The Olympics is perhaps the most iconic \"unity\" symbol. The question is whether the audience sees it as authentic or performed. Given the cynical bent shown in SCREEN TIME (a commercialized modern phenomenon got 81% performed), the Olympics — also commercialized (NBC, sponsors, IOC) — might get a strong performed+uniting share. But the Olympics also has authentic human moments that even cynics acknowledge.\n\nAlternatively, some might see the Olympics as genuinely uniting (honest+uniting) — the Olympic truce, athletes from all nations, etc.\n\nI'll go with:\n- performed+uniting: 0.42\n- honest+uniting: 0.31\n- performed+dividing: 0.13\n- honest+dividing: 0.14\n\nSum = 1.000. Let me check: 0.42 + 0.31 + 0.13 + 0.14 = 1.00. Good.\n\nActually, let me reconsider the dividing quadrants. The Olympics' divisiveness: nationalism is a real feature — medal counts, rivalries (USA vs USSR, etc.). Is that \"honest+dividing\" (truthfully fracturing us) or \"performed+dividing\" (deliberately exploiting divisions)? The deliberate exploitation reading: host countries using games for propaganda, IOC decisions, doping scandals, boycotts. The honest dividing reading: the competition format inherently creates national rivalry.\n\nI think both dividing quadrants would be relatively small, maybe 0.10-0.15 each. The unity framing dominates for the Olympics.\n\nFinal answer:\n{\"performed+uniting\": 0.42, \"honest+uniting\": 0.31, \"performed+dividing\": 0.13, \"honest+dividing\": 0.14}\n\nOr maybe slightly adjust: performed+uniting 0.44, honest+uniting 0.30, performed+dividing 0.12, honest+dividing 0.14. Sum = 1.00.\n\nI'll go with 0.43, 0.30, 0.13, 0.14 = 1.00.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "Let me analyze this task. I need to predict how an audience of a generative art project (\"Mixed Messages\") would interpret the word \"THE OLYMPICS\" across four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nThe examples given:\n1. SCREEN TIME (293 submissions): mostly performed+dividing (0.689), then honest+dividing (0.123), performed+uniting (0.119), honest+uniting (0.068). So screen time is seen as divisive, mostly performed (fake/exploitative).\n\n2. TRIBUTE LABS (327 submissions): mostly honest+uniting (0.612), then honest+dividing (0.196), performed+uniting (0.187), performed+dividing (0.006). Seen as authentic and uniting.\n\n3. SAME-SEX MARRIAGE (113 submissions): mostly honest+uniting (0.619), honest+dividing (0.327), small performed shares. Seen as authentic, mostly uniting but some honest division.\n\nNow for \"THE OLYMPICS\": The Olympics are classically framed as \"bringing the world together\" — but there's a strong cynical reading that it's a performed unity: corporate spectacle, nationalism, commercialization, IOC corruption, hosting controversies, \"sportswashing.\" The audience of this project seems to be skeptical/critical (given SCREEN TIME got 69% performed+dividing).\n\nThe Olympics is a quintessential case of \"performed unity\" — the idea that the Olympics create a false sense of global togetherness while actually being commercialized, nationalistic, etc. So I'd expect performed+uniting to be the dominant quadrant.\n\nBut there's also an honest+uniting reading: genuine moments of human achievement, international cooperation, athletes coming together. Some might see it as authentically bringing people together.\n\nDividing readings: The Olympics can divide via nationalism (us vs. them competition), excluding cities/countries, boycotts. performed+dividing: exploiting divisions deliberately — e.g., using the games for propaganda (1936 Berlin), sportswashing (Beijing, Sochi). honest+dividing: truthfully fracturing — the Olympics genuinely reveal national rivalries, inequality between nations.\n\nGiven the audience's pattern: they seem to lean toward \"honest\" for things with genuine human significance (same-sex marriage, tribute labs) and \"performed\" for commercialized/technological things (screen time).\n\nThe Olympics is a mass-media commercial spectacle but also has genuine human elements. I'd guess:\n\n- performed+uniting: highest, maybe 0.40-0.50 — the classic \"false unity\" critique of the Olympics\n- honest+uniting: substantial, maybe 0.25-0.35 — genuine coming together\n- performed+dividing: moderate, maybe 0.10-0.15 — propaganda, sportswashing\n- honest+dividing: moderate, maybe 0.10-0.15 — nationalism genuinely divides\n\nLet me think about the audience more. The Mixed Messages project — this seems to be a project where people interpret words through a lens of unity/division and honesty/performance. The examples show:\n\n- SCREEN TIME: heavily performed+dividing (0.689). Total performed = 0.809, total dividing = 0.812.\n- TRIBUTE LABS: heavily honest+uniting (0.612). Total honest = 0.807, total uniting = 0.798.\n- SAME-SEX MARRIAGE: honest+uniting (0.619) + honest+dividing (0.327). Total honest = 0.947, total uniting = 0.646.\n\nSo this audience tends to pick one dominant quadrant. For the Olympics, the dominant cultural critique is \"performed unity\" — the spectacle of togetherness that masks commercialism and nationalism. But there's also genuine athletic achievement.\n\nI'd predict:\n- performed+uniting: ~0.45\n- honest+uniting: ~0.30\n- performed+dividing: ~0.12\n- honest+dividing: ~0.13\n\nHmm, let me reconsider. The Olympics is perhaps the most iconic \"unity\" symbol. The question is whether the audience sees it as authentic or performed. Given the cynical bent shown in SCREEN TIME (a commercialized modern phenomenon got 81% performed), the Olympics — also commercialized (NBC, sponsors, IOC) — might get a strong performed+uniting share. But the Olympics also has authentic human moments that even cynics acknowledge.\n\nAlternatively, some might see the Olympics as genuinely uniting (honest+uniting) — the Olympic truce, athletes from all nations, etc.\n\nI'll go with:\n- performed+uniting: 0.42\n- honest+uniting: 0.31\n- performed+dividing: 0.13\n- honest+dividing: 0.14\n\nSum = 1.000. Let me check: 0.42 + 0.31 + 0.13 + 0.14 = 1.00. Good.\n\nActually, let me reconsider the dividing quadrants. The Olympics' divisiveness: nationalism is a real feature — medal counts, rivalries (USA vs USSR, etc.). Is that \"honest+dividing\" (truthfully fracturing us) or \"performed+dividing\" (deliberately exploiting divisions)? The deliberate exploitation reading: host countries using games for propaganda, IOC decisions, doping scandals, boycotts. The honest dividing reading: the competition format inherently creates national rivalry.\n\nI think both dividing quadrants would be relatively small, maybe 0.10-0.15 each. The unity framing dominates for the Olympics.\n\nFinal answer:\n{\"performed+uniting\": 0.42, \"honest+uniting\": 0.31, \"performed+dividing\": 0.13, \"honest+dividing\": 0.14}\n\nOr maybe slightly adjust: performed+uniting 0.44, honest+uniting 0.30, performed+dividing 0.12, honest+dividing 0.14. Sum = 1.00.\n\nI'll go with 0.43, 0.30, 0.13, 0.14 = 1.00.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 560,
+          "completion_tokens": 1444,
+          "total_tokens": 2004,
+          "cost": 0.0001355536,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0001355536,
+            "upstream_inference_prompt_cost": 0.000022344,
+            "upstream_inference_completions_cost": 0.0001132096
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1371,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Relace",
+      "usage": {
+        "prompt_tokens": 560,
+        "completion_tokens": 1444,
+        "total_tokens": 2004,
+        "cost": 0.0001355536,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.0001355536,
+          "upstream_inference_prompt_cost": 0.000022344,
+          "upstream_inference_completions_cost": 0.0001132096
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1371,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 47,
+      "finishedAt": "2026-11-15T06:05:50.295Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 73
+      },
+      "observation": {
+        "ok": true,
+        "id": 73,
+        "prompt": "SCREEN TIME",
+        "distribution": {
+          "performed+uniting": 0.11945392491467577,
+          "honest+uniting": 0.06825938566552901,
+          "performed+dividing": 0.689419795221843,
+          "honest+dividing": 0.12286689419795221
+        },
+        "submissions": 293,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 50
+      },
+      "observation": {
+        "ok": true,
+        "id": 50,
+        "prompt": "TRIBUTE LABS",
+        "distribution": {
+          "performed+uniting": 0.18654434250764526,
+          "honest+uniting": 0.6116207951070336,
+          "performed+dividing": 0.0061162079510703364,
+          "honest+dividing": 0.19571865443425077
+        },
+        "submissions": 327,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 87
+      },
+      "observation": {
+        "ok": true,
+        "id": 87,
+        "prompt": "SAME-SEX MARRIAGE",
+        "distribution": {
+          "performed+uniting": 0.02654867256637168,
+          "honest+uniting": 0.6194690265486725,
+          "performed+dividing": 0.02654867256637168,
+          "honest+dividing": 0.3274336283185841
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.43,
+          "honest+uniting": 0.3,
+          "performed+dividing": 0.13,
+          "honest+dividing": 0.14
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.43,
+      "honest+uniting": 0.3,
+      "performed+dividing": 0.13,
+      "honest+dividing": 0.14
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.2972138200183655,
+    "score": 85.13930899908173,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

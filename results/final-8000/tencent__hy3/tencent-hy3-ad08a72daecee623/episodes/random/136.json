@@ -1,0 +1,607 @@
+{
+  "day": 136,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"LOVE AT FIRST SIGHT\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":70,\"prompt\":\"MILLENNIALS\",\"distribution\":{\"performed+uniting\":0.34810126582278483,\"honest+uniting\":0.2468354430379747,\"performed+dividing\":0.22151898734177214,\"honest+dividing\":0.18354430379746836},\"submissions\":158},{\"id\":7,\"prompt\":\"AI PSYCHOSIS\",\"distribution\":{\"performed+uniting\":0.27586206896551724,\"honest+uniting\":0.014778325123152709,\"performed+dividing\":0.6699507389162561,\"honest+dividing\":0.03940886699507389},\"submissions\":203},{\"id\":31,\"prompt\":\"TASTE\",\"distribution\":{\"performed+uniting\":0.42452830188679247,\"honest+uniting\":0.054245283018867926,\"performed+dividing\":0.4339622641509434,\"honest+dividing\":0.08726415094339622},\"submissions\":424}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:23:05.440Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.438,\"honest+uniting\":0.082,\"performed+dividing\":0.392,\"honest+dividing\":0.088}",
+      "response": {
+        "id": "gen-1794716585-1ZlEUTph29Icu1wc573h",
+        "object": "chat.completion",
+        "created": 1794716585,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.438,\"honest+uniting\":0.082,\"performed+dividing\":0.392,\"honest+dividing\":0.088}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"LOVE AT FIRST SIGHT\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to return a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed, sum diff <=0.001 normalized. No other keys.\n\nWe have historical examples:\n1. prompt: \"MILLENNIALS\" (158 submissions)\n   performed+uniting: 0.3481\n   honest+uniting: 0.2468\n   performed+dividing: 0.2215\n   honest+dividing: 0.1835\n   So for a neutral-ish demographic word, uniting dominates (0.595), performed slightly higher than honest, dividing lower (0.405 total, performed dividing > honest dividing).\n\n2. prompt: \"AI PSYCHOSIS\" (203 submissions)\n   performed+uniting: 0.2759\n   honest+uniting: 0.0148 (very low)\n   performed+dividing: 0.6699 (high)\n   honest+dividing: 0.0394\n   So for a negative/provocative concept, performed dividing dominates, honest uniting almost zero.\n\n3. prompt: \"TASTE\" (424 submissions)\n   performed+uniting: 0.4245\n   honest+uniting: 0.0542 (low)\n   performed+dividing: 0.4340 (high)\n   honest+dividing: 0.0873\n   So for a more benign but subjective concept, performed uniting and performed dividing are both high (~0.43 each), honest both low.\n\nNow the target word: \"LOVE AT FIRST SIGHT\". This is a romantic, positive phrase, but also cliché, maybe ironic. The audience seems to be from a generative art project, likely internet-savvy, maybe cynical. The historical examples show that for \"MILLENNIALS\" (a group identity) there is more honest uniting (0.247). For \"AI PSYCHOSIS\" (negative) almost no honest uniting. For \"TASTE\" (subjective) low honest uniting. \"LOVE AT FIRST SIGHT\" is a positive romantic trope; could evoke either genuine warmth (honest uniting) or eye-rolling (performed uniting/dividing). Given the pattern: performed reactions dominate across all examples. Honest uniting only significant for MILLENNIALS (maybe because it's about \"us\"). \"LOVE AT FIRST SIGHT\" is not about \"us\" collectively but a personal experience; might not bring \"us\" together authentically. However, it could be seen as a shared cultural meme, maybe creating false unity (performed uniting). Or it could be seen as divisive (some believe, some cynical) -> performed dividing. Honest dividing? Possibly some truthfully fracturing (e.g., love at first sight is a myth that harms relationships). But historical honest dividing is low (0.18, 0.04, 0.09). Honest uniting also low except MILLENNIALS.\n\nWe need to estimate shares. Let's think about the phrase: \"LOVE AT FIRST SIGHT\". It's a common phrase, often used in greeting cards, movies. In a generative art audience, likely they'd treat it with irony: either performatively uniting (mocking shared sentiment) or performatively dividing (pointing out differences in belief about it). Could also be honest uniting if they feel genuine connection? But given the examples, honest uniting is only high when prompt is about the audience itself (\"MILLENNIALS\"). \"LOVE AT FIRST SIGHT\" is not about the audience, so honest uniting likely low, similar to TASTE or AI PSYCHOSIS. Performed uniting maybe moderate-high. Performed dividing maybe high because it's a divisive topic (believers vs skeptics). Honest dividing maybe low-moderate.\n\nLet's approximate: For TASTE, p+u=0.425, h+u=0.054, p+d=0.434, h+d=0.087. That's a balanced performed split. For MILLENNIALS, p+u=0.348, h+u=0.247, p+d=0.222, h+d=0.184. For AI PSYCHOSIS, p+u=0.276, h+u=0.015, p+d=0.670, h+d=0.039.\n\n\"LOVE AT FIRST SIGHT\" is more positive than AI PSYCHOSIS, less demographic than MILLENNIALS, more like a concept like TASTE but with emotional charge. Could be similar to TASTE but with slightly more uniting because it's positive? Or maybe more performed uniting because it's a cliché that people like to rally around ironically. I'd guess performed uniting around 0.4, performed dividing around 0.4, honest uniting around 0.1, honest dividing around 0.1. But we need to sum to 1.\n\nLet's look at averages of the three examples:\np+u: (0.348+0.276+0.425)/3 = 1.049/3 = 0.3497\nh+u: (0.247+0.015+0.054)/3 = 0.316/3 = 0.1053\np+d: (0.222+0.670+0.434)/3 = 1.326/3 = 0.442\nh+d: (0.184+0.039+0.087)/3 = 0.310/3 = 0.1033\nSum = 1.0003 approx. So average is p+d highest, p+u next, h+u and h+d low similar.\n\nBut for \"LOVE AT FIRST SIGHT\", maybe more uniting than average because positive? Could shift some from p+d to p+u. For MILLENNIALS, p+d was low (0.222) and p+u moderate, h+u high. For TASTE, p+d and p+u both ~0.43. For AI PSYCHOSIS, p+d huge. So the topic's valence matters. Positive topic -> less dividing? But TASTE is neutral and still dividing high. Love at first sight is a subset of taste/romance. Might be like TASTE but with slightly more uniting because it's a shared romantic ideal. I'll predict:\nperformed+uniting: 0.45\nhonest+uniting: 0.08\nperformed+dividing: 0.37\nhonest+dividing: 0.10\nSum = 1.00. But need at least three decimals if needed; we can use 0.450, 0.080, 0.370, 0.100. Or more precise: 0.450, 0.080, 0.370, 0.100.\n\nBut maybe honest uniting slightly higher because love is about connection? However historical honest uniting only for \"us\" words. The prompt is not \"us\". So keep low.\n\nAlternatively, consider that \"LOVE AT FIRST SIGHT\" could be interpreted as a uniting experience (we all have felt it or want it) -> performed uniting high, honest uniting maybe moderate? But the audience is cynical generative art participants. I'll stick with low honest.\n\nLet's adjust to match style: probabilities often have many decimals. We can output something like:\n{\"performed+uniting\":0.421,\"honest+uniting\":0.073,\"performed+dividing\":0.401,\"honest+dividing\":0.105}\nSum = 1.000. That seems plausible.\n\nBut we should maybe base more on TASTE because it's a similar abstract noun. TASTE: p+u 0.4245, h+u 0.0542, p+d 0.4340, h+d 0.0873. For LOVE AT FIRST SIGHT, maybe slightly more uniting because it's more universally relatable? Shift 0.03 from p+d to p+u and maybe h+u up a bit: p+u 0.455, h+u 0.08, p+d 0.404, h+d 0.061? Sum 1. But we need to keep honest dividing maybe similar to TASTE (0.087). Let's do:\nperformed+uniting: 0.460\nhonest+uniting: 0.070\nperformed+dividing: 0.383\nhonest+dividing: 0.087\nSum = 1.000. That seems fine.\n\nBut we could also think that \"LOVE AT FIRST SIGHT\" is a phrase that could be seen as \"creating false unity among us\" (performed uniting) because it's a romantic cliché that pretends we all believe in it. That could be high. \"Exploiting our divisions deliberately\" (performed dividing) could be those who mock it and highlight cynicism. So both performed high.\n\nI'll produce a JSON with reasonable numbers. Ensure no code fences, single object.\n\nLet's pick:\n{\"performed+uniting\":0.438,\"honest+uniting\":0.082,\"performed+dividing\":0.392,\"honest+dividing\":0.088}\nSum = 1.000. Use three decimals.\n\nBut the instruction: \"Use at least three decimal places when needed.\" So 0.438 is three decimals, fine.\n\nI'll output exactly that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"LOVE AT FIRST SIGHT\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to return a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed, sum diff <=0.001 normalized. No other keys.\n\nWe have historical examples:\n1. prompt: \"MILLENNIALS\" (158 submissions)\n   performed+uniting: 0.3481\n   honest+uniting: 0.2468\n   performed+dividing: 0.2215\n   honest+dividing: 0.1835\n   So for a neutral-ish demographic word, uniting dominates (0.595), performed slightly higher than honest, dividing lower (0.405 total, performed dividing > honest dividing).\n\n2. prompt: \"AI PSYCHOSIS\" (203 submissions)\n   performed+uniting: 0.2759\n   honest+uniting: 0.0148 (very low)\n   performed+dividing: 0.6699 (high)\n   honest+dividing: 0.0394\n   So for a negative/provocative concept, performed dividing dominates, honest uniting almost zero.\n\n3. prompt: \"TASTE\" (424 submissions)\n   performed+uniting: 0.4245\n   honest+uniting: 0.0542 (low)\n   performed+dividing: 0.4340 (high)\n   honest+dividing: 0.0873\n   So for a more benign but subjective concept, performed uniting and performed dividing are both high (~0.43 each), honest both low.\n\nNow the target word: \"LOVE AT FIRST SIGHT\". This is a romantic, positive phrase, but also cliché, maybe ironic. The audience seems to be from a generative art project, likely internet-savvy, maybe cynical. The historical examples show that for \"MILLENNIALS\" (a group identity) there is more honest uniting (0.247). For \"AI PSYCHOSIS\" (negative) almost no honest uniting. For \"TASTE\" (subjective) low honest uniting. \"LOVE AT FIRST SIGHT\" is a positive romantic trope; could evoke either genuine warmth (honest uniting) or eye-rolling (performed uniting/dividing). Given the pattern: performed reactions dominate across all examples. Honest uniting only significant for MILLENNIALS (maybe because it's about \"us\"). \"LOVE AT FIRST SIGHT\" is not about \"us\" collectively but a personal experience; might not bring \"us\" together authentically. However, it could be seen as a shared cultural meme, maybe creating false unity (performed uniting). Or it could be seen as divisive (some believe, some cynical) -> performed dividing. Honest dividing? Possibly some truthfully fracturing (e.g., love at first sight is a myth that harms relationships). But historical honest dividing is low (0.18, 0.04, 0.09). Honest uniting also low except MILLENNIALS.\n\nWe need to estimate shares. Let's think about the phrase: \"LOVE AT FIRST SIGHT\". It's a common phrase, often used in greeting cards, movies. In a generative art audience, likely they'd treat it with irony: either performatively uniting (mocking shared sentiment) or performatively dividing (pointing out differences in belief about it). Could also be honest uniting if they feel genuine connection? But given the examples, honest uniting is only high when prompt is about the audience itself (\"MILLENNIALS\"). \"LOVE AT FIRST SIGHT\" is not about the audience, so honest uniting likely low, similar to TASTE or AI PSYCHOSIS. Performed uniting maybe moderate-high. Performed dividing maybe high because it's a divisive topic (believers vs skeptics). Honest dividing maybe low-moderate.\n\nLet's approximate: For TASTE, p+u=0.425, h+u=0.054, p+d=0.434, h+d=0.087. That's a balanced performed split. For MILLENNIALS, p+u=0.348, h+u=0.247, p+d=0.222, h+d=0.184. For AI PSYCHOSIS, p+u=0.276, h+u=0.015, p+d=0.670, h+d=0.039.\n\n\"LOVE AT FIRST SIGHT\" is more positive than AI PSYCHOSIS, less demographic than MILLENNIALS, more like a concept like TASTE but with emotional charge. Could be similar to TASTE but with slightly more uniting because it's positive? Or maybe more performed uniting because it's a cliché that people like to rally around ironically. I'd guess performed uniting around 0.4, performed dividing around 0.4, honest uniting around 0.1, honest dividing around 0.1. But we need to sum to 1.\n\nLet's look at averages of the three examples:\np+u: (0.348+0.276+0.425)/3 = 1.049/3 = 0.3497\nh+u: (0.247+0.015+0.054)/3 = 0.316/3 = 0.1053\np+d: (0.222+0.670+0.434)/3 = 1.326/3 = 0.442\nh+d: (0.184+0.039+0.087)/3 = 0.310/3 = 0.1033\nSum = 1.0003 approx. So average is p+d highest, p+u next, h+u and h+d low similar.\n\nBut for \"LOVE AT FIRST SIGHT\", maybe more uniting than average because positive? Could shift some from p+d to p+u. For MILLENNIALS, p+d was low (0.222) and p+u moderate, h+u high. For TASTE, p+d and p+u both ~0.43. For AI PSYCHOSIS, p+d huge. So the topic's valence matters. Positive topic -> less dividing? But TASTE is neutral and still dividing high. Love at first sight is a subset of taste/romance. Might be like TASTE but with slightly more uniting because it's a shared romantic ideal. I'll predict:\nperformed+uniting: 0.45\nhonest+uniting: 0.08\nperformed+dividing: 0.37\nhonest+dividing: 0.10\nSum = 1.00. But need at least three decimals if needed; we can use 0.450, 0.080, 0.370, 0.100. Or more precise: 0.450, 0.080, 0.370, 0.100.\n\nBut maybe honest uniting slightly higher because love is about connection? However historical honest uniting only for \"us\" words. The prompt is not \"us\". So keep low.\n\nAlternatively, consider that \"LOVE AT FIRST SIGHT\" could be interpreted as a uniting experience (we all have felt it or want it) -> performed uniting high, honest uniting maybe moderate? But the audience is cynical generative art participants. I'll stick with low honest.\n\nLet's adjust to match style: probabilities often have many decimals. We can output something like:\n{\"performed+uniting\":0.421,\"honest+uniting\":0.073,\"performed+dividing\":0.401,\"honest+dividing\":0.105}\nSum = 1.000. That seems plausible.\n\nBut we should maybe base more on TASTE because it's a similar abstract noun. TASTE: p+u 0.4245, h+u 0.0542, p+d 0.4340, h+d 0.0873. For LOVE AT FIRST SIGHT, maybe slightly more uniting because it's more universally relatable? Shift 0.03 from p+d to p+u and maybe h+u up a bit: p+u 0.455, h+u 0.08, p+d 0.404, h+d 0.061? Sum 1. But we need to keep honest dividing maybe similar to TASTE (0.087). Let's do:\nperformed+uniting: 0.460\nhonest+uniting: 0.070\nperformed+dividing: 0.383\nhonest+dividing: 0.087\nSum = 1.000. That seems fine.\n\nBut we could also think that \"LOVE AT FIRST SIGHT\" is a phrase that could be seen as \"creating false unity among us\" (performed uniting) because it's a romantic cliché that pretends we all believe in it. That could be high. \"Exploiting our divisions deliberately\" (performed dividing) could be those who mock it and highlight cynicism. So both performed high.\n\nI'll produce a JSON with reasonable numbers. Ensure no code fences, single object.\n\nLet's pick:\n{\"performed+uniting\":0.438,\"honest+uniting\":0.082,\"performed+dividing\":0.392,\"honest+dividing\":0.088}\nSum = 1.000. Use three decimals.\n\nBut the instruction: \"Use at least three decimal places when needed.\" So 0.438 is three decimals, fine.\n\nI'll output exactly that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 507,
+          "completion_tokens": 2207,
+          "total_tokens": 2714,
+          "cost": 0.00123222,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00123222,
+            "upstream_inference_prompt_cost": 0.000066924,
+            "upstream_inference_completions_cost": 0.001165296
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2164,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 507,
+        "completion_tokens": 2207,
+        "total_tokens": 2714,
+        "cost": 0.00123222,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00123222,
+          "upstream_inference_prompt_cost": 0.000066924,
+          "upstream_inference_completions_cost": 0.001165296
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2164,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 51,
+      "finishedAt": "2026-11-15T04:23:31.033Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 70
+      },
+      "observation": {
+        "ok": true,
+        "id": 70,
+        "prompt": "MILLENNIALS",
+        "distribution": {
+          "performed+uniting": 0.34810126582278483,
+          "honest+uniting": 0.2468354430379747,
+          "performed+dividing": 0.22151898734177214,
+          "honest+dividing": 0.18354430379746836
+        },
+        "submissions": 158,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 7
+      },
+      "observation": {
+        "ok": true,
+        "id": 7,
+        "prompt": "AI PSYCHOSIS",
+        "distribution": {
+          "performed+uniting": 0.27586206896551724,
+          "honest+uniting": 0.014778325123152709,
+          "performed+dividing": 0.6699507389162561,
+          "honest+dividing": 0.03940886699507389
+        },
+        "submissions": 203,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 31
+      },
+      "observation": {
+        "ok": true,
+        "id": 31,
+        "prompt": "TASTE",
+        "distribution": {
+          "performed+uniting": 0.42452830188679247,
+          "honest+uniting": 0.054245283018867926,
+          "performed+dividing": 0.4339622641509434,
+          "honest+dividing": 0.08726415094339622
+        },
+        "submissions": 424,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.438,
+          "honest+uniting": 0.082,
+          "performed+dividing": 0.392,
+          "honest+dividing": 0.088
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.438,
+      "honest+uniting": 0.082,
+      "performed+dividing": 0.392,
+      "honest+dividing": 0.088
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.6882082485207102,
+    "score": 65.5895875739645,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

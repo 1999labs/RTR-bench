@@ -1,66 +1,58 @@
-# deepseek-v4.1-flash-1017 final evaluation — 8,000 tokens
+# deepseek-v4.1-flash-1017 — final evaluation
 
-Provider: Sail Research (`sail-research/fp4/us`, fp4). All 45 evaluation targets were run in all four conditions under the [frozen campaign plan](../../../../docs/final-run-plan-8000.md).
+Provider: **Sail Research (fp4)**, requested route `sail-research/fp4/us`. Actual response providers: Sail Research. All 45 targets ran in each condition under the [campaign protocol](../../README.md).
 
-| Condition | Score / 100 | vs baseline (points) | Valid / 45 | 95% score interval | Reported cost |
+| Condition | Score | vs historical baseline | Valid / 45 | 95% interval | Reported cost |
 |---|---:|---:|---:|---|---:|
-| Historical-average baseline | 85.56 | 0.00 | — | — | — |
-| Predict | 74.81725902 | −10.74 | 38/45 | 64.93 to 83.79 | ≥$0.0228571855 |
-| Random examples | 62.20354214 | −23.35 | 31/45 | 49.40 to 73.99 | ≥$0.0286401031 |
-| Similar examples | 64.98243948 | −20.58 | 33/45 | 52.64 to 76.43 | ≥$0.0273151303 |
-| Learn | 86.74674526 | +1.19 | 45/45 | 83.32 to 90.13 | ≥$0.0261351421 |
+| Predict | 74.81725902 | −10.74 | 38/45 | 64.93 to 83.79 | ≥$0.02286 |
+| Random examples | 62.20354214 | −23.35 | 31/45 | 49.40 to 73.99 | ≥$0.02864 |
+| Similar examples | 64.98243948 | −20.58 | 33/45 | 52.64 to 76.43 | ≥$0.02732 |
+| Learn | 86.74674526 | +1.19 | 45/45 | 83.32 to 90.13 | ≥$0.02614 |
 
-The historical-average baseline predicts the same distribution for every target, calculated only from reference windows. Uniform prediction scores 85.39. Differences use unrounded scores; failed terminal answers retain zero points. Learn gain measures the overall workflow difference, including answer-completion differences.
+Learn Gain: **+11.93** points; paired exploratory 95% interval **2.43 to 22.77**. Historical-average baseline: 85.55744060; uniform baseline: 85.38589005.
 
-Learn gain: 11.92948624 points; exploratory paired 95% interval [2.428821818523353, 22.766831994932044]. Total reported cost: ≥$0.1049475610, including controls; 369 HTTP attempts; 102.53 minutes including provider backoff and the scheduling pause.
+147/180 valid final predictions; 369 HTTP attempts, 11 API/transport errors, 33 responses stopped at the token limit. Wall-clock span: 102.53 minutes, including retries and pauses. Known total cost including controls: $0.1049475610; ledger accounted: $1.030345096; unresolved charges: 12.
 
-147/180 final predictions were valid. There were 11 API/transport errors and 33 length stops across attempts. The ledger records 0 unbilled rate-limit rejections and 12 unknown-cost reservations. The reported-cost total is separate from the ledger's conservatively rounded accounting total ($1.030345096).
+Terminal failures remain in the denominator with score zero; they were not rerolled:
 
-The cost figures are lower bounds. Eleven provider TTFT-guard rejections and one HTTP 200 response with no usage data retain $0.925397364 in conservative reservations. The ledger total includes these reservations; it is not an invoice. The [budget amendment](../../budget-amendment.md) explains the preserved partial history and provider pause.
+- none, day 130 (BERNIE SANDERS): missing — Missing final model response.
+- none, day 149 (COMMITMENT): missing — Missing final model response.
+- none, day 157 (VANITY): missing — Missing final model response.
+- none, day 158 (THE US CONSTITUTION): missing — Missing final model response.
+- none, day 168 (BIG TOBACCO): missing — Missing final model response.
+- none, day 171 (ANONYMITY): missing — Missing final model response.
+- none, day 173 (JENSEN HUANG): missing — Missing final model response.
+- random, day 131 (WELFARE): missing — Missing final model response.
+- random, day 144 (SELF-DRIVING CARS): missing — Missing final model response.
+- random, day 146 (MATRIARCHIES): missing — Missing final model response.
+- random, day 149 (COMMITMENT): missing — Missing final model response.
+- random, day 150 (MEMORY): missing — Missing final model response.
+- random, day 154 (REPUTATION): missing — Missing final model response.
+- random, day 155 (CHILD PROTECTIVE SERVICES): missing — Missing final model response.
+- random, day 160 (ROBOTS): missing — Missing final model response.
+- random, day 162 (GRETA THUNBERG): missing — Missing final model response.
+- random, day 170 (LUST): missing — Missing final model response.
+- random, day 171 (ANONYMITY): missing — Missing final model response.
+- random, day 172 (THE US MILITARY): missing — Missing final model response.
+- random, day 173 (JENSEN HUANG): missing — Missing final model response.
+- random, day 174 (GOOGLE): missing — Missing final model response.
+- similar, day 137 (NOSTALGIA): missing — Missing final model response.
+- similar, day 142 (ONSHORING): missing — Missing final model response.
+- similar, day 149 (COMMITMENT): missing — Missing final model response.
+- similar, day 154 (REPUTATION): missing — Missing final model response.
+- similar, day 158 (THE US CONSTITUTION): missing — Missing final model response.
+- similar, day 160 (ROBOTS): missing — Missing final model response.
+- similar, day 161 (DEBT): missing — Missing final model response.
+- similar, day 163 (GAME SHOWS): missing — Missing final model response.
+- similar, day 166 (STEROIDS): missing — Missing final model response.
+- similar, day 169 (HONOR): missing — Missing final model response.
+- similar, day 170 (LUST): missing — Missing final model response.
+- similar, day 171 (ANONYMITY): missing — Missing final model response.
 
-All 33 failed final predictions were empty responses: 32 had a length stop, and one similarity-control response (day 166) was an HTTP 200 body containing only whitespace, with no usage data. Seven failures occurred in Predict, fourteen in random, and twelve in similar. Learn recovered from one intermediate length stop, and every Learn episode produced a valid final prediction. Learn gain therefore reflects both distribution agreement and the difference in final-answer completion rates.
-
-Final failed episodes (retained at zero points):
-
-- none day 130: missing — Missing final model response
-- none day 149: missing — Missing final model response
-- none day 157: missing — Missing final model response
-- none day 158: missing — Missing final model response
-- none day 168: missing — Missing final model response
-- none day 171: missing — Missing final model response
-- none day 173: missing — Missing final model response
-- random day 131: missing — Missing final model response
-- random day 144: missing — Missing final model response
-- random day 146: missing — Missing final model response
-- random day 149: missing — Missing final model response
-- random day 150: missing — Missing final model response
-- random day 154: missing — Missing final model response
-- random day 155: missing — Missing final model response
-- random day 160: missing — Missing final model response
-- random day 162: missing — Missing final model response
-- random day 170: missing — Missing final model response
-- random day 171: missing — Missing final model response
-- random day 172: missing — Missing final model response
-- random day 173: missing — Missing final model response
-- random day 174: missing — Missing final model response
-- similar day 137: missing — Missing final model response
-- similar day 142: missing — Missing final model response
-- similar day 149: missing — Missing final model response
-- similar day 154: missing — Missing final model response
-- similar day 158: missing — Missing final model response
-- similar day 160: missing — Missing final model response
-- similar day 161: missing — Missing final model response
-- similar day 163: missing — Missing final model response
-- similar day 166: missing — Missing final model response
-- similar day 169: missing — Missing final model response
-- similar day 170: missing — Missing final model response
-- similar day 171: missing — Missing final model response
-
-Failures were not rerolled. Learn may recover from malformed or empty actions through its existing bounded feedback loop; a valid final prediction does not imply that every intermediate response succeeded.
-
-The verifier independently recomputed scores, replayed requests and traces, reconciled the ledger, and resumed with network calls disabled without changing the report. Scores measure distribution agreement, not percentage accuracy. Intervals are exploratory and do not capture all model/service variation.
+The offline verifier independently recomputed scores, replayed saved requests/traces, checked the spending ledger, and resumed this completed run with network calls forbidden. Learn Gain measures the whole workflow, including completion differences. Intervals describe target variation, not repeated model runs.
 
 - [Full report](report.md)
 - [Interactive traces](report.html)
 - [Raw report](report.json)
 - [Manifest](manifest.json)
+- [Spending ledger](spending.json)

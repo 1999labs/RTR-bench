@@ -1,0 +1,607 @@
+{
+  "day": 167,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"LAST CALLS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":81,\"prompt\":\"BORDER WALLS\",\"distribution\":{\"performed+uniting\":0.0189873417721519,\"honest+uniting\":0.16139240506329114,\"performed+dividing\":0.028481012658227847,\"honest+dividing\":0.7911392405063291},\"submissions\":316},{\"id\":79,\"prompt\":\"LAS VEGAS\",\"distribution\":{\"performed+uniting\":0.11711711711711711,\"honest+uniting\":0.26126126126126126,\"performed+dividing\":0.2702702702702703,\"honest+dividing\":0.35135135135135137},\"submissions\":111},{\"id\":49,\"prompt\":\"FAST FASHION\",\"distribution\":{\"performed+uniting\":0.045454545454545456,\"honest+uniting\":0,\"performed+dividing\":0.24242424242424243,\"honest+dividing\":0.7121212121212122},\"submissions\":66}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T05:07:46.089Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.108,\"honest+uniting\":0.197,\"performed+dividing\":0.245,\"honest+dividing\":0.450}",
+      "response": {
+        "id": "gen-1794719266-wUBn7M9TB4PMt57haLzz",
+        "object": "chat.completion",
+        "created": 1794719266,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.108,\"honest+uniting\":0.197,\"performed+dividing\":0.245,\"honest+dividing\":0.450}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"LAST CALLS\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"BORDER WALLS\": performed+uniting: 0.01899, honest+uniting: 0.16139, performed+dividing: 0.02848, honest+dividing: 0.79114 (n=316)\n2. \"LAS VEGAS\": performed+uniting: 0.11712, honest+uniting: 0.26126, performed+dividing: 0.27027, honest+dividing: 0.35135 (n=111)\n3. \"FAST FASHION\": performed+uniting: 0.04545, honest+uniting: 0, performed+dividing: 0.24242, honest+dividing: 0.71212 (n=66)\n\nWe need to estimate share for \"LAST CALLS\". The word \"LAST CALLS\" likely refers to last calls at a bar (final orders), or metaphorically final warnings, last chances, last calls for action, etc. In the context of the project, audience interprets words. We need to infer from patterns.\n\nLook at historical: words with negative/consequential/societal division themes: BORDER WALLS (divisive, physical separation) -> heavily honest+dividing (0.79), some honest+uniting (0.16), low performed. FAST FASHION (exploitative industry) -> honest+dividing 0.71, performed+dividing 0.24, honest+uniting 0, performed+uniting 0.045. LAS VEGAS (city of sin, entertainment, maybe uniting/dividing mix) -> more balanced, with honest+dividing 0.35, performed+dividing 0.27, honest+uniting 0.26, performed+uniting 0.12.\n\n\"LAST CALLS\" could be a call to action, final call, maybe a unifying or dividing thing. Could be like \"last calls\" as in final pleas, maybe honest+dividing if it's about fracturing (last calls before end, separation). Or performed+uniting if it's a false unity (last call to come together but superficial). Or honest+uniting if authentically bringing together (last call to unite). Or performed+dividing (exploiting divisions with last calls). Need to estimate.\n\nWe should consider the audience's tendency: they seem to lean toward honest+dividing for words that have inherent divisive/exploitative connotations (border walls, fast fashion). LAS VEGAS is more neutral/ambiguous, leading to more spread. \"LAST CALLS\" might be ambiguous: could be a bar's last call (uniting people in a shared experience? or dividing because it ends the night). But in a generative art project, participants might interpret \"LAST CALLS\" as final warnings about climate, politics, etc. Could be \"last calls\" as in calls from beyond the grave? Not sure.\n\nWe can use the examples to see average distributions:\nAverage of the three (simple mean, not weighted by n):\npu: (0.01899+0.11712+0.04545)/3 = 0.18156/3 = 0.06052\nhu: (0.16139+0.26126+0)/3 = 0.42265/3 = 0.14088\npd: (0.02848+0.27027+0.24242)/3 = 0.54117/3 = 0.18039\nhd: (0.79114+0.35135+0.71212)/3 = 1.85461/3 = 0.61820\nSum = 1.0 approx.\n\nWeighted by submissions (316+111+66=493):\npu: (316*0.01899 + 111*0.11712 + 66*0.04545)/493 = (6.0 + 13.0 + 3.0)/493 approx: 316*0.018987=6.0, 111*0.117117=13.0, 66*0.04545=3.0 => 22.0/493=0.0446\nhu: (316*0.16139=51.0, 111*0.26126=29.0, 66*0=0) => 80/493=0.1623\npd: (316*0.02848=9.0, 111*0.27027=30.0, 66*0.24242=16.0) => 55/493=0.1116\nhd: (316*0.79114=250, 111*0.35135=39, 66*0.71212=47) => 336/493=0.6815\nSum ~1.0.\n\nSo overall audience skews heavily to honest+dividing (around 0.68 weighted), then honest+uniting (0.16), performed categories lower.\n\nBut \"LAST CALLS\" might be less inherently divisive than border walls/fast fashion. Could be more like LAS VEGAS in ambiguity? \"Last calls\" could be a call to unite (honest+uniting) or false unity (performed+uniting). However, the phrase \"LAST CALLS\" (plural) might evoke multiple final calls, perhaps from different groups, possibly divisive. Could also be about last calls for submissions, like final notices.\n\nGiven the project is \"Mixed Messages\", maybe participants often see words as fracturing us truthfully. The word \"CALLS\" implies communication, possibly uniting. But \"LAST\" implies end, maybe division. I'd predict a distribution somewhat between BORDER WALLS and LAS VEGAS, but maybe with higher performed+uniting because \"calls\" can be performative.\n\nLet's think of possible interpretations:\n- performed+uniting: creating false unity among us: e.g., politicians making last calls for unity but superficially.\n- honest+uniting: bringing us together authentically: last calls to rally together genuinely.\n- performed+dividing: exploiting divisions deliberately: last calls that stir up conflict for gain.\n- honest+dividing: fracturing us truthfully: last calls reveal our splits, end of relationships.\n\nGiven the historical, honest+dividing dominates for negative nouns (walls, fashion). \"Calls\" is more neutral/action. LAS VEGAS (a place known for excess) got more balanced with performed+dividing high (0.27) and honest+dividing 0.35. So maybe for LAST CALLS, we could see a mix: honest+dividing maybe around 0.4-0.5, performed+dividing around 0.2-0.3, honest+uniting around 0.2, performed+uniting around 0.1.\n\nBut we need to output a single JSON object with four probabilities summing to 1. We can choose values like:\nperformed+uniting: 0.1\nhonest+uniting: 0.2\nperformed+dividing: 0.25\nhonest+dividing: 0.45\nSum = 1.0. But we should use at least three decimals if needed. Could do 0.100, 0.200, 0.250, 0.450.\n\nBut maybe we should align more with the weighted average? Weighted average: pu 0.045, hu 0.162, pd 0.112, hd 0.681. That is heavily hd. But LAS VEGAS shows that not all words are that extreme. \"LAST CALLS\" might be less inherently divisive than border walls, but maybe more than LAS VEGAS? Actually \"last calls\" could be about final opportunities, which could be unifying or dividing. I'd argue it's closer to LAS VEGAS in that it's a cultural phrase, not a clear negative infrastructure. So maybe distribution similar to LAS VEGAS but with slightly more honest+dividing because \"last\" implies endings/fracture. Let's propose:\nperformed+uniting: 0.12 (similar to LV's 0.117)\nhonest+uniting: 0.22 (a bit less than LV's 0.261)\nperformed+dividing: 0.26 (similar to LV's 0.270)\nhonest+dividing: 0.40 (a bit more than LV's 0.351)\nSum = 1.00. That seems plausible.\n\nAlternatively, we could use a simple model: based on word embeddings? Not possible. We'll rely on intuition.\n\nThe instruction: \"Predict the distribution of responses from participants in Mixed Messages... These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences.\" And \"Estimate the share of this audience's submissions in each quadrant... Return exactly these four keys with numeric probabilities between 0 and 1 that sum to 1... A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\"\n\nThus we output e.g.:\n{\"performed+uniting\":0.12,\"honest+uniting\":0.22,\"performed+dividing\":0.26,\"honest+dividing\":0.40}\n\nBut we should use three decimals: 0.120, 0.220, 0.260, 0.400. That sums to 1.000.\n\nCould also tweak to match historical patterns more: maybe honest+dividing is higher because the audience leans that way. Let's check FAST FASHION had honest+uniting 0, meaning they didn't see any authentic unity in fast fashion. For LAST CALLS, maybe some authentic unity. I'd keep honest+uniting >0.\n\nMaybe we can compute a naive Bayes? Not needed.\n\nI'll go with a distribution that reflects a mix but with honest+dividing still largest:\nperformed+uniting: 0.108\nhonest+uniting: 0.197\nperformed+dividing: 0.245\nhonest+dividing: 0.450\nSum = 1.000. That's fine.\n\nBut we need to ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll output:\n{\"performed+uniting\":0.108,\"honest+uniting\":0.197,\"performed+dividing\":0.245,\"honest+dividing\":0.450}\n\nCheck sum: 0.108+0.197=0.305, +0.245=0.55, +0.45=1.0. Good.\n\nAlternatively, maybe more like BORDER WALLS? But \"LAST CALLS\" not as divisive as wall. I'll stick with moderate.\n\nThus final answer.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"LAST CALLS\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"BORDER WALLS\": performed+uniting: 0.01899, honest+uniting: 0.16139, performed+dividing: 0.02848, honest+dividing: 0.79114 (n=316)\n2. \"LAS VEGAS\": performed+uniting: 0.11712, honest+uniting: 0.26126, performed+dividing: 0.27027, honest+dividing: 0.35135 (n=111)\n3. \"FAST FASHION\": performed+uniting: 0.04545, honest+uniting: 0, performed+dividing: 0.24242, honest+dividing: 0.71212 (n=66)\n\nWe need to estimate share for \"LAST CALLS\". The word \"LAST CALLS\" likely refers to last calls at a bar (final orders), or metaphorically final warnings, last chances, last calls for action, etc. In the context of the project, audience interprets words. We need to infer from patterns.\n\nLook at historical: words with negative/consequential/societal division themes: BORDER WALLS (divisive, physical separation) -> heavily honest+dividing (0.79), some honest+uniting (0.16), low performed. FAST FASHION (exploitative industry) -> honest+dividing 0.71, performed+dividing 0.24, honest+uniting 0, performed+uniting 0.045. LAS VEGAS (city of sin, entertainment, maybe uniting/dividing mix) -> more balanced, with honest+dividing 0.35, performed+dividing 0.27, honest+uniting 0.26, performed+uniting 0.12.\n\n\"LAST CALLS\" could be a call to action, final call, maybe a unifying or dividing thing. Could be like \"last calls\" as in final pleas, maybe honest+dividing if it's about fracturing (last calls before end, separation). Or performed+uniting if it's a false unity (last call to come together but superficial). Or honest+uniting if authentically bringing together (last call to unite). Or performed+dividing (exploiting divisions with last calls). Need to estimate.\n\nWe should consider the audience's tendency: they seem to lean toward honest+dividing for words that have inherent divisive/exploitative connotations (border walls, fast fashion). LAS VEGAS is more neutral/ambiguous, leading to more spread. \"LAST CALLS\" might be ambiguous: could be a bar's last call (uniting people in a shared experience? or dividing because it ends the night). But in a generative art project, participants might interpret \"LAST CALLS\" as final warnings about climate, politics, etc. Could be \"last calls\" as in calls from beyond the grave? Not sure.\n\nWe can use the examples to see average distributions:\nAverage of the three (simple mean, not weighted by n):\npu: (0.01899+0.11712+0.04545)/3 = 0.18156/3 = 0.06052\nhu: (0.16139+0.26126+0)/3 = 0.42265/3 = 0.14088\npd: (0.02848+0.27027+0.24242)/3 = 0.54117/3 = 0.18039\nhd: (0.79114+0.35135+0.71212)/3 = 1.85461/3 = 0.61820\nSum = 1.0 approx.\n\nWeighted by submissions (316+111+66=493):\npu: (316*0.01899 + 111*0.11712 + 66*0.04545)/493 = (6.0 + 13.0 + 3.0)/493 approx: 316*0.018987=6.0, 111*0.117117=13.0, 66*0.04545=3.0 => 22.0/493=0.0446\nhu: (316*0.16139=51.0, 111*0.26126=29.0, 66*0=0) => 80/493=0.1623\npd: (316*0.02848=9.0, 111*0.27027=30.0, 66*0.24242=16.0) => 55/493=0.1116\nhd: (316*0.79114=250, 111*0.35135=39, 66*0.71212=47) => 336/493=0.6815\nSum ~1.0.\n\nSo overall audience skews heavily to honest+dividing (around 0.68 weighted), then honest+uniting (0.16), performed categories lower.\n\nBut \"LAST CALLS\" might be less inherently divisive than border walls/fast fashion. Could be more like LAS VEGAS in ambiguity? \"Last calls\" could be a call to unite (honest+uniting) or false unity (performed+uniting). However, the phrase \"LAST CALLS\" (plural) might evoke multiple final calls, perhaps from different groups, possibly divisive. Could also be about last calls for submissions, like final notices.\n\nGiven the project is \"Mixed Messages\", maybe participants often see words as fracturing us truthfully. The word \"CALLS\" implies communication, possibly uniting. But \"LAST\" implies end, maybe division. I'd predict a distribution somewhat between BORDER WALLS and LAS VEGAS, but maybe with higher performed+uniting because \"calls\" can be performative.\n\nLet's think of possible interpretations:\n- performed+uniting: creating false unity among us: e.g., politicians making last calls for unity but superficially.\n- honest+uniting: bringing us together authentically: last calls to rally together genuinely.\n- performed+dividing: exploiting divisions deliberately: last calls that stir up conflict for gain.\n- honest+dividing: fracturing us truthfully: last calls reveal our splits, end of relationships.\n\nGiven the historical, honest+dividing dominates for negative nouns (walls, fashion). \"Calls\" is more neutral/action. LAS VEGAS (a place known for excess) got more balanced with performed+dividing high (0.27) and honest+dividing 0.35. So maybe for LAST CALLS, we could see a mix: honest+dividing maybe around 0.4-0.5, performed+dividing around 0.2-0.3, honest+uniting around 0.2, performed+uniting around 0.1.\n\nBut we need to output a single JSON object with four probabilities summing to 1. We can choose values like:\nperformed+uniting: 0.1\nhonest+uniting: 0.2\nperformed+dividing: 0.25\nhonest+dividing: 0.45\nSum = 1.0. But we should use at least three decimals if needed. Could do 0.100, 0.200, 0.250, 0.450.\n\nBut maybe we should align more with the weighted average? Weighted average: pu 0.045, hu 0.162, pd 0.112, hd 0.681. That is heavily hd. But LAS VEGAS shows that not all words are that extreme. \"LAST CALLS\" might be less inherently divisive than border walls, but maybe more than LAS VEGAS? Actually \"last calls\" could be about final opportunities, which could be unifying or dividing. I'd argue it's closer to LAS VEGAS in that it's a cultural phrase, not a clear negative infrastructure. So maybe distribution similar to LAS VEGAS but with slightly more honest+dividing because \"last\" implies endings/fracture. Let's propose:\nperformed+uniting: 0.12 (similar to LV's 0.117)\nhonest+uniting: 0.22 (a bit less than LV's 0.261)\nperformed+dividing: 0.26 (similar to LV's 0.270)\nhonest+dividing: 0.40 (a bit more than LV's 0.351)\nSum = 1.00. That seems plausible.\n\nAlternatively, we could use a simple model: based on word embeddings? Not possible. We'll rely on intuition.\n\nThe instruction: \"Predict the distribution of responses from participants in Mixed Messages... These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences.\" And \"Estimate the share of this audience's submissions in each quadrant... Return exactly these four keys with numeric probabilities between 0 and 1 that sum to 1... A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\"\n\nThus we output e.g.:\n{\"performed+uniting\":0.12,\"honest+uniting\":0.22,\"performed+dividing\":0.26,\"honest+dividing\":0.40}\n\nBut we should use three decimals: 0.120, 0.220, 0.260, 0.400. That sums to 1.000.\n\nCould also tweak to match historical patterns more: maybe honest+dividing is higher because the audience leans that way. Let's check FAST FASHION had honest+uniting 0, meaning they didn't see any authentic unity in fast fashion. For LAST CALLS, maybe some authentic unity. I'd keep honest+uniting >0.\n\nMaybe we can compute a naive Bayes? Not needed.\n\nI'll go with a distribution that reflects a mix but with honest+dividing still largest:\nperformed+uniting: 0.108\nhonest+uniting: 0.197\nperformed+dividing: 0.245\nhonest+dividing: 0.450\nSum = 1.000. That's fine.\n\nBut we need to ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll output:\n{\"performed+uniting\":0.108,\"honest+uniting\":0.197,\"performed+dividing\":0.245,\"honest+dividing\":0.450}\n\nCheck sum: 0.108+0.197=0.305, +0.245=0.55, +0.45=1.0. Good.\n\nAlternatively, maybe more like BORDER WALLS? But \"LAST CALLS\" not as divisive as wall. I'll stick with moderate.\n\nThus final answer.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 497,
+          "completion_tokens": 2504,
+          "total_tokens": 3001,
+          "cost": 0.001387716,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001387716,
+            "upstream_inference_prompt_cost": 0.000065604,
+            "upstream_inference_completions_cost": 0.001322112
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2461,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 497,
+        "completion_tokens": 2504,
+        "total_tokens": 3001,
+        "cost": 0.001387716,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001387716,
+          "upstream_inference_prompt_cost": 0.000065604,
+          "upstream_inference_completions_cost": 0.001322112
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2461,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 131,
+      "finishedAt": "2026-11-15T05:08:15.029Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 81
+      },
+      "observation": {
+        "ok": true,
+        "id": 81,
+        "prompt": "BORDER WALLS",
+        "distribution": {
+          "performed+uniting": 0.0189873417721519,
+          "honest+uniting": 0.16139240506329114,
+          "performed+dividing": 0.028481012658227847,
+          "honest+dividing": 0.7911392405063291
+        },
+        "submissions": 316,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 79
+      },
+      "observation": {
+        "ok": true,
+        "id": 79,
+        "prompt": "LAS VEGAS",
+        "distribution": {
+          "performed+uniting": 0.11711711711711711,
+          "honest+uniting": 0.26126126126126126,
+          "performed+dividing": 0.2702702702702703,
+          "honest+dividing": 0.35135135135135137
+        },
+        "submissions": 111,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 49
+      },
+      "observation": {
+        "ok": true,
+        "id": 49,
+        "prompt": "FAST FASHION",
+        "distribution": {
+          "performed+uniting": 0.045454545454545456,
+          "honest+uniting": 0,
+          "performed+dividing": 0.24242424242424243,
+          "honest+dividing": 0.7121212121212122
+        },
+        "submissions": 66,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.108,
+          "honest+uniting": 0.197,
+          "performed+dividing": 0.245,
+          "honest+dividing": 0.45
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.108,
+      "honest+uniting": 0.197,
+      "performed+dividing": 0.245,
+      "honest+dividing": 0.45
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.06314553596571779,
+    "score": 96.84272320171411,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

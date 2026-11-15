@@ -1,0 +1,607 @@
+{
+  "day": 131,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"WELFARE\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":24,\"prompt\":\"DONALD TRUMP\",\"distribution\":{\"performed+uniting\":0.0027100271002710027,\"honest+uniting\":0,\"performed+dividing\":0.13821138211382114,\"honest+dividing\":0.8590785907859079},\"submissions\":738},{\"id\":68,\"prompt\":\"POLICE DEPARTMENTS\",\"distribution\":{\"performed+uniting\":0.017699115044247787,\"honest+uniting\":0.02654867256637168,\"performed+dividing\":0.4778761061946903,\"honest+dividing\":0.4778761061946903},\"submissions\":113},{\"id\":8,\"prompt\":\"@SHL0MS\",\"distribution\":{\"performed+uniting\":0.5663311985361391,\"honest+uniting\":0.06404391582799634,\"performed+dividing\":0.0878316559926807,\"honest+dividing\":0.2817932296431839},\"submissions\":1093}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:20:46.083Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.250,\"honest+uniting\":0.050,\"performed+dividing\":0.300,\"honest+dividing\":0.400}",
+      "response": {
+        "id": "gen-1794716446-v55NCLkWLv6vAaBuMPUD",
+        "object": "chat.completion",
+        "created": 1794716446,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.250,\"honest+uniting\":0.050,\"performed+dividing\":0.300,\"honest+dividing\":0.400}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"WELFARE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"DONALD TRUMP\": performed+uniting: 0.0027, honest+uniting: 0, performed+dividing: 0.1382, honest+dividing: 0.8591. So Trump is seen as honestly dividing (fracturing us truthfully) mostly, with some performed dividing.\n2. \"POLICE DEPARTMENTS\": performed+uniting: 0.0177, honest+uniting: 0.0265, performed+dividing: 0.4779, honest+dividing: 0.4779. So roughly half dividing (both performed and honest equally), small uniting.\n3. \"@SHL0MS\" (an artist?): performed+uniting: 0.5663, honest+uniting: 0.0640, performed+dividing: 0.0878, honest+dividing: 0.2818. So mostly performed uniting (false unity) and some honest dividing.\n\nNow we need to estimate for \"WELFARE\". Welfare as a concept: government assistance, social welfare. The audience likely has mixed political views. Could be seen as bringing us together authentically (honest+uniting) if they think welfare helps people, or performed uniting (false unity) if they think it's a handout that creates dependency but pretends to help. Or dividing: exploiting divisions (performed dividing) if they think politicians use welfare to divide (e.g., welfare queen rhetoric), or honestly dividing (fracturing us truthfully) if they think welfare actually fractures society (e.g., creates class divisions). \n\nGiven the examples: Trump (divisive figure) -> honest dividing dominant. Police departments -> both dividing roughly equal. @SHL0MS (maybe an art account) -> performed uniting dominant.\n\nWelfare is a policy/topic, not a person necessarily. Could be more like police departments? Or maybe more uniting? Let's think about the audience: Mixed Messages is a generative art project by shl0ms? Actually @SHL0MS is a generative artist, maybe the project is his. The audience might be crypto/art/political edge types. They might be cynical about welfare. Possibly they see welfare as performed uniting (false unity: pretending to care, creating false unity) or honest dividing (actually fracturing society). \n\nWe need to produce probabilities summing to 1. Let's consider the historical patterns: For polarizing political figures/entities, dividing dominates. For a more neutral or self-referential (shl0ms) it's performed uniting. Welfare is a political topic, likely divisive. Could be similar to police departments: around 0.48 dividing each? But police departments had equal performed and honest dividing, and tiny uniting. Welfare might have more uniting because some see it as helping. But the audience may be right-leaning? Not sure.\n\nWe can also think of \"welfare\" as a word that could be interpreted as \"well-being\" generally, but in US context it's government aid. The project likely uses prompts that are provocative. The examples: Donald Trump, Police Departments, @SHL0MS. So they use names/entities. Welfare is a concept. Might get a mix.\n\nWe need to output a single JSON object with four keys, numeric probabilities, sum to 1. Use at least three decimals when needed. We can choose something like:\nperformed+uniting: 0.15\nhonest+uniting: 0.10\nperformed+dividing: 0.35\nhonest+dividing: 0.40\nSum = 1.00. But we need to base on evidence. Let's examine the three examples more:\n\n- Trump: honest dividing 0.859, performed dividing 0.138, performed uniting 0.003, honest uniting 0. So extremely negative, honest fracture.\n- Police: performed uniting 0.018, honest uniting 0.027, performed dividing 0.478, honest dividing 0.478. So balanced dividing, slight uniting.\n- shl0ms: performed uniting 0.566, honest uniting 0.064, performed dividing 0.088, honest dividing 0.282. So mostly performed uniting, then honest dividing.\n\nIf we think welfare is a government program, maybe like police? But police are an institution that can be seen as both protective and oppressive. Welfare is assistance, maybe more likely to be seen as performed uniting (fake care) or honest dividing (creates dependency/division). I'd guess the audience is cynical, so performed uniting might be high, honest dividing moderate, performed dividing some, honest uniting low.\n\nMaybe we can approximate: performed+uniting: 0.35, honest+uniting: 0.05, performed+dividing: 0.20, honest+dividing: 0.40. Sum = 1.00. Or we could do 0.3, 0.1, 0.3, 0.3? But need to sum 1.\n\nLet's think of \"welfare\" as possibly evoking \"welfare state\" which could be seen as bringing us together authentically by some, but the audience may be more skeptical. The project's audience might be from the art/crypto sphere, likely libertarian-ish, so welfare negative. So honest dividing and performed uniting are plausible.\n\nI'll set:\nperformed+uniting: 0.420\nhonest+uniting: 0.030\nperformed+dividing: 0.250\nhonest+dividing: 0.300\nSum = 1.000. But we need at least three decimals if needed; these are three decimals.\n\nAlternatively, to be more grounded, we could take average of the three examples? But they are very different. Weighted by submissions? Trump 738, police 113, shl0ms 1093. Total submissions 1944. Average distribution weighted:\nperformed+uniting: (0.00271*738 + 0.0177*113 + 0.56633*1093)/1944 = (2.000 + 2.000? let's compute: 0.00271*738≈2.000 (actually 0.0027100271*738 = 2.000? 0.00271*738=2.000, yes); 0.017699*113≈1.998; 0.566331*1093≈619.0? Wait 0.56633*1093 = 619.0? 0.566*1000=566, plus 0.566*93≈52.6, total 618.6. So sum ≈ 2+2+618.6=622.6. /1944 = 0.320.\nhonest+uniting: (0*738 + 0.02655*113 + 0.06404*1093) = 0 + 3.0 + 70.0 = 73 /1944 = 0.0375.\nperformed+dividing: (0.13821*738 + 0.47788*113 + 0.08783*1093) = 102.1 + 54.0 + 96.0 = 252.1 /1944 = 0.1297.\nhonest+dividing: (0.85908*738 + 0.47788*113 + 0.28179*1093) = 634.0 + 54.0 + 308.0 = 996 /1944 = 0.512.\nWeighted average: {0.320, 0.038, 0.130, 0.512}. That's dominated by shl0ms because large submissions. But shl0ms is the artist himself maybe, so his prompt got many responses from his followers? That might skew.\n\nBut the target is \"WELFARE\", a concept. Might be more like police departments (institution) than shl0ms. Could be between police and trump? Actually welfare is a government benefit, maybe seen as dividing like police? I'd guess performed dividing and honest dividing both significant, with some performed uniting.\n\nLet's look at police: both dividing ~0.478 each, uniting ~0.02 each. That's almost 0.5/0.5 dividing. For welfare, maybe performed uniting is higher because welfare is sold as helping (false unity). So maybe performed uniting 0.2, honest uniting 0.05, performed dividing 0.35, honest dividing 0.40. Sum 1.\n\nI'll choose something plausible: \nperformed+uniting: 0.250\nhonest+uniting: 0.050\nperformed+dividing: 0.300\nhonest+dividing: 0.400\n\nCheck sum: 1.000. Use three decimals: 0.250, 0.050, 0.300, 0.400. But 0.050 is three decimals? Yes 0.050. Could also write 0.05 but at least three decimals when needed; 0.050 is fine.\n\nAlternatively, to be safe, we can output with more precision: 0.250, 0.050, 0.300, 0.400.\n\nBut the instruction: \"Use at least three decimal places when needed.\" So we can use 0.25? That's two decimals, but it's exactly 0.25, which is 0.250. Better to use three decimals.\n\nI'll output: {\"performed+uniting\":0.250,\"honest+uniting\":0.050,\"performed+dividing\":0.300,\"honest+dividing\":0.400}\n\nBut maybe we should adjust to sum exactly 1: 0.25+0.05+0.3+0.4=1.0. Good.\n\nHowever, we might want to mimic the style: they used long decimals sometimes. But it's fine.\n\nLet's consider if there is any hidden pattern: The quadrants are \"performed+uniting\" (false unity), \"honest+uniting\" (authentic unity), \"performed+dividing\" (exploiting divisions deliberately), \"honest+dividing\" (fracturing truthfully). For welfare, maybe the audience thinks welfare is a tool to exploit divisions (performed dividing) by politicians, or it truthfully fractures (honest dividing). I'd lean honest dividing a bit higher.\n\nAnother approach: Since welfare is a word that could be seen as positive by some, maybe honest uniting is not zero. But in the examples, honest uniting only appeared in police (0.027) and shl0ms (0.064). So it's low generally. So 0.05 is plausible.\n\nI'll finalize with those numbers.\n\nBut wait: The prompt says \"Reply with a single JSON object only. No prose or code fences.\" So just the JSON.\n\nThus final answer: {\"performed+uniting\":0.250,\"honest+uniting\":0.050,\"performed+dividing\":0.300,\"honest+dividing\":0.400}\n\nBut maybe we should use more nuanced decimals: 0.248, 0.052, 0.301, 0.399 sum 1.000. But not necessary.\n\nI'll go with the simple ones.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"WELFARE\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"DONALD TRUMP\": performed+uniting: 0.0027, honest+uniting: 0, performed+dividing: 0.1382, honest+dividing: 0.8591. So Trump is seen as honestly dividing (fracturing us truthfully) mostly, with some performed dividing.\n2. \"POLICE DEPARTMENTS\": performed+uniting: 0.0177, honest+uniting: 0.0265, performed+dividing: 0.4779, honest+dividing: 0.4779. So roughly half dividing (both performed and honest equally), small uniting.\n3. \"@SHL0MS\" (an artist?): performed+uniting: 0.5663, honest+uniting: 0.0640, performed+dividing: 0.0878, honest+dividing: 0.2818. So mostly performed uniting (false unity) and some honest dividing.\n\nNow we need to estimate for \"WELFARE\". Welfare as a concept: government assistance, social welfare. The audience likely has mixed political views. Could be seen as bringing us together authentically (honest+uniting) if they think welfare helps people, or performed uniting (false unity) if they think it's a handout that creates dependency but pretends to help. Or dividing: exploiting divisions (performed dividing) if they think politicians use welfare to divide (e.g., welfare queen rhetoric), or honestly dividing (fracturing us truthfully) if they think welfare actually fractures society (e.g., creates class divisions). \n\nGiven the examples: Trump (divisive figure) -> honest dividing dominant. Police departments -> both dividing roughly equal. @SHL0MS (maybe an art account) -> performed uniting dominant.\n\nWelfare is a policy/topic, not a person necessarily. Could be more like police departments? Or maybe more uniting? Let's think about the audience: Mixed Messages is a generative art project by shl0ms? Actually @SHL0MS is a generative artist, maybe the project is his. The audience might be crypto/art/political edge types. They might be cynical about welfare. Possibly they see welfare as performed uniting (false unity: pretending to care, creating false unity) or honest dividing (actually fracturing society). \n\nWe need to produce probabilities summing to 1. Let's consider the historical patterns: For polarizing political figures/entities, dividing dominates. For a more neutral or self-referential (shl0ms) it's performed uniting. Welfare is a political topic, likely divisive. Could be similar to police departments: around 0.48 dividing each? But police departments had equal performed and honest dividing, and tiny uniting. Welfare might have more uniting because some see it as helping. But the audience may be right-leaning? Not sure.\n\nWe can also think of \"welfare\" as a word that could be interpreted as \"well-being\" generally, but in US context it's government aid. The project likely uses prompts that are provocative. The examples: Donald Trump, Police Departments, @SHL0MS. So they use names/entities. Welfare is a concept. Might get a mix.\n\nWe need to output a single JSON object with four keys, numeric probabilities, sum to 1. Use at least three decimals when needed. We can choose something like:\nperformed+uniting: 0.15\nhonest+uniting: 0.10\nperformed+dividing: 0.35\nhonest+dividing: 0.40\nSum = 1.00. But we need to base on evidence. Let's examine the three examples more:\n\n- Trump: honest dividing 0.859, performed dividing 0.138, performed uniting 0.003, honest uniting 0. So extremely negative, honest fracture.\n- Police: performed uniting 0.018, honest uniting 0.027, performed dividing 0.478, honest dividing 0.478. So balanced dividing, slight uniting.\n- shl0ms: performed uniting 0.566, honest uniting 0.064, performed dividing 0.088, honest dividing 0.282. So mostly performed uniting, then honest dividing.\n\nIf we think welfare is a government program, maybe like police? But police are an institution that can be seen as both protective and oppressive. Welfare is assistance, maybe more likely to be seen as performed uniting (fake care) or honest dividing (creates dependency/division). I'd guess the audience is cynical, so performed uniting might be high, honest dividing moderate, performed dividing some, honest uniting low.\n\nMaybe we can approximate: performed+uniting: 0.35, honest+uniting: 0.05, performed+dividing: 0.20, honest+dividing: 0.40. Sum = 1.00. Or we could do 0.3, 0.1, 0.3, 0.3? But need to sum 1.\n\nLet's think of \"welfare\" as possibly evoking \"welfare state\" which could be seen as bringing us together authentically by some, but the audience may be more skeptical. The project's audience might be from the art/crypto sphere, likely libertarian-ish, so welfare negative. So honest dividing and performed uniting are plausible.\n\nI'll set:\nperformed+uniting: 0.420\nhonest+uniting: 0.030\nperformed+dividing: 0.250\nhonest+dividing: 0.300\nSum = 1.000. But we need at least three decimals if needed; these are three decimals.\n\nAlternatively, to be more grounded, we could take average of the three examples? But they are very different. Weighted by submissions? Trump 738, police 113, shl0ms 1093. Total submissions 1944. Average distribution weighted:\nperformed+uniting: (0.00271*738 + 0.0177*113 + 0.56633*1093)/1944 = (2.000 + 2.000? let's compute: 0.00271*738≈2.000 (actually 0.0027100271*738 = 2.000? 0.00271*738=2.000, yes); 0.017699*113≈1.998; 0.566331*1093≈619.0? Wait 0.56633*1093 = 619.0? 0.566*1000=566, plus 0.566*93≈52.6, total 618.6. So sum ≈ 2+2+618.6=622.6. /1944 = 0.320.\nhonest+uniting: (0*738 + 0.02655*113 + 0.06404*1093) = 0 + 3.0 + 70.0 = 73 /1944 = 0.0375.\nperformed+dividing: (0.13821*738 + 0.47788*113 + 0.08783*1093) = 102.1 + 54.0 + 96.0 = 252.1 /1944 = 0.1297.\nhonest+dividing: (0.85908*738 + 0.47788*113 + 0.28179*1093) = 634.0 + 54.0 + 308.0 = 996 /1944 = 0.512.\nWeighted average: {0.320, 0.038, 0.130, 0.512}. That's dominated by shl0ms because large submissions. But shl0ms is the artist himself maybe, so his prompt got many responses from his followers? That might skew.\n\nBut the target is \"WELFARE\", a concept. Might be more like police departments (institution) than shl0ms. Could be between police and trump? Actually welfare is a government benefit, maybe seen as dividing like police? I'd guess performed dividing and honest dividing both significant, with some performed uniting.\n\nLet's look at police: both dividing ~0.478 each, uniting ~0.02 each. That's almost 0.5/0.5 dividing. For welfare, maybe performed uniting is higher because welfare is sold as helping (false unity). So maybe performed uniting 0.2, honest uniting 0.05, performed dividing 0.35, honest dividing 0.40. Sum 1.\n\nI'll choose something plausible: \nperformed+uniting: 0.250\nhonest+uniting: 0.050\nperformed+dividing: 0.300\nhonest+dividing: 0.400\n\nCheck sum: 1.000. Use three decimals: 0.250, 0.050, 0.300, 0.400. But 0.050 is three decimals? Yes 0.050. Could also write 0.05 but at least three decimals when needed; 0.050 is fine.\n\nAlternatively, to be safe, we can output with more precision: 0.250, 0.050, 0.300, 0.400.\n\nBut the instruction: \"Use at least three decimal places when needed.\" So we can use 0.25? That's two decimals, but it's exactly 0.25, which is 0.250. Better to use three decimals.\n\nI'll output: {\"performed+uniting\":0.250,\"honest+uniting\":0.050,\"performed+dividing\":0.300,\"honest+dividing\":0.400}\n\nBut maybe we should adjust to sum exactly 1: 0.25+0.05+0.3+0.4=1.0. Good.\n\nHowever, we might want to mimic the style: they used long decimals sometimes. But it's fine.\n\nLet's consider if there is any hidden pattern: The quadrants are \"performed+uniting\" (false unity), \"honest+uniting\" (authentic unity), \"performed+dividing\" (exploiting divisions deliberately), \"honest+dividing\" (fracturing truthfully). For welfare, maybe the audience thinks welfare is a tool to exploit divisions (performed dividing) by politicians, or it truthfully fractures (honest dividing). I'd lean honest dividing a bit higher.\n\nAnother approach: Since welfare is a word that could be seen as positive by some, maybe honest uniting is not zero. But in the examples, honest uniting only appeared in police (0.027) and shl0ms (0.064). So it's low generally. So 0.05 is plausible.\n\nI'll finalize with those numbers.\n\nBut wait: The prompt says \"Reply with a single JSON object only. No prose or code fences.\" So just the JSON.\n\nThus final answer: {\"performed+uniting\":0.250,\"honest+uniting\":0.050,\"performed+dividing\":0.300,\"honest+dividing\":0.400}\n\nBut maybe we should use more nuanced decimals: 0.248, 0.052, 0.301, 0.399 sum 1.000. But not necessary.\n\nI'll go with the simple ones.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 501,
+          "completion_tokens": 2620,
+          "total_tokens": 3121,
+          "cost": 0.001449492,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001449492,
+            "upstream_inference_prompt_cost": 0.000066132,
+            "upstream_inference_completions_cost": 0.00138336
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2577,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 501,
+        "completion_tokens": 2620,
+        "total_tokens": 3121,
+        "cost": 0.001449492,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001449492,
+          "upstream_inference_prompt_cost": 0.000066132,
+          "upstream_inference_completions_cost": 0.00138336
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2577,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 46,
+      "finishedAt": "2026-11-15T04:21:15.418Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 24
+      },
+      "observation": {
+        "ok": true,
+        "id": 24,
+        "prompt": "DONALD TRUMP",
+        "distribution": {
+          "performed+uniting": 0.0027100271002710027,
+          "honest+uniting": 0,
+          "performed+dividing": 0.13821138211382114,
+          "honest+dividing": 0.8590785907859079
+        },
+        "submissions": 738,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 68
+      },
+      "observation": {
+        "ok": true,
+        "id": 68,
+        "prompt": "POLICE DEPARTMENTS",
+        "distribution": {
+          "performed+uniting": 0.017699115044247787,
+          "honest+uniting": 0.02654867256637168,
+          "performed+dividing": 0.4778761061946903,
+          "honest+dividing": 0.4778761061946903
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 8
+      },
+      "observation": {
+        "ok": true,
+        "id": 8,
+        "prompt": "@SHL0MS",
+        "distribution": {
+          "performed+uniting": 0.5663311985361391,
+          "honest+uniting": 0.06404391582799634,
+          "performed+dividing": 0.0878316559926807,
+          "honest+dividing": 0.2817932296431839
+        },
+        "submissions": 1093,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.25,
+          "honest+uniting": 0.05,
+          "performed+dividing": 0.3,
+          "honest+dividing": 0.4
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.25,
+      "honest+uniting": 0.05,
+      "performed+dividing": 0.3,
+      "honest+dividing": 0.4
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.04555555555555557,
+    "score": 97.72222222222223,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

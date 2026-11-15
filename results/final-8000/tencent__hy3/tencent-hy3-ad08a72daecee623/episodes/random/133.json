@@ -1,0 +1,607 @@
+{
+  "day": 133,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"MASCULINITY\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":4,\"prompt\":\"MICHELIN STARS\",\"distribution\":{\"performed+uniting\":0.8333333333333334,\"honest+uniting\":0.06862745098039216,\"performed+dividing\":0.06862745098039216,\"honest+dividing\":0.029411764705882353},\"submissions\":102},{\"id\":47,\"prompt\":\"GENERATIVE ART\",\"distribution\":{\"performed+uniting\":0.2490842490842491,\"honest+uniting\":0.6996336996336996,\"performed+dividing\":0,\"honest+dividing\":0.05128205128205128},\"submissions\":273},{\"id\":64,\"prompt\":\"TRAUMA DUMPING\",\"distribution\":{\"performed+uniting\":0.047619047619047616,\"honest+uniting\":0.49523809523809526,\"performed+dividing\":0,\"honest+dividing\":0.45714285714285713},\"submissions\":105}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:21:35.666Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.283,\"honest+uniting\":0.367,\"performed+dividing\":0.017,\"honest+dividing\":0.333}",
+      "response": {
+        "id": "gen-1794716495-B0qHaZwEnOJs71HJGFB0",
+        "object": "chat.completion",
+        "created": 1794716495,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.283,\"honest+uniting\":0.367,\"performed+dividing\":0.017,\"honest+dividing\":0.333}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"MASCULINITY\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to return a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. prompt: \"MICHELIN STARS\" (102 submissions)\ndistribution:\nperformed+uniting: 0.8333\nhonest+uniting: 0.0686\nperformed+dividing: 0.0686\nhonest+dividing: 0.0294\nSo for Michelin Stars, huge performed+uniting (false unity). That seems like a prestige/elite thing maybe ironic? Not sure.\n\n2. prompt: \"GENERATIVE ART\" (273 submissions)\nperformed+uniting: 0.249\nhonest+uniting: 0.700\nperformed+dividing: 0\nhonest+dividing: 0.051\nSo for generative art (the project itself maybe), mostly honest+uniting (authentic togetherness), some performed+uniting, almost no dividing.\n\n3. prompt: \"TRAUMA DUMPING\" (105 submissions)\nperformed+uniting: 0.0476\nhonest+uniting: 0.4952\nperformed+dividing: 0\nhonest+dividing: 0.4571\nSo trauma dumping: mostly honest uniting and honest dividing, no performed dividing, little performed uniting.\n\nNow we need to predict for \"MASCULINITY\". This is a concept loaded with gender, likely to be divisive. The audience is from Mixed Messages, likely art-oriented, maybe critical of traditional masculinity. We need to estimate shares.\n\nConsider the quadrants:\n- performed+uniting: creating false unity among us (e.g., toxic masculinity pretending we're all bros? or superficial unity)\n- honest+uniting: bringing us together authentically (maybe healthy masculinity, vulnerability)\n- performed+dividing: exploiting divisions deliberately (maybe men vs women, or toxic masculinity as performance)\n- honest+dividing: fracturing us truthfully (maybe acknowledging real divides around masculinity)\n\nFrom historical patterns: For topics that are more about community/art (generative art) honest uniting dominates. For personal/heavy topic (trauma dumping) honest uniting and honest dividing are high, performed uniting low, performed dividing zero. For something like Michelin stars (maybe elite, ironic) performed uniting dominates.\n\nMasculinity is a social construct, often performed. It could be seen as either uniting or dividing. Given the audience's likely progressive/art perspective, they might see masculinity as honestly dividing (fracturing us truthfully) due to patriarchy, or performed uniting (false unity among men). Or honest uniting (bringing together authentically through new masculinity). Performed dividing might be present if they see some deliberately exploiting divisions (like grifters). But in previous examples performed dividing was 0 for both generative art and trauma dumping, only Michelin stars had small 0.0686. So performed dividing seems rare in this audience's interpretations. Possibly they don't attribute deliberate exploitation often.\n\nThus we might assign performed dividing near 0 or small.\n\nNow between performed+uniting, honest+uniting, honest+dividing. Masculinity could be seen as creating false unity (bro culture) -> performed uniting. Or fracturing us truthfully -> honest dividing. Or bringing us together authentically -> honest uniting (e.g., queer masculinity, vulnerable men). Which is more likely?\n\nLook at trauma dumping: honest uniting 0.495, honest dividing 0.457. That's a heavy personal topic, both authentic responses. For masculinity, it's also a personal/social identity topic, maybe similar: people might submit interpretations that are honest about division (patriarchy hurts) and honest about unity (shared human). But masculinity is more charged than trauma dumping? Trauma dumping is a behavior; masculinity is identity.\n\nMichelin stars is unrelated, performed uniting high maybe because it's about status and fake prestige.\n\nGenerative art is the project itself, honest uniting high.\n\nSo for masculinity, I'd guess honest dividing and honest uniting are significant, performed uniting moderate, performed dividing near zero.\n\nBut we need numbers summing to 1. Let's think of approximate shares.\n\nCould be like: performed+uniting: 0.2, honest+uniting: 0.4, performed+dividing: 0.0, honest+dividing: 0.4. But need at least three decimals.\n\nMaybe performed+uniting: 0.25, honest+uniting: 0.35, performed+dividing: 0.05, honest+dividing: 0.35. But performed dividing was 0 in two examples, so maybe keep it 0 or tiny like 0.01.\n\nGiven the audience's tendency to avoid performed dividing (maybe they see less cynical manipulation), we can set performed+dividing: 0.0 or 0.01. But sum must be 1; if 0, then others sum to 1.\n\nLet's examine Michelin stars: performed+uniting 0.833, honest+uniting 0.0686, performed+dividing 0.0686, honest+dividing 0.0294. That's an outlier with high performed uniting. Possibly because the word \"MICHELIN STARS\" evokes a false hierarchy? Not sure.\n\nFor masculinity, I suspect less performed uniting than Michelin but some. Maybe around 0.3? Honest uniting maybe 0.3, honest dividing 0.35, performed dividing 0.05? But we need to be plausible.\n\nAlternatively, think of the concept: \"MASCULINITY\" might be interpreted as a performed identity (drag, gender performance). So performed+uniting could be high because they see masculinity as a performance that pretends to unite (e.g., \"boys will be boys\" solidarity). But also honest+dividing because it truthfully fractures gender norms.\n\nI'll try to approximate using a mix of trauma dumping (honest heavy) and some performed uniting from Michelin.\n\nLet's set:\nperformed+uniting: 0.300\nhonest+uniting: 0.350\nperformed+dividing: 0.020\nhonest+dividing: 0.330\n\nSum = 1.000. That's fine. But we need at least three decimals when needed; we can use 0.300 etc. But maybe more precise: 0.301, 0.347, 0.018, 0.334 sum=1.000.\n\nBut we should consider that in historical, performed dividing was exactly 0 for two prompts, so maybe set to 0.0. However the instruction says probabilities between 0 and 1; 0 is allowed. If we set performed+dividing: 0.0, then others sum to 1. Example: performed+uniting: 0.333, honest+uniting: 0.333, honest+dividing: 0.334. But that ignores possible small performed dividing. I'd include a small nonzero to be safe? The examples had 0.0686 for Michelin, 0 for others. So it's plausible to be 0.\n\nGiven masculinity might have some deliberate exploitation (e.g., manosphere), performed dividing could be >0. But the audience might not label it as \"performed+dividing\" (exploiting our divisions deliberately) maybe they'd see it as honest dividing (fracturing truthfully) if they think it's real. Hmm.\n\nI'll go with a distribution that reflects: moderate performed uniting (false unity of masculine brotherhood), substantial honest uniting (authentic connection), substantial honest dividing (truthful fracture), and minimal performed dividing.\n\nLet's pick:\nperformed+uniting: 0.283\nhonest+uniting: 0.367\nperformed+dividing: 0.017\nhonest+dividing: 0.333\n\nSum = 0.283+0.367=0.65; +0.017=0.667; +0.333=1.000. Good.\n\nBut we need to output only JSON, no prose. So: {\"performed+uniting\":0.283,\"honest+uniting\":0.367,\"performed+dividing\":0.017,\"honest+dividing\":0.333}\n\nCheck sum: 0.283+0.367=0.650; +0.017=0.667; +0.333=1.000. Yes.\n\nAlternatively, use more decimals: 0.283, 0.367, 0.017, 0.333 exactly sum 1. But 0.283+0.367=0.650, +0.017=0.667, +0.333=1.000. That's fine.\n\nCould also do 0.25, 0.35, 0.02, 0.38 => sum 1.00. But I'll stick with above.\n\nWe should ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\".\n\nReturn only the object.\n\nThus final answer.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"MASCULINITY\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to return a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. prompt: \"MICHELIN STARS\" (102 submissions)\ndistribution:\nperformed+uniting: 0.8333\nhonest+uniting: 0.0686\nperformed+dividing: 0.0686\nhonest+dividing: 0.0294\nSo for Michelin Stars, huge performed+uniting (false unity). That seems like a prestige/elite thing maybe ironic? Not sure.\n\n2. prompt: \"GENERATIVE ART\" (273 submissions)\nperformed+uniting: 0.249\nhonest+uniting: 0.700\nperformed+dividing: 0\nhonest+dividing: 0.051\nSo for generative art (the project itself maybe), mostly honest+uniting (authentic togetherness), some performed+uniting, almost no dividing.\n\n3. prompt: \"TRAUMA DUMPING\" (105 submissions)\nperformed+uniting: 0.0476\nhonest+uniting: 0.4952\nperformed+dividing: 0\nhonest+dividing: 0.4571\nSo trauma dumping: mostly honest uniting and honest dividing, no performed dividing, little performed uniting.\n\nNow we need to predict for \"MASCULINITY\". This is a concept loaded with gender, likely to be divisive. The audience is from Mixed Messages, likely art-oriented, maybe critical of traditional masculinity. We need to estimate shares.\n\nConsider the quadrants:\n- performed+uniting: creating false unity among us (e.g., toxic masculinity pretending we're all bros? or superficial unity)\n- honest+uniting: bringing us together authentically (maybe healthy masculinity, vulnerability)\n- performed+dividing: exploiting divisions deliberately (maybe men vs women, or toxic masculinity as performance)\n- honest+dividing: fracturing us truthfully (maybe acknowledging real divides around masculinity)\n\nFrom historical patterns: For topics that are more about community/art (generative art) honest uniting dominates. For personal/heavy topic (trauma dumping) honest uniting and honest dividing are high, performed uniting low, performed dividing zero. For something like Michelin stars (maybe elite, ironic) performed uniting dominates.\n\nMasculinity is a social construct, often performed. It could be seen as either uniting or dividing. Given the audience's likely progressive/art perspective, they might see masculinity as honestly dividing (fracturing us truthfully) due to patriarchy, or performed uniting (false unity among men). Or honest uniting (bringing together authentically through new masculinity). Performed dividing might be present if they see some deliberately exploiting divisions (like grifters). But in previous examples performed dividing was 0 for both generative art and trauma dumping, only Michelin stars had small 0.0686. So performed dividing seems rare in this audience's interpretations. Possibly they don't attribute deliberate exploitation often.\n\nThus we might assign performed dividing near 0 or small.\n\nNow between performed+uniting, honest+uniting, honest+dividing. Masculinity could be seen as creating false unity (bro culture) -> performed uniting. Or fracturing us truthfully -> honest dividing. Or bringing us together authentically -> honest uniting (e.g., queer masculinity, vulnerable men). Which is more likely?\n\nLook at trauma dumping: honest uniting 0.495, honest dividing 0.457. That's a heavy personal topic, both authentic responses. For masculinity, it's also a personal/social identity topic, maybe similar: people might submit interpretations that are honest about division (patriarchy hurts) and honest about unity (shared human). But masculinity is more charged than trauma dumping? Trauma dumping is a behavior; masculinity is identity.\n\nMichelin stars is unrelated, performed uniting high maybe because it's about status and fake prestige.\n\nGenerative art is the project itself, honest uniting high.\n\nSo for masculinity, I'd guess honest dividing and honest uniting are significant, performed uniting moderate, performed dividing near zero.\n\nBut we need numbers summing to 1. Let's think of approximate shares.\n\nCould be like: performed+uniting: 0.2, honest+uniting: 0.4, performed+dividing: 0.0, honest+dividing: 0.4. But need at least three decimals.\n\nMaybe performed+uniting: 0.25, honest+uniting: 0.35, performed+dividing: 0.05, honest+dividing: 0.35. But performed dividing was 0 in two examples, so maybe keep it 0 or tiny like 0.01.\n\nGiven the audience's tendency to avoid performed dividing (maybe they see less cynical manipulation), we can set performed+dividing: 0.0 or 0.01. But sum must be 1; if 0, then others sum to 1.\n\nLet's examine Michelin stars: performed+uniting 0.833, honest+uniting 0.0686, performed+dividing 0.0686, honest+dividing 0.0294. That's an outlier with high performed uniting. Possibly because the word \"MICHELIN STARS\" evokes a false hierarchy? Not sure.\n\nFor masculinity, I suspect less performed uniting than Michelin but some. Maybe around 0.3? Honest uniting maybe 0.3, honest dividing 0.35, performed dividing 0.05? But we need to be plausible.\n\nAlternatively, think of the concept: \"MASCULINITY\" might be interpreted as a performed identity (drag, gender performance). So performed+uniting could be high because they see masculinity as a performance that pretends to unite (e.g., \"boys will be boys\" solidarity). But also honest+dividing because it truthfully fractures gender norms.\n\nI'll try to approximate using a mix of trauma dumping (honest heavy) and some performed uniting from Michelin.\n\nLet's set:\nperformed+uniting: 0.300\nhonest+uniting: 0.350\nperformed+dividing: 0.020\nhonest+dividing: 0.330\n\nSum = 1.000. That's fine. But we need at least three decimals when needed; we can use 0.300 etc. But maybe more precise: 0.301, 0.347, 0.018, 0.334 sum=1.000.\n\nBut we should consider that in historical, performed dividing was exactly 0 for two prompts, so maybe set to 0.0. However the instruction says probabilities between 0 and 1; 0 is allowed. If we set performed+dividing: 0.0, then others sum to 1. Example: performed+uniting: 0.333, honest+uniting: 0.333, honest+dividing: 0.334. But that ignores possible small performed dividing. I'd include a small nonzero to be safe? The examples had 0.0686 for Michelin, 0 for others. So it's plausible to be 0.\n\nGiven masculinity might have some deliberate exploitation (e.g., manosphere), performed dividing could be >0. But the audience might not label it as \"performed+dividing\" (exploiting our divisions deliberately) maybe they'd see it as honest dividing (fracturing truthfully) if they think it's real. Hmm.\n\nI'll go with a distribution that reflects: moderate performed uniting (false unity of masculine brotherhood), substantial honest uniting (authentic connection), substantial honest dividing (truthful fracture), and minimal performed dividing.\n\nLet's pick:\nperformed+uniting: 0.283\nhonest+uniting: 0.367\nperformed+dividing: 0.017\nhonest+dividing: 0.333\n\nSum = 0.283+0.367=0.65; +0.017=0.667; +0.333=1.000. Good.\n\nBut we need to output only JSON, no prose. So: {\"performed+uniting\":0.283,\"honest+uniting\":0.367,\"performed+dividing\":0.017,\"honest+dividing\":0.333}\n\nCheck sum: 0.283+0.367=0.650; +0.017=0.667; +0.333=1.000. Yes.\n\nAlternatively, use more decimals: 0.283, 0.367, 0.017, 0.333 exactly sum 1. But 0.283+0.367=0.650, +0.017=0.667, +0.333=1.000. That's fine.\n\nCould also do 0.25, 0.35, 0.02, 0.38 => sum 1.00. But I'll stick with above.\n\nWe should ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\".\n\nReturn only the object.\n\nThus final answer.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 492,
+          "completion_tokens": 2153,
+          "total_tokens": 2645,
+          "cost": 0.001201728,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001201728,
+            "upstream_inference_prompt_cost": 0.000064944,
+            "upstream_inference_completions_cost": 0.001136784
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2110,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 492,
+        "completion_tokens": 2153,
+        "total_tokens": 2645,
+        "cost": 0.001201728,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001201728,
+          "upstream_inference_prompt_cost": 0.000064944,
+          "upstream_inference_completions_cost": 0.001136784
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2110,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 48,
+      "finishedAt": "2026-11-15T04:22:07.855Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 4
+      },
+      "observation": {
+        "ok": true,
+        "id": 4,
+        "prompt": "MICHELIN STARS",
+        "distribution": {
+          "performed+uniting": 0.8333333333333334,
+          "honest+uniting": 0.06862745098039216,
+          "performed+dividing": 0.06862745098039216,
+          "honest+dividing": 0.029411764705882353
+        },
+        "submissions": 102,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 47
+      },
+      "observation": {
+        "ok": true,
+        "id": 47,
+        "prompt": "GENERATIVE ART",
+        "distribution": {
+          "performed+uniting": 0.2490842490842491,
+          "honest+uniting": 0.6996336996336996,
+          "performed+dividing": 0,
+          "honest+dividing": 0.05128205128205128
+        },
+        "submissions": 273,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 64
+      },
+      "observation": {
+        "ok": true,
+        "id": 64,
+        "prompt": "TRAUMA DUMPING",
+        "distribution": {
+          "performed+uniting": 0.047619047619047616,
+          "honest+uniting": 0.49523809523809526,
+          "performed+dividing": 0,
+          "honest+dividing": 0.45714285714285713
+        },
+        "submissions": 105,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.283,
+          "honest+uniting": 0.367,
+          "performed+dividing": 0.017,
+          "honest+dividing": 0.333
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.283,
+      "honest+uniting": 0.367,
+      "performed+dividing": 0.017,
+      "honest+dividing": 0.333
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.2426593917391108,
+    "score": 87.86703041304446,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

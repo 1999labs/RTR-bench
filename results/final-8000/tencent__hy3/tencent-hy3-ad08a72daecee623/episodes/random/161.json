@@ -1,0 +1,607 @@
+{
+  "day": 161,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"DEBT\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":37,\"prompt\":\"BEEPLE\",\"distribution\":{\"performed+uniting\":0.246875,\"honest+uniting\":0.078125,\"performed+dividing\":0.078125,\"honest+dividing\":0.596875},\"submissions\":320},{\"id\":31,\"prompt\":\"TASTE\",\"distribution\":{\"performed+uniting\":0.42452830188679247,\"honest+uniting\":0.054245283018867926,\"performed+dividing\":0.4339622641509434,\"honest+dividing\":0.08726415094339622},\"submissions\":424},{\"id\":72,\"prompt\":\"FOSSIL FUELS\",\"distribution\":{\"performed+uniting\":0.0049261083743842365,\"honest+uniting\":0.0049261083743842365,\"performed+dividing\":0.09359605911330049,\"honest+dividing\":0.896551724137931},\"submissions\":203}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:37:11.122Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.119,\"honest+uniting\":0.032,\"performed+dividing\":0.123,\"honest+dividing\":0.726}",
+      "response": {
+        "id": "gen-1794717431-f9wmFgB1LBs0pfTLTz6W",
+        "object": "chat.completion",
+        "created": 1794717431,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.119,\"honest+uniting\":0.032,\"performed+dividing\":0.123,\"honest+dividing\":0.726}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"DEBT\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. BEEPLE: performed+uniting 0.246875, honest+uniting 0.078125, performed+dividing 0.078125, honest+dividing 0.596875. Sum = 1.0. Submissions 320.\n2. TASTE: performed+uniting 0.4245, honest+uniting 0.0542, performed+dividing 0.4340, honest+dividing 0.0873. Sum ~1.0. Submissions 424.\n3. FOSSIL FUELS: performed+uniting 0.0049, honest+uniting 0.0049, performed+dividing 0.0936, honest+dividing 0.8966. Sum ~1.0. Submissions 203.\n\nWe need to estimate share for \"DEBT\". The examples show varying patterns. BEEPLE (maybe a person/artist? meme?) had high honest+dividing (fracturing truthfully) and moderate performed+uniting. TASTE had high performed+uniting and performed+dividing, low honest categories. FOSSIL FUELS had extremely high honest+dividing (truthfully fracturing) and very low uniting.\n\nWhat about \"DEBT\"? Debt is a weight, a burden, something that divides people (creditors vs debtors), can be exploitative, can be honest fracture (systemic debt divides us truthfully), or performed dividing (exploiting divisions deliberately, e.g., political rhetoric). Could also be performed uniting (false unity, e.g., \"we're all in debt together\" but fake), or honest uniting (bringing together authentically, e.g., mutual aid debt relief). But likely audience leans toward cynical/divisive interpretations? The project seems to be about mixed messages, maybe audience tends to see words as divisive rather than uniting. For \"FOSSIL FUELS\" almost all honest dividing. For \"BEEPLE\" more than half honest dividing. For \"TASTE\" more performed both sides.\n\nWe need to infer from these examples the typical mapping. There's no direct similarity metric, but we can think of semantic categories:\n- BEEPLE: maybe a controversial digital artist, known for NFTs, hype? Audience might see as fracturing us truthfully (maybe NFT bubble divides). \n- TASTE: subjective, polarizing, performed unity/dividing high.\n- FOSSIL FUELS: clear evil, honest dividing high.\n\nDEBT: likely similar to fossil fuels? Economic burden, systemic, truthfully fracturing. But debt can also be a uniting experience (shared struggle) but perhaps performed uniting (false \"we're all in this together\" while banks exploit). Could be performed dividing (politicians divide by debt blame). Honest dividing (debt honestly fractures society). I'd guess high honest dividing, some performed dividing, low uniting.\n\nLet's look at averages across examples (simple mean of distributions):\nMean performed+uniting: (0.246875 + 0.424528 + 0.004926)/3 = (0.676329)/3 = 0.225443\nMean honest+uniting: (0.078125 + 0.054245 + 0.004926)/3 = 0.137296/3 = 0.045765\nMean performed+dividing: (0.078125 + 0.433962 + 0.093596)/3 = 0.605683/3 = 0.201894\nMean honest+dividing: (0.596875 + 0.087264 + 0.896552)/3 = 1.580691/3 = 0.526897\nSum = 1.0. So average audience tends to honest dividing ~0.527, performed uniting ~0.225, performed dividing ~0.202, honest uniting ~0.046.\n\nBut we need specific for DEBT. Debt is a negative concept, like fossil fuels, maybe more honest dividing. Fossil fuels had honest dividing 0.897, performed dividing 0.094, uniting near 0.005 each. That's extreme. Beeple had honest dividing 0.597, performed uniting 0.247, performed dividing 0.078, honest uniting 0.078. Taste had performed uniting 0.425, performed dividing 0.434, honest dividing 0.087, honest uniting 0.054.\n\nIf we consider debt as more like fossil fuels (systemic negative) than taste (subjective) or beeple (maybe meme), we might assign high honest dividing, low uniting. But debt also has a performative political aspect: \"debt ceiling\" debates exploit divisions. So performed dividing might be higher than fossil fuels. Also \"we're all in debt\" could be performed uniting. Honest uniting maybe minimal.\n\nLet's think of the quadrants definitions:\n- performed+uniting: creating false unity among us. E.g., \"We all have debt, we're united!\" but it's false because debt affects differently.\n- honest+uniting: bringing us together authentically. E.g., debt forgiveness campaigns uniting.\n- performed+dividing: exploiting our divisions, deliberately. E.g., blaming debtors vs taxpayers.\n- honest+dividing: fracturing us, truthfully. E.g., debt inherently creates creditor/debtor split, systemic inequality.\n\nGiven the audience's previous interpretations, they seem to be skeptical, favoring divisive truths. For a word like DEBT, I'd predict:\nhonest+dividing: high, maybe ~0.65\nperformed+dividing: moderate, ~0.20\nperformed+uniting: low-moderate, ~0.12\nhonest+uniting: very low, ~0.03\n\nCheck sum: 0.65+0.20+0.12+0.03 = 1.00. But we need at least three decimals if needed. Let's refine.\n\nCompare to BEEPLE: honest dividing 0.597, performed uniting 0.247, performed dividing 0.078, honest uniting 0.078. Debt is less meme, more structural, so honest dividing higher, performed uniting lower. Compare to FOSSIL FUELS: honest dividing 0.897, performed dividing 0.094, uniting ~0.005. Debt might be slightly more performative because of political discourse, so performed dividing maybe 0.15, performed uniting 0.05, honest uniting 0.02, honest dividing 0.78? That sums 1.0. But maybe performed uniting slightly higher because \"debt\" can be framed as shared (false unity). I'd give performed uniting 0.08, honest uniting 0.02, performed dividing 0.15, honest dividing 0.75. Sum = 1.0.\n\nAlternatively, use a weighted similarity: Fossil fuels (negative systemic) weight 0.6, Beeple (cultural) weight 0.3, Taste (subjective) weight 0.1? Then:\nperformed uniting: 0.6*0.0049 + 0.3*0.2469 + 0.1*0.4245 = 0.00294+0.07406+0.04245=0.11945\nhonest uniting: 0.6*0.0049+0.3*0.0781+0.1*0.0542=0.00294+0.02343+0.00542=0.03179\nperformed dividing: 0.6*0.0936+0.3*0.0781+0.1*0.4340=0.05616+0.02343+0.0434=0.12299\nhonest dividing: 0.6*0.8966+0.3*0.5969+0.1*0.0873=0.53796+0.17907+0.00873=0.72576\nSum = 1.0 approx. That yields: pu=0.119, hu=0.032, pd=0.123, hd=0.726. That seems plausible.\n\nWe need to output a single JSON object only, no prose, no code fences. Keys exactly as given. Probabilities numeric between 0 and 1 sum to 1. Use at least three decimal places when needed.\n\nLet's produce:\n{\"performed+uniting\":0.119,\"honest+uniting\":0.032,\"performed+dividing\":0.123,\"honest+dividing\":0.726}\n\nBut check sum: 0.119+0.032=0.151; +0.123=0.274; +0.726=1.000. Good. Could add more decimals: 0.11945 -> 0.119, but we can use 0.119, 0.032, 0.123, 0.726. Or more precise: 0.1195, 0.0318, 0.1230, 0.7257 sum = 1.0000. Let's compute precisely from above weighted: pu=0.11945, hu=0.03179, pd=0.12299, hd=0.72577 sum=1.00000. Round to 3 decimals: pu=0.119, hu=0.032, pd=0.123, hd=0.726 (since 0.72577 rounds to 0.726). That's fine.\n\nBut maybe we should consider that the audience for \"DEBT\" might be even more divisive than fossil fuels? Probably not. I'll go with something like:\n{\"performed+uniting\":0.12,\"honest+uniting\":0.03,\"performed+dividing\":0.15,\"honest+dividing\":0.70} sum=1.00. But we have evidence from examples; better to stay near weighted.\n\nI'll output exactly:\n{\"performed+uniting\":0.119,\"honest+uniting\":0.032,\"performed+dividing\":0.123,\"honest+dividing\":0.726}\n\nMake sure no extra spaces? It's fine. JSON object only.\n\nDouble-check key names: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nThus final.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"DEBT\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. BEEPLE: performed+uniting 0.246875, honest+uniting 0.078125, performed+dividing 0.078125, honest+dividing 0.596875. Sum = 1.0. Submissions 320.\n2. TASTE: performed+uniting 0.4245, honest+uniting 0.0542, performed+dividing 0.4340, honest+dividing 0.0873. Sum ~1.0. Submissions 424.\n3. FOSSIL FUELS: performed+uniting 0.0049, honest+uniting 0.0049, performed+dividing 0.0936, honest+dividing 0.8966. Sum ~1.0. Submissions 203.\n\nWe need to estimate share for \"DEBT\". The examples show varying patterns. BEEPLE (maybe a person/artist? meme?) had high honest+dividing (fracturing truthfully) and moderate performed+uniting. TASTE had high performed+uniting and performed+dividing, low honest categories. FOSSIL FUELS had extremely high honest+dividing (truthfully fracturing) and very low uniting.\n\nWhat about \"DEBT\"? Debt is a weight, a burden, something that divides people (creditors vs debtors), can be exploitative, can be honest fracture (systemic debt divides us truthfully), or performed dividing (exploiting divisions deliberately, e.g., political rhetoric). Could also be performed uniting (false unity, e.g., \"we're all in debt together\" but fake), or honest uniting (bringing together authentically, e.g., mutual aid debt relief). But likely audience leans toward cynical/divisive interpretations? The project seems to be about mixed messages, maybe audience tends to see words as divisive rather than uniting. For \"FOSSIL FUELS\" almost all honest dividing. For \"BEEPLE\" more than half honest dividing. For \"TASTE\" more performed both sides.\n\nWe need to infer from these examples the typical mapping. There's no direct similarity metric, but we can think of semantic categories:\n- BEEPLE: maybe a controversial digital artist, known for NFTs, hype? Audience might see as fracturing us truthfully (maybe NFT bubble divides). \n- TASTE: subjective, polarizing, performed unity/dividing high.\n- FOSSIL FUELS: clear evil, honest dividing high.\n\nDEBT: likely similar to fossil fuels? Economic burden, systemic, truthfully fracturing. But debt can also be a uniting experience (shared struggle) but perhaps performed uniting (false \"we're all in this together\" while banks exploit). Could be performed dividing (politicians divide by debt blame). Honest dividing (debt honestly fractures society). I'd guess high honest dividing, some performed dividing, low uniting.\n\nLet's look at averages across examples (simple mean of distributions):\nMean performed+uniting: (0.246875 + 0.424528 + 0.004926)/3 = (0.676329)/3 = 0.225443\nMean honest+uniting: (0.078125 + 0.054245 + 0.004926)/3 = 0.137296/3 = 0.045765\nMean performed+dividing: (0.078125 + 0.433962 + 0.093596)/3 = 0.605683/3 = 0.201894\nMean honest+dividing: (0.596875 + 0.087264 + 0.896552)/3 = 1.580691/3 = 0.526897\nSum = 1.0. So average audience tends to honest dividing ~0.527, performed uniting ~0.225, performed dividing ~0.202, honest uniting ~0.046.\n\nBut we need specific for DEBT. Debt is a negative concept, like fossil fuels, maybe more honest dividing. Fossil fuels had honest dividing 0.897, performed dividing 0.094, uniting near 0.005 each. That's extreme. Beeple had honest dividing 0.597, performed uniting 0.247, performed dividing 0.078, honest uniting 0.078. Taste had performed uniting 0.425, performed dividing 0.434, honest dividing 0.087, honest uniting 0.054.\n\nIf we consider debt as more like fossil fuels (systemic negative) than taste (subjective) or beeple (maybe meme), we might assign high honest dividing, low uniting. But debt also has a performative political aspect: \"debt ceiling\" debates exploit divisions. So performed dividing might be higher than fossil fuels. Also \"we're all in debt\" could be performed uniting. Honest uniting maybe minimal.\n\nLet's think of the quadrants definitions:\n- performed+uniting: creating false unity among us. E.g., \"We all have debt, we're united!\" but it's false because debt affects differently.\n- honest+uniting: bringing us together authentically. E.g., debt forgiveness campaigns uniting.\n- performed+dividing: exploiting our divisions, deliberately. E.g., blaming debtors vs taxpayers.\n- honest+dividing: fracturing us, truthfully. E.g., debt inherently creates creditor/debtor split, systemic inequality.\n\nGiven the audience's previous interpretations, they seem to be skeptical, favoring divisive truths. For a word like DEBT, I'd predict:\nhonest+dividing: high, maybe ~0.65\nperformed+dividing: moderate, ~0.20\nperformed+uniting: low-moderate, ~0.12\nhonest+uniting: very low, ~0.03\n\nCheck sum: 0.65+0.20+0.12+0.03 = 1.00. But we need at least three decimals if needed. Let's refine.\n\nCompare to BEEPLE: honest dividing 0.597, performed uniting 0.247, performed dividing 0.078, honest uniting 0.078. Debt is less meme, more structural, so honest dividing higher, performed uniting lower. Compare to FOSSIL FUELS: honest dividing 0.897, performed dividing 0.094, uniting ~0.005. Debt might be slightly more performative because of political discourse, so performed dividing maybe 0.15, performed uniting 0.05, honest uniting 0.02, honest dividing 0.78? That sums 1.0. But maybe performed uniting slightly higher because \"debt\" can be framed as shared (false unity). I'd give performed uniting 0.08, honest uniting 0.02, performed dividing 0.15, honest dividing 0.75. Sum = 1.0.\n\nAlternatively, use a weighted similarity: Fossil fuels (negative systemic) weight 0.6, Beeple (cultural) weight 0.3, Taste (subjective) weight 0.1? Then:\nperformed uniting: 0.6*0.0049 + 0.3*0.2469 + 0.1*0.4245 = 0.00294+0.07406+0.04245=0.11945\nhonest uniting: 0.6*0.0049+0.3*0.0781+0.1*0.0542=0.00294+0.02343+0.00542=0.03179\nperformed dividing: 0.6*0.0936+0.3*0.0781+0.1*0.4340=0.05616+0.02343+0.0434=0.12299\nhonest dividing: 0.6*0.8966+0.3*0.5969+0.1*0.0873=0.53796+0.17907+0.00873=0.72576\nSum = 1.0 approx. That yields: pu=0.119, hu=0.032, pd=0.123, hd=0.726. That seems plausible.\n\nWe need to output a single JSON object only, no prose, no code fences. Keys exactly as given. Probabilities numeric between 0 and 1 sum to 1. Use at least three decimal places when needed.\n\nLet's produce:\n{\"performed+uniting\":0.119,\"honest+uniting\":0.032,\"performed+dividing\":0.123,\"honest+dividing\":0.726}\n\nBut check sum: 0.119+0.032=0.151; +0.123=0.274; +0.726=1.000. Good. Could add more decimals: 0.11945 -> 0.119, but we can use 0.119, 0.032, 0.123, 0.726. Or more precise: 0.1195, 0.0318, 0.1230, 0.7257 sum = 1.0000. Let's compute precisely from above weighted: pu=0.11945, hu=0.03179, pd=0.12299, hd=0.72577 sum=1.00000. Round to 3 decimals: pu=0.119, hu=0.032, pd=0.123, hd=0.726 (since 0.72577 rounds to 0.726). That's fine.\n\nBut maybe we should consider that the audience for \"DEBT\" might be even more divisive than fossil fuels? Probably not. I'll go with something like:\n{\"performed+uniting\":0.12,\"honest+uniting\":0.03,\"performed+dividing\":0.15,\"honest+dividing\":0.70} sum=1.00. But we have evidence from examples; better to stay near weighted.\n\nI'll output exactly:\n{\"performed+uniting\":0.119,\"honest+uniting\":0.032,\"performed+dividing\":0.123,\"honest+dividing\":0.726}\n\nMake sure no extra spaces? It's fine. JSON object only.\n\nDouble-check key names: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nThus final.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 486,
+          "completion_tokens": 2433,
+          "total_tokens": 2919,
+          "cost": 0.001348776,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001348776,
+            "upstream_inference_prompt_cost": 0.000064152,
+            "upstream_inference_completions_cost": 0.001284624
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2390,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 486,
+        "completion_tokens": 2433,
+        "total_tokens": 2919,
+        "cost": 0.001348776,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001348776,
+          "upstream_inference_prompt_cost": 0.000064152,
+          "upstream_inference_completions_cost": 0.001284624
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2390,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 76,
+      "finishedAt": "2026-11-15T04:37:55.592Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 37
+      },
+      "observation": {
+        "ok": true,
+        "id": 37,
+        "prompt": "BEEPLE",
+        "distribution": {
+          "performed+uniting": 0.246875,
+          "honest+uniting": 0.078125,
+          "performed+dividing": 0.078125,
+          "honest+dividing": 0.596875
+        },
+        "submissions": 320,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 31
+      },
+      "observation": {
+        "ok": true,
+        "id": 31,
+        "prompt": "TASTE",
+        "distribution": {
+          "performed+uniting": 0.42452830188679247,
+          "honest+uniting": 0.054245283018867926,
+          "performed+dividing": 0.4339622641509434,
+          "honest+dividing": 0.08726415094339622
+        },
+        "submissions": 424,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 72
+      },
+      "observation": {
+        "ok": true,
+        "id": 72,
+        "prompt": "FOSSIL FUELS",
+        "distribution": {
+          "performed+uniting": 0.0049261083743842365,
+          "honest+uniting": 0.0049261083743842365,
+          "performed+dividing": 0.09359605911330049,
+          "honest+dividing": 0.896551724137931
+        },
+        "submissions": 203,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.119,
+          "honest+uniting": 0.032,
+          "performed+dividing": 0.123,
+          "honest+dividing": 0.726
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.119,
+      "honest+uniting": 0.032,
+      "performed+dividing": 0.123,
+      "honest+dividing": 0.726
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.005066461585552495,
+    "score": 99.74667692072238,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

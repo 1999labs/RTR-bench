@@ -1,0 +1,607 @@
+{
+  "day": 153,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"BIG PHARMA\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":54,\"prompt\":\"GEN ALPHA\",\"distribution\":{\"performed+uniting\":0.2727272727272727,\"honest+uniting\":0.34710743801652894,\"performed+dividing\":0.23140495867768596,\"honest+dividing\":0.1487603305785124},\"submissions\":121},{\"id\":51,\"prompt\":\"BITCOIN\",\"distribution\":{\"performed+uniting\":0.09740259740259741,\"honest+uniting\":0.38961038961038963,\"performed+dividing\":0.3181818181818182,\"honest+dividing\":0.19480519480519481},\"submissions\":154},{\"id\":55,\"prompt\":\"PHOEBE GATES\",\"distribution\":{\"performed+uniting\":0.16911764705882354,\"honest+uniting\":0.013235294117647059,\"performed+dividing\":0.7661764705882353,\"honest+dividing\":0.051470588235294115},\"submissions\":680}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:59:28.641Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.180,\"honest+uniting\":0.020,\"performed+dividing\":0.720,\"honest+dividing\":0.080}",
+      "response": {
+        "id": "gen-1794718768-9DjBvKsypt7T6543KGT1",
+        "object": "chat.completion",
+        "created": 1794718768,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.180,\"honest+uniting\":0.020,\"performed+dividing\":0.720,\"honest+dividing\":0.080}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"BIG PHARMA\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to return a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. GEN ALPHA: performed+uniting 0.273, honest+uniting 0.347, performed+dividing 0.231, honest+dividing 0.149. Submissions 121.\n2. BITCOIN: performed+uniting 0.097, honest+uniting 0.390, performed+dividing 0.318, honest+dividing 0.195. Submissions 154.\n3. PHOEBE GATES: performed+uniting 0.169, honest+uniting 0.013, performed+dividing 0.766, honest+dividing 0.051. Submissions 680.\n\nWe need to estimate for \"BIG PHARMA\". Big Pharma is a term often used to refer to the pharmaceutical industry, often with conspiracy theories, criticism about profit motives, exploitation, division, etc. The audience seems to interpret prompts in a way that reflects cultural attitudes. For \"GEN ALPHA\" (a generation), they saw mostly honest uniting and some performed uniting, low dividing. For \"BITCOIN\", honest uniting high, performed dividing moderate, performed uniting low, honest dividing moderate. For \"PHOEBE GATES\" (daughter of Bill Gates, associated with vaccines, conspiracy?), they saw huge performed dividing (0.766), almost no honest uniting, low others. That suggests that prompts associated with controversy, conspiracy, or perceived elite manipulation get high performed dividing. Big Pharma is a classic target of conspiracy theories, profiteering, division, exploitation. So likely similar to Phoebe Gates (which is Gates related to vaccines/pharma) but maybe not as extreme. Also Bitcoin had some performed dividing (0.318) and honest dividing (0.195). Big Pharma might be seen as deliberately exploiting divisions (performed dividing) and maybe fracturing truthfully (honest dividing) but more performed. Honest uniting likely low. Performed uniting maybe some (creating false unity, like PR campaigns). So we need to assign probabilities.\n\nLet's think about typical interpretations: \"Big Pharma\" as a concept: people might think of corporations that pretend to care (performed uniting), or actually bring people together through medicine (honest uniting) but less likely. More likely they are seen as dividing us for profit (performed dividing) or honestly causing fracture (honest dividing). Among the examples, Phoebe Gates (associated with vaccine advocacy, Gates foundation) got 0.766 performed dividing, 0.051 honest dividing, 0.169 performed uniting, 0.013 honest uniting. Big Pharma might be even more directly about industry, so performed dividing could be high but maybe not as high as personal target? Actually Phoebe Gates is a person, maybe more specific conspiracy. Big Pharma is a broad term; could be seen as exploiting divisions deliberately. I'd guess performed dividing around 0.6-0.7, performed uniting around 0.2, honest dividing around 0.1, honest uniting around 0.05. But we should consider the other examples: Bitcoin had performed dividing 0.318, honest dividing 0.195, performed uniting 0.097, honest uniting 0.390. That's because Bitcoin community sees it as uniting (honest). For Big Pharma, not a positive community. So honest uniting should be low.\n\nMaybe we can approximate as a mix between Phoebe Gates and Bitcoin? But Phoebe Gates is most analogous (health, vaccines, conspiracy). Let's set:\nperformed+uniting: 0.15 (some false unity, like \"we're all in this together\" ads)\nhonest+uniting: 0.02 (rare authentic togetherness)\nperformed+dividing: 0.70 (exploiting divisions deliberately)\nhonest+dividing: 0.13 (fracturing truthfully, e.g., high drug prices cause real fracture)\n\nSum = 1.00. Check: 0.15+0.02+0.70+0.13 = 1.00. Use three decimals: 0.150, 0.020, 0.700, 0.130. But we need at least three decimal places when needed; we can provide 0.15 as 0.15? Better to use 0.150 to be safe. But the instruction says \"Use at least three decimal places when needed.\" It's fine to use 0.15? Probably better to use 0.150, 0.020, 0.700, 0.130. However, the examples used long decimals. We can output something like {\"performed+uniting\":0.150,\"honest+uniting\":0.020,\"performed+dividing\":0.700,\"honest+dividing\":0.130}. But sum is exactly 1.\n\nAlternatively, we could be more nuanced: performed dividing 0.65, performed uniting 0.20, honest dividing 0.10, honest uniting 0.05 => sum 1.0. That seems plausible.\n\nLook at Phoebe Gates: performed uniting 0.169, honest uniting 0.013, performed dividing 0.766, honest dividing 0.051. If we shift a bit of performed dividing to performed uniting and honest dividing, we get something like 0.20, 0.02, 0.70, 0.08 = 1.0. Or 0.18, 0.02, 0.72, 0.08.\n\nGiven the audience's interpretations, \"BIG PHARMA\" likely triggers conspiracy ideation: performed dividing high. I'll go with:\nperformed+uniting: 0.180\nhonest+uniting: 0.020\nperformed+dividing: 0.720\nhonest+dividing: 0.080\n\nSum = 1.000. That's fine.\n\nBut we should also consider that \"BIG PHARMA\" might have some honest uniting via medical breakthroughs? But the audience seems cynical. In GEN ALPHA, honest uniting high because maybe generation identity. In BITCOIN, honest uniting high because ideology. In PHOEBE GATES, honest uniting near zero. So for BIG PHARMA, likely near zero.\n\nThus final JSON: {\"performed+uniting\":0.180,\"honest+uniting\":0.020,\"performed+dividing\":0.720,\"honest+dividing\":0.080}\n\nMake sure no prose, no code fences. Single JSON object only.\n\nI'll output exactly that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"BIG PHARMA\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to return a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. GEN ALPHA: performed+uniting 0.273, honest+uniting 0.347, performed+dividing 0.231, honest+dividing 0.149. Submissions 121.\n2. BITCOIN: performed+uniting 0.097, honest+uniting 0.390, performed+dividing 0.318, honest+dividing 0.195. Submissions 154.\n3. PHOEBE GATES: performed+uniting 0.169, honest+uniting 0.013, performed+dividing 0.766, honest+dividing 0.051. Submissions 680.\n\nWe need to estimate for \"BIG PHARMA\". Big Pharma is a term often used to refer to the pharmaceutical industry, often with conspiracy theories, criticism about profit motives, exploitation, division, etc. The audience seems to interpret prompts in a way that reflects cultural attitudes. For \"GEN ALPHA\" (a generation), they saw mostly honest uniting and some performed uniting, low dividing. For \"BITCOIN\", honest uniting high, performed dividing moderate, performed uniting low, honest dividing moderate. For \"PHOEBE GATES\" (daughter of Bill Gates, associated with vaccines, conspiracy?), they saw huge performed dividing (0.766), almost no honest uniting, low others. That suggests that prompts associated with controversy, conspiracy, or perceived elite manipulation get high performed dividing. Big Pharma is a classic target of conspiracy theories, profiteering, division, exploitation. So likely similar to Phoebe Gates (which is Gates related to vaccines/pharma) but maybe not as extreme. Also Bitcoin had some performed dividing (0.318) and honest dividing (0.195). Big Pharma might be seen as deliberately exploiting divisions (performed dividing) and maybe fracturing truthfully (honest dividing) but more performed. Honest uniting likely low. Performed uniting maybe some (creating false unity, like PR campaigns). So we need to assign probabilities.\n\nLet's think about typical interpretations: \"Big Pharma\" as a concept: people might think of corporations that pretend to care (performed uniting), or actually bring people together through medicine (honest uniting) but less likely. More likely they are seen as dividing us for profit (performed dividing) or honestly causing fracture (honest dividing). Among the examples, Phoebe Gates (associated with vaccine advocacy, Gates foundation) got 0.766 performed dividing, 0.051 honest dividing, 0.169 performed uniting, 0.013 honest uniting. Big Pharma might be even more directly about industry, so performed dividing could be high but maybe not as high as personal target? Actually Phoebe Gates is a person, maybe more specific conspiracy. Big Pharma is a broad term; could be seen as exploiting divisions deliberately. I'd guess performed dividing around 0.6-0.7, performed uniting around 0.2, honest dividing around 0.1, honest uniting around 0.05. But we should consider the other examples: Bitcoin had performed dividing 0.318, honest dividing 0.195, performed uniting 0.097, honest uniting 0.390. That's because Bitcoin community sees it as uniting (honest). For Big Pharma, not a positive community. So honest uniting should be low.\n\nMaybe we can approximate as a mix between Phoebe Gates and Bitcoin? But Phoebe Gates is most analogous (health, vaccines, conspiracy). Let's set:\nperformed+uniting: 0.15 (some false unity, like \"we're all in this together\" ads)\nhonest+uniting: 0.02 (rare authentic togetherness)\nperformed+dividing: 0.70 (exploiting divisions deliberately)\nhonest+dividing: 0.13 (fracturing truthfully, e.g., high drug prices cause real fracture)\n\nSum = 1.00. Check: 0.15+0.02+0.70+0.13 = 1.00. Use three decimals: 0.150, 0.020, 0.700, 0.130. But we need at least three decimal places when needed; we can provide 0.15 as 0.15? Better to use 0.150 to be safe. But the instruction says \"Use at least three decimal places when needed.\" It's fine to use 0.15? Probably better to use 0.150, 0.020, 0.700, 0.130. However, the examples used long decimals. We can output something like {\"performed+uniting\":0.150,\"honest+uniting\":0.020,\"performed+dividing\":0.700,\"honest+dividing\":0.130}. But sum is exactly 1.\n\nAlternatively, we could be more nuanced: performed dividing 0.65, performed uniting 0.20, honest dividing 0.10, honest uniting 0.05 => sum 1.0. That seems plausible.\n\nLook at Phoebe Gates: performed uniting 0.169, honest uniting 0.013, performed dividing 0.766, honest dividing 0.051. If we shift a bit of performed dividing to performed uniting and honest dividing, we get something like 0.20, 0.02, 0.70, 0.08 = 1.0. Or 0.18, 0.02, 0.72, 0.08.\n\nGiven the audience's interpretations, \"BIG PHARMA\" likely triggers conspiracy ideation: performed dividing high. I'll go with:\nperformed+uniting: 0.180\nhonest+uniting: 0.020\nperformed+dividing: 0.720\nhonest+dividing: 0.080\n\nSum = 1.000. That's fine.\n\nBut we should also consider that \"BIG PHARMA\" might have some honest uniting via medical breakthroughs? But the audience seems cynical. In GEN ALPHA, honest uniting high because maybe generation identity. In BITCOIN, honest uniting high because ideology. In PHOEBE GATES, honest uniting near zero. So for BIG PHARMA, likely near zero.\n\nThus final JSON: {\"performed+uniting\":0.180,\"honest+uniting\":0.020,\"performed+dividing\":0.720,\"honest+dividing\":0.080}\n\nMake sure no prose, no code fences. Single JSON object only.\n\nI'll output exactly that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 503,
+          "completion_tokens": 1607,
+          "total_tokens": 2110,
+          "cost": 0.000914892,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000914892,
+            "upstream_inference_prompt_cost": 0.000066396,
+            "upstream_inference_completions_cost": 0.000848496
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1564,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 503,
+        "completion_tokens": 1607,
+        "total_tokens": 2110,
+        "cost": 0.000914892,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.000914892,
+          "upstream_inference_prompt_cost": 0.000066396,
+          "upstream_inference_completions_cost": 0.000848496
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1564,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 116,
+      "finishedAt": "2026-11-15T04:59:56.549Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 54
+      },
+      "observation": {
+        "ok": true,
+        "id": 54,
+        "prompt": "GEN ALPHA",
+        "distribution": {
+          "performed+uniting": 0.2727272727272727,
+          "honest+uniting": 0.34710743801652894,
+          "performed+dividing": 0.23140495867768596,
+          "honest+dividing": 0.1487603305785124
+        },
+        "submissions": 121,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 51
+      },
+      "observation": {
+        "ok": true,
+        "id": 51,
+        "prompt": "BITCOIN",
+        "distribution": {
+          "performed+uniting": 0.09740259740259741,
+          "honest+uniting": 0.38961038961038963,
+          "performed+dividing": 0.3181818181818182,
+          "honest+dividing": 0.19480519480519481
+        },
+        "submissions": 154,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 55
+      },
+      "observation": {
+        "ok": true,
+        "id": 55,
+        "prompt": "PHOEBE GATES",
+        "distribution": {
+          "performed+uniting": 0.16911764705882354,
+          "honest+uniting": 0.013235294117647059,
+          "performed+dividing": 0.7661764705882353,
+          "honest+dividing": 0.051470588235294115
+        },
+        "submissions": 680,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.18,
+          "honest+uniting": 0.02,
+          "performed+dividing": 0.72,
+          "honest+dividing": 0.08
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.18000000000000002,
+      "honest+uniting": 0.020000000000000004,
+      "performed+dividing": 0.7200000000000001,
+      "honest+dividing": 0.08000000000000002
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.020920121094847227,
+    "score": 98.95399394525764,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

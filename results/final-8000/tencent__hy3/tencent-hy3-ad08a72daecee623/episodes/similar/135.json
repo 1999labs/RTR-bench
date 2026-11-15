@@ -1,0 +1,607 @@
+{
+  "day": 135,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"SITCOMS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":51,\"prompt\":\"BITCOIN\",\"distribution\":{\"performed+uniting\":0.09740259740259741,\"honest+uniting\":0.38961038961038963,\"performed+dividing\":0.3181818181818182,\"honest+dividing\":0.19480519480519481},\"submissions\":154},{\"id\":8,\"prompt\":\"@SHL0MS\",\"distribution\":{\"performed+uniting\":0.5663311985361391,\"honest+uniting\":0.06404391582799634,\"performed+dividing\":0.0878316559926807,\"honest+dividing\":0.2817932296431839},\"submissions\":1093},{\"id\":69,\"prompt\":\"SILENCE\",\"distribution\":{\"performed+uniting\":0.29411764705882354,\"honest+uniting\":0.22058823529411764,\"performed+dividing\":0.3235294117647059,\"honest+dividing\":0.16176470588235295},\"submissions\":68}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:46:44.638Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.421,\"honest+uniting\":0.219,\"performed+dividing\":0.201,\"honest+dividing\":0.159}",
+      "response": {
+        "id": "gen-1794718004-o2vL9eVchZ3IG2tIsrW4",
+        "object": "chat.completion",
+        "created": 1794718004,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.421,\"honest+uniting\":0.219,\"performed+dividing\":0.201,\"honest+dividing\":0.159}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"SITCOMS\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"BITCOIN\": performed+uniting: 0.0974, honest+uniting: 0.3896, performed+dividing: 0.3182, honest+dividing: 0.1948 (154 submissions)\n2. \"@SHL0MS\": performed+uniting: 0.5663, honest+uniting: 0.0640, performed+dividing: 0.0878, honest+dividing: 0.2818 (1093 submissions)\n3. \"SILENCE\": performed+uniting: 0.2941, honest+uniting: 0.2206, performed+dividing: 0.3235, honest+dividing: 0.1618 (68 submissions)\n\nWe need to estimate share for \"SITCOMS\". This is a word about television comedy shows, typically situation comedies. The audience is from Mixed Messages, which seems to be a project where people interpret words in these quadrants. We need to infer likely distribution based on the concept of sitcoms.\n\nWhat are sitcoms? They are TV shows that are comedic, often about families, friends, coworkers, meant to be light-hearted, often create a sense of unity or shared laughter, but can be seen as superficial (performed unity) because they present idealized versions of social harmony. They can also be divisive (e.g., exploiting stereotypes, or dividing audiences by taste). But generally, sitcoms are associated with bringing people together (watching together) but maybe in a performed way (fake laughter, contrived situations). Honest uniting might be less likely because sitcoms are entertainment, not authentic connection. Honest dividing might be fracturing us truthfully (maybe revealing societal fractures? but sitcoms usually gloss over). Performed dividing could be deliberately exploiting divisions for comedy (e.g., using conflict for laughs). \n\nWe should consider the historical examples to see patterns. The words: BITCOIN (financial, divisive, speculative), @SHL0MS (an artist handle? maybe a person, performed uniting high), SILENCE (lack of communication, performed uniting moderate, performed dividing high). Not super clear.\n\nWe need to produce probabilities summing to 1. We can think about typical associations: Sitcoms as a cultural product: they often aim to unite audiences in laughter (performed uniting maybe high). But also they can be seen as mindless, creating false unity (performed uniting). Honest uniting might be low because they are not authentic community building. Performed dividing could be moderate (some sitcoms rely on misunderstandings or stereotypes). Honest dividing low.\n\nLet's try to approximate: performed+uniting maybe around 0.4-0.5, honest+uniting maybe 0.2, performed+dividing maybe 0.25, honest+dividing maybe 0.1. But we need to be informed by examples. The examples show variation. For BITCOIN: honest uniting highest (0.39), performed dividing second (0.318), performed uniting low (0.097), honest dividing (0.195). For @SHL0MS: performed uniting very high (0.566), honest dividing high (0.282), others low. For SILENCE: performed dividing highest (0.3235), performed uniting (0.294), honest uniting (0.221), honest dividing (0.162). So no clear pattern by word type.\n\nMaybe the audience tends to assign more to performed categories? In two of three, performed+uniting or performed+dividing is top. Honest uniting only top in BITCOIN. Honest dividing is second in @SHL0MS.\n\nFor SITCOMS, a word that implies a genre of TV, likely evokes \"fake laughter\", \"canned laughter\", \"scripted\", so performed uniting could be high. Also sitcoms often have characters in conflict but resolve, so performed dividing maybe moderate. Honest uniting maybe some (shared experience). Honest dividing maybe low.\n\nI'll guess: performed+uniting: 0.45, honest+uniting: 0.20, performed+dividing: 0.25, honest+dividing: 0.10. Sum = 1.00. But need at least three decimals if needed. Use 0.450, 0.200, 0.250, 0.100. Or more precise: 0.450, 0.200, 0.250, 0.100.\n\nBut maybe we should consider that sitcoms are \"comforting\" and \"bring us together\" but in a performed way. Could be performed uniting 0.5, honest uniting 0.15, performed dividing 0.2, honest dividing 0.15.\n\nAlternatively, look at SILENCE: a word about absence, got performed dividing high (exploiting divisions). Sitcoms is opposite of silence, more noise, so maybe performed uniting high.\n\nI'll go with something like:\nperformed+uniting: 0.482\nhonest+uniting: 0.213\nperformed+dividing: 0.227\nhonest+dividing: 0.078\nSum = 1.000. But we need to justify? No, just output JSON.\n\nWe can also think of average of examples? Not appropriate. But maybe the audience has a bias toward performed+uniting and performed+dividing overall. The mean of the three examples:\npu: (0.0974+0.5663+0.2941)/3 = 0.3193\nhu: (0.3896+0.0640+0.2206)/3 = 0.2247\npd: (0.3182+0.0878+0.3235)/3 = 0.2432\nhd: (0.1948+0.2818+0.1618)/3 = 0.2128\nSum = 1.0. So average distribution is roughly pu 0.32, hu 0.22, pd 0.24, hd 0.21.\n\nFor SITCOMS, maybe more pu than average because of \"com\" (comedy) unity. So pu higher, hu maybe similar, pd lower, hd lower. So pu 0.42, hu 0.22, pd 0.20, hd 0.16. Sum 1.00.\n\nI'll choose:\n{\"performed+uniting\":0.420,\"honest+uniting\":0.220,\"performed+dividing\":0.200,\"honest+dividing\":0.160}\n\nBut ensure at least three decimal places when needed: these have three, fine.\n\nAlternatively, to be safe, use more decimals: 0.421, 0.219, 0.201, 0.159 sum 1.000.\n\nI'll output a single JSON object only. No prose.\n\nLet's finalize:\n{\"performed+uniting\":0.421,\"honest+uniting\":0.219,\"performed+dividing\":0.201,\"honest+dividing\":0.159}\n\nCheck sum: 0.421+0.219=0.640, +0.201=0.841, +0.159=1.000. Good.\n\nI'll use that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"SITCOMS\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"BITCOIN\": performed+uniting: 0.0974, honest+uniting: 0.3896, performed+dividing: 0.3182, honest+dividing: 0.1948 (154 submissions)\n2. \"@SHL0MS\": performed+uniting: 0.5663, honest+uniting: 0.0640, performed+dividing: 0.0878, honest+dividing: 0.2818 (1093 submissions)\n3. \"SILENCE\": performed+uniting: 0.2941, honest+uniting: 0.2206, performed+dividing: 0.3235, honest+dividing: 0.1618 (68 submissions)\n\nWe need to estimate share for \"SITCOMS\". This is a word about television comedy shows, typically situation comedies. The audience is from Mixed Messages, which seems to be a project where people interpret words in these quadrants. We need to infer likely distribution based on the concept of sitcoms.\n\nWhat are sitcoms? They are TV shows that are comedic, often about families, friends, coworkers, meant to be light-hearted, often create a sense of unity or shared laughter, but can be seen as superficial (performed unity) because they present idealized versions of social harmony. They can also be divisive (e.g., exploiting stereotypes, or dividing audiences by taste). But generally, sitcoms are associated with bringing people together (watching together) but maybe in a performed way (fake laughter, contrived situations). Honest uniting might be less likely because sitcoms are entertainment, not authentic connection. Honest dividing might be fracturing us truthfully (maybe revealing societal fractures? but sitcoms usually gloss over). Performed dividing could be deliberately exploiting divisions for comedy (e.g., using conflict for laughs). \n\nWe should consider the historical examples to see patterns. The words: BITCOIN (financial, divisive, speculative), @SHL0MS (an artist handle? maybe a person, performed uniting high), SILENCE (lack of communication, performed uniting moderate, performed dividing high). Not super clear.\n\nWe need to produce probabilities summing to 1. We can think about typical associations: Sitcoms as a cultural product: they often aim to unite audiences in laughter (performed uniting maybe high). But also they can be seen as mindless, creating false unity (performed uniting). Honest uniting might be low because they are not authentic community building. Performed dividing could be moderate (some sitcoms rely on misunderstandings or stereotypes). Honest dividing low.\n\nLet's try to approximate: performed+uniting maybe around 0.4-0.5, honest+uniting maybe 0.2, performed+dividing maybe 0.25, honest+dividing maybe 0.1. But we need to be informed by examples. The examples show variation. For BITCOIN: honest uniting highest (0.39), performed dividing second (0.318), performed uniting low (0.097), honest dividing (0.195). For @SHL0MS: performed uniting very high (0.566), honest dividing high (0.282), others low. For SILENCE: performed dividing highest (0.3235), performed uniting (0.294), honest uniting (0.221), honest dividing (0.162). So no clear pattern by word type.\n\nMaybe the audience tends to assign more to performed categories? In two of three, performed+uniting or performed+dividing is top. Honest uniting only top in BITCOIN. Honest dividing is second in @SHL0MS.\n\nFor SITCOMS, a word that implies a genre of TV, likely evokes \"fake laughter\", \"canned laughter\", \"scripted\", so performed uniting could be high. Also sitcoms often have characters in conflict but resolve, so performed dividing maybe moderate. Honest uniting maybe some (shared experience). Honest dividing maybe low.\n\nI'll guess: performed+uniting: 0.45, honest+uniting: 0.20, performed+dividing: 0.25, honest+dividing: 0.10. Sum = 1.00. But need at least three decimals if needed. Use 0.450, 0.200, 0.250, 0.100. Or more precise: 0.450, 0.200, 0.250, 0.100.\n\nBut maybe we should consider that sitcoms are \"comforting\" and \"bring us together\" but in a performed way. Could be performed uniting 0.5, honest uniting 0.15, performed dividing 0.2, honest dividing 0.15.\n\nAlternatively, look at SILENCE: a word about absence, got performed dividing high (exploiting divisions). Sitcoms is opposite of silence, more noise, so maybe performed uniting high.\n\nI'll go with something like:\nperformed+uniting: 0.482\nhonest+uniting: 0.213\nperformed+dividing: 0.227\nhonest+dividing: 0.078\nSum = 1.000. But we need to justify? No, just output JSON.\n\nWe can also think of average of examples? Not appropriate. But maybe the audience has a bias toward performed+uniting and performed+dividing overall. The mean of the three examples:\npu: (0.0974+0.5663+0.2941)/3 = 0.3193\nhu: (0.3896+0.0640+0.2206)/3 = 0.2247\npd: (0.3182+0.0878+0.3235)/3 = 0.2432\nhd: (0.1948+0.2818+0.1618)/3 = 0.2128\nSum = 1.0. So average distribution is roughly pu 0.32, hu 0.22, pd 0.24, hd 0.21.\n\nFor SITCOMS, maybe more pu than average because of \"com\" (comedy) unity. So pu higher, hu maybe similar, pd lower, hd lower. So pu 0.42, hu 0.22, pd 0.20, hd 0.16. Sum 1.00.\n\nI'll choose:\n{\"performed+uniting\":0.420,\"honest+uniting\":0.220,\"performed+dividing\":0.200,\"honest+dividing\":0.160}\n\nBut ensure at least three decimal places when needed: these have three, fine.\n\nAlternatively, to be safe, use more decimals: 0.421, 0.219, 0.201, 0.159 sum 1.000.\n\nI'll output a single JSON object only. No prose.\n\nLet's finalize:\n{\"performed+uniting\":0.421,\"honest+uniting\":0.219,\"performed+dividing\":0.201,\"honest+dividing\":0.159}\n\nCheck sum: 0.421+0.219=0.640, +0.201=0.841, +0.159=1.000. Good.\n\nI'll use that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 502,
+          "completion_tokens": 1733,
+          "total_tokens": 2235,
+          "cost": 0.000981288,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000981288,
+            "upstream_inference_prompt_cost": 0.000066264,
+            "upstream_inference_completions_cost": 0.000915024
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1690,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 502,
+        "completion_tokens": 1733,
+        "total_tokens": 2235,
+        "cost": 0.000981288,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.000981288,
+          "upstream_inference_prompt_cost": 0.000066264,
+          "upstream_inference_completions_cost": 0.000915024
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1690,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 95,
+      "finishedAt": "2026-11-15T04:47:12.153Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 51
+      },
+      "observation": {
+        "ok": true,
+        "id": 51,
+        "prompt": "BITCOIN",
+        "distribution": {
+          "performed+uniting": 0.09740259740259741,
+          "honest+uniting": 0.38961038961038963,
+          "performed+dividing": 0.3181818181818182,
+          "honest+dividing": 0.19480519480519481
+        },
+        "submissions": 154,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 8
+      },
+      "observation": {
+        "ok": true,
+        "id": 8,
+        "prompt": "@SHL0MS",
+        "distribution": {
+          "performed+uniting": 0.5663311985361391,
+          "honest+uniting": 0.06404391582799634,
+          "performed+dividing": 0.0878316559926807,
+          "honest+dividing": 0.2817932296431839
+        },
+        "submissions": 1093,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 69
+      },
+      "observation": {
+        "ok": true,
+        "id": 69,
+        "prompt": "SILENCE",
+        "distribution": {
+          "performed+uniting": 0.29411764705882354,
+          "honest+uniting": 0.22058823529411764,
+          "performed+dividing": 0.3235294117647059,
+          "honest+dividing": 0.16176470588235295
+        },
+        "submissions": 68,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.421,
+          "honest+uniting": 0.219,
+          "performed+dividing": 0.201,
+          "honest+dividing": 0.159
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.421,
+      "honest+uniting": 0.219,
+      "performed+dividing": 0.201,
+      "honest+dividing": 0.159
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.17297396539792387,
+    "score": 91.35130173010381,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

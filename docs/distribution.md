@@ -1,8 +1,8 @@
-# Distribution prediction protocol v1
+# Predict protocol v1
 
-For the public Predict track, use `node src/cli.ts predict <model>`; see the [Quickstart](../README.md#quickstart). This uses the shared Learn runner’s no-example condition with an 8,000-token default in version 0.2.1 and support for `--max-usd`. `read-the-room <model>` runs Predict and Learn together. The legacy `distribution` command and its fixture format remain available unchanged.
+For the public Predict track, use `node src/cli.ts predict <model>`; see the [Quickstart](../README.md#quickstart). This uses the shared Learn runner’s no-example condition with an 8,000-token default since version 0.2.1 and support for `--max-usd`. `read-the-room <model>` runs Predict and Learn together. The legacy `distribution` command and its fixture format remain available unchanged.
 
-This is a separate RTR-bench track. The original winning-quadrant benchmark retains its prompts, scoring, and result paths. [Learn the Room](learn-room.md) reuses this protocol's probability validation and scorer for its interactive environment and initial baseline comparisons.
+This is a separate RTR-bench track. The original winning-quadrant benchmark retains its prompts, scoring, and result paths. [Learn](learn-room.md) reuses this protocol's probability validation and scorer for its interactive environment and initial baseline comparisons.
 
 ## Dataset and frozen split
 
@@ -97,6 +97,6 @@ npm run build
 
 ## Evaluation status
 
-Both tracks have completed development validation and a [first final evaluation](../results/learn-room/z-ai-glm-5-3-flash-e9d0327447ef1856/README.md) on all 45 frozen evaluation targets. GLM 5.3 Flash through Relace scored **87.93/100** for direct distribution prediction, using the identical no-example condition in Learn the Room without duplicate calls. All 45 direct predictions were valid. Uniform and constant reference-distribution baselines scored 85.39 and 85.56, respectively; these scores are not percentage accuracy.
+Both tracks have completed development validation. The current [eleven-model campaign](../results/final-8000/README.md) uses 8,000 tokens per response. The earlier [4,000-token evaluation](../results/learn-room/z-ai-glm-5-3-flash-e9d0327447ef1856/README.md) covered all 45 frozen evaluation targets. GLM 5.3 Flash through Relace scored **87.93/100** for direct distribution prediction, using the identical no-example condition in Learn without duplicate calls. All 45 direct predictions were valid. Uniform and constant reference-distribution baselines scored 85.39 and 85.56, respectively; these scores are not percentage accuracy.
 
-The same run evaluated all three evidence conditions, for 180 valid predictions total. The transfer-check agent scored 85.57; see the linked report for paired comparisons, uncertainty, usage, and the frozen protocol. The original RTR score remains separate. Future models should use the same declared settings; any policy development informed by these final outcomes must disclose that this holdout has been used.
+The same run evaluated all three evidence conditions, for 180 valid predictions total. The transfer-check agent scored 85.57; see the linked report for paired comparisons, uncertainty, usage, and the frozen protocol. The original RTR score remains separate. Model comparisons should use matching declared settings; any policy development informed by these final outcomes must disclose that this holdout has been used.

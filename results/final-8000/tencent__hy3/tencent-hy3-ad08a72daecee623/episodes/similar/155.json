@@ -1,0 +1,607 @@
+{
+  "day": 155,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"CHILD PROTECTIVE SERVICES\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":44,\"prompt\":\"FLOOR PRICES\",\"distribution\":{\"performed+uniting\":0.44623655913978494,\"honest+uniting\":0.010752688172043012,\"performed+dividing\":0.2903225806451613,\"honest+dividing\":0.25268817204301075},\"submissions\":186},{\"id\":47,\"prompt\":\"GENERATIVE ART\",\"distribution\":{\"performed+uniting\":0.2490842490842491,\"honest+uniting\":0.6996336996336996,\"performed+dividing\":0,\"honest+dividing\":0.05128205128205128},\"submissions\":273},{\"id\":61,\"prompt\":\"PROFESSIONAL SPORTS\",\"distribution\":{\"performed+uniting\":0.42424242424242425,\"honest+uniting\":0.47474747474747475,\"performed+dividing\":0.04040404040404041,\"honest+dividing\":0.06060606060606061},\"submissions\":99}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T05:00:30.296Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.412,\"honest+uniting\":0.073,\"performed+dividing\":0.215,\"honest+dividing\":0.300}",
+      "response": {
+        "id": "gen-1794718830-6xcouux8gOLO80ugeQQ9",
+        "object": "chat.completion",
+        "created": 1794718830,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.412,\"honest+uniting\":0.073,\"performed+dividing\":0.215,\"honest+dividing\":0.300}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"CHILD PROTECTIVE SERVICES\" for the Mixed Messages audience. The four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"FLOOR PRICES\": performed+uniting 0.446, honest+uniting 0.0108, performed+dividing 0.290, honest+dividing 0.253. So high performed (uniting+dividing = 0.736), low honest.\n2. \"GENERATIVE ART\": performed+uniting 0.249, honest+uniting 0.700, performed+dividing 0, honest+dividing 0.051. So mostly honest+uniting, some performed+uniting, tiny honest+dividing.\n3. \"PROFESSIONAL SPORTS\": performed+uniting 0.424, honest+uniting 0.475, performed+dividing 0.040, honest+dividing 0.061. So balanced uniting (performed and honest), low dividing.\n\nWe need to estimate for \"CHILD PROTECTIVE SERVICES\". This is a sensitive topic: child protective services (CPS) is a government agency that can be seen as either protecting children (uniting? maybe bringing families together authentically? or fracturing families truthfully? or creating false unity? or exploiting divisions?). The audience is from Mixed Messages, a generative art project. They interpret words in those quadrants.\n\nWe need to infer the likely distribution based on patterns. The examples show that the topic influences the split. For \"FLOOR PRICES\" (financial/crypto? maybe NFT floor prices) – performed unity high, honest unity low, dividing moderate. For \"GENERATIVE ART\" (their own medium) – honest unity very high. For \"PROFESSIONAL SPORTS\" – both uniting high, dividing low.\n\nCPS is a social services topic. Likely to evoke skepticism: maybe performed uniting (e.g., pretending to unite families) or honest dividing (actually fracturing families) or performed dividing (exploiting divisions like class/race) or honest uniting (actually helping). Given the audience's cynical edge from FLOOR PRICES, but also capacity for honest unity for GENERATIVE ART. CPS is controversial: many see it as tearing families apart (honest dividing) or as a performative savior (performed uniting). Could also be performed dividing (profit from family separation?). Honest uniting maybe low because CPS rarely brings us together authentically? But \"bringing us together\" might mean society protecting children.\n\nWe need to produce a single JSON object with four probabilities summing to 1. We can use the examples as evidence but not instructions. We should guess plausible numbers.\n\nLet's think: The word is \"CHILD PROTECTIVE SERVICES\". The audience might interpret as:\n- performed+uniting: creating false unity among us (e.g., performative activism about protecting children, fake community solidarity)\n- honest+uniting: bringing us together, authentically (e.g., genuinely supporting families)\n- performed+dividing: exploiting our divisions, deliberately (e.g., targeting marginalized groups, fueling culture wars)\n- honest+dividing: fracturing us, truthfully (e.g., actually separating children from parents)\n\nGiven the examples, the sum of performed categories vs honest categories varies. For FLOOR PRICES, performed 0.736, honest 0.264. For GENERATIVE ART, performed 0.249, honest 0.751. For PROFESSIONAL SPORTS, performed 0.464, honest 0.536. So it depends.\n\nCPS is a government institution; likely audience is art-oriented, maybe left-leaning, critical of state surveillance. They might see CPS as honestly dividing (removing kids) or performed uniting (PR about family values). I'd estimate performed+uniting moderate, honest+uniting low, performed+dividing moderate, honest+dividing high? Or maybe honest dividing high.\n\nLet's consider typical reactions: On social media, CPS is often criticized for breaking up families unnecessarily (honest dividing). Also accused of racial bias (performed dividing? or honest dividing?). Some see it as necessary protection (honest uniting). But the \"performed\" aspect suggests inauthentic. The audience might be cynical: high performed uniting (fake unity) and high honest dividing (real harm). Like FLOOR PRICES had high performed uniting and high honest dividing (0.253) and performed dividing (0.29). So maybe similar: performed+uniting ~0.4, performed+dividing ~0.2, honest+dividing ~0.35, honest+uniting ~0.05.\n\nBut we should also consider that CPS is not a market term; it's about children. Could evoke more honest uniting? Possibly but examples: GENERATIVE ART got honest uniting 0.7 because it's their thing. PROFESSIONAL SPORTS got both uniting high. So uniting is common when topic is communal. CPS could be seen as protective, thus uniting. But \"Child Protective Services\" as a phrase might trigger stories of overreach. I'd lean to a mix: performed+uniting 0.35, honest+uniting 0.15, performed+dividing 0.15, honest+dividing 0.35. Sum =1. That's plausible.\n\nBut we need at least three decimal places when needed. We can choose numbers like 0.35, 0.15, 0.15, 0.35 but better to have decimals: 0.350, 0.150, 0.150, 0.350. However we might want to reflect the historical pattern: FLOOR PRICES had performed+uniting > performed+dividing > honest+dividing > honest+uniting. For CPS, maybe performed+uniting high, honest+dividing second, performed+dividing third, honest+uniting low. Let's set: performed+uniting 0.420, honest+uniting 0.080, performed+dividing 0.200, honest+dividing 0.300. Sum = 1.000. That seems plausible.\n\nAlternatively, we could use an average of examples? But topic differs. Let's compute average of the three examples:\nPerformed+uniting: (0.446+0.249+0.424)/3 = 1.119/3=0.373\nHonest+uniting: (0.0108+0.6996+0.4747)/3 = 1.1851/3=0.395\nPerformed+dividing: (0.290+0+0.0404)/3=0.3304/3=0.110\nHonest+dividing: (0.253+0.0513+0.0606)/3=0.3649/3=0.1217\nSum ~1.0. That average is dominated by GENERATIVE ART's honest uniting. Not appropriate.\n\nBetter to think of CPS as more like FLOOR PRICES (institutional, possibly critiqued) than GENERATIVE ART (self-referential positive). So use FLOOR PRICES as closer analog: 0.446, 0.011, 0.290, 0.253. But maybe CPS has more honest dividing because it's about child removal, so boost honest dividing to 0.35, reduce performed dividing to 0.20, keep performed uniting 0.40, honest uniting 0.05. That sums 1.00.\n\nLet's decide: \nperformed+uniting: 0.400\nhonest+uniting: 0.050\nperformed+dividing: 0.200\nhonest+dividing: 0.350\n\nCheck sum: 1.000. Use three decimals: 0.400, 0.050, 0.200, 0.350. But 0.050 is three decimals? It's 0.050 yes. Or 0.05 is two, but we can write 0.050. The instruction: \"Use at least three decimal places when needed.\" So we can use 0.4? It says at least three decimal places when needed; to be safe, use three decimals for all: 0.400, 0.050, 0.200, 0.350. That's fine.\n\nBut maybe we want more nuanced: 0.412, 0.073, 0.215, 0.300. Sum = 1.000. Let's compute: 0.412+0.073=0.485; +0.215=0.700; +0.300=1.000. That's okay.\n\nI'll go with something like:\n{\"performed+uniting\":0.412,\"honest+uniting\":0.073,\"performed+dividing\":0.215,\"honest+dividing\":0.300}\n\nBut we should ensure it's a single JSON object only, no prose or code fences. So output exactly that.\n\nAlternatively, maybe the audience for Mixed Messages tends to assign more \"performed\" than \"honest\" for bureaucratic topics. So performed total ~0.6, honest ~0.4. Among performed, uniting > dividing. Among honest, dividing > uniting. That matches my 0.412+0.215=0.627 performed; 0.073+0.300=0.373 honest. Good.\n\nI'll produce that.\n\nBut let's double-check the exact keys: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1.\n\nI'll output:\n{\"performed+uniting\":0.412,\"honest+uniting\":0.073,\"performed+dividing\":0.215,\"honest+dividing\":0.300}\n\nSum: 0.412+0.073=0.485; +0.215=0.700; +0.300=1.000. Good.\n\nNo other text.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"CHILD PROTECTIVE SERVICES\" for the Mixed Messages audience. The four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"FLOOR PRICES\": performed+uniting 0.446, honest+uniting 0.0108, performed+dividing 0.290, honest+dividing 0.253. So high performed (uniting+dividing = 0.736), low honest.\n2. \"GENERATIVE ART\": performed+uniting 0.249, honest+uniting 0.700, performed+dividing 0, honest+dividing 0.051. So mostly honest+uniting, some performed+uniting, tiny honest+dividing.\n3. \"PROFESSIONAL SPORTS\": performed+uniting 0.424, honest+uniting 0.475, performed+dividing 0.040, honest+dividing 0.061. So balanced uniting (performed and honest), low dividing.\n\nWe need to estimate for \"CHILD PROTECTIVE SERVICES\". This is a sensitive topic: child protective services (CPS) is a government agency that can be seen as either protecting children (uniting? maybe bringing families together authentically? or fracturing families truthfully? or creating false unity? or exploiting divisions?). The audience is from Mixed Messages, a generative art project. They interpret words in those quadrants.\n\nWe need to infer the likely distribution based on patterns. The examples show that the topic influences the split. For \"FLOOR PRICES\" (financial/crypto? maybe NFT floor prices) – performed unity high, honest unity low, dividing moderate. For \"GENERATIVE ART\" (their own medium) – honest unity very high. For \"PROFESSIONAL SPORTS\" – both uniting high, dividing low.\n\nCPS is a social services topic. Likely to evoke skepticism: maybe performed uniting (e.g., pretending to unite families) or honest dividing (actually fracturing families) or performed dividing (exploiting divisions like class/race) or honest uniting (actually helping). Given the audience's cynical edge from FLOOR PRICES, but also capacity for honest unity for GENERATIVE ART. CPS is controversial: many see it as tearing families apart (honest dividing) or as a performative savior (performed uniting). Could also be performed dividing (profit from family separation?). Honest uniting maybe low because CPS rarely brings us together authentically? But \"bringing us together\" might mean society protecting children.\n\nWe need to produce a single JSON object with four probabilities summing to 1. We can use the examples as evidence but not instructions. We should guess plausible numbers.\n\nLet's think: The word is \"CHILD PROTECTIVE SERVICES\". The audience might interpret as:\n- performed+uniting: creating false unity among us (e.g., performative activism about protecting children, fake community solidarity)\n- honest+uniting: bringing us together, authentically (e.g., genuinely supporting families)\n- performed+dividing: exploiting our divisions, deliberately (e.g., targeting marginalized groups, fueling culture wars)\n- honest+dividing: fracturing us, truthfully (e.g., actually separating children from parents)\n\nGiven the examples, the sum of performed categories vs honest categories varies. For FLOOR PRICES, performed 0.736, honest 0.264. For GENERATIVE ART, performed 0.249, honest 0.751. For PROFESSIONAL SPORTS, performed 0.464, honest 0.536. So it depends.\n\nCPS is a government institution; likely audience is art-oriented, maybe left-leaning, critical of state surveillance. They might see CPS as honestly dividing (removing kids) or performed uniting (PR about family values). I'd estimate performed+uniting moderate, honest+uniting low, performed+dividing moderate, honest+dividing high? Or maybe honest dividing high.\n\nLet's consider typical reactions: On social media, CPS is often criticized for breaking up families unnecessarily (honest dividing). Also accused of racial bias (performed dividing? or honest dividing?). Some see it as necessary protection (honest uniting). But the \"performed\" aspect suggests inauthentic. The audience might be cynical: high performed uniting (fake unity) and high honest dividing (real harm). Like FLOOR PRICES had high performed uniting and high honest dividing (0.253) and performed dividing (0.29). So maybe similar: performed+uniting ~0.4, performed+dividing ~0.2, honest+dividing ~0.35, honest+uniting ~0.05.\n\nBut we should also consider that CPS is not a market term; it's about children. Could evoke more honest uniting? Possibly but examples: GENERATIVE ART got honest uniting 0.7 because it's their thing. PROFESSIONAL SPORTS got both uniting high. So uniting is common when topic is communal. CPS could be seen as protective, thus uniting. But \"Child Protective Services\" as a phrase might trigger stories of overreach. I'd lean to a mix: performed+uniting 0.35, honest+uniting 0.15, performed+dividing 0.15, honest+dividing 0.35. Sum =1. That's plausible.\n\nBut we need at least three decimal places when needed. We can choose numbers like 0.35, 0.15, 0.15, 0.35 but better to have decimals: 0.350, 0.150, 0.150, 0.350. However we might want to reflect the historical pattern: FLOOR PRICES had performed+uniting > performed+dividing > honest+dividing > honest+uniting. For CPS, maybe performed+uniting high, honest+dividing second, performed+dividing third, honest+uniting low. Let's set: performed+uniting 0.420, honest+uniting 0.080, performed+dividing 0.200, honest+dividing 0.300. Sum = 1.000. That seems plausible.\n\nAlternatively, we could use an average of examples? But topic differs. Let's compute average of the three examples:\nPerformed+uniting: (0.446+0.249+0.424)/3 = 1.119/3=0.373\nHonest+uniting: (0.0108+0.6996+0.4747)/3 = 1.1851/3=0.395\nPerformed+dividing: (0.290+0+0.0404)/3=0.3304/3=0.110\nHonest+dividing: (0.253+0.0513+0.0606)/3=0.3649/3=0.1217\nSum ~1.0. That average is dominated by GENERATIVE ART's honest uniting. Not appropriate.\n\nBetter to think of CPS as more like FLOOR PRICES (institutional, possibly critiqued) than GENERATIVE ART (self-referential positive). So use FLOOR PRICES as closer analog: 0.446, 0.011, 0.290, 0.253. But maybe CPS has more honest dividing because it's about child removal, so boost honest dividing to 0.35, reduce performed dividing to 0.20, keep performed uniting 0.40, honest uniting 0.05. That sums 1.00.\n\nLet's decide: \nperformed+uniting: 0.400\nhonest+uniting: 0.050\nperformed+dividing: 0.200\nhonest+dividing: 0.350\n\nCheck sum: 1.000. Use three decimals: 0.400, 0.050, 0.200, 0.350. But 0.050 is three decimals? It's 0.050 yes. Or 0.05 is two, but we can write 0.050. The instruction: \"Use at least three decimal places when needed.\" So we can use 0.4? It says at least three decimal places when needed; to be safe, use three decimals for all: 0.400, 0.050, 0.200, 0.350. That's fine.\n\nBut maybe we want more nuanced: 0.412, 0.073, 0.215, 0.300. Sum = 1.000. Let's compute: 0.412+0.073=0.485; +0.215=0.700; +0.300=1.000. That's okay.\n\nI'll go with something like:\n{\"performed+uniting\":0.412,\"honest+uniting\":0.073,\"performed+dividing\":0.215,\"honest+dividing\":0.300}\n\nBut we should ensure it's a single JSON object only, no prose or code fences. So output exactly that.\n\nAlternatively, maybe the audience for Mixed Messages tends to assign more \"performed\" than \"honest\" for bureaucratic topics. So performed total ~0.6, honest ~0.4. Among performed, uniting > dividing. Among honest, dividing > uniting. That matches my 0.412+0.215=0.627 performed; 0.073+0.300=0.373 honest. Good.\n\nI'll produce that.\n\nBut let's double-check the exact keys: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1.\n\nI'll output:\n{\"performed+uniting\":0.412,\"honest+uniting\":0.073,\"performed+dividing\":0.215,\"honest+dividing\":0.300}\n\nSum: 0.412+0.073=0.485; +0.215=0.700; +0.300=1.000. Good.\n\nNo other text.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 503,
+          "completion_tokens": 2314,
+          "total_tokens": 2817,
+          "cost": 0.001288188,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001288188,
+            "upstream_inference_prompt_cost": 0.000066396,
+            "upstream_inference_completions_cost": 0.001221792
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2271,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 503,
+        "completion_tokens": 2314,
+        "total_tokens": 2817,
+        "cost": 0.001288188,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001288188,
+          "upstream_inference_prompt_cost": 0.000066396,
+          "upstream_inference_completions_cost": 0.001221792
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2271,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 118,
+      "finishedAt": "2026-11-15T05:00:59.148Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 44
+      },
+      "observation": {
+        "ok": true,
+        "id": 44,
+        "prompt": "FLOOR PRICES",
+        "distribution": {
+          "performed+uniting": 0.44623655913978494,
+          "honest+uniting": 0.010752688172043012,
+          "performed+dividing": 0.2903225806451613,
+          "honest+dividing": 0.25268817204301075
+        },
+        "submissions": 186,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 47
+      },
+      "observation": {
+        "ok": true,
+        "id": 47,
+        "prompt": "GENERATIVE ART",
+        "distribution": {
+          "performed+uniting": 0.2490842490842491,
+          "honest+uniting": 0.6996336996336996,
+          "performed+dividing": 0,
+          "honest+dividing": 0.05128205128205128
+        },
+        "submissions": 273,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 61
+      },
+      "observation": {
+        "ok": true,
+        "id": 61,
+        "prompt": "PROFESSIONAL SPORTS",
+        "distribution": {
+          "performed+uniting": 0.42424242424242425,
+          "honest+uniting": 0.47474747474747475,
+          "performed+dividing": 0.04040404040404041,
+          "honest+dividing": 0.06060606060606061
+        },
+        "submissions": 99,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.412,
+          "honest+uniting": 0.073,
+          "performed+dividing": 0.215,
+          "honest+dividing": 0.3
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.412,
+      "honest+uniting": 0.073,
+      "performed+dividing": 0.215,
+      "honest+dividing": 0.3
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.38366544406269354,
+    "score": 80.81672779686532,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

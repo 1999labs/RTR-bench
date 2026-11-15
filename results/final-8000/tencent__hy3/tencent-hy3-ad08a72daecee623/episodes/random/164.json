@@ -1,0 +1,607 @@
+{
+  "day": 164,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"HEARTBREAK\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":56,\"prompt\":\"BURNING MAN\",\"distribution\":{\"performed+uniting\":0.8966666666666666,\"honest+uniting\":0.03666666666666667,\"performed+dividing\":0.02666666666666667,\"honest+dividing\":0.04},\"submissions\":300},{\"id\":87,\"prompt\":\"SAME-SEX MARRIAGE\",\"distribution\":{\"performed+uniting\":0.02654867256637168,\"honest+uniting\":0.6194690265486725,\"performed+dividing\":0.02654867256637168,\"honest+dividing\":0.3274336283185841},\"submissions\":113},{\"id\":91,\"prompt\":\"THERAPY\",\"distribution\":{\"performed+uniting\":0.21782178217821782,\"honest+uniting\":0.5181518151815182,\"performed+dividing\":0.10231023102310231,\"honest+dividing\":0.1617161716171617},\"submissions\":303}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:38:40.471Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.217,\"honest+uniting\":0.316,\"performed+dividing\":0.097,\"honest+dividing\":0.370}",
+      "response": {
+        "id": "gen-1794717520-5nYhq3qsmnDWVgWFwoH2",
+        "object": "chat.completion",
+        "created": 1794717520,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.217,\"honest+uniting\":0.316,\"performed+dividing\":0.097,\"honest+dividing\":0.370}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"HEARTBREAK\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given historical examples:\n1. \"BURNING MAN\": performed+uniting 0.8967, honest+uniting 0.0367, performed+dividing 0.0267, honest+dividing 0.04. Submissions 300. So for Burning Man, the audience heavily saw it as performed+uniting (creating false unity). That's a festival that might be seen as fake unity.\n2. \"SAME-SEX MARRIAGE\": performed+uniting 0.0265, honest+uniting 0.6195, performed+dividing 0.0265, honest+dividing 0.3274. So mostly honest+uniting (bringing together authentically) and a significant honest+dividing (fracturing truthfully). That makes sense: same-sex marriage unites some, divides others truthfully.\n3. \"THERAPY\": performed+uniting 0.2178, honest+uniting 0.5182, performed+dividing 0.1023, honest+dividing 0.1617. So mostly honest+uniting, some performed+uniting, some honest+dividing.\n\nNow we need to estimate for \"HEARTBREAK\". Heartbreak is a personal emotional experience of loss, typically from romantic breakup. How would this audience interpret it in terms of these quadrants? The quadrants are about \"us\" (collective) - \"creating false unity among us\", \"bringing us together authentically\", \"exploiting our divisions deliberately\", \"fracturing us truthfully\". So it's about social dynamics, not just personal feeling. Heartbreak could be seen as something that fractures us truthfully (honest+dividing) because heartbreak is a real fracture in a relationship, and truthfully it divides people. Or it could be seen as bringing us together authentically (honest+uniting) because shared experience of heartbreak unites people in empathy. Or performed+uniting: creating false unity among us - maybe superficial solidarity about heartbreak (like \"we've all been heartbroken\" but fake). Or performed+dividing: exploiting divisions deliberately - maybe using heartbreak to drive people apart for clicks, etc.\n\nWe need to infer from the examples. The examples show that the audience tends to assign high probability to one or two quadrants based on the concept. For Burning Man (a communal event) they saw it as performed unity. For same-sex marriage (a social issue) they saw honest uniting and honest dividing. For therapy (personal improvement) they saw honest uniting mostly.\n\nHeartbreak is more like a personal emotional state but with social implications. It might be similar to therapy? Therapy was honest uniting 0.518, performed uniting 0.218, honest dividing 0.162, performed dividing 0.102. Heartbreak might be more on the dividing side because it's about breakup. But \"heartbreak\" as a word might evoke collective empathy: \"we are all heartbroken about something\" (e.g., social grief). However, the prompt is just the word \"HEARTBREAK\", not contextualized.\n\nWe should think about the generative art project Mixed Messages. Possibly the audience is prone to cynicism or certain patterns. The Burning Man example shows extreme performed+uniting (0.897) which is interesting: they interpreted Burning Man as creating false unity. That suggests for events that claim unity, they see through it. For same-sex marriage, they saw both authentic unity and truthful fracture. For therapy, authentic unity.\n\nHeartbreak is not an event that claims unity; it's a state of brokenness. So performed+uniting might be low because there's no obvious pretense of unity. Honest+dividing might be high because heartbreak is literally fracturing. But also honest+uniting could be moderate because shared heartbreak brings people together authentically (support groups). Performed+dividing might be low.\n\nLet's approximate: maybe honest+dividing is highest, then honest+uniting, then performed+uniting, then performed+dividing. Or perhaps honest+uniting is highest because the audience is empathetic? But compare to therapy: therapy is about healing, so uniting is high. Heartbreak is about breaking, so dividing might be higher.\n\nWe can also consider that \"heartbreak\" could be used in political discourse (e.g., \"heartbreak in America\") but without context, it's ambiguous.\n\nWe need to produce a JSON object with four probabilities summing to 1. Use at least three decimals when needed. We can choose numbers like:\nhonest+dividing: 0.45\nhonest+uniting: 0.35\nperformed+uniting: 0.15\nperformed+dividing: 0.05\nSum = 1.0. But we should maybe base on patterns: For therapy, honest+uniting 0.518, honest+dividing 0.162, performed+uniting 0.218, performed+dividing 0.102. For heartbreak, shift weight from uniting to dividing. So maybe honest+dividing 0.418, honest+uniting 0.318, performed+uniting 0.158, performed+dividing 0.106? That sums to 1.0. But we can adjust.\n\nAlternatively, maybe heartbreak is seen as more performative because people post about heartbreak on social media for attention (performed+uniting? false unity among us? \"we're all heartbroken\" as a meme). Could be performed+uniting moderate.\n\nLet's think of the quadrants definitions again:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHeartbreak as a shared cultural trope might create a false sense of unity (\"we've all been there\") -> performed+uniting. But also authentically brings people together via empathy -> honest+uniting. It fractures relationships truthfully -> honest+dividing. Deliberately exploiting divisions? Maybe in media they use heartbreak stories to drive clicks/divisions? Less likely.\n\nGiven the examples, the audience seems to assign near-zero to performed+dividing for some prompts (Burning Man 0.027, Same-sex 0.027) but therapy 0.102. So performed+dividing is usually small. Performed+uniting can be huge (Burning Man) or tiny (Same-sex). Honest+uniting can be medium to high. Honest+dividing can be medium (Same-sex 0.327, therapy 0.162).\n\nFor heartbreak, I'd guess:\nperformed+uniting: 0.2 (some false unity)\nhonest+uniting: 0.3 (some authentic bonding)\nperformed+dividing: 0.1 (some exploitation)\nhonest+dividing: 0.4 (truthful fracture)\n\nSum = 1.0. Let's refine to three decimals: 0.200, 0.300, 0.100, 0.400.\n\nBut maybe honest+dividing should be higher, like 0.5, honest+uniting 0.25, performed+uniting 0.2, performed+dividing 0.05. Sum=1.0.\n\nWe need to decide. Since heartbreak is fundamentally about division (breakup), honest+dividing should be prominent. However, the word alone might also be used in contexts like \"heartbreak for the nation\" which unites. But the audience's interpretations from examples: they gave Burning Man (which is about community) as performed+uniting heavily, meaning they are skeptical of explicit unity claims. Heartbreak doesn't claim unity, so performed+uniting might be lower. Same-sex marriage had honest+uniting high because it's about love/rights. Heartbreak is opposite of love/union, so honest+uniting lower.\n\nI'll set:\nhonest+dividing: 0.487\nhonest+uniting: 0.313\nperformed+uniting: 0.150\nperformed+dividing: 0.050\nSum = 1.000. That's fine.\n\nBut we could also mimic the therapy distribution shifted: therapy: pu 0.218, hu 0.518, pd 0.102, hd 0.162. If we swap hu and hd partially: pu 0.218, hu 0.3, pd 0.102, hd 0.38 -> sum 1.0? 0.218+0.3+0.102+0.38=1.0. That's plausible. Let's use that: performed+uniting 0.218, honest+uniting 0.300, performed+dividing 0.102, honest+dividing 0.380. But we might want more rounding: 0.218, 0.300, 0.102, 0.380 sums to 1.000. That's okay.\n\nBut the instruction: \"Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can provide 0.218, 0.300, 0.102, 0.380. However, 0.300 is three decimals, fine.\n\nAlternatively, we could be more original. I think a reasonable prediction: heartbreak is personal but shared, so honest+dividing and honest+uniting both moderate, performed+uniting some, performed+dividing low.\n\nI'll go with:\n{\"performed+uniting\": 0.217, \"honest+uniting\": 0.316, \"performed+dividing\": 0.097, \"honest+dividing\": 0.370}\nSum = 0.217+0.316=0.533; +0.097=0.630; +0.370=1.000. Good.\n\nBut let's check if any example had performed+uniting around 0.2 and honest+dividing around 0.37? Not exactly. But it's fine.\n\nWe must return exactly a single JSON object only, no prose or code fences. So output:\n{\"performed+uniting\":0.217,\"honest+uniting\":0.316,\"performed+dividing\":0.097,\"honest+dividing\":0.370}\n\nMake sure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Use numeric probabilities.\n\nI'll produce that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"HEARTBREAK\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given historical examples:\n1. \"BURNING MAN\": performed+uniting 0.8967, honest+uniting 0.0367, performed+dividing 0.0267, honest+dividing 0.04. Submissions 300. So for Burning Man, the audience heavily saw it as performed+uniting (creating false unity). That's a festival that might be seen as fake unity.\n2. \"SAME-SEX MARRIAGE\": performed+uniting 0.0265, honest+uniting 0.6195, performed+dividing 0.0265, honest+dividing 0.3274. So mostly honest+uniting (bringing together authentically) and a significant honest+dividing (fracturing truthfully). That makes sense: same-sex marriage unites some, divides others truthfully.\n3. \"THERAPY\": performed+uniting 0.2178, honest+uniting 0.5182, performed+dividing 0.1023, honest+dividing 0.1617. So mostly honest+uniting, some performed+uniting, some honest+dividing.\n\nNow we need to estimate for \"HEARTBREAK\". Heartbreak is a personal emotional experience of loss, typically from romantic breakup. How would this audience interpret it in terms of these quadrants? The quadrants are about \"us\" (collective) - \"creating false unity among us\", \"bringing us together authentically\", \"exploiting our divisions deliberately\", \"fracturing us truthfully\". So it's about social dynamics, not just personal feeling. Heartbreak could be seen as something that fractures us truthfully (honest+dividing) because heartbreak is a real fracture in a relationship, and truthfully it divides people. Or it could be seen as bringing us together authentically (honest+uniting) because shared experience of heartbreak unites people in empathy. Or performed+uniting: creating false unity among us - maybe superficial solidarity about heartbreak (like \"we've all been heartbroken\" but fake). Or performed+dividing: exploiting divisions deliberately - maybe using heartbreak to drive people apart for clicks, etc.\n\nWe need to infer from the examples. The examples show that the audience tends to assign high probability to one or two quadrants based on the concept. For Burning Man (a communal event) they saw it as performed unity. For same-sex marriage (a social issue) they saw honest uniting and honest dividing. For therapy (personal improvement) they saw honest uniting mostly.\n\nHeartbreak is more like a personal emotional state but with social implications. It might be similar to therapy? Therapy was honest uniting 0.518, performed uniting 0.218, honest dividing 0.162, performed dividing 0.102. Heartbreak might be more on the dividing side because it's about breakup. But \"heartbreak\" as a word might evoke collective empathy: \"we are all heartbroken about something\" (e.g., social grief). However, the prompt is just the word \"HEARTBREAK\", not contextualized.\n\nWe should think about the generative art project Mixed Messages. Possibly the audience is prone to cynicism or certain patterns. The Burning Man example shows extreme performed+uniting (0.897) which is interesting: they interpreted Burning Man as creating false unity. That suggests for events that claim unity, they see through it. For same-sex marriage, they saw both authentic unity and truthful fracture. For therapy, authentic unity.\n\nHeartbreak is not an event that claims unity; it's a state of brokenness. So performed+uniting might be low because there's no obvious pretense of unity. Honest+dividing might be high because heartbreak is literally fracturing. But also honest+uniting could be moderate because shared heartbreak brings people together authentically (support groups). Performed+dividing might be low.\n\nLet's approximate: maybe honest+dividing is highest, then honest+uniting, then performed+uniting, then performed+dividing. Or perhaps honest+uniting is highest because the audience is empathetic? But compare to therapy: therapy is about healing, so uniting is high. Heartbreak is about breaking, so dividing might be higher.\n\nWe can also consider that \"heartbreak\" could be used in political discourse (e.g., \"heartbreak in America\") but without context, it's ambiguous.\n\nWe need to produce a JSON object with four probabilities summing to 1. Use at least three decimals when needed. We can choose numbers like:\nhonest+dividing: 0.45\nhonest+uniting: 0.35\nperformed+uniting: 0.15\nperformed+dividing: 0.05\nSum = 1.0. But we should maybe base on patterns: For therapy, honest+uniting 0.518, honest+dividing 0.162, performed+uniting 0.218, performed+dividing 0.102. For heartbreak, shift weight from uniting to dividing. So maybe honest+dividing 0.418, honest+uniting 0.318, performed+uniting 0.158, performed+dividing 0.106? That sums to 1.0. But we can adjust.\n\nAlternatively, maybe heartbreak is seen as more performative because people post about heartbreak on social media for attention (performed+uniting? false unity among us? \"we're all heartbroken\" as a meme). Could be performed+uniting moderate.\n\nLet's think of the quadrants definitions again:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nHeartbreak as a shared cultural trope might create a false sense of unity (\"we've all been there\") -> performed+uniting. But also authentically brings people together via empathy -> honest+uniting. It fractures relationships truthfully -> honest+dividing. Deliberately exploiting divisions? Maybe in media they use heartbreak stories to drive clicks/divisions? Less likely.\n\nGiven the examples, the audience seems to assign near-zero to performed+dividing for some prompts (Burning Man 0.027, Same-sex 0.027) but therapy 0.102. So performed+dividing is usually small. Performed+uniting can be huge (Burning Man) or tiny (Same-sex). Honest+uniting can be medium to high. Honest+dividing can be medium (Same-sex 0.327, therapy 0.162).\n\nFor heartbreak, I'd guess:\nperformed+uniting: 0.2 (some false unity)\nhonest+uniting: 0.3 (some authentic bonding)\nperformed+dividing: 0.1 (some exploitation)\nhonest+dividing: 0.4 (truthful fracture)\n\nSum = 1.0. Let's refine to three decimals: 0.200, 0.300, 0.100, 0.400.\n\nBut maybe honest+dividing should be higher, like 0.5, honest+uniting 0.25, performed+uniting 0.2, performed+dividing 0.05. Sum=1.0.\n\nWe need to decide. Since heartbreak is fundamentally about division (breakup), honest+dividing should be prominent. However, the word alone might also be used in contexts like \"heartbreak for the nation\" which unites. But the audience's interpretations from examples: they gave Burning Man (which is about community) as performed+uniting heavily, meaning they are skeptical of explicit unity claims. Heartbreak doesn't claim unity, so performed+uniting might be lower. Same-sex marriage had honest+uniting high because it's about love/rights. Heartbreak is opposite of love/union, so honest+uniting lower.\n\nI'll set:\nhonest+dividing: 0.487\nhonest+uniting: 0.313\nperformed+uniting: 0.150\nperformed+dividing: 0.050\nSum = 1.000. That's fine.\n\nBut we could also mimic the therapy distribution shifted: therapy: pu 0.218, hu 0.518, pd 0.102, hd 0.162. If we swap hu and hd partially: pu 0.218, hu 0.3, pd 0.102, hd 0.38 -> sum 1.0? 0.218+0.3+0.102+0.38=1.0. That's plausible. Let's use that: performed+uniting 0.218, honest+uniting 0.300, performed+dividing 0.102, honest+dividing 0.380. But we might want more rounding: 0.218, 0.300, 0.102, 0.380 sums to 1.000. That's okay.\n\nBut the instruction: \"Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can provide 0.218, 0.300, 0.102, 0.380. However, 0.300 is three decimals, fine.\n\nAlternatively, we could be more original. I think a reasonable prediction: heartbreak is personal but shared, so honest+dividing and honest+uniting both moderate, performed+uniting some, performed+dividing low.\n\nI'll go with:\n{\"performed+uniting\": 0.217, \"honest+uniting\": 0.316, \"performed+dividing\": 0.097, \"honest+dividing\": 0.370}\nSum = 0.217+0.316=0.533; +0.097=0.630; +0.370=1.000. Good.\n\nBut let's check if any example had performed+uniting around 0.2 and honest+dividing around 0.37? Not exactly. But it's fine.\n\nWe must return exactly a single JSON object only, no prose or code fences. So output:\n{\"performed+uniting\":0.217,\"honest+uniting\":0.316,\"performed+dividing\":0.097,\"honest+dividing\":0.370}\n\nMake sure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Use numeric probabilities.\n\nI'll produce that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 500,
+          "completion_tokens": 2440,
+          "total_tokens": 2940,
+          "cost": 0.00135432,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00135432,
+            "upstream_inference_prompt_cost": 0.000066,
+            "upstream_inference_completions_cost": 0.00128832
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2397,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 500,
+        "completion_tokens": 2440,
+        "total_tokens": 2940,
+        "cost": 0.00135432,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00135432,
+          "upstream_inference_prompt_cost": 0.000066,
+          "upstream_inference_completions_cost": 0.00128832
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2397,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 79,
+      "finishedAt": "2026-11-15T04:39:04.108Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 56
+      },
+      "observation": {
+        "ok": true,
+        "id": 56,
+        "prompt": "BURNING MAN",
+        "distribution": {
+          "performed+uniting": 0.8966666666666666,
+          "honest+uniting": 0.03666666666666667,
+          "performed+dividing": 0.02666666666666667,
+          "honest+dividing": 0.04
+        },
+        "submissions": 300,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 87
+      },
+      "observation": {
+        "ok": true,
+        "id": 87,
+        "prompt": "SAME-SEX MARRIAGE",
+        "distribution": {
+          "performed+uniting": 0.02654867256637168,
+          "honest+uniting": 0.6194690265486725,
+          "performed+dividing": 0.02654867256637168,
+          "honest+dividing": 0.3274336283185841
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 91
+      },
+      "observation": {
+        "ok": true,
+        "id": 91,
+        "prompt": "THERAPY",
+        "distribution": {
+          "performed+uniting": 0.21782178217821782,
+          "honest+uniting": 0.5181518151815182,
+          "performed+dividing": 0.10231023102310231,
+          "honest+dividing": 0.1617161716171617
+        },
+        "submissions": 303,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.217,
+          "honest+uniting": 0.316,
+          "performed+dividing": 0.097,
+          "honest+dividing": 0.37
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.217,
+      "honest+uniting": 0.316,
+      "performed+dividing": 0.097,
+      "honest+dividing": 0.37
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.019974473372781062,
+    "score": 99.00127633136094,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

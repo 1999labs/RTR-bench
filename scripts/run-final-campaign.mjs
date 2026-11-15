@@ -5,16 +5,25 @@ import fs from 'node:fs';import path from 'node:path';import assert from 'node:a
 import {fileURLToPath} from 'node:url';import {createHash} from 'node:crypto';import {execFileSync} from 'node:child_process';
 import {runLearnRoom} from '../src/tracks/learn-room/run.ts';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');process.chdir(root);
-const planFile='docs/final-campaign-shared-budget.json',planRaw=fs.readFileSync(planFile),plan=JSON.parse(planRaw);
+const file='results/final-8000/shared-campaign.json',lock=file+'.lock';
+const planFile=fs.existsSync(file)?JSON.parse(fs.readFileSync(file)).plan:'docs/final-campaign-shared-budget.json';
+assert.ok(['docs/final-campaign-shared-budget.json','docs/final-campaign-price-amendment.json','docs/final-campaign-provider-amendment.json'].includes(planFile));
+const planRaw=fs.readFileSync(planFile),plan=JSON.parse(planRaw);
 const hash=b=>createHash('sha256').update(b).digest('hex'),read=p=>JSON.parse(fs.readFileSync(p));
-const totalUnits=Math.floor(plan.limitUsd*1e9),file='results/final-8000/shared-campaign.json',lock=file+'.lock';
+const totalUnits=Math.floor(plan.limitUsd*1e9);
 const ledgerUnits=p=>{const entries=read(p).entries;assert.ok(entries.every(e=>Number.isSafeInteger(e.reservedUnits)&&e.reservedUnits>=0&&(e.chargedUnits===null||Number.isSafeInteger(e.chargedUnits)&&e.chargedUnits>=0)));return entries.reduce((s,e)=>s+(e.chargedUnits??e.reservedUnits),0);};
 const frozenUnits=()=>plan.closedRuns.reduce((sum,r)=>{const p=path.join(r.directory,'spending.json');assert.equal(hash(fs.readFileSync(p)),r.ledgerSha256,'Closed run changed');assert.equal(ledgerUnits(p),r.accountedUnits);return sum+r.accountedUnits;},0);
 assert.equal(plan.limitUsd,10);assert.equal(plan.authorizedModels.length,11);assert.equal(new Set(plan.remaining.map(m=>m.model)).size,plan.remaining.length);
 assert.ok(process.argv.slice(2).every(a=>a==='--run'||a==='--check'),'Use --check or --run');
 assert.equal(plan.protocol.maxTokens,8000);assert.equal(plan.protocol.budget,3);assert.equal(plan.protocol.maxModelCalls,8);
 if(!process.argv.includes('--run')){
- console.log(JSON.stringify({limitUsd:plan.limitUsd,openingAccountedUsd:frozenUnits()/1e9,remainingUsd:(totalUnits-frozenUnits())/1e9,remainingModels:plan.remaining.map(m=>m.model),mode:'offline check; no requests'},null,2));
+ const state=fs.existsSync(file)?read(file):{runs:[]};
+ const currentUnits=frozenUnits()+state.runs.reduce((sum,r)=>{
+  const dirs=r.directory?[r.directory]:fs.existsSync(r.output)?fs.readdirSync(r.output).map(d=>path.join(r.output,d)).filter(d=>fs.existsSync(path.join(d,'manifest.json'))&&read(path.join(d,'manifest.json')).config.spending?.limitUsd===r.limitUsd&&read(path.join(d,'manifest.json')).config.provider===r.provider):[];
+  assert.ok(dirs.length<=1);return sum+(dirs.length?ledgerUnits(path.join(dirs[0],'spending.json')):0);
+ },0);
+ assert.ok(currentUnits<=totalUnits);
+ console.log(JSON.stringify({limitUsd:plan.limitUsd,openingAccountedUsd:frozenUnits()/1e9,currentAccountedUsd:currentUnits/1e9,remainingUsd:(totalUnits-currentUnits)/1e9,remainingModels:plan.remaining.filter(m=>!state.runs.some(r=>r.model===m.model&&r.complete)).map(m=>m.model),mode:'offline check; no requests'},null,2));
  process.exit(0);
 }
 const fd=fs.openSync(lock,'wx');fs.writeFileSync(fd,String(process.pid));

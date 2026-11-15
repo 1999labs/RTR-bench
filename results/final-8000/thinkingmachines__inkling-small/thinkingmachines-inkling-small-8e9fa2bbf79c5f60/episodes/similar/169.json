@@ -1,0 +1,607 @@
+{
+  "day": 169,
+  "strategy": "similar",
+  "request": {
+    "model": "thinkingmachines/inkling-small",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"HONOR\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":44,\"prompt\":\"FLOOR PRICES\",\"distribution\":{\"performed+uniting\":0.44623655913978494,\"honest+uniting\":0.010752688172043012,\"performed+dividing\":0.2903225806451613,\"honest+dividing\":0.25268817204301075},\"submissions\":186},{\"id\":1,\"prompt\":\"THE INTERNET\",\"distribution\":{\"performed+uniting\":0.32608695652173914,\"honest+uniting\":0.06521739130434782,\"performed+dividing\":0.5543478260869565,\"honest+dividing\":0.05434782608695652},\"submissions\":92},{\"id\":2,\"prompt\":\"CONTENT CREATORS\",\"distribution\":{\"performed+uniting\":0.1320754716981132,\"honest+uniting\":0.09433962264150944,\"performed+dividing\":0.16981132075471697,\"honest+dividing\":0.6037735849056604},\"submissions\":53}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "deepinfra/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.44999999999999996,
+        "completion": 1.2,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T08:03:48.629Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.420, \"honest+uniting\": 0.070, \"performed+dividing\": 0.240, \"honest+dividing\": 0.270}",
+      "response": {
+        "id": "gen-1794729828-w9p397Pdbajy4No1JK0y",
+        "object": "chat.completion",
+        "created": 1794729828,
+        "model": "thinkingmachines/inkling-small",
+        "provider": "DeepInfra",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.420, \"honest+uniting\": 0.070, \"performed+dividing\": 0.240, \"honest+dividing\": 0.270}",
+              "refusal": null,
+              "reasoning": "We need parse: user asks: Predict distribution of responses from participants in Mixed Messages, generative art project. Audience interpretations, not objective labels. Word: \"HONOR\". Estimate share of audience's submissions in each quadrant: performed+uniting, honest+uniting, performed+dividing, honest+dividing.\n\nWe have historical examples from same audience: id44 FLOOR PRICES, id1 THE INTERNET, id2 CONTENT CREATORS. We need use observations to inform target prediction. Return only JSON with four probs sum 1.\n\nWe need think about semantics of word \"HONOR\". Likely evokes themes of respect, duty, tradition, maybe nationalism, toxic honor culture, etc. In context of \"Mixed Messages\" likely participants interpret whether message is performed (fake) or honest, uniting or dividing.\n\nWe have three prior distributions:\n\n- FLOOR PRICES: high performed+uniting (0.446), low honest+uniting (0.011), performed+dividing 0.290, honest+dividing 0.253.\n- THE INTERNET: performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054.\n- CONTENT CREATORS: performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170, honest+dividing 0.604.\n\nThese vary widely based on prompt. For \"HONOR\", likely strong emotional valence. Could be seen as performed+uniting? Honor as a concept used to create false unity (e.g., honor of nation, honor codes that enforce conformity). Also could be honest+dividing: honor as truthfully fracturing? Let's think.\n\nThe quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nSo for word \"HONOR\", interpretations might be: Honor is often invoked to unify people around shared values (but possibly performed/false). Also honor can be divisive: honor cultures lead to violence, tribalism; honest about dividing.\n\nWhich distribution likely? Let's examine patterns: For economic topic \"FLOOR PRICES\", high false unity (maybe \"housing market unites\"? Not sure). For \"THE INTERNET\", high performed+dividing (exploiting divisions). For \"CONTENT CREATORS\", high honest+dividing (truthfully fracturing? maybe because content creators reveal divisions).\n\n\"Honor\" is abstract moral concept. Could generate many \"performed+uniting\" because honor is used rhetorically to unite groups falsely (national honor, family honor). But also \"honest+dividing\" because honor codes honestly reflect divisions (e.g., honor killings, honor-based violence). We need allocate.\n\nLet's consider likely audience (maybe art project participants are critical, likely see messages as performed and dividing? But not sure). The prior average across three: performed+uniting avg ~0.301, honest+uniting ~0.057, performed+dividing ~0.338, honest+dividing ~0.304. So roughly balanced between performed+uniting and performed+dividing and honest+dividing.\n\nFor \"HONOR\", because it's a virtue word, maybe more uniting? But the \"performed\" aspect might dominate because honor is performative. Let's think: The phrase \"HONOR\" as a word likely interpreted as a call to honor something, which could be unifying but false. However, honor is also about integrity, so honest+uniting possible.\n\nWe need choose numbers summing to 1, with at least three decimals.\n\nPotential: performed+uniting: 0.35, honest+uniting: 0.15, performed+dividing: 0.25, honest+dividing: 0.25. Sum 1.00.\n\nBut we want to be informed by observations: The three examples have honest+uniting always low (0.01-0.09). So likely honest+uniting is small for HONOR too. Yes, across all three, honest+uniting is lowest. So keep it low, maybe 0.08.\n\nThen performed+uniting ranges 0.13-0.45. Performed+dividing 0.17-0.55. Honest+dividing 0.05-0.60.\n\nWhich quadrants are high depends on topic. \"HONOR\" is similar to \"CONTENT CREATORS\"? Not exactly.\n\nLet's think: The word \"HONOR\" might be seen as \"performed+uniting\" because invoking honor is a way to create false unity (like \"honor the flag\", \"honor our troops\"). That seems plausible: political use of honor to unify. So high performed+uniting.\n\nBut also honor can be divisive: \"honor killings\", \"blood honor\", etc. So honest+dividing maybe.\n\nWhich is more likely dominant? Let's craft: performed+uniting: 0.40, honest+uniting: 0.08, performed+dividing: 0.27, honest+dividing: 0.25. Sum = 1.00.\n\nCheck: 0.40+0.08=0.48, +0.27=0.75, +0.25=1.00. Good.\n\nUse three decimals: 0.400, 0.080, 0.270, 0.250. Sum exactly 1.\n\nBut maybe performed+dividing higher? Let's consider \"HONOR\" as a word that exposes division truthfully: because honor is tied to tribal identity, so it fractures us truthfully. That would be honest+dividing high. But the prompt is \"Mixed Messages\" - maybe each word is ambiguous. The audience decides.\n\nGiven historical: content creators -> high honest+dividing (0.60). The internet -> high performed+dividing (0.55). Floor prices -> high performed+uniting (0.45). So each prompt maps to a dominant quadrant differently.\n\nWhat characteristic of prompt drives it? \"FLOOR PRICES\" maybe economic, perceived as false unity? \"THE INTERNET\" as tool dividing. \"CONTENT CREATORS\" as honest about division.\n\n\"Honor\" is a moral/values word. Could be interpreted as \"performed+uniting\" because honor is a social construct used to unify. Or \"honest+dividing\" because honor reveals true fractures.\n\nWhich mapping is most appropriate? Let's examine semantics: \"Creating false unity among us\" - e.g., \"honor\" used to say we are all honorable, united by shared values, but it's performative. \"Exploiting our divisions, deliberately\" - e.g., \"honor\" used to shame those who disagree, dividing groups deliberately.\n\nI think the most likely dominant is performed+uniting, because \"honor\" is often invoked in rhetoric to bring people together around a common cause, but it's often a performance (like honor codes, honor cultures, honor society). The second highest could be honest+dividing, because honor also truthfully reflects existing tribal divisions.\n\nLet's set: performed+uniting 0.42, honest+uniting 0.07, performed+dividing 0.24, honest+dividing 0.27. Sum = 1.00.\n\nUse 3 decimals: 0.420, 0.070, 0.240, 0.270. Sum 1.000.\n\nYes.\n\nMake sure no prose. Return JSON.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need parse: user asks: Predict distribution of responses from participants in Mixed Messages, generative art project. Audience interpretations, not objective labels. Word: \"HONOR\". Estimate share of audience's submissions in each quadrant: performed+uniting, honest+uniting, performed+dividing, honest+dividing.\n\nWe have historical examples from same audience: id44 FLOOR PRICES, id1 THE INTERNET, id2 CONTENT CREATORS. We need use observations to inform target prediction. Return only JSON with four probs sum 1.\n\nWe need think about semantics of word \"HONOR\". Likely evokes themes of respect, duty, tradition, maybe nationalism, toxic honor culture, etc. In context of \"Mixed Messages\" likely participants interpret whether message is performed (fake) or honest, uniting or dividing.\n\nWe have three prior distributions:\n\n- FLOOR PRICES: high performed+uniting (0.446), low honest+uniting (0.011), performed+dividing 0.290, honest+dividing 0.253.\n- THE INTERNET: performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054.\n- CONTENT CREATORS: performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170, honest+dividing 0.604.\n\nThese vary widely based on prompt. For \"HONOR\", likely strong emotional valence. Could be seen as performed+uniting? Honor as a concept used to create false unity (e.g., honor of nation, honor codes that enforce conformity). Also could be honest+dividing: honor as truthfully fracturing? Let's think.\n\nThe quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nSo for word \"HONOR\", interpretations might be: Honor is often invoked to unify people around shared values (but possibly performed/false). Also honor can be divisive: honor cultures lead to violence, tribalism; honest about dividing.\n\nWhich distribution likely? Let's examine patterns: For economic topic \"FLOOR PRICES\", high false unity (maybe \"housing market unites\"? Not sure). For \"THE INTERNET\", high performed+dividing (exploiting divisions). For \"CONTENT CREATORS\", high honest+dividing (truthfully fracturing? maybe because content creators reveal divisions).\n\n\"Honor\" is abstract moral concept. Could generate many \"performed+uniting\" because honor is used rhetorically to unite groups falsely (national honor, family honor). But also \"honest+dividing\" because honor codes honestly reflect divisions (e.g., honor killings, honor-based violence). We need allocate.\n\nLet's consider likely audience (maybe art project participants are critical, likely see messages as performed and dividing? But not sure). The prior average across three: performed+uniting avg ~0.301, honest+uniting ~0.057, performed+dividing ~0.338, honest+dividing ~0.304. So roughly balanced between performed+uniting and performed+dividing and honest+dividing.\n\nFor \"HONOR\", because it's a virtue word, maybe more uniting? But the \"performed\" aspect might dominate because honor is performative. Let's think: The phrase \"HONOR\" as a word likely interpreted as a call to honor something, which could be unifying but false. However, honor is also about integrity, so honest+uniting possible.\n\nWe need choose numbers summing to 1, with at least three decimals.\n\nPotential: performed+uniting: 0.35, honest+uniting: 0.15, performed+dividing: 0.25, honest+dividing: 0.25. Sum 1.00.\n\nBut we want to be informed by observations: The three examples have honest+uniting always low (0.01-0.09). So likely honest+uniting is small for HONOR too. Yes, across all three, honest+uniting is lowest. So keep it low, maybe 0.08.\n\nThen performed+uniting ranges 0.13-0.45. Performed+dividing 0.17-0.55. Honest+dividing 0.05-0.60.\n\nWhich quadrants are high depends on topic. \"HONOR\" is similar to \"CONTENT CREATORS\"? Not exactly.\n\nLet's think: The word \"HONOR\" might be seen as \"performed+uniting\" because invoking honor is a way to create false unity (like \"honor the flag\", \"honor our troops\"). That seems plausible: political use of honor to unify. So high performed+uniting.\n\nBut also honor can be divisive: \"honor killings\", \"blood honor\", etc. So honest+dividing maybe.\n\nWhich is more likely dominant? Let's craft: performed+uniting: 0.40, honest+uniting: 0.08, performed+dividing: 0.27, honest+dividing: 0.25. Sum = 1.00.\n\nCheck: 0.40+0.08=0.48, +0.27=0.75, +0.25=1.00. Good.\n\nUse three decimals: 0.400, 0.080, 0.270, 0.250. Sum exactly 1.\n\nBut maybe performed+dividing higher? Let's consider \"HONOR\" as a word that exposes division truthfully: because honor is tied to tribal identity, so it fractures us truthfully. That would be honest+dividing high. But the prompt is \"Mixed Messages\" - maybe each word is ambiguous. The audience decides.\n\nGiven historical: content creators -> high honest+dividing (0.60). The internet -> high performed+dividing (0.55). Floor prices -> high performed+uniting (0.45). So each prompt maps to a dominant quadrant differently.\n\nWhat characteristic of prompt drives it? \"FLOOR PRICES\" maybe economic, perceived as false unity? \"THE INTERNET\" as tool dividing. \"CONTENT CREATORS\" as honest about division.\n\n\"Honor\" is a moral/values word. Could be interpreted as \"performed+uniting\" because honor is a social construct used to unify. Or \"honest+dividing\" because honor reveals true fractures.\n\nWhich mapping is most appropriate? Let's examine semantics: \"Creating false unity among us\" - e.g., \"honor\" used to say we are all honorable, united by shared values, but it's performative. \"Exploiting our divisions, deliberately\" - e.g., \"honor\" used to shame those who disagree, dividing groups deliberately.\n\nI think the most likely dominant is performed+uniting, because \"honor\" is often invoked in rhetoric to bring people together around a common cause, but it's often a performance (like honor codes, honor cultures, honor society). The second highest could be honest+dividing, because honor also truthfully reflects existing tribal divisions.\n\nLet's set: performed+uniting 0.42, honest+uniting 0.07, performed+dividing 0.24, honest+dividing 0.27. Sum = 1.00.\n\nUse 3 decimals: 0.420, 0.070, 0.240, 0.270. Sum 1.000.\n\nYes.\n\nMake sure no prose. Return JSON.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 495,
+          "completion_tokens": 1649,
+          "total_tokens": 2144,
+          "cost": 0.00215675,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 128,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00215675,
+            "upstream_inference_prompt_cost": 0.00017795,
+            "upstream_inference_completions_cost": 0.0019788
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1584,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "DeepInfra",
+      "usage": {
+        "prompt_tokens": 495,
+        "completion_tokens": 1649,
+        "total_tokens": 2144,
+        "cost": 0.00215675,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 128,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00215675,
+          "upstream_inference_prompt_cost": 0.00017795,
+          "upstream_inference_completions_cost": 0.0019788
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1584,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 129,
+      "finishedAt": "2026-11-15T08:03:53.794Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 44
+      },
+      "observation": {
+        "ok": true,
+        "id": 44,
+        "prompt": "FLOOR PRICES",
+        "distribution": {
+          "performed+uniting": 0.44623655913978494,
+          "honest+uniting": 0.010752688172043012,
+          "performed+dividing": 0.2903225806451613,
+          "honest+dividing": 0.25268817204301075
+        },
+        "submissions": 186,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 1
+      },
+      "observation": {
+        "ok": true,
+        "id": 1,
+        "prompt": "THE INTERNET",
+        "distribution": {
+          "performed+uniting": 0.32608695652173914,
+          "honest+uniting": 0.06521739130434782,
+          "performed+dividing": 0.5543478260869565,
+          "honest+dividing": 0.05434782608695652
+        },
+        "submissions": 92,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 2
+      },
+      "observation": {
+        "ok": true,
+        "id": 2,
+        "prompt": "CONTENT CREATORS",
+        "distribution": {
+          "performed+uniting": 0.1320754716981132,
+          "honest+uniting": 0.09433962264150944,
+          "performed+dividing": 0.16981132075471697,
+          "honest+dividing": 0.6037735849056604
+        },
+        "submissions": 53,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.42,
+          "honest+uniting": 0.07,
+          "performed+dividing": 0.24,
+          "honest+dividing": 0.27
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.42,
+      "honest+uniting": 0.07,
+      "performed+dividing": 0.24,
+      "honest+dividing": 0.27
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.19052505776097453,
+    "score": 90.47374711195127,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

@@ -1,0 +1,607 @@
+{
+  "day": 142,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"ONSHORING\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":11,\"prompt\":\"OPEN RELATIONSHIPS\",\"distribution\":{\"performed+uniting\":0.08132530120481928,\"honest+uniting\":0.08132530120481928,\"performed+dividing\":0.07981927710843373,\"honest+dividing\":0.7575301204819277},\"submissions\":664},{\"id\":82,\"prompt\":\"RECYCLING\",\"distribution\":{\"performed+uniting\":0,\"honest+uniting\":0.75,\"performed+dividing\":0,\"honest+dividing\":0.25},\"submissions\":52},{\"id\":56,\"prompt\":\"BURNING MAN\",\"distribution\":{\"performed+uniting\":0.8966666666666666,\"honest+uniting\":0.03666666666666667,\"performed+dividing\":0.02666666666666667,\"honest+dividing\":0.04},\"submissions\":300}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:51:16.486Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.100,\"honest+uniting\":0.780,\"performed+dividing\":0.040,\"honest+dividing\":0.080}",
+      "response": {
+        "id": "gen-1794718276-NTJ7fUs6NeNjzNq3BsCn",
+        "object": "chat.completion",
+        "created": 1794718276,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.100,\"honest+uniting\":0.780,\"performed+dividing\":0.040,\"honest+dividing\":0.080}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"ONSHORING\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"OPEN RELATIONSHIPS\": performed+uniting 0.081, honest+uniting 0.081, performed+dividing 0.080, honest+dividing 0.758. Submissions 664. So heavily honest+dividing (fracturing us truthfully). That suggests \"open relationships\" interpreted as fracturing us truthfully (maybe honest about dividing?).\n2. \"RECYCLING\": performed+uniting 0, honest+uniting 0.75, performed+dividing 0, honest+dividing 0.25. So mostly honest+uniting (bringing us together authentically). Submissions 52.\n3. \"BURNING MAN\": performed+uniting 0.897, honest+uniting 0.037, performed+dividing 0.027, honest+dividing 0.04. So heavily performed+uniting (creating false unity among us). Submissions 300.\n\nWe need to estimate share for \"ONSHORING\". Onshoring is a business/economic term: moving offshore operations back to the home country. It's a political/economic concept. The audience tends to interpret words in a social/relational way (us/them, unity/division). For \"onshoring\", likely interpretations: bringing jobs back home, thus \"bringing us together authentically\" (honest+uniting) because it's about national unity, bringing production home, maybe uniting workers? Or could be \"performed+uniting\" (false unity) if seen as political rhetoric that creates false unity (e.g., politicians saying they bring jobs back but it's superficial). Or \"honest+dividing\" if it's about fracturing global supply chains, truthfully separating from others? Or \"performed+dividing\" exploiting divisions deliberately (e.g., nationalist exploitation).\n\nWe need to infer from examples. The examples show varied responses: \"OPEN RELATIONSHIPS\" -> honest dividing (truthfully fracturing us). \"RECYCLING\" -> honest uniting (authentically bringing together). \"BURNING MAN\" -> performed uniting (false unity). So the audience's interpretations depend on the word's connotations.\n\nOnshoring: similar to \"reshoring\". It implies reversing offshoring. It's often used in political contexts about bringing manufacturing back, which could be seen as unifying a nation (us vs them? Actually it's about \"us\" bringing back to home, so could be uniting domestically). But also could be seen as dividing from other countries (honest dividing? fracturing global ties truthfully). Or performed uniting: politicians pretend to unite by onshoring but it's fake. Or performed dividing: deliberately exploiting divisions by blaming foreigners.\n\nWe need to assign probabilities. Since we have only three examples, we can't do heavy ML. But we can reason: The word \"onshoring\" is more like \"recycling\" (a positive-ish activity that brings things back/home) or like \"burning man\" (a cultural event with fake unity) or \"open relationships\" (personal fracturing). Onshoring is economic policy. The audience might be cynical about such terms? In Mixed Messages, the interpretations are often subversive or critical. For \"burning man\" they saw false unity (performed uniting) heavily. For \"open relationships\" they saw honest fracturing. For \"recycling\" they saw honest uniting. So maybe words that sound communal but are actually exclusive/performative get performed uniting; words about personal freedom get honest dividing; words about environmental good get honest uniting.\n\nOnshoring: sounds like bringing back, could be seen as good for local community (honest uniting) or as nationalist/protective (maybe dividing from others). But \"onshoring\" is a corporate term, not grassroots. Might be perceived as performed uniting (companies saying they bring jobs back to create false unity) or honest dividing (truthfully pulling back from global community, fracturing ties). Let's think of the audience: participants in Mixed Messages generative art project. They likely enjoy irony and deconstruction. The prompt word is given, they submit interpretations into quadrants. The historical distributions show that for some words, one quadrant dominates. For \"OPEN RELATIONSHIPS\", honest+dividing 0.758. For \"RECYCLING\", honest+uniting 0.75. For \"BURNING MAN\", performed+uniting 0.897. So each word tends to have a dominant interpretation, with others small.\n\nWe need to predict for \"ONSHORING\". I'd guess it's similar to \"RECYCLING\" in that it's about bringing back / restoring, so honest+uniting might be high. But onshoring is more about national economic policy, could be seen as performative (like politicians promising to onshore but not really). However, \"BURNING MAN\" is a festival, they saw performed uniting (fake unity). Onshoring might be more like a political slogan, so performed uniting could be high. But also \"onshoring\" literally means moving operations to home country, which could be interpreted as \"bringing us together authentically\" (jobs back home). Yet the audience might be skeptical.\n\nLet's examine the exact phrasing: performed+uniting: creating false unity among us. honest+uniting: bringing us together, authentically. performed+dividing: exploiting our divisions, deliberately. honest+dividing: fracturing us, truthfully.\n\nFor \"onshoring\", the concept of \"us\" could be the nation. If a company onshores, it brings production to \"us\", potentially uniting workers and consumers. If it's a genuine move, honest+uniting. If it's a PR stunt, performed+uniting. If it's done to exclude others, honest+dividing (truthfully fracturing global community) or performed+dividing (exploiting divisions for profit).\n\nGiven the examples, \"RECYCLING\" got 0 performed uniting, 0 performed dividing, 0.75 honest uniting, 0.25 honest dividing. So they saw recycling as authentically bringing together (maybe materials) and some fracturing? Actually honest dividing 0.25 maybe truthfully fracturing waste? Not sure.\n\n\"BURNING MAN\" got 0.897 performed uniting, others tiny. So they saw it as fake unity.\n\n\"OPEN RELATIONSHIPS\" got 0.758 honest dividing, others ~0.08 each. So they saw it as truthfully fracturing us (relationships break traditional unity).\n\nThus, the audience seems to pick a primary lens: for relationship -> honest dividing; for recycling -> honest uniting; for burning man -> performed uniting.\n\nWhat lens for onshoring? It's a word about relocation of industry. Could be seen as economic nationalism: \"bringing jobs home\" -> uniting us, but maybe performed because it's often rhetoric. I'd lean performed+uniting moderately high, but also honest+dividing maybe because it fractures international relations. However, we need a single distribution.\n\nMaybe we can think of semantic similarity: \"Onshoring\" is like \"reshoring\", similar to \"bringing back home\". \"Recycling\" is also bringing back materials. So maybe honest+uniting is dominant. But \"onshoring\" has a protectionist vibe, which could be dividing. Yet \"recycling\" had 0.25 honest dividing, so some dividing.\n\nAlternatively, \"onshoring\" could be like \"offshore\" inverse. \"Offshoring\" might be honest dividing (sending away fracturing). But we don't have that.\n\nGiven the lack of strong signal, we could produce a distribution that reflects uncertainty but with a plausible dominant quadrant. I think performed+uniting might be plausible because corporate onshoring is often a PR move (false unity). But \"BURNING MAN\" already captured that niche. Could be honest+uniting because it's about restoring local production.\n\nLet's consider the submissions counts: OPEN RELATIONSHIPS 664 (large), RECYCLING 52 (small), BURNING MAN 300. So the large sample for OPEN RELATIONSHIPS gave a strong skew to honest dividing. The small sample for RECYCLING gave exact 0.75/0.25 maybe due to few submissions (52). BURNING MAN 300 gave 0.897 performed uniting.\n\nFor ONSHORING, we don't know submissions, but we just need probabilities.\n\nI'll hypothesize that onshoring is interpreted as \"bringing us together authentically\" (honest+uniting) because it's about returning resources/home, similar to recycling. But also there is a performative aspect. Let's assign: honest+uniting 0.6, performed+uniting 0.2, honest+dividing 0.15, performed+dividing 0.05. Sum=1.0. But we need at least three decimals if needed.\n\nAlternatively, maybe the audience is more cynical: performed+uniting 0.5, honest+uniting 0.2, performed+dividing 0.2, honest+dividing 0.1.\n\nWe can look at word structure: \"ONSHORING\" is a compound with \"ON\" + \"SHORING\" (like shore up). Shoring up is supporting. So it could be seen as supporting unity. Hmm.\n\nGiven the instruction: \"These are this audience's interpretations, not objective labels.\" So we predict based on audience's likely subjective take. The examples show they often choose the most ironic/subversive reading: Burning Man (a festival of radical self-expression and community) they called false unity; Open Relationships (often seen as freeing) they called fracturing truthfully; Recycling (usually good) they called authentic unity. So they are not uniformly cynical; they matched the word's essence: Recycling is genuinely about reusing materials (uniting), Open Relationships genuinely change relationship structures (dividing), Burning Man is a temporary illusion of community (performed unity). So for Onshoring: the essence is moving business back home. Is that genuinely uniting? It could be seen as bringing jobs back, which is authentically bringing us together (honest uniting). Or is it a corporate buzzword that creates illusion of patriotic unity (performed uniting)? The word itself is a business strategy term, not a grassroots movement. So likely performed uniting (like a PR move) or honest dividing (actually pulling away from global community). I think the audience might see it as performed uniting because it's a corporate term that sounds like it helps the homeland but may be superficial. However, Burning Man already got performed uniting heavily; they might not repeat same pattern. But each word is independent.\n\nMaybe we should consider that \"onshoring\" is less about community and more about economic boundaries, so honest+dividing could be significant: it truthfully fractures global supply chains. That is literally what it does: it moves production back home, thus dividing from other countries. So honest+dividing might be high. For OPEN RELATIONSHIPS, honest dividing was high because it truthfully fractures couples' exclusivity. For ONSHORING, honest dividing fractures international ties. So maybe honest+dividing is dominant. But onshoring also could be seen as uniting domestically. The quadrants are about \"us\" - \"among us\" or \"fracturing us\". The phrase \"fracturing us\" means dividing the in-group. For onshoring, does it fracture \"us\" (the home country) or fracture relations with others? The quadrants are about \"us\" internally: uniting among us or dividing among us. So honest+dividing means fracturing the internal community truthfully. Onshoring might not fracture internally; it might unite internally. So honest+dividing would be if onshoring actually causes internal division (e.g., protects some workers but hurts others). But more likely it's seen as uniting internally. So honest+uniting or performed+uniting.\n\nThus, likely uniting quadrant dominates. Between honest and performed: is onshoring authentic? It's a real economic action, not just a performance. So honest+uniting maybe. Recycling got honest+uniting. Onshoring similar real action. So I'll go with honest+uniting dominant.\n\nLet's set: honest+uniting: 0.65, performed+uniting: 0.15, honest+dividing: 0.15, performed+dividing: 0.05. Sum=1.0. But we need to output JSON with exactly those keys.\n\nMaybe we should mimic the style: they used decimals like 0.08132530120481928 etc. But we can use simpler.\n\nI'll produce: {\"performed+uniting\":0.15,\"honest+uniting\":0.65,\"performed+dividing\":0.05,\"honest+dividing\":0.15} sum=1.0.\n\nBut check: performed+uniting + honest+uniting = 0.8 uniting; dividing 0.2. That seems plausible.\n\nAlternatively, to be safe, we could spread more: performed+uniting 0.2, honest+uniting 0.5, performed+dividing 0.1, honest+dividing 0.2.\n\nI think honest+uniting should be highest. Let's finalize with 0.6, 0.2, 0.1, 0.1? Actually sum: 0.2+0.6+0.1+0.1=1.0. That's fine.\n\nBut we need at least three decimal places when needed. We can use 0.200 etc.\n\nI'll output: {\"performed+uniting\":0.200,\"honest+uniting\":0.600,\"performed+dividing\":0.100,\"honest+dividing\":0.100}\n\nBut maybe more realistic: from examples, dominant quadrant often >0.75. So maybe honest+uniting 0.75, others 0.083 each? Like open relationships had 0.758 and ~0.081 each. Recycling had 0.75 and 0.25. Burning man 0.897 and ~0.03-0.04. So pattern: one quadrant ~0.75-0.9, others small. So for onshoring, pick honest+uniting 0.75, performed+uniting 0.083, performed+dividing 0.083, honest+dividing 0.084? Sum ~1.0. But recycling had only two non-zero. Could be similar.\n\nI'll choose honest+uniting 0.75, performed+uniting 0.05, performed+dividing 0.05, honest+dividing 0.15. Sum=1.0.\n\nBetter to have small ones not too equal. Let's do: honest+uniting 0.78, performed+uniting 0.10, performed+dividing 0.04, honest+dividing 0.08. Sum=1.0.\n\nI'll go with: {\"performed+uniting\":0.100,\"honest+uniting\":0.780,\"performed+dividing\":0.040,\"honest+dividing\":0.080}\n\nCheck sum: 0.1+0.78=0.88, +0.04=0.92, +0.08=1.0. Good.\n\nNo other keys. Return only JSON object.\n\nThus final answer.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"ONSHORING\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"OPEN RELATIONSHIPS\": performed+uniting 0.081, honest+uniting 0.081, performed+dividing 0.080, honest+dividing 0.758. Submissions 664. So heavily honest+dividing (fracturing us truthfully). That suggests \"open relationships\" interpreted as fracturing us truthfully (maybe honest about dividing?).\n2. \"RECYCLING\": performed+uniting 0, honest+uniting 0.75, performed+dividing 0, honest+dividing 0.25. So mostly honest+uniting (bringing us together authentically). Submissions 52.\n3. \"BURNING MAN\": performed+uniting 0.897, honest+uniting 0.037, performed+dividing 0.027, honest+dividing 0.04. So heavily performed+uniting (creating false unity among us). Submissions 300.\n\nWe need to estimate share for \"ONSHORING\". Onshoring is a business/economic term: moving offshore operations back to the home country. It's a political/economic concept. The audience tends to interpret words in a social/relational way (us/them, unity/division). For \"onshoring\", likely interpretations: bringing jobs back home, thus \"bringing us together authentically\" (honest+uniting) because it's about national unity, bringing production home, maybe uniting workers? Or could be \"performed+uniting\" (false unity) if seen as political rhetoric that creates false unity (e.g., politicians saying they bring jobs back but it's superficial). Or \"honest+dividing\" if it's about fracturing global supply chains, truthfully separating from others? Or \"performed+dividing\" exploiting divisions deliberately (e.g., nationalist exploitation).\n\nWe need to infer from examples. The examples show varied responses: \"OPEN RELATIONSHIPS\" -> honest dividing (truthfully fracturing us). \"RECYCLING\" -> honest uniting (authentically bringing together). \"BURNING MAN\" -> performed uniting (false unity). So the audience's interpretations depend on the word's connotations.\n\nOnshoring: similar to \"reshoring\". It implies reversing offshoring. It's often used in political contexts about bringing manufacturing back, which could be seen as unifying a nation (us vs them? Actually it's about \"us\" bringing back to home, so could be uniting domestically). But also could be seen as dividing from other countries (honest dividing? fracturing global ties truthfully). Or performed uniting: politicians pretend to unite by onshoring but it's fake. Or performed dividing: deliberately exploiting divisions by blaming foreigners.\n\nWe need to assign probabilities. Since we have only three examples, we can't do heavy ML. But we can reason: The word \"onshoring\" is more like \"recycling\" (a positive-ish activity that brings things back/home) or like \"burning man\" (a cultural event with fake unity) or \"open relationships\" (personal fracturing). Onshoring is economic policy. The audience might be cynical about such terms? In Mixed Messages, the interpretations are often subversive or critical. For \"burning man\" they saw false unity (performed uniting) heavily. For \"open relationships\" they saw honest fracturing. For \"recycling\" they saw honest uniting. So maybe words that sound communal but are actually exclusive/performative get performed uniting; words about personal freedom get honest dividing; words about environmental good get honest uniting.\n\nOnshoring: sounds like bringing back, could be seen as good for local community (honest uniting) or as nationalist/protective (maybe dividing from others). But \"onshoring\" is a corporate term, not grassroots. Might be perceived as performed uniting (companies saying they bring jobs back to create false unity) or honest dividing (truthfully pulling back from global community, fracturing ties). Let's think of the audience: participants in Mixed Messages generative art project. They likely enjoy irony and deconstruction. The prompt word is given, they submit interpretations into quadrants. The historical distributions show that for some words, one quadrant dominates. For \"OPEN RELATIONSHIPS\", honest+dividing 0.758. For \"RECYCLING\", honest+uniting 0.75. For \"BURNING MAN\", performed+uniting 0.897. So each word tends to have a dominant interpretation, with others small.\n\nWe need to predict for \"ONSHORING\". I'd guess it's similar to \"RECYCLING\" in that it's about bringing back / restoring, so honest+uniting might be high. But onshoring is more about national economic policy, could be seen as performative (like politicians promising to onshore but not really). However, \"BURNING MAN\" is a festival, they saw performed uniting (fake unity). Onshoring might be more like a political slogan, so performed uniting could be high. But also \"onshoring\" literally means moving operations to home country, which could be interpreted as \"bringing us together authentically\" (jobs back home). Yet the audience might be skeptical.\n\nLet's examine the exact phrasing: performed+uniting: creating false unity among us. honest+uniting: bringing us together, authentically. performed+dividing: exploiting our divisions, deliberately. honest+dividing: fracturing us, truthfully.\n\nFor \"onshoring\", the concept of \"us\" could be the nation. If a company onshores, it brings production to \"us\", potentially uniting workers and consumers. If it's a genuine move, honest+uniting. If it's a PR stunt, performed+uniting. If it's done to exclude others, honest+dividing (truthfully fracturing global community) or performed+dividing (exploiting divisions for profit).\n\nGiven the examples, \"RECYCLING\" got 0 performed uniting, 0 performed dividing, 0.75 honest uniting, 0.25 honest dividing. So they saw recycling as authentically bringing together (maybe materials) and some fracturing? Actually honest dividing 0.25 maybe truthfully fracturing waste? Not sure.\n\n\"BURNING MAN\" got 0.897 performed uniting, others tiny. So they saw it as fake unity.\n\n\"OPEN RELATIONSHIPS\" got 0.758 honest dividing, others ~0.08 each. So they saw it as truthfully fracturing us (relationships break traditional unity).\n\nThus, the audience seems to pick a primary lens: for relationship -> honest dividing; for recycling -> honest uniting; for burning man -> performed uniting.\n\nWhat lens for onshoring? It's a word about relocation of industry. Could be seen as economic nationalism: \"bringing jobs home\" -> uniting us, but maybe performed because it's often rhetoric. I'd lean performed+uniting moderately high, but also honest+dividing maybe because it fractures international relations. However, we need a single distribution.\n\nMaybe we can think of semantic similarity: \"Onshoring\" is like \"reshoring\", similar to \"bringing back home\". \"Recycling\" is also bringing back materials. So maybe honest+uniting is dominant. But \"onshoring\" has a protectionist vibe, which could be dividing. Yet \"recycling\" had 0.25 honest dividing, so some dividing.\n\nAlternatively, \"onshoring\" could be like \"offshore\" inverse. \"Offshoring\" might be honest dividing (sending away fracturing). But we don't have that.\n\nGiven the lack of strong signal, we could produce a distribution that reflects uncertainty but with a plausible dominant quadrant. I think performed+uniting might be plausible because corporate onshoring is often a PR move (false unity). But \"BURNING MAN\" already captured that niche. Could be honest+uniting because it's about restoring local production.\n\nLet's consider the submissions counts: OPEN RELATIONSHIPS 664 (large), RECYCLING 52 (small), BURNING MAN 300. So the large sample for OPEN RELATIONSHIPS gave a strong skew to honest dividing. The small sample for RECYCLING gave exact 0.75/0.25 maybe due to few submissions (52). BURNING MAN 300 gave 0.897 performed uniting.\n\nFor ONSHORING, we don't know submissions, but we just need probabilities.\n\nI'll hypothesize that onshoring is interpreted as \"bringing us together authentically\" (honest+uniting) because it's about returning resources/home, similar to recycling. But also there is a performative aspect. Let's assign: honest+uniting 0.6, performed+uniting 0.2, honest+dividing 0.15, performed+dividing 0.05. Sum=1.0. But we need at least three decimals if needed.\n\nAlternatively, maybe the audience is more cynical: performed+uniting 0.5, honest+uniting 0.2, performed+dividing 0.2, honest+dividing 0.1.\n\nWe can look at word structure: \"ONSHORING\" is a compound with \"ON\" + \"SHORING\" (like shore up). Shoring up is supporting. So it could be seen as supporting unity. Hmm.\n\nGiven the instruction: \"These are this audience's interpretations, not objective labels.\" So we predict based on audience's likely subjective take. The examples show they often choose the most ironic/subversive reading: Burning Man (a festival of radical self-expression and community) they called false unity; Open Relationships (often seen as freeing) they called fracturing truthfully; Recycling (usually good) they called authentic unity. So they are not uniformly cynical; they matched the word's essence: Recycling is genuinely about reusing materials (uniting), Open Relationships genuinely change relationship structures (dividing), Burning Man is a temporary illusion of community (performed unity). So for Onshoring: the essence is moving business back home. Is that genuinely uniting? It could be seen as bringing jobs back, which is authentically bringing us together (honest uniting). Or is it a corporate buzzword that creates illusion of patriotic unity (performed uniting)? The word itself is a business strategy term, not a grassroots movement. So likely performed uniting (like a PR move) or honest dividing (actually pulling away from global community). I think the audience might see it as performed uniting because it's a corporate term that sounds like it helps the homeland but may be superficial. However, Burning Man already got performed uniting heavily; they might not repeat same pattern. But each word is independent.\n\nMaybe we should consider that \"onshoring\" is less about community and more about economic boundaries, so honest+dividing could be significant: it truthfully fractures global supply chains. That is literally what it does: it moves production back home, thus dividing from other countries. So honest+dividing might be high. For OPEN RELATIONSHIPS, honest dividing was high because it truthfully fractures couples' exclusivity. For ONSHORING, honest dividing fractures international ties. So maybe honest+dividing is dominant. But onshoring also could be seen as uniting domestically. The quadrants are about \"us\" - \"among us\" or \"fracturing us\". The phrase \"fracturing us\" means dividing the in-group. For onshoring, does it fracture \"us\" (the home country) or fracture relations with others? The quadrants are about \"us\" internally: uniting among us or dividing among us. So honest+dividing means fracturing the internal community truthfully. Onshoring might not fracture internally; it might unite internally. So honest+dividing would be if onshoring actually causes internal division (e.g., protects some workers but hurts others). But more likely it's seen as uniting internally. So honest+uniting or performed+uniting.\n\nThus, likely uniting quadrant dominates. Between honest and performed: is onshoring authentic? It's a real economic action, not just a performance. So honest+uniting maybe. Recycling got honest+uniting. Onshoring similar real action. So I'll go with honest+uniting dominant.\n\nLet's set: honest+uniting: 0.65, performed+uniting: 0.15, honest+dividing: 0.15, performed+dividing: 0.05. Sum=1.0. But we need to output JSON with exactly those keys.\n\nMaybe we should mimic the style: they used decimals like 0.08132530120481928 etc. But we can use simpler.\n\nI'll produce: {\"performed+uniting\":0.15,\"honest+uniting\":0.65,\"performed+dividing\":0.05,\"honest+dividing\":0.15} sum=1.0.\n\nBut check: performed+uniting + honest+uniting = 0.8 uniting; dividing 0.2. That seems plausible.\n\nAlternatively, to be safe, we could spread more: performed+uniting 0.2, honest+uniting 0.5, performed+dividing 0.1, honest+dividing 0.2.\n\nI think honest+uniting should be highest. Let's finalize with 0.6, 0.2, 0.1, 0.1? Actually sum: 0.2+0.6+0.1+0.1=1.0. That's fine.\n\nBut we need at least three decimal places when needed. We can use 0.200 etc.\n\nI'll output: {\"performed+uniting\":0.200,\"honest+uniting\":0.600,\"performed+dividing\":0.100,\"honest+dividing\":0.100}\n\nBut maybe more realistic: from examples, dominant quadrant often >0.75. So maybe honest+uniting 0.75, others 0.083 each? Like open relationships had 0.758 and ~0.081 each. Recycling had 0.75 and 0.25. Burning man 0.897 and ~0.03-0.04. So pattern: one quadrant ~0.75-0.9, others small. So for onshoring, pick honest+uniting 0.75, performed+uniting 0.083, performed+dividing 0.083, honest+dividing 0.084? Sum ~1.0. But recycling had only two non-zero. Could be similar.\n\nI'll choose honest+uniting 0.75, performed+uniting 0.05, performed+dividing 0.05, honest+dividing 0.15. Sum=1.0.\n\nBetter to have small ones not too equal. Let's do: honest+uniting 0.78, performed+uniting 0.10, performed+dividing 0.04, honest+dividing 0.08. Sum=1.0.\n\nI'll go with: {\"performed+uniting\":0.100,\"honest+uniting\":0.780,\"performed+dividing\":0.040,\"honest+dividing\":0.080}\n\nCheck sum: 0.1+0.78=0.88, +0.04=0.92, +0.08=1.0. Good.\n\nNo other keys. Return only JSON object.\n\nThus final answer.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 474,
+          "completion_tokens": 3499,
+          "total_tokens": 3973,
+          "cost": 0.00191004,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00191004,
+            "upstream_inference_prompt_cost": 0.000062568,
+            "upstream_inference_completions_cost": 0.001847472
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 3456,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 474,
+        "completion_tokens": 3499,
+        "total_tokens": 3973,
+        "cost": 0.00191004,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00191004,
+          "upstream_inference_prompt_cost": 0.000062568,
+          "upstream_inference_completions_cost": 0.001847472
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 3456,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 103,
+      "finishedAt": "2026-11-15T04:52:14.344Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 11
+      },
+      "observation": {
+        "ok": true,
+        "id": 11,
+        "prompt": "OPEN RELATIONSHIPS",
+        "distribution": {
+          "performed+uniting": 0.08132530120481928,
+          "honest+uniting": 0.08132530120481928,
+          "performed+dividing": 0.07981927710843373,
+          "honest+dividing": 0.7575301204819277
+        },
+        "submissions": 664,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 82
+      },
+      "observation": {
+        "ok": true,
+        "id": 82,
+        "prompt": "RECYCLING",
+        "distribution": {
+          "performed+uniting": 0,
+          "honest+uniting": 0.75,
+          "performed+dividing": 0,
+          "honest+dividing": 0.25
+        },
+        "submissions": 52,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 56
+      },
+      "observation": {
+        "ok": true,
+        "id": 56,
+        "prompt": "BURNING MAN",
+        "distribution": {
+          "performed+uniting": 0.8966666666666666,
+          "honest+uniting": 0.03666666666666667,
+          "performed+dividing": 0.02666666666666667,
+          "honest+dividing": 0.04
+        },
+        "submissions": 300,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.1,
+          "honest+uniting": 0.78,
+          "performed+dividing": 0.04,
+          "honest+dividing": 0.08
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.1,
+      "honest+uniting": 0.78,
+      "performed+dividing": 0.04,
+      "honest+dividing": 0.08
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.004540495867768595,
+    "score": 99.77297520661156,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

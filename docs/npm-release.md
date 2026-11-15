@@ -1,37 +1,37 @@
-# Publishing RTR-bench 0.2.1
+# Publishing RTR-bench 0.2.2
 
-This patch fixes paid-run resume identity, setup-error handling, transient-error retries, and spending-ledger recovery. Pinned providers must support the requested parameters. Public commands now default to 8,000 output tokens following development compatibility checks. Resume older 4,000-token runs with an explicit `--max-tokens 4000`. The runner is version 4; the frozen data, Predict/Learn prompts, evidence rules, and score formula are unchanged. Node.js 22.18 or newer is required. See the [preflight audit](preflight-audit.md).
+Version 0.2.2 supports providers that advertise UTC time-of-day pricing, including Tencent HY3. Spending reservations use the highest advertised token rate; settled charges use reported usage. This patch also updates the eleven-model Predict/Learn results, charts, and dataset documentation. The frozen data, prompt policies, evidence rules, score formula, and 8,000-token public-command default are unchanged. Node.js 22.18 or newer is required.
 
-Publishing to npm is separate from committing and pushing to GitHub. These instructions are for the package maintainer, using an npm account with permission to publish `rtr-bench`.
+Publishing to npm is separate from pushing GitHub and uploading the Hugging Face dataset. These commands are for the package maintainer.
 
-## Prepare and check
-
-From the repository folder:
+## Prepare and verify
 
 ```bash
-git pull --ff-only
 npm ci
 npm test
 npm pack --dry-run
+npm pack
 ```
 
-The package version in both `package.json` and `package-lock.json` must be `0.2.1`. `npm pack --dry-run` builds the bundled CLI and lists what would be included without publishing anything. The existing `prepack` script runs `npm run build` automatically for both packing and publishing.
+Both `package.json` and `package-lock.json` must identify version `0.2.2`. Packing builds the bundled CLI through `prepack`. Inspect the tarball, extract it to a temporary directory, and run its synthetic fixture commands before publishing that exact artifact.
 
-The package includes `dist/cli.js`, the dataset and frozen split, protocol documentation, and synthetic fixtures. API keys, `.env`, local evaluation outputs, and `node_modules` must not be included. Tests and synthetic runs make no paid model calls.
+The package includes the bundled CLI, frozen dataset/split, protocols, synthetic fixtures, and published result summaries/charts. It must exclude `.env`, API keys, local credentials, `node_modules`, and raw evaluation responses. Packing and synthetic checks make no paid model calls.
 
-## Publish
+## Publish the reviewed artifact
 
 ```bash
-npm login
-npm publish --access public
+npm whoami
+npm publish ./rtr-bench-0.2.2.tgz --access public
 ```
 
-Follow npm's browser sign-in and any authentication prompts. The second command publishes version 0.2.1 to the public registry and makes it the default `latest` release. An already-published name/version cannot be overwritten. See npm's [login](https://docs.npmjs.com/cli/v11/commands/npm-login/) and [publish](https://docs.npmjs.com/cli/v11/commands/npm-publish/) documentation.
+If npm requests authentication, finish its sign-in or two-factor prompt. A published name/version cannot be overwritten. Publishing the package does not start a model evaluation.
 
-## Verify
+## Verify the registry
 
 ```bash
 npm view rtr-bench@latest version
+npm view rtr-bench@0.2.2 dist.integrity
+npx --yes rtr-bench@0.2.2 --help
 ```
 
-This should print `0.2.1` once the registry has updated. Users can then run `npx rtr-bench@0.2.1 read-the-room ...` using the model, provider, split, and spending limit described in the README. A real model evaluation requires an OpenRouter key and incurs API charges; publishing the package does not start an evaluation.
+The latest version should be `0.2.2`, and the published integrity should match the reviewed tarball. Users can pin `npx rtr-bench@0.2.2 read-the-room ...` with the model, provider, split, and spending limit described in the Quickstart.

@@ -1,0 +1,607 @@
+{
+  "day": 144,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"SELF-DRIVING CARS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":4,\"prompt\":\"MICHELIN STARS\",\"distribution\":{\"performed+uniting\":0.8333333333333334,\"honest+uniting\":0.06862745098039216,\"performed+dividing\":0.06862745098039216,\"honest+dividing\":0.029411764705882353},\"submissions\":102},{\"id\":89,\"prompt\":\"RED CARPETS\",\"distribution\":{\"performed+uniting\":0.8508557457212714,\"honest+uniting\":0.061124694376528114,\"performed+dividing\":0.029339853300733496,\"honest+dividing\":0.05867970660146699},\"submissions\":409},{\"id\":96,\"prompt\":\"GOLF\",\"distribution\":{\"performed+uniting\":0.21052631578947367,\"honest+uniting\":0.13157894736842105,\"performed+dividing\":0.47368421052631576,\"honest+dividing\":0.18421052631578946},\"submissions\":76}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:52:43.749Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.512,\"honest+uniting\":0.061,\"performed+dividing\":0.287,\"honest+dividing\":0.140}",
+      "response": {
+        "id": "gen-1794718363-TtfnVCk4CjV73pOMOSQP",
+        "object": "chat.completion",
+        "created": 1794718363,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.512,\"honest+uniting\":0.061,\"performed+dividing\":0.287,\"honest+dividing\":0.140}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"SELF-DRIVING CARS\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given historical examples:\n1. \"MICHELIN STARS\": performed+uniting 0.833, honest+uniting 0.0686, performed+dividing 0.0686, honest+dividing 0.0294 (submissions 102)\n2. \"RED CARPETS\": performed+uniting 0.8509, honest+uniting 0.0611, performed+dividing 0.0293, honest+dividing 0.0587 (submissions 409)\n3. \"GOLF\": performed+uniting 0.2105, honest+uniting 0.1316, performed+dividing 0.4737, honest+dividing 0.1842 (submissions 76)\n\nWe need to estimate share for \"SELF-DRIVING CARS\". The examples show that for glamorous/status symbols like Michelin stars, red carpets, the audience heavily sees \"performed+uniting\" (false unity) around 0.83-0.85. For golf, which is a sport often associated with exclusivity, business networking, maybe divisions, the distribution is very different: performed+uniting low (0.21), performed+dividing high (0.47), honest+dividing 0.18, honest+uniting 0.13.\n\nSelf-driving cars: what is the cultural interpretation? It's technology, automation, maybe promise of convenience, safety, but also fears of job loss, accidents, surveillance, inequality. The audience might see it as creating false unity (e.g., we're all in this tech future together, but it's a performed unity) or exploiting divisions (e.g., tech elites vs others, or dividing those who can afford vs not). Could also be honest dividing (truthfully fracturing us, e.g., real impacts of automation). Honest uniting? Possibly bringing us together authentically? Less likely.\n\nWe need to infer from the pattern. The examples: Michelin stars and red carpets are about luxury/celebrity/status, leading to high performed uniting (false unity). Golf is a recreational activity with class connotations, leading to more dividing. Self-driving cars is a technology with both utopian and dystopian views. It might be more like golf? Or maybe like a mix? Let's think about the project: Mixed Messages generative art, audience interpretations. They might be cynical about self-driving cars: corporations promising unity/safety but actually dividing (e.g., job loss, surveillance). Or they might see the hype as performed unity (we're all going to be transported effortlessly together). The \"performed+uniting\" is \"creating false unity among us\". That seems like PR spin. Self-driving cars are often marketed as safer, shared mobility, etc. So could be high performed uniting. But also there is real concern about divisions: those who benefit vs those displaced. The performed dividing is \"exploiting our divisions, deliberately\" – maybe tech companies exploiting fears. Honest dividing: fracturing us truthfully – actual effects.\n\nGiven the examples, the audience tends to assign high weight to one quadrant depending on the prompt. For luxury status: performed uniting dominant. For golf: performed dividing dominant. Self-driving cars might be more like a tech promise: performed uniting could be high, but maybe not as high as Michelin/red carpet because it's controversial. Alternatively, it could be more balanced.\n\nWe need to produce a single JSON object with four probabilities summing to 1. Use at least three decimals. We can choose numbers.\n\nLet's consider typical interpretations: Self-driving cars: \n- Performed+uniting: companies say they'll bring everyone together, reduce accidents, shared rides -> false unity. Could be ~0.5?\n- Honest+uniting: maybe some see it as genuinely connecting people? Low, maybe 0.1.\n- Performed+dividing: exploiting divisions like urban/rural, rich/poor, tech workers/others? Maybe 0.2.\n- Honest+dividing: truthfully fracturing due to job losses, etc. Maybe 0.2.\n\nBut we should look at the examples more: Michelin stars: performed uniting 0.833, others small. Red carpets: similar. Golf: performed uniting 0.21, performed dividing 0.47, honest dividing 0.18, honest uniting 0.13. So the sum of uniting (performed+honest) for Michelin: 0.902, red carpet: 0.912, golf: 0.342. So golf is mostly dividing. Self-driving cars might be more like golf? Actually, self-driving cars are a product, not a leisure class marker as much. But they are high-tech, maybe polarizing.\n\nAnother angle: The project \"Mixed Messages\" might have a bias toward cynicism: performed uniting is common for superficial status symbols. For something with real societal impact, they might see dividing. Self-driving cars have real impact, so maybe more dividing. But the examples are limited.\n\nWe could approximate by taking a middle: performed uniting 0.6, honest uniting 0.1, performed dividing 0.2, honest dividing 0.1. Sum=1.0. But need at least three decimals? We can do 0.600, 0.100, 0.200, 0.100. But maybe more nuanced: 0.550, 0.080, 0.270, 0.100. Or use the golf pattern but shift: self-driving cars maybe less extreme dividing. Golf had performed dividing 0.474, honest dividing 0.184, performed uniting 0.211, honest uniting 0.132. For self-driving cars, perhaps performed uniting higher because of tech optimism hype: 0.35, performed dividing 0.35, honest dividing 0.20, honest uniting 0.10. Sum=1.0.\n\nBut we need to predict as this audience. The instruction: \"These are this audience's interpretations, not objective labels.\" So we should emulate the audience's likely response based on examples. The examples show that for glamorous award/status (Michelin, red carpet) they see false unity. For golf (a sport associated with business, exclusivity) they see deliberate exploitation of divisions. Self-driving cars: could be seen as a technological advancement that is promoted as unifying but actually divisive. I'd guess performed uniting still significant but not as dominant as Michelin. Maybe around 0.45, performed dividing around 0.35, honest dividing 0.15, honest uniting 0.05. Sum=1.0.\n\nLet's check if any other pattern: The submissions counts: Michelin 102, red carpet 409, golf 76. Not directly relevant.\n\nWe need to output only JSON object, no prose, no code fences. So: {\"performed+uniting\":0.45,\"honest+uniting\":0.05,\"performed+dividing\":0.35,\"honest+dividing\":0.15} but with three decimals: 0.450, 0.050, 0.350, 0.150.\n\nBut maybe we should be more precise: Use values like 0.472, 0.063, 0.331, 0.134 (sum 1.000). That mimics the style of examples (they have many decimals). We can generate something plausible.\n\nLet's think: Self-driving cars: The phrase might evoke \"false promise of togetherness\" (performed uniting) because they are often touted as freeing time, shared mobility, but actually isolate individuals in pods. So performed uniting maybe ~0.5. Honest uniting low ~0.07 (like red carpet). Performed dividing ~0.25 (companies exploiting fear of tech to sell). Honest dividing ~0.18 (real fracturing of labor). That gives sum 1.0: 0.5+0.07+0.25+0.18 = 1.0. With decimals: 0.500, 0.070, 0.250, 0.180.\n\nBut red carpet had performed uniting 0.851, honest uniting 0.061, performed dividing 0.029, honest dividing 0.059. That's very skewed. Golf skewed opposite. Self-driving cars might be more like a modern tech topic, maybe audience is more skeptical, so less performed uniting. I'll go with a moderate skew: performed uniting 0.472, honest uniting 0.083, performed dividing 0.278, honest dividing 0.167 (sum 1.000). That's similar to golf but less extreme dividing. Actually golf: 0.211, 0.132, 0.474, 0.184. My numbers: 0.472 (uniting performed) is high, not like golf. Maybe better: performed uniting 0.365, honest uniting 0.092, performed dividing 0.365, honest dividing 0.178 (sum 1.000). That's balanced.\n\nGiven the lack of strong signal, I'll choose a distribution that reflects a tech topic: high performed uniting (hype) but also notable performed dividing (exploiting divisions) and honest dividing. I'll set:\nperformed+uniting: 0.512\nhonest+uniting: 0.061\nperformed+dividing: 0.287\nhonest+dividing: 0.140\nSum = 1.000.\n\nThat seems plausible. Use three decimals: 0.512, 0.061, 0.287, 0.140. But 0.061 is three decimals, fine.\n\nAlternatively, to be safe, we can mimic the format: many decimals like 0.512345... but not needed. \"Use at least three decimal places when needed.\" So 0.512 is fine.\n\nI'll output: {\"performed+uniting\":0.512,\"honest+uniting\":0.061,\"performed+dividing\":0.287,\"honest+dividing\":0.140}\n\nCheck sum: 0.512+0.061=0.573; +0.287=0.860; +0.140=1.000. Good.\n\nNo other keys.\n\nThus final answer.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"SELF-DRIVING CARS\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given historical examples:\n1. \"MICHELIN STARS\": performed+uniting 0.833, honest+uniting 0.0686, performed+dividing 0.0686, honest+dividing 0.0294 (submissions 102)\n2. \"RED CARPETS\": performed+uniting 0.8509, honest+uniting 0.0611, performed+dividing 0.0293, honest+dividing 0.0587 (submissions 409)\n3. \"GOLF\": performed+uniting 0.2105, honest+uniting 0.1316, performed+dividing 0.4737, honest+dividing 0.1842 (submissions 76)\n\nWe need to estimate share for \"SELF-DRIVING CARS\". The examples show that for glamorous/status symbols like Michelin stars, red carpets, the audience heavily sees \"performed+uniting\" (false unity) around 0.83-0.85. For golf, which is a sport often associated with exclusivity, business networking, maybe divisions, the distribution is very different: performed+uniting low (0.21), performed+dividing high (0.47), honest+dividing 0.18, honest+uniting 0.13.\n\nSelf-driving cars: what is the cultural interpretation? It's technology, automation, maybe promise of convenience, safety, but also fears of job loss, accidents, surveillance, inequality. The audience might see it as creating false unity (e.g., we're all in this tech future together, but it's a performed unity) or exploiting divisions (e.g., tech elites vs others, or dividing those who can afford vs not). Could also be honest dividing (truthfully fracturing us, e.g., real impacts of automation). Honest uniting? Possibly bringing us together authentically? Less likely.\n\nWe need to infer from the pattern. The examples: Michelin stars and red carpets are about luxury/celebrity/status, leading to high performed uniting (false unity). Golf is a recreational activity with class connotations, leading to more dividing. Self-driving cars is a technology with both utopian and dystopian views. It might be more like golf? Or maybe like a mix? Let's think about the project: Mixed Messages generative art, audience interpretations. They might be cynical about self-driving cars: corporations promising unity/safety but actually dividing (e.g., job loss, surveillance). Or they might see the hype as performed unity (we're all going to be transported effortlessly together). The \"performed+uniting\" is \"creating false unity among us\". That seems like PR spin. Self-driving cars are often marketed as safer, shared mobility, etc. So could be high performed uniting. But also there is real concern about divisions: those who benefit vs those displaced. The performed dividing is \"exploiting our divisions, deliberately\" – maybe tech companies exploiting fears. Honest dividing: fracturing us truthfully – actual effects.\n\nGiven the examples, the audience tends to assign high weight to one quadrant depending on the prompt. For luxury status: performed uniting dominant. For golf: performed dividing dominant. Self-driving cars might be more like a tech promise: performed uniting could be high, but maybe not as high as Michelin/red carpet because it's controversial. Alternatively, it could be more balanced.\n\nWe need to produce a single JSON object with four probabilities summing to 1. Use at least three decimals. We can choose numbers.\n\nLet's consider typical interpretations: Self-driving cars: \n- Performed+uniting: companies say they'll bring everyone together, reduce accidents, shared rides -> false unity. Could be ~0.5?\n- Honest+uniting: maybe some see it as genuinely connecting people? Low, maybe 0.1.\n- Performed+dividing: exploiting divisions like urban/rural, rich/poor, tech workers/others? Maybe 0.2.\n- Honest+dividing: truthfully fracturing due to job losses, etc. Maybe 0.2.\n\nBut we should look at the examples more: Michelin stars: performed uniting 0.833, others small. Red carpets: similar. Golf: performed uniting 0.21, performed dividing 0.47, honest dividing 0.18, honest uniting 0.13. So the sum of uniting (performed+honest) for Michelin: 0.902, red carpet: 0.912, golf: 0.342. So golf is mostly dividing. Self-driving cars might be more like golf? Actually, self-driving cars are a product, not a leisure class marker as much. But they are high-tech, maybe polarizing.\n\nAnother angle: The project \"Mixed Messages\" might have a bias toward cynicism: performed uniting is common for superficial status symbols. For something with real societal impact, they might see dividing. Self-driving cars have real impact, so maybe more dividing. But the examples are limited.\n\nWe could approximate by taking a middle: performed uniting 0.6, honest uniting 0.1, performed dividing 0.2, honest dividing 0.1. Sum=1.0. But need at least three decimals? We can do 0.600, 0.100, 0.200, 0.100. But maybe more nuanced: 0.550, 0.080, 0.270, 0.100. Or use the golf pattern but shift: self-driving cars maybe less extreme dividing. Golf had performed dividing 0.474, honest dividing 0.184, performed uniting 0.211, honest uniting 0.132. For self-driving cars, perhaps performed uniting higher because of tech optimism hype: 0.35, performed dividing 0.35, honest dividing 0.20, honest uniting 0.10. Sum=1.0.\n\nBut we need to predict as this audience. The instruction: \"These are this audience's interpretations, not objective labels.\" So we should emulate the audience's likely response based on examples. The examples show that for glamorous award/status (Michelin, red carpet) they see false unity. For golf (a sport associated with business, exclusivity) they see deliberate exploitation of divisions. Self-driving cars: could be seen as a technological advancement that is promoted as unifying but actually divisive. I'd guess performed uniting still significant but not as dominant as Michelin. Maybe around 0.45, performed dividing around 0.35, honest dividing 0.15, honest uniting 0.05. Sum=1.0.\n\nLet's check if any other pattern: The submissions counts: Michelin 102, red carpet 409, golf 76. Not directly relevant.\n\nWe need to output only JSON object, no prose, no code fences. So: {\"performed+uniting\":0.45,\"honest+uniting\":0.05,\"performed+dividing\":0.35,\"honest+dividing\":0.15} but with three decimals: 0.450, 0.050, 0.350, 0.150.\n\nBut maybe we should be more precise: Use values like 0.472, 0.063, 0.331, 0.134 (sum 1.000). That mimics the style of examples (they have many decimals). We can generate something plausible.\n\nLet's think: Self-driving cars: The phrase might evoke \"false promise of togetherness\" (performed uniting) because they are often touted as freeing time, shared mobility, but actually isolate individuals in pods. So performed uniting maybe ~0.5. Honest uniting low ~0.07 (like red carpet). Performed dividing ~0.25 (companies exploiting fear of tech to sell). Honest dividing ~0.18 (real fracturing of labor). That gives sum 1.0: 0.5+0.07+0.25+0.18 = 1.0. With decimals: 0.500, 0.070, 0.250, 0.180.\n\nBut red carpet had performed uniting 0.851, honest uniting 0.061, performed dividing 0.029, honest dividing 0.059. That's very skewed. Golf skewed opposite. Self-driving cars might be more like a modern tech topic, maybe audience is more skeptical, so less performed uniting. I'll go with a moderate skew: performed uniting 0.472, honest uniting 0.083, performed dividing 0.278, honest dividing 0.167 (sum 1.000). That's similar to golf but less extreme dividing. Actually golf: 0.211, 0.132, 0.474, 0.184. My numbers: 0.472 (uniting performed) is high, not like golf. Maybe better: performed uniting 0.365, honest uniting 0.092, performed dividing 0.365, honest dividing 0.178 (sum 1.000). That's balanced.\n\nGiven the lack of strong signal, I'll choose a distribution that reflects a tech topic: high performed uniting (hype) but also notable performed dividing (exploiting divisions) and honest dividing. I'll set:\nperformed+uniting: 0.512\nhonest+uniting: 0.061\nperformed+dividing: 0.287\nhonest+dividing: 0.140\nSum = 1.000.\n\nThat seems plausible. Use three decimals: 0.512, 0.061, 0.287, 0.140. But 0.061 is three decimals, fine.\n\nAlternatively, to be safe, we can mimic the format: many decimals like 0.512345... but not needed. \"Use at least three decimal places when needed.\" So 0.512 is fine.\n\nI'll output: {\"performed+uniting\":0.512,\"honest+uniting\":0.061,\"performed+dividing\":0.287,\"honest+dividing\":0.140}\n\nCheck sum: 0.512+0.061=0.573; +0.287=0.860; +0.140=1.000. Good.\n\nNo other keys.\n\nThus final answer.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 506,
+          "completion_tokens": 2373,
+          "total_tokens": 2879,
+          "cost": 0.001319736,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001319736,
+            "upstream_inference_prompt_cost": 0.000066792,
+            "upstream_inference_completions_cost": 0.001252944
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2330,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 506,
+        "completion_tokens": 2373,
+        "total_tokens": 2879,
+        "cost": 0.001319736,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001319736,
+          "upstream_inference_prompt_cost": 0.000066792,
+          "upstream_inference_completions_cost": 0.001252944
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2330,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 105,
+      "finishedAt": "2026-11-15T04:53:06.518Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 4
+      },
+      "observation": {
+        "ok": true,
+        "id": 4,
+        "prompt": "MICHELIN STARS",
+        "distribution": {
+          "performed+uniting": 0.8333333333333334,
+          "honest+uniting": 0.06862745098039216,
+          "performed+dividing": 0.06862745098039216,
+          "honest+dividing": 0.029411764705882353
+        },
+        "submissions": 102,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 89
+      },
+      "observation": {
+        "ok": true,
+        "id": 89,
+        "prompt": "RED CARPETS",
+        "distribution": {
+          "performed+uniting": 0.8508557457212714,
+          "honest+uniting": 0.061124694376528114,
+          "performed+dividing": 0.029339853300733496,
+          "honest+dividing": 0.05867970660146699
+        },
+        "submissions": 409,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 96
+      },
+      "observation": {
+        "ok": true,
+        "id": 96,
+        "prompt": "GOLF",
+        "distribution": {
+          "performed+uniting": 0.21052631578947367,
+          "honest+uniting": 0.13157894736842105,
+          "performed+dividing": 0.47368421052631576,
+          "honest+dividing": 0.18421052631578946
+        },
+        "submissions": 76,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.512,
+          "honest+uniting": 0.061,
+          "performed+dividing": 0.287,
+          "honest+dividing": 0.14
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.5120000000000001,
+      "honest+uniting": 0.061000000000000006,
+      "performed+dividing": 0.28700000000000003,
+      "honest+dividing": 0.14000000000000004
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.6378667783558793,
+    "score": 68.10666108220603,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

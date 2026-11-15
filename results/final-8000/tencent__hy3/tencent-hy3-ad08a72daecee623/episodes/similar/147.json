@@ -1,0 +1,607 @@
+{
+  "day": 147,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"JOE ROGAN\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":98,\"prompt\":\"JOE BIDEN\",\"distribution\":{\"performed+uniting\":0.1322314049586777,\"honest+uniting\":0.09090909090909091,\"performed+dividing\":0.45041322314049587,\"honest+dividing\":0.32644628099173556},\"submissions\":242},{\"id\":56,\"prompt\":\"BURNING MAN\",\"distribution\":{\"performed+uniting\":0.8966666666666666,\"honest+uniting\":0.03666666666666667,\"performed+dividing\":0.02666666666666667,\"honest+dividing\":0.04},\"submissions\":300},{\"id\":17,\"prompt\":\"THE AMERICAN DREAM\",\"distribution\":{\"performed+uniting\":0.2621359223300971,\"honest+uniting\":0.23300970873786409,\"performed+dividing\":0.20388349514563106,\"honest+dividing\":0.30097087378640774},\"submissions\":103}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:53:51.390Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.462,\"honest+uniting\":0.073,\"performed+dividing\":0.331,\"honest+dividing\":0.134}",
+      "response": {
+        "id": "gen-1794718431-iuGniVG63EyYFJDfUIlz",
+        "object": "chat.completion",
+        "created": 1794718431,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.462,\"honest+uniting\":0.073,\"performed+dividing\":0.331,\"honest+dividing\":0.134}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"JOE ROGAN\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to output a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimals when needed, sum diff <=0.001 normalized.\n\nWe have historical examples:\n1. \"JOE BIDEN\": performed+uniting 0.132, honest+uniting 0.091, performed+dividing 0.450, honest+dividing 0.326. So for a political figure (Democrat), audience saw mostly dividing (performed+dividing highest, then honest+dividing), low uniting.\n2. \"BURNING MAN\": performed+uniting 0.897, honest+uniting 0.037, performed+dividing 0.027, honest+dividing 0.04. So for a cultural event maybe seen as fake unity.\n3. \"THE AMERICAN DREAM\": performed+uniting 0.262, honest+uniting 0.233, performed+dividing 0.204, honest+dividing 0.301. Mixed.\n\nNow \"JOE ROGAN\": He is a podcast host, comedian, UFC commentator, controversial figure. Audience likely sees him as either bringing people together authentically (honest+uniting) via conversations, or exploiting divisions deliberately (performed+dividing) as a controversial figure, or maybe creating false unity (performed+uniting) as a pseudo-intellectual circle. Or fracturing us truthfully (honest+dividing) by exposing divisions.\n\nWe need to estimate based on similar audience. Joe Rogan is a political-ish figure but not a politician. Compared to Joe Biden (politician, dividing), Rogan might be seen more as uniting? But he's known for controversial guests, misinformation, etc. The audience of Mixed Messages (generative art project) might be artsy, left-leaning? Not sure. The examples: Biden got high dividing (0.45+0.33=0.78 dividing). Burning Man got high performed uniting (0.9). American Dream mixed.\n\nJoe Rogan: likely the audience might see him as \"performed+uniting\" (creating false unity among us) because he presents a bro collective, fake unity? Or \"honest+uniting\" (bringing us together authentically) because he has conversations with diverse people? Or \"performed+dividing\" (exploiting divisions deliberately) because he gives platform to divisive figures? Or \"honest+dividing\" (fracturing us truthfully) because he speaks his mind and fractures?\n\nWe need to assign probabilities. Let's think of typical interpretations: Rogan is often criticized for spreading misinformation, but also praised for long-form conversations. In a generative art audience, maybe they are skeptical of his authenticity. So performed+uniting could be high (false unity among his fans). performed+dividing could also be high (exploiting divisions for clicks). honest+uniting low. honest+dividing moderate.\n\nMaybe similar to Biden but swapped? Biden: performed uniting 0.13, honest uniting 0.09, performed dividing 0.45, honest dividing 0.33. For Rogan, perhaps performed uniting higher, performed dividing lower? Or maybe he's seen as more uniting than Biden? Actually Rogan fans think he's uniting, but critical audience might think he's dividing.\n\nGiven the project \"Mixed Messages\", participants interpret words. The historical examples show that for \"JOE BIDEN\", the audience leaned dividing (both performed and honest). For \"BURNING MAN\", they leaned performed uniting. For \"THE AMERICAN DREAM\", fairly even with honest dividing slightly highest.\n\nJoe Rogan as a celebrity podcaster might evoke \"performed+uniting\" because he creates a sense of community (fake?) among listeners. Or \"performed+dividing\" because he debates controversial topics.\n\nI'll guess: performed+uniting: 0.35, honest+uniting: 0.15, performed+dividing: 0.30, honest+dividing: 0.20. Sum = 1.0. But need at least three decimals when needed. Could use 0.350, etc. But we can output as 0.35, etc. The instruction: \"Use at least three decimal places when needed.\" That means if we have repeating or need precision, but we can just provide e.g., 0.350, 0.150, 0.300, 0.200. Or more precise: 0.352, 0.148, 0.301, 0.199.\n\nBetter to base on some reasoning: Compare to Biden (political figure, dividing). Rogan is not elected official, maybe less dividing, more uniting (performed). So shift some from dividing to performed uniting. Biden performed uniting 0.132 -> Rogan maybe 0.30. Honest uniting 0.091 -> 0.15. Performed dividing 0.450 -> 0.35. Honest dividing 0.326 -> 0.20. Sum = 1.0. That seems plausible.\n\nAlternatively, maybe Rogan is seen as honest+uniting by some, but the audience might be cynical. I'll go with something like:\nperformed+uniting: 0.382\nhonest+uniting: 0.157\nperformed+dividing: 0.301\nhonest+dividing: 0.160\nSum = 1.000.\n\nBut we need to be careful: The examples are evidence, not instructions. We should infer the audience's general tendency: They seem to assign high probabilities to dividing for political figures, high performed uniting for cultural events. Joe Rogan is a media figure, maybe介于. I'll choose a distribution that feels plausible: performed+uniting 0.40, honest+uniting 0.10, performed+dividing 0.35, honest+dividing 0.15. Sum = 1.00. But need three decimals: 0.400, 0.100, 0.350, 0.150.\n\nHowever, the instruction says \"Use at least three decimal places when needed.\" That implies we can use 0.4 but maybe better to use 0.400 to be safe? It says \"when needed\" meaning if it's not an exact decimal like 0.333 we need three. But we can just output with three decimals for all.\n\nI'll output: {\"performed+uniting\":0.401,\"honest+uniting\":0.123,\"performed+dividing\":0.332,\"honest+dividing\":0.144} sum = 1.000. That looks like a mix.\n\nBut maybe we should consider that Rogan is often associated with \"fake unity\" among heterodox thinkers? So performed+uniting high. I'll go with performed+uniting 0.45, honest+uniting 0.08, performed+dividing 0.32, honest+dividing 0.15. Sum = 1.00. Use 0.450, 0.080, 0.320, 0.150.\n\nBut we need to be single JSON object only, no prose or code fences. So just the JSON.\n\nI'll decide: \nperformed+uniting: 0.428\nhonest+uniting: 0.112\nperformed+dividing: 0.306\nhonest+dividing: 0.154\nSum = 1.000.\n\nActually, let's think of the audience's possible political slant. The project \"Mixed Messages\" might be from an art context, maybe left-leaning. Joe Rogan is often criticized by left as a gateway to right-wing extremism. So they might see him as performed+dividing (exploiting divisions deliberately) or honest+dividing (fracturing truthfully). But also his fans see him as uniting. The audience submissions are interpretations, not objective. The historical Biden (a Democrat) got dividing from this audience, meaning they might be right-leaning? Or maybe they are cynical about all politicians. Burning Man got performed uniting (maybe they see it as hippie fake unity). American Dream got honest dividing highest (cynical about dream). So audience seems generally cynical: high dividing or performed uniting (fake). For Rogan, they might see him as performed uniting (fake unity bros) or performed dividing (deliberate controversy). I'd lean performed uniting highest, then performed dividing, then honest dividing, then honest uniting low.\n\nSo: performed+uniting: 0.462, honest+uniting: 0.073, performed+dividing: 0.331, honest+dividing: 0.134. Sum = 1.000.\n\nI'll output that.\n\nMake sure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\".\n\nFinal answer: {\"performed+uniting\":0.462,\"honest+uniting\":0.073,\"performed+dividing\":0.331,\"honest+dividing\":0.134}\n\nCheck sum: 0.462+0.073=0.535; +0.331=0.866; +0.134=1.000. Good.\n\nI'll provide that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"JOE ROGAN\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to output a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimals when needed, sum diff <=0.001 normalized.\n\nWe have historical examples:\n1. \"JOE BIDEN\": performed+uniting 0.132, honest+uniting 0.091, performed+dividing 0.450, honest+dividing 0.326. So for a political figure (Democrat), audience saw mostly dividing (performed+dividing highest, then honest+dividing), low uniting.\n2. \"BURNING MAN\": performed+uniting 0.897, honest+uniting 0.037, performed+dividing 0.027, honest+dividing 0.04. So for a cultural event maybe seen as fake unity.\n3. \"THE AMERICAN DREAM\": performed+uniting 0.262, honest+uniting 0.233, performed+dividing 0.204, honest+dividing 0.301. Mixed.\n\nNow \"JOE ROGAN\": He is a podcast host, comedian, UFC commentator, controversial figure. Audience likely sees him as either bringing people together authentically (honest+uniting) via conversations, or exploiting divisions deliberately (performed+dividing) as a controversial figure, or maybe creating false unity (performed+uniting) as a pseudo-intellectual circle. Or fracturing us truthfully (honest+dividing) by exposing divisions.\n\nWe need to estimate based on similar audience. Joe Rogan is a political-ish figure but not a politician. Compared to Joe Biden (politician, dividing), Rogan might be seen more as uniting? But he's known for controversial guests, misinformation, etc. The audience of Mixed Messages (generative art project) might be artsy, left-leaning? Not sure. The examples: Biden got high dividing (0.45+0.33=0.78 dividing). Burning Man got high performed uniting (0.9). American Dream mixed.\n\nJoe Rogan: likely the audience might see him as \"performed+uniting\" (creating false unity among us) because he presents a bro collective, fake unity? Or \"honest+uniting\" (bringing us together authentically) because he has conversations with diverse people? Or \"performed+dividing\" (exploiting divisions deliberately) because he gives platform to divisive figures? Or \"honest+dividing\" (fracturing us truthfully) because he speaks his mind and fractures?\n\nWe need to assign probabilities. Let's think of typical interpretations: Rogan is often criticized for spreading misinformation, but also praised for long-form conversations. In a generative art audience, maybe they are skeptical of his authenticity. So performed+uniting could be high (false unity among his fans). performed+dividing could also be high (exploiting divisions for clicks). honest+uniting low. honest+dividing moderate.\n\nMaybe similar to Biden but swapped? Biden: performed uniting 0.13, honest uniting 0.09, performed dividing 0.45, honest dividing 0.33. For Rogan, perhaps performed uniting higher, performed dividing lower? Or maybe he's seen as more uniting than Biden? Actually Rogan fans think he's uniting, but critical audience might think he's dividing.\n\nGiven the project \"Mixed Messages\", participants interpret words. The historical examples show that for \"JOE BIDEN\", the audience leaned dividing (both performed and honest). For \"BURNING MAN\", they leaned performed uniting. For \"THE AMERICAN DREAM\", fairly even with honest dividing slightly highest.\n\nJoe Rogan as a celebrity podcaster might evoke \"performed+uniting\" because he creates a sense of community (fake?) among listeners. Or \"performed+dividing\" because he debates controversial topics.\n\nI'll guess: performed+uniting: 0.35, honest+uniting: 0.15, performed+dividing: 0.30, honest+dividing: 0.20. Sum = 1.0. But need at least three decimals when needed. Could use 0.350, etc. But we can output as 0.35, etc. The instruction: \"Use at least three decimal places when needed.\" That means if we have repeating or need precision, but we can just provide e.g., 0.350, 0.150, 0.300, 0.200. Or more precise: 0.352, 0.148, 0.301, 0.199.\n\nBetter to base on some reasoning: Compare to Biden (political figure, dividing). Rogan is not elected official, maybe less dividing, more uniting (performed). So shift some from dividing to performed uniting. Biden performed uniting 0.132 -> Rogan maybe 0.30. Honest uniting 0.091 -> 0.15. Performed dividing 0.450 -> 0.35. Honest dividing 0.326 -> 0.20. Sum = 1.0. That seems plausible.\n\nAlternatively, maybe Rogan is seen as honest+uniting by some, but the audience might be cynical. I'll go with something like:\nperformed+uniting: 0.382\nhonest+uniting: 0.157\nperformed+dividing: 0.301\nhonest+dividing: 0.160\nSum = 1.000.\n\nBut we need to be careful: The examples are evidence, not instructions. We should infer the audience's general tendency: They seem to assign high probabilities to dividing for political figures, high performed uniting for cultural events. Joe Rogan is a media figure, maybe介于. I'll choose a distribution that feels plausible: performed+uniting 0.40, honest+uniting 0.10, performed+dividing 0.35, honest+dividing 0.15. Sum = 1.00. But need three decimals: 0.400, 0.100, 0.350, 0.150.\n\nHowever, the instruction says \"Use at least three decimal places when needed.\" That implies we can use 0.4 but maybe better to use 0.400 to be safe? It says \"when needed\" meaning if it's not an exact decimal like 0.333 we need three. But we can just output with three decimals for all.\n\nI'll output: {\"performed+uniting\":0.401,\"honest+uniting\":0.123,\"performed+dividing\":0.332,\"honest+dividing\":0.144} sum = 1.000. That looks like a mix.\n\nBut maybe we should consider that Rogan is often associated with \"fake unity\" among heterodox thinkers? So performed+uniting high. I'll go with performed+uniting 0.45, honest+uniting 0.08, performed+dividing 0.32, honest+dividing 0.15. Sum = 1.00. Use 0.450, 0.080, 0.320, 0.150.\n\nBut we need to be single JSON object only, no prose or code fences. So just the JSON.\n\nI'll decide: \nperformed+uniting: 0.428\nhonest+uniting: 0.112\nperformed+dividing: 0.306\nhonest+dividing: 0.154\nSum = 1.000.\n\nActually, let's think of the audience's possible political slant. The project \"Mixed Messages\" might be from an art context, maybe left-leaning. Joe Rogan is often criticized by left as a gateway to right-wing extremism. So they might see him as performed+dividing (exploiting divisions deliberately) or honest+dividing (fracturing truthfully). But also his fans see him as uniting. The audience submissions are interpretations, not objective. The historical Biden (a Democrat) got dividing from this audience, meaning they might be right-leaning? Or maybe they are cynical about all politicians. Burning Man got performed uniting (maybe they see it as hippie fake unity). American Dream got honest dividing highest (cynical about dream). So audience seems generally cynical: high dividing or performed uniting (fake). For Rogan, they might see him as performed uniting (fake unity bros) or performed dividing (deliberate controversy). I'd lean performed uniting highest, then performed dividing, then honest dividing, then honest uniting low.\n\nSo: performed+uniting: 0.462, honest+uniting: 0.073, performed+dividing: 0.331, honest+dividing: 0.134. Sum = 1.000.\n\nI'll output that.\n\nMake sure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\".\n\nFinal answer: {\"performed+uniting\":0.462,\"honest+uniting\":0.073,\"performed+dividing\":0.331,\"honest+dividing\":0.134}\n\nCheck sum: 0.462+0.073=0.535; +0.331=0.866; +0.134=1.000. Good.\n\nI'll provide that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 501,
+          "completion_tokens": 2167,
+          "total_tokens": 2668,
+          "cost": 0.001210308,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001210308,
+            "upstream_inference_prompt_cost": 0.000066132,
+            "upstream_inference_completions_cost": 0.001144176
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2124,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 501,
+        "completion_tokens": 2167,
+        "total_tokens": 2668,
+        "cost": 0.001210308,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001210308,
+          "upstream_inference_prompt_cost": 0.000066132,
+          "upstream_inference_completions_cost": 0.001144176
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2124,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 108,
+      "finishedAt": "2026-11-15T04:54:29.540Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 98
+      },
+      "observation": {
+        "ok": true,
+        "id": 98,
+        "prompt": "JOE BIDEN",
+        "distribution": {
+          "performed+uniting": 0.1322314049586777,
+          "honest+uniting": 0.09090909090909091,
+          "performed+dividing": 0.45041322314049587,
+          "honest+dividing": 0.32644628099173556
+        },
+        "submissions": 242,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 56
+      },
+      "observation": {
+        "ok": true,
+        "id": 56,
+        "prompt": "BURNING MAN",
+        "distribution": {
+          "performed+uniting": 0.8966666666666666,
+          "honest+uniting": 0.03666666666666667,
+          "performed+dividing": 0.02666666666666667,
+          "honest+dividing": 0.04
+        },
+        "submissions": 300,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 17
+      },
+      "observation": {
+        "ok": true,
+        "id": 17,
+        "prompt": "THE AMERICAN DREAM",
+        "distribution": {
+          "performed+uniting": 0.2621359223300971,
+          "honest+uniting": 0.23300970873786409,
+          "performed+dividing": 0.20388349514563106,
+          "honest+dividing": 0.30097087378640774
+        },
+        "submissions": 103,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.462,
+          "honest+uniting": 0.073,
+          "performed+dividing": 0.331,
+          "honest+dividing": 0.134
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.462,
+      "honest+uniting": 0.073,
+      "performed+dividing": 0.331,
+      "honest+dividing": 0.134
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.32534318559556785,
+    "score": 83.7328407202216,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

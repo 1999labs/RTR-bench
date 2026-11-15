@@ -1,0 +1,607 @@
+{
+  "day": 158,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"THE US CONSTITUTION\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":90,\"prompt\":\"ONE NIGHT STANDS\",\"distribution\":{\"performed+uniting\":0.16262975778546712,\"honest+uniting\":0.14878892733564014,\"performed+dividing\":0.3494809688581315,\"honest+dividing\":0.3391003460207612},\"submissions\":289},{\"id\":49,\"prompt\":\"FAST FASHION\",\"distribution\":{\"performed+uniting\":0.045454545454545456,\"honest+uniting\":0,\"performed+dividing\":0.24242424242424243,\"honest+dividing\":0.7121212121212122},\"submissions\":66},{\"id\":11,\"prompt\":\"OPEN RELATIONSHIPS\",\"distribution\":{\"performed+uniting\":0.08132530120481928,\"honest+uniting\":0.08132530120481928,\"performed+dividing\":0.07981927710843373,\"honest+dividing\":0.7575301204819277},\"submissions\":664}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:35:46.644Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.091,\"honest+uniting\":0.076,\"performed+dividing\":0.433,\"honest+dividing\":0.400}",
+      "response": {
+        "id": "gen-1794717346-YIl4ETTBsYpJvYgpKPPD",
+        "object": "chat.completion",
+        "created": 1794717346,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.091,\"honest+uniting\":0.076,\"performed+dividing\":0.433,\"honest+dividing\":0.400}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"THE US CONSTITUTION\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"ONE NIGHT STANDS\": performed+uniting 0.163, honest+uniting 0.149, performed+dividing 0.349, honest+dividing 0.339. Submissions 289.\n2. \"FAST FASHION\": performed+uniting 0.045, honest+uniting 0, performed+dividing 0.242, honest+dividing 0.712. Submissions 66.\n3. \"OPEN RELATIONSHIPS\": performed+uniting 0.081, honest+uniting 0.081, performed+dividing 0.080, honest+dividing 0.758. Submissions 664.\n\nWe need to estimate share for \"THE US CONSTITUTION\". The examples show that for topics that are perhaps more about personal/sexual relationships (one night stands, open relationships) or consumer (fast fashion), the honest+dividing is high (fracturing us truthfully). For one night stands, performed+dividing and honest+dividing are both around 0.35, while uniting are lower. For fast fashion, honest+dividing dominates (0.712), performed+uniting very low, honest+uniting zero. For open relationships, honest+dividing dominates (0.758), others low.\n\nNow \"THE US CONSTITUTION\" is a political document, likely to be seen as either uniting (bringing together) or dividing. Given the current political climate, many might see it as exploited for divisions (performed+dividing) or honestly divisive (honest+dividing). Also some might see it as creating false unity (performed+uniting) or authentic unity (honest+uniting). The historical examples are not directly political but show a tendency for audiences to interpret prompts with a cynical/divisive lens, especially honest+dividing high. For \"ONE NIGHT STANDS\", both dividing quadrants sum to ~0.688, uniting ~0.311. For \"FAST FASHION\", dividing sum 0.954, uniting 0.045. For \"OPEN RELATIONSHIPS\", dividing sum 0.838, uniting 0.162.\n\nSo the audience seems to lean towards dividing interpretations, and especially honest+dividing (truthfully fracturing). For a concept like the US Constitution, which is supposed to be a unifying document but often contested, we might expect a mix. Possibly performed+dividing (exploiting divisions deliberately) could be high because politicians use it to exploit divisions. Honest+dividing might also be high because it inherently fractures (e.g., through amendments, interpretations). But maybe some see it as bringing us together authentically (honest+uniting) like foundational unity. Performed+uniting (false unity) might be present.\n\nWe need to assign probabilities summing to 1. Let's think relative to examples. The examples have honest+dividing as the largest except for one night stands where performed+dividing slightly larger (0.349 vs 0.339). So honest+dividing is typically largest. For constitution, maybe honest+dividing around 0.4-0.5? Performed+dividing maybe around 0.3? Uniting lower.\n\nWe can try to infer from semantic similarity. \"ONE NIGHT STANDS\" - transient, maybe deceptive, thus performed+dividing high. \"FAST FASHION\" - negative industry, honest+dividing high (exploitative truthfully). \"OPEN RELATIONSHIPS\" - alternative lifestyle, honest+dividing high (fracturing traditional norms truthfully). Constitution is a formal document; maybe it's more about unity conceptually, but audience may be critical.\n\nGiven the project \"Mixed Messages\", participants likely generate ambiguous/ironic interpretations. The prompt says \"These are this audience's interpretations, not objective labels.\" So we need to predict distribution of submissions.\n\nWe could approximate by averaging the three examples? But that might not be appropriate because topic differs. Average of the three:\nperformed+uniting: (0.1626+0.0455+0.0813)/3 = 0.2894/3 = 0.0965\nhonest+uniting: (0.1488+0+0.0813)/3 = 0.2301/3 = 0.0767\nperformed+dividing: (0.3495+0.2424+0.0798)/3 = 0.6717/3 = 0.2239\nhonest+dividing: (0.3391+0.7121+0.7575)/3 = 1.8087/3 = 0.6029\nSum = 1.0. That yields honest+dividing dominant, performed+dividing next, uniting small.\n\nBut for constitution, maybe performed+dividing is higher because of political exploitation. Could shift some from honest+dividing to performed+dividing. For one night stands, performed+dividing > honest+dividing, perhaps because \"one night stands\" involve performance/deception. For constitution, it's not inherently deceptive but used deceptively. So performed+dividing could be sizable.\n\nLet's consider a plausible distribution:\nperformed+uniting: 0.1 (false unity, e.g., \"we're all united under the constitution\" but superficial)\nhonest+uniting: 0.15 (authentic bringing together, foundational values)\nperformed+dividing: 0.35 (deliberately exploiting divisions via constitutional arguments)\nhonest+dividing: 0.40 (truthfully fracturing, e.g., it's outdated, divides by design)\n\nSum = 1.0. That seems reasonable.\n\nAlternatively, maybe honest+uniting is lower because audience is cynical. In examples, honest+uniting is 0.149, 0, 0.081. So average 0.077. So maybe honest+uniting ~0.08. Performed+uniting ~0.09. So uniting total ~0.17. Dividing total ~0.83. Among dividing, for political topic, performed+dividing might be higher than honest+dividing? In one night stands, performed+dividing 0.349, honest+dividing 0.339 (almost equal). For fast fashion, honest+dividing much higher. For open relationships, honest+dividing much higher. So if constitution is more like a tool for exploitation, performed+dividing could be higher. But constitution also has genuine divisive structure (federalism, checks). I'd guess performed+dividing ~0.45, honest+dividing ~0.38, uniting ~0.17.\n\nLet's set:\nperformed+uniting: 0.08\nhonest+uniting: 0.07\nperformed+dividing: 0.45\nhonest+dividing: 0.40\nSum = 1.00. That matches cynical political view.\n\nBut we need at least three decimal places when needed. Use decimals.\n\nWe could also look at the number of submissions: examples have 289,66,664. Not needed.\n\nThe instruction: \"Reply with a single JSON object only. No prose or code fences.\" So output exactly: {\"performed+uniting\":0.08,\"honest+uniting\":0.07,\"performed+dividing\":0.45,\"honest+dividing\":0.40} but better with more precision: 0.080, 0.070, 0.450, 0.400. Or 0.08,0.07,0.45,0.40 sums to 1.0 exactly. But they said \"Use at least three decimal places when needed.\" It's fine to use two if exact? They said \"when needed\" meaning if not integer, use at least three decimals. To be safe, use three decimals: 0.080, 0.070, 0.450, 0.400. That sums to 1.000.\n\nBut maybe we should adjust to reflect more nuanced: from examples, honest+dividing is never below 0.339. So 0.400 is fine. performed+dividing varies. I'll go with:\n\n{\n\"performed+uniting\":0.082,\n\"honest+uniting\":0.073,\n\"performed+dividing\":0.437,\n\"honest+dividing\":0.408\n}\nSum = 0.082+0.073=0.155; +0.437=0.592; +0.408=1.000. Good.\n\nBut we can also mimic the style: examples have long decimals. We can produce something like 0.0823 etc. But not required.\n\nI'll choose a distribution that seems plausible: performed+uniting low, honest+uniting low, performed+dividing high, honest+dividing high but slightly less than performed+dividing. Let's do:\n\nperformed+uniting: 0.091\nhonest+uniting: 0.076\nperformed+dividing: 0.433\nhonest+dividing: 0.400\nSum = 1.000.\n\nActually, from one night stands, performed+uniting 0.163, honest+uniting 0.149 (both around 0.15). For constitution, maybe less because not about personal connection. So 0.09 and 0.07 okay.\n\nI'll output: {\"performed+uniting\":0.091,\"honest+uniting\":0.076,\"performed+dividing\":0.433,\"honest+dividing\":0.400}\n\nCheck sum: 0.091+0.076=0.167; +0.433=0.600; +0.400=1.000. Good.\n\nNo other text.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"THE US CONSTITUTION\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"ONE NIGHT STANDS\": performed+uniting 0.163, honest+uniting 0.149, performed+dividing 0.349, honest+dividing 0.339. Submissions 289.\n2. \"FAST FASHION\": performed+uniting 0.045, honest+uniting 0, performed+dividing 0.242, honest+dividing 0.712. Submissions 66.\n3. \"OPEN RELATIONSHIPS\": performed+uniting 0.081, honest+uniting 0.081, performed+dividing 0.080, honest+dividing 0.758. Submissions 664.\n\nWe need to estimate share for \"THE US CONSTITUTION\". The examples show that for topics that are perhaps more about personal/sexual relationships (one night stands, open relationships) or consumer (fast fashion), the honest+dividing is high (fracturing us truthfully). For one night stands, performed+dividing and honest+dividing are both around 0.35, while uniting are lower. For fast fashion, honest+dividing dominates (0.712), performed+uniting very low, honest+uniting zero. For open relationships, honest+dividing dominates (0.758), others low.\n\nNow \"THE US CONSTITUTION\" is a political document, likely to be seen as either uniting (bringing together) or dividing. Given the current political climate, many might see it as exploited for divisions (performed+dividing) or honestly divisive (honest+dividing). Also some might see it as creating false unity (performed+uniting) or authentic unity (honest+uniting). The historical examples are not directly political but show a tendency for audiences to interpret prompts with a cynical/divisive lens, especially honest+dividing high. For \"ONE NIGHT STANDS\", both dividing quadrants sum to ~0.688, uniting ~0.311. For \"FAST FASHION\", dividing sum 0.954, uniting 0.045. For \"OPEN RELATIONSHIPS\", dividing sum 0.838, uniting 0.162.\n\nSo the audience seems to lean towards dividing interpretations, and especially honest+dividing (truthfully fracturing). For a concept like the US Constitution, which is supposed to be a unifying document but often contested, we might expect a mix. Possibly performed+dividing (exploiting divisions deliberately) could be high because politicians use it to exploit divisions. Honest+dividing might also be high because it inherently fractures (e.g., through amendments, interpretations). But maybe some see it as bringing us together authentically (honest+uniting) like foundational unity. Performed+uniting (false unity) might be present.\n\nWe need to assign probabilities summing to 1. Let's think relative to examples. The examples have honest+dividing as the largest except for one night stands where performed+dividing slightly larger (0.349 vs 0.339). So honest+dividing is typically largest. For constitution, maybe honest+dividing around 0.4-0.5? Performed+dividing maybe around 0.3? Uniting lower.\n\nWe can try to infer from semantic similarity. \"ONE NIGHT STANDS\" - transient, maybe deceptive, thus performed+dividing high. \"FAST FASHION\" - negative industry, honest+dividing high (exploitative truthfully). \"OPEN RELATIONSHIPS\" - alternative lifestyle, honest+dividing high (fracturing traditional norms truthfully). Constitution is a formal document; maybe it's more about unity conceptually, but audience may be critical.\n\nGiven the project \"Mixed Messages\", participants likely generate ambiguous/ironic interpretations. The prompt says \"These are this audience's interpretations, not objective labels.\" So we need to predict distribution of submissions.\n\nWe could approximate by averaging the three examples? But that might not be appropriate because topic differs. Average of the three:\nperformed+uniting: (0.1626+0.0455+0.0813)/3 = 0.2894/3 = 0.0965\nhonest+uniting: (0.1488+0+0.0813)/3 = 0.2301/3 = 0.0767\nperformed+dividing: (0.3495+0.2424+0.0798)/3 = 0.6717/3 = 0.2239\nhonest+dividing: (0.3391+0.7121+0.7575)/3 = 1.8087/3 = 0.6029\nSum = 1.0. That yields honest+dividing dominant, performed+dividing next, uniting small.\n\nBut for constitution, maybe performed+dividing is higher because of political exploitation. Could shift some from honest+dividing to performed+dividing. For one night stands, performed+dividing > honest+dividing, perhaps because \"one night stands\" involve performance/deception. For constitution, it's not inherently deceptive but used deceptively. So performed+dividing could be sizable.\n\nLet's consider a plausible distribution:\nperformed+uniting: 0.1 (false unity, e.g., \"we're all united under the constitution\" but superficial)\nhonest+uniting: 0.15 (authentic bringing together, foundational values)\nperformed+dividing: 0.35 (deliberately exploiting divisions via constitutional arguments)\nhonest+dividing: 0.40 (truthfully fracturing, e.g., it's outdated, divides by design)\n\nSum = 1.0. That seems reasonable.\n\nAlternatively, maybe honest+uniting is lower because audience is cynical. In examples, honest+uniting is 0.149, 0, 0.081. So average 0.077. So maybe honest+uniting ~0.08. Performed+uniting ~0.09. So uniting total ~0.17. Dividing total ~0.83. Among dividing, for political topic, performed+dividing might be higher than honest+dividing? In one night stands, performed+dividing 0.349, honest+dividing 0.339 (almost equal). For fast fashion, honest+dividing much higher. For open relationships, honest+dividing much higher. So if constitution is more like a tool for exploitation, performed+dividing could be higher. But constitution also has genuine divisive structure (federalism, checks). I'd guess performed+dividing ~0.45, honest+dividing ~0.38, uniting ~0.17.\n\nLet's set:\nperformed+uniting: 0.08\nhonest+uniting: 0.07\nperformed+dividing: 0.45\nhonest+dividing: 0.40\nSum = 1.00. That matches cynical political view.\n\nBut we need at least three decimal places when needed. Use decimals.\n\nWe could also look at the number of submissions: examples have 289,66,664. Not needed.\n\nThe instruction: \"Reply with a single JSON object only. No prose or code fences.\" So output exactly: {\"performed+uniting\":0.08,\"honest+uniting\":0.07,\"performed+dividing\":0.45,\"honest+dividing\":0.40} but better with more precision: 0.080, 0.070, 0.450, 0.400. Or 0.08,0.07,0.45,0.40 sums to 1.0 exactly. But they said \"Use at least three decimal places when needed.\" It's fine to use two if exact? They said \"when needed\" meaning if not integer, use at least three decimals. To be safe, use three decimals: 0.080, 0.070, 0.450, 0.400. That sums to 1.000.\n\nBut maybe we should adjust to reflect more nuanced: from examples, honest+dividing is never below 0.339. So 0.400 is fine. performed+dividing varies. I'll go with:\n\n{\n\"performed+uniting\":0.082,\n\"honest+uniting\":0.073,\n\"performed+dividing\":0.437,\n\"honest+dividing\":0.408\n}\nSum = 0.082+0.073=0.155; +0.437=0.592; +0.408=1.000. Good.\n\nBut we can also mimic the style: examples have long decimals. We can produce something like 0.0823 etc. But not required.\n\nI'll choose a distribution that seems plausible: performed+uniting low, honest+uniting low, performed+dividing high, honest+dividing high but slightly less than performed+dividing. Let's do:\n\nperformed+uniting: 0.091\nhonest+uniting: 0.076\nperformed+dividing: 0.433\nhonest+dividing: 0.400\nSum = 1.000.\n\nActually, from one night stands, performed+uniting 0.163, honest+uniting 0.149 (both around 0.15). For constitution, maybe less because not about personal connection. So 0.09 and 0.07 okay.\n\nI'll output: {\"performed+uniting\":0.091,\"honest+uniting\":0.076,\"performed+dividing\":0.433,\"honest+dividing\":0.400}\n\nCheck sum: 0.091+0.076=0.167; +0.433=0.600; +0.400=1.000. Good.\n\nNo other text.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 500,
+          "completion_tokens": 2272,
+          "total_tokens": 2772,
+          "cost": 0.001265616,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001265616,
+            "upstream_inference_prompt_cost": 0.000066,
+            "upstream_inference_completions_cost": 0.001199616
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2229,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 500,
+        "completion_tokens": 2272,
+        "total_tokens": 2772,
+        "cost": 0.001265616,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001265616,
+          "upstream_inference_prompt_cost": 0.000066,
+          "upstream_inference_completions_cost": 0.001199616
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2229,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 73,
+      "finishedAt": "2026-11-15T04:36:13.457Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 90
+      },
+      "observation": {
+        "ok": true,
+        "id": 90,
+        "prompt": "ONE NIGHT STANDS",
+        "distribution": {
+          "performed+uniting": 0.16262975778546712,
+          "honest+uniting": 0.14878892733564014,
+          "performed+dividing": 0.3494809688581315,
+          "honest+dividing": 0.3391003460207612
+        },
+        "submissions": 289,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 49
+      },
+      "observation": {
+        "ok": true,
+        "id": 49,
+        "prompt": "FAST FASHION",
+        "distribution": {
+          "performed+uniting": 0.045454545454545456,
+          "honest+uniting": 0,
+          "performed+dividing": 0.24242424242424243,
+          "honest+dividing": 0.7121212121212122
+        },
+        "submissions": 66,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 11
+      },
+      "observation": {
+        "ok": true,
+        "id": 11,
+        "prompt": "OPEN RELATIONSHIPS",
+        "distribution": {
+          "performed+uniting": 0.08132530120481928,
+          "honest+uniting": 0.08132530120481928,
+          "performed+dividing": 0.07981927710843373,
+          "honest+dividing": 0.7575301204819277
+        },
+        "submissions": 664,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.091,
+          "honest+uniting": 0.076,
+          "performed+dividing": 0.433,
+          "honest+dividing": 0.4
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.091,
+      "honest+uniting": 0.076,
+      "performed+dividing": 0.433,
+      "honest+dividing": 0.4
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.27005363365899465,
+    "score": 86.49731831705026,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

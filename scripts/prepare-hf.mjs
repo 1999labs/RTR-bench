@@ -1,9 +1,10 @@
 import fs from 'node:fs';
+import {createHash} from 'node:crypto';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 import {fileURLToPath} from 'node:url';
 import {execFileSync} from 'node:child_process';
-import {loadDistributionData, digest} from '../src/shared/dataset.ts';
+import {loadDistributionData} from '../src/shared/dataset.ts';
 
 // Offline export only. Publish the resulting folder separately after review.
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -35,15 +36,22 @@ fs.copyFileSync(path.join(root,'data/splits/v1.json'),path.join(out,'source/spli
 const license=fs.readFileSync(path.join(root,'LICENSE'),'utf8');
 assert(license.includes('data/windows.json is dedicated to the public domain under CC0 1.0.'));
 fs.writeFileSync(path.join(out,'LICENSE-MIT'),license.split('\n---\n')[0].trim()+'\n');
-const files=['README.md','LICENSE','LICENSE-CC0','LICENSE-MIT','CITATION.cff',...parts.map(p=>`data/${p}.jsonl`),'source/windows.json','source/split-v1.json'];
+const verified=JSON.parse(fs.readFileSync(path.join(root,'results/final-8000/verified-results.json')));
+assert.equal(verified.results.length,11,'Publish only the complete verified eleven-model campaign');
+assert.ok(verified.results.every(r=>r.offlineResumeVerified));
+const resultFiles=['predict-scatter.png','learn-scatter.png','predict-learn-scatter.png','predict-scatter.svg','learn-scatter.svg','predict-learn-scatter.svg','predict-learn-scatter.json'];
+fs.mkdirSync(path.join(out,'results'),{recursive:true});
+for(const file of resultFiles)fs.copyFileSync(path.join(root,'results',file),path.join(out,'results',file));
+fs.copyFileSync(path.join(root,'results/final-8000/verified-results.json'),path.join(out,'results/verified-results.json'));
+const files=[...resultFiles.map(f=>`results/${f}`),'results/verified-results.json','README.md','LICENSE','LICENSE-CC0','LICENSE-MIT','CITATION.cff',...parts.map(p=>`data/${p}.jsonl`),'source/windows.json','source/split-v1.json'];
 const sourceCommit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
 const release={
-  packageVersion:'rtr-bench-hf-v1',repository:'noahmclaughlin/RTR-bench',
+  packageVersion:'rtr-bench-hf-v1',cliVersion:'0.2.2',repository:'noahmclaughlin/RTR-bench',
   sourceRepository:'https://github.com/1999labs/RTR-bench',sourceCommit,
   sourceGeneratedAt:source.generatedAt,datasetSha256:datasetHash,splitSha256:splitHash,
   splitVersion:split.version,rows:windows.length,submissions:windows.reduce((s,w)=>s+w.n,0),
   quadrants,partitions:Object.fromEntries(parts.map(p=>[p,{rows:split[p].length,days:split[p]}])),
-  files:Object.fromEntries(files.map(f=>{const raw=fs.readFileSync(path.join(out,f),'utf8');return [f,{bytes:Buffer.byteLength(raw),sha256:digest(raw)}];})),
+  files:Object.fromEntries(files.map(f=>{const raw=fs.readFileSync(path.join(out,f));return [f,{bytes:raw.length,sha256:createHash('sha256').update(raw).digest('hex')}];})),
 };
 fs.writeFileSync(path.join(out,'release.json'),JSON.stringify(release,null,2)+'\n');
 console.log(`Prepared ${windows.length} rows (${parts.map(p=>`${p}: ${split[p].length}`).join(', ')}), ${release.submissions} submissions, in ${out}`);

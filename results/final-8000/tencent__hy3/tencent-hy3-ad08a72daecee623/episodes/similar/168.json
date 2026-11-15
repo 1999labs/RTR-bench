@@ -1,0 +1,607 @@
+{
+  "day": 168,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"BIG TOBACCO\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":51,\"prompt\":\"BITCOIN\",\"distribution\":{\"performed+uniting\":0.09740259740259741,\"honest+uniting\":0.38961038961038963,\"performed+dividing\":0.3181818181818182,\"honest+dividing\":0.19480519480519481},\"submissions\":154},{\"id\":85,\"prompt\":\"BARACK OBAMA\",\"distribution\":{\"performed+uniting\":0.10891089108910891,\"honest+uniting\":0.10396039603960396,\"performed+dividing\":0.13366336633663367,\"honest+dividing\":0.6534653465346535},\"submissions\":202},{\"id\":98,\"prompt\":\"JOE BIDEN\",\"distribution\":{\"performed+uniting\":0.1322314049586777,\"honest+uniting\":0.09090909090909091,\"performed+dividing\":0.45041322314049587,\"honest+dividing\":0.32644628099173556},\"submissions\":242}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T05:08:15.034Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.120,\"honest+uniting\":0.050,\"performed+dividing\":0.480,\"honest+dividing\":0.350}",
+      "response": {
+        "id": "gen-1794719295-uVlJIzHOLDeaqOPSIwm7",
+        "object": "chat.completion",
+        "created": 1794719295,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.120,\"honest+uniting\":0.050,\"performed+dividing\":0.480,\"honest+dividing\":0.350}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"BIG TOBACCO\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to output a JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. BITCOIN: performed+uniting 0.0974, honest+uniting 0.3896, performed+dividing 0.3182, honest+dividing 0.1948. Submissions 154.\n2. BARACK OBAMA: p+u 0.1089, h+u 0.1040, p+d 0.1337, h+d 0.6535. Submissions 202.\n3. JOE BIDEN: p+u 0.1322, h+u 0.0909, p+d 0.4504, h+d 0.3264. Submissions 242.\n\nWe need to estimate for \"BIG TOBACCO\". Big Tobacco is a term referring to the tobacco industry, often criticized for deceptive practices, lobbying, manipulating public opinion, creating doubt about science, targeting youth, etc. It's generally seen as a corrupting influence, exploitative, divisive perhaps. In the context of these quadrants: performed+uniting = creating false unity among us (e.g., tobacco companies sponsoring community events to seem unifying). honest+uniting = bringing us together authentically (unlikely for Big Tobacco, maybe some corporate social responsibility but audience likely cynical). performed+dividing = exploiting our divisions deliberately (e.g., lobbying to pit groups against each other, or targeting specific demographics). honest+dividing = fracturing us truthfully (maybe truthfully showing how it divides? But \"truthfully fracturing us\" is odd: maybe the honest effect is that it fractures society, e.g., health disparities, addiction divides). The audience seems to assign probabilities based on interpretations.\n\nLook at historical patterns: For political figures (Obama, Biden) honest+dividing is high (0.65, 0.33) and performed+dividing also significant (0.13, 0.45). For Bitcoin (a decentralized currency, maybe more positive/uniting) honest+uniting is high (0.39) and performed+dividing moderate (0.32). Big Tobacco is a corporate entity with negative connotation. Likely the audience will see it as divisive rather than uniting. Performed+uniting might be low (like Obama's 0.11, Biden's 0.13, Bitcoin's 0.10). Honest+uniting likely very low (Obama 0.10, Biden 0.09, Bitcoin 0.39 but Bitcoin is different). So for Big Tobacco, honest+uniting probably near 0.05-0.10. Performed+uniting maybe 0.10-0.15. Performed+dividing and honest+dividing will dominate. Which is larger? For Obama, honest+dividing dominates (0.65). For Biden, performed+dividing (0.45) > honest+dividing (0.33). For Bitcoin, performed+dividing (0.32) > honest+dividing (0.19). Big Tobacco as a corporation might be seen as deliberately exploiting divisions (performed+dividing) through marketing, lobbying, etc. Also honestly fracturing us through addiction and health harm (honest+dividing). Which is more? The term \"Big Tobacco\" is often used to highlight the deceptive practices (performative) and the industry's role in dividing (e.g., funding doubt). I'd guess performed+dividing might be highest, similar to Biden or higher. Honest+dividing also substantial. Let's approximate.\n\nWe need to produce numbers summing to 1. Let's think of a plausible distribution:\n- performed+uniting: 0.10 (creating false unity via PR campaigns)\n- honest+uniting: 0.05 (unlikely authentic unity)\n- performed+dividing: 0.50 (exploiting divisions deliberately via lobbying, targeting vulnerable groups)\n- honest+dividing: 0.35 (fracturing us truthfully via health impacts, addiction)\n\nSum = 1.00. But we need at least three decimals if needed. Could use 0.100, 0.050, 0.500, 0.350. But maybe more nuanced: from examples, p+u around 0.1-0.13, h+u around 0.09-0.10 for politicians, but for Bitcoin h+u 0.39. So for tobacco, h+u maybe 0.08. p+u maybe 0.12. p+d maybe 0.45, h+d maybe 0.35? Sum = 1.00. Let's adjust: 0.12 + 0.08 + 0.45 + 0.35 = 1.00. Or 0.11 + 0.07 + 0.52 + 0.30 = 1.00. We should consider that \"Big Tobacco\" is a pejorative term highlighting the industry's manipulative power. The audience might see it as \"performed+dividing\" because it's deliberately exploiting divisions (e.g., sowing doubt about science, targeting minorities). \"honest+dividing\" might be lower because the fracturing is not \"truthful\" but caused by deceptive practices; but the quadrant \"honest+dividing\" means fracturing us truthfully, i.e., the true nature is divisive? Actually the labels: \"honest+dividing: fracturing us, truthfully\" meaning the entity authentically fractures us, not via performance. For a corporation, its honest effect might be fracturing via addiction, but it's not \"truthful\" in intent; however the interpretation is about the audience's reading of the entity's effect. The historical examples: For Obama, honest+dividing is 0.65, meaning audience thinks Obama authentically fractures us (maybe due to partisan perceptions). For Biden, honest+dividing 0.33, performed+dividing 0.45. So for disliked entities, performed+dividing can be higher. Big Tobacco is widely disliked, so performed+dividing likely high.\n\nLet's compute average of the three examples? Not directly, but we can see ranges.\nBITCOIN: p+u .097, h+u .390, p+d .318, h+d .195\nOBAMA: p+u .109, h+u .104, p+d .134, h+d .653\nBIDEN: p+u .132, h+u .091, p+d .450, h+d .326\n\nBig Tobacco is more like a corporation, maybe akin to a political figure in terms of public relations? Actually Bitcoin is a technology/community; Obama/Biden are politicians. Big Tobacco is a corporate lobby. Might be similar to Biden (political/corporate overlap) with high p+d. I'd estimate:\np+u: ~0.11 (similar to others)\nh+u: ~0.08 (low)\np+d: ~0.48 (high, deliberate exploitation)\nh+d: ~0.33 (substantial)\n\nSum = 0.11+0.08+0.48+0.33 = 1.00. To three decimals: 0.110, 0.080, 0.480, 0.330. But we could use more precise: 0.112, 0.078, 0.476, 0.334 sum = 1.000. Let's pick something that sums exactly 1. Use 0.110, 0.080, 0.480, 0.330. That's fine.\n\nBut maybe honest+uniting should be even lower, like 0.04. Then p+u 0.12, p+d 0.50, h+d 0.34. Sum = 1.00. Let's decide: The audience might see \"Big Tobacco\" as creating false unity (sponsoring sports, community) at maybe 0.12. Authentic unity near 0.05. Deliberate division 0.50. Truthful fracturing 0.33. That seems plausible.\n\nWe need to output only JSON object, no prose, no code fences. So:\n{\"performed+uniting\":0.120,\"honest+uniting\":0.050,\"performed+dividing\":0.500,\"honest+dividing\":0.330}\n\nBut ensure sum = 1.000. 0.12+0.05+0.5+0.33 = 1.00. Use three decimals: 0.120, 0.050, 0.500, 0.330. That's acceptable.\n\nAlternatively, to be safe with normalization tolerance, we can use 0.121, 0.052, 0.497, 0.330 sum = 1.000. Let's compute: 0.121+0.052=0.173; +0.497=0.670; +0.330=1.000. Good.\n\nI'll go with a distribution inspired by Biden but shifted: p+u 0.121, h+u 0.052, p+d 0.497, h+d 0.330. That sums exactly.\n\nBut maybe honest+dividing should be higher because tobacco genuinely harms and divides (health inequality). Could be 0.35, p+d 0.47. Let's do 0.120, 0.050, 0.480, 0.350 sum=1.000. That's fine.\n\nI'll output: {\"performed+uniting\":0.120,\"honest+uniting\":0.050,\"performed+dividing\":0.480,\"honest+dividing\":0.350}\n\nCheck keys exactly as required: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nNo other text.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"BIG TOBACCO\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to output a JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. BITCOIN: performed+uniting 0.0974, honest+uniting 0.3896, performed+dividing 0.3182, honest+dividing 0.1948. Submissions 154.\n2. BARACK OBAMA: p+u 0.1089, h+u 0.1040, p+d 0.1337, h+d 0.6535. Submissions 202.\n3. JOE BIDEN: p+u 0.1322, h+u 0.0909, p+d 0.4504, h+d 0.3264. Submissions 242.\n\nWe need to estimate for \"BIG TOBACCO\". Big Tobacco is a term referring to the tobacco industry, often criticized for deceptive practices, lobbying, manipulating public opinion, creating doubt about science, targeting youth, etc. It's generally seen as a corrupting influence, exploitative, divisive perhaps. In the context of these quadrants: performed+uniting = creating false unity among us (e.g., tobacco companies sponsoring community events to seem unifying). honest+uniting = bringing us together authentically (unlikely for Big Tobacco, maybe some corporate social responsibility but audience likely cynical). performed+dividing = exploiting our divisions deliberately (e.g., lobbying to pit groups against each other, or targeting specific demographics). honest+dividing = fracturing us truthfully (maybe truthfully showing how it divides? But \"truthfully fracturing us\" is odd: maybe the honest effect is that it fractures society, e.g., health disparities, addiction divides). The audience seems to assign probabilities based on interpretations.\n\nLook at historical patterns: For political figures (Obama, Biden) honest+dividing is high (0.65, 0.33) and performed+dividing also significant (0.13, 0.45). For Bitcoin (a decentralized currency, maybe more positive/uniting) honest+uniting is high (0.39) and performed+dividing moderate (0.32). Big Tobacco is a corporate entity with negative connotation. Likely the audience will see it as divisive rather than uniting. Performed+uniting might be low (like Obama's 0.11, Biden's 0.13, Bitcoin's 0.10). Honest+uniting likely very low (Obama 0.10, Biden 0.09, Bitcoin 0.39 but Bitcoin is different). So for Big Tobacco, honest+uniting probably near 0.05-0.10. Performed+uniting maybe 0.10-0.15. Performed+dividing and honest+dividing will dominate. Which is larger? For Obama, honest+dividing dominates (0.65). For Biden, performed+dividing (0.45) > honest+dividing (0.33). For Bitcoin, performed+dividing (0.32) > honest+dividing (0.19). Big Tobacco as a corporation might be seen as deliberately exploiting divisions (performed+dividing) through marketing, lobbying, etc. Also honestly fracturing us through addiction and health harm (honest+dividing). Which is more? The term \"Big Tobacco\" is often used to highlight the deceptive practices (performative) and the industry's role in dividing (e.g., funding doubt). I'd guess performed+dividing might be highest, similar to Biden or higher. Honest+dividing also substantial. Let's approximate.\n\nWe need to produce numbers summing to 1. Let's think of a plausible distribution:\n- performed+uniting: 0.10 (creating false unity via PR campaigns)\n- honest+uniting: 0.05 (unlikely authentic unity)\n- performed+dividing: 0.50 (exploiting divisions deliberately via lobbying, targeting vulnerable groups)\n- honest+dividing: 0.35 (fracturing us truthfully via health impacts, addiction)\n\nSum = 1.00. But we need at least three decimals if needed. Could use 0.100, 0.050, 0.500, 0.350. But maybe more nuanced: from examples, p+u around 0.1-0.13, h+u around 0.09-0.10 for politicians, but for Bitcoin h+u 0.39. So for tobacco, h+u maybe 0.08. p+u maybe 0.12. p+d maybe 0.45, h+d maybe 0.35? Sum = 1.00. Let's adjust: 0.12 + 0.08 + 0.45 + 0.35 = 1.00. Or 0.11 + 0.07 + 0.52 + 0.30 = 1.00. We should consider that \"Big Tobacco\" is a pejorative term highlighting the industry's manipulative power. The audience might see it as \"performed+dividing\" because it's deliberately exploiting divisions (e.g., sowing doubt about science, targeting minorities). \"honest+dividing\" might be lower because the fracturing is not \"truthful\" but caused by deceptive practices; but the quadrant \"honest+dividing\" means fracturing us truthfully, i.e., the true nature is divisive? Actually the labels: \"honest+dividing: fracturing us, truthfully\" meaning the entity authentically fractures us, not via performance. For a corporation, its honest effect might be fracturing via addiction, but it's not \"truthful\" in intent; however the interpretation is about the audience's reading of the entity's effect. The historical examples: For Obama, honest+dividing is 0.65, meaning audience thinks Obama authentically fractures us (maybe due to partisan perceptions). For Biden, honest+dividing 0.33, performed+dividing 0.45. So for disliked entities, performed+dividing can be higher. Big Tobacco is widely disliked, so performed+dividing likely high.\n\nLet's compute average of the three examples? Not directly, but we can see ranges.\nBITCOIN: p+u .097, h+u .390, p+d .318, h+d .195\nOBAMA: p+u .109, h+u .104, p+d .134, h+d .653\nBIDEN: p+u .132, h+u .091, p+d .450, h+d .326\n\nBig Tobacco is more like a corporation, maybe akin to a political figure in terms of public relations? Actually Bitcoin is a technology/community; Obama/Biden are politicians. Big Tobacco is a corporate lobby. Might be similar to Biden (political/corporate overlap) with high p+d. I'd estimate:\np+u: ~0.11 (similar to others)\nh+u: ~0.08 (low)\np+d: ~0.48 (high, deliberate exploitation)\nh+d: ~0.33 (substantial)\n\nSum = 0.11+0.08+0.48+0.33 = 1.00. To three decimals: 0.110, 0.080, 0.480, 0.330. But we could use more precise: 0.112, 0.078, 0.476, 0.334 sum = 1.000. Let's pick something that sums exactly 1. Use 0.110, 0.080, 0.480, 0.330. That's fine.\n\nBut maybe honest+uniting should be even lower, like 0.04. Then p+u 0.12, p+d 0.50, h+d 0.34. Sum = 1.00. Let's decide: The audience might see \"Big Tobacco\" as creating false unity (sponsoring sports, community) at maybe 0.12. Authentic unity near 0.05. Deliberate division 0.50. Truthful fracturing 0.33. That seems plausible.\n\nWe need to output only JSON object, no prose, no code fences. So:\n{\"performed+uniting\":0.120,\"honest+uniting\":0.050,\"performed+dividing\":0.500,\"honest+dividing\":0.330}\n\nBut ensure sum = 1.000. 0.12+0.05+0.5+0.33 = 1.00. Use three decimals: 0.120, 0.050, 0.500, 0.330. That's acceptable.\n\nAlternatively, to be safe with normalization tolerance, we can use 0.121, 0.052, 0.497, 0.330 sum = 1.000. Let's compute: 0.121+0.052=0.173; +0.497=0.670; +0.330=1.000. Good.\n\nI'll go with a distribution inspired by Biden but shifted: p+u 0.121, h+u 0.052, p+d 0.497, h+d 0.330. That sums exactly.\n\nBut maybe honest+dividing should be higher because tobacco genuinely harms and divides (health inequality). Could be 0.35, p+d 0.47. Let's do 0.120, 0.050, 0.480, 0.350 sum=1.000. That's fine.\n\nI'll output: {\"performed+uniting\":0.120,\"honest+uniting\":0.050,\"performed+dividing\":0.480,\"honest+dividing\":0.350}\n\nCheck keys exactly as required: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nNo other text.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 503,
+          "completion_tokens": 2267,
+          "total_tokens": 2770,
+          "cost": 0.001263372,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001263372,
+            "upstream_inference_prompt_cost": 0.000066396,
+            "upstream_inference_completions_cost": 0.001196976
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2224,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 503,
+        "completion_tokens": 2267,
+        "total_tokens": 2770,
+        "cost": 0.001263372,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001263372,
+          "upstream_inference_prompt_cost": 0.000066396,
+          "upstream_inference_completions_cost": 0.001196976
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2224,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 132,
+      "finishedAt": "2026-11-15T05:08:45.421Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 51
+      },
+      "observation": {
+        "ok": true,
+        "id": 51,
+        "prompt": "BITCOIN",
+        "distribution": {
+          "performed+uniting": 0.09740259740259741,
+          "honest+uniting": 0.38961038961038963,
+          "performed+dividing": 0.3181818181818182,
+          "honest+dividing": 0.19480519480519481
+        },
+        "submissions": 154,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 85
+      },
+      "observation": {
+        "ok": true,
+        "id": 85,
+        "prompt": "BARACK OBAMA",
+        "distribution": {
+          "performed+uniting": 0.10891089108910891,
+          "honest+uniting": 0.10396039603960396,
+          "performed+dividing": 0.13366336633663367,
+          "honest+dividing": 0.6534653465346535
+        },
+        "submissions": 202,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 98
+      },
+      "observation": {
+        "ok": true,
+        "id": 98,
+        "prompt": "JOE BIDEN",
+        "distribution": {
+          "performed+uniting": 0.1322314049586777,
+          "honest+uniting": 0.09090909090909091,
+          "performed+dividing": 0.45041322314049587,
+          "honest+dividing": 0.32644628099173556
+        },
+        "submissions": 242,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.12,
+          "honest+uniting": 0.05,
+          "performed+dividing": 0.48,
+          "honest+dividing": 0.35
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.12000000000000001,
+      "honest+uniting": 0.05000000000000001,
+      "performed+dividing": 0.48000000000000004,
+      "honest+dividing": 0.35000000000000003
+    },
+    "originalSum": 0.9999999999999999,
+    "failure": null,
+    "error": 0.18379561723886045,
+    "score": 90.81021913805698,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

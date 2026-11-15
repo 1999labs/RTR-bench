@@ -1,0 +1,607 @@
+{
+  "day": 162,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"GRETA THUNBERG\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":91,\"prompt\":\"THERAPY\",\"distribution\":{\"performed+uniting\":0.21782178217821782,\"honest+uniting\":0.5181518151815182,\"performed+dividing\":0.10231023102310231,\"honest+dividing\":0.1617161716171617},\"submissions\":303},{\"id\":1,\"prompt\":\"THE INTERNET\",\"distribution\":{\"performed+uniting\":0.32608695652173914,\"honest+uniting\":0.06521739130434782,\"performed+dividing\":0.5543478260869565,\"honest+dividing\":0.05434782608695652},\"submissions\":92},{\"id\":35,\"prompt\":\"THE WORLD CUP\",\"distribution\":{\"performed+uniting\":0.8992805755395683,\"honest+uniting\":0.03597122302158273,\"performed+dividing\":0.02877697841726619,\"honest+dividing\":0.03597122302158273},\"submissions\":139}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T05:03:57.511Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.172,\"honest+uniting\":0.461,\"performed+dividing\":0.267,\"honest+dividing\":0.100}",
+      "response": {
+        "id": "gen-1794719037-bY53NWyOoKsC1nlGbdil",
+        "object": "chat.completion",
+        "created": 1794719037,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.172,\"honest+uniting\":0.461,\"performed+dividing\":0.267,\"honest+dividing\":0.100}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"GRETA THUNBERG\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to output a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. prompt: THERAPY (submissions 303)\ndist: performed+uniting: 0.2178, honest+uniting: 0.5182, performed+dividing: 0.1023, honest+dividing: 0.1617\nSo THERAPY is seen mostly as honest+uniting (bringing together authentically) ~51.8%, some performed+uniting ~21.8%, honest+dividing ~16.2%, performed+dividing ~10.2%.\n\n2. prompt: THE INTERNET (submissions 92)\ndist: performed+uniting: 0.3261, honest+uniting: 0.0652, performed+dividing: 0.5543, honest+dividing: 0.0543\nSo THE INTERNET is seen mostly as performed+dividing (exploiting divisions deliberately) ~55.4%, performed+uniting ~32.6%, and both honest categories low (~6.5% each). So internet is divisive via performance.\n\n3. prompt: THE WORLD CUP (submissions 139)\ndist: performed+uniting: 0.8993, honest+uniting: 0.0360, performed+dividing: 0.0288, honest+dividing: 0.0360\nSo WORLD CUP is overwhelmingly performed+uniting (false unity) ~89.9%, other categories low.\n\nNow we need to estimate for GRETA THUNBERG. Greta Thunberg is a climate activist. She is a polarizing figure: some see her as uniting people around climate action authentically (honest+uniting), others see her as divisive, maybe exploited by media or political sides (performed+dividing or honest+dividing). Also some might see her as creating false unity (performed+uniting) e.g., superficial greenwashing or performative allyship.\n\nWe need to infer from audience's interpretations. The examples show that the audience tends to assign based on the concept's social perception. For THERAPY, a generally positive, authentic unifying concept -> honest+uniting high. For INTERNET, a tool that can be manipulative and divisive -> performed+dividing high, performed+uniting moderate (maybe echo chambers?). For WORLD CUP, a sports event that creates superficial national unity -> performed+uniting very high.\n\nGreta Thunberg: She is a real person, activist. The audience might see her as honest+uniting (bringing us together authentically around climate) or honest+dividing (fracturing us truthfully, because climate crisis is divisive and she speaks truth that divides). Or performed+dividing: media exploiting divisions, politicians using her to divide. Performed+uniting: maybe brands using her image for false unity (greenwashing). Which is most likely?\n\nWe should consider the political climate. Greta is often seen as a sincere activist (honest) but also a figure that sparks division. In the Mixed Messages project (I recall it's a project by something? Maybe it's from a specific dataset? Actually Mixed Messages is a generative art project by... I'm not sure. But we have these examples). The audience might be generally left-leaning or art-oriented? Not sure. But from examples: THERAPY (positive, personal) honest+uniting; INTERNET (ambiguous, manipulative) performed+dividing; WORLD CUP (mass event) performed+uniting.\n\nGreta Thunberg as an individual activist: could be seen as honest+uniting (she authentically tries to unite people for climate). But also she is controversial, so maybe honest+dividing (she truthfully fractures us because the truth about climate divides). Or performed+dividing (others exploit her to divide). Let's think of similar concepts: maybe \"ACTIVIST\" would be honest+uniting? But we don't have that.\n\nWe could approximate by averaging or using intuition. Since we need to produce a distribution, we can assign plausible numbers. Let's reason:\n\n- performed+uniting: creating false unity among us. This could be brands/leaders co-opting Greta for false unity. Probably moderate, maybe 0.15-0.25.\n- honest+uniting: bringing us together, authentically. She is a genuine figure inspiring youth climate movement. Could be high, maybe 0.35-0.45.\n- performed+dividing: exploiting our divisions, deliberately. Media or politicians using her to inflame culture wars. Could be significant, maybe 0.25-0.35.\n- honest+dividing: fracturing us, truthfully. The climate message itself is divisive truthfully. Could be moderate, maybe 0.10-0.20.\n\nBut we need to sum to 1. Let's look at the examples: For THERAPY, honest+uniting dominant (0.518). For INTERNET, performed+dividing dominant (0.554). For WORLD CUP, performed+uniting dominant (0.899). So each prompt tends to have one dominant quadrant, with others smaller.\n\nWhat would be dominant for Greta? I'd argue she is a polarizing figure, so maybe performed+dividing or honest+dividing could be high. But also many see her as authentic unifier. In the art audience, maybe they are sympathetic to climate activism, so honest+uniting might be high. However, the project might encourage cynical interpretations? Not sure.\n\nLet's consider the phrase \"Mixed Messages\" - it's about how words can be interpreted in these four ways. The audience submissions are interpretations. For a word like GRETA THUNBERG, participants might think: \"She unites us authentically\" (honest+uniting) OR \"She is used to divide us for political gain\" (performed+dividing) OR \"She honestly divides us because the truth hurts\" (honest+dividing) OR \"She is a token for fake unity\" (performed+uniting).\n\nGiven the examples, the distributions are not uniform; they are skewed. For a person who is a activist, maybe similar to THERAPY? But THERAPY is a concept, not a person. Greta is a person with controversy.\n\nMaybe we can think of \"GRETA THUNBERG\" as akin to a political figure. If we had \"POLITICIAN\" maybe performed+dividing. But we don't.\n\nWe could also consider that the audience might be inclined to see public figures as performed (i.e., mediated) rather than honest. The INTERNET example shows performed+dividing high, performed+uniting moderate. WORLD CUP performed+uniting high. So public spectacles are performed. Greta is a public figure mediated by internet and news. So performed quadrants might be larger than honest. In INTERNET, performed total = 0.326+0.554=0.880, honest total=0.119. In WORLD CUP, performed total=0.928, honest total=0.072. In THERAPY, performed total=0.320, honest total=0.680. So THERAPY is an exception (personal, not public spectacle). Greta is public, so likely performed dominates. Between performed+uniting and performed+dividing: For WORLD CUP (a uniting event) performed+uniting high. For INTERNET (a divisive tool) performed+dividing high. Greta is a figure that is both uniting for some, divisive for others. But which is more salient? The media often portrays her as divisive (culture wars). So performed+dividing might be high. But also there is a narrative of global climate strikes uniting youth (performed+uniting maybe). However, the \"performed\" aspect suggests inauthentic. Her unity might be seen as authentic by supporters, but the audience of Mixed Messages might be cynical about public figures? Not sure.\n\nLet's check the exact definitions:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nIf the audience thinks Greta is a genuine activist, they'd pick honest+uniting. If they think she's a pawn of media, performed+dividing. If they think she speaks hard truths that divide, honest+dividing. If they think she's used for greenwashing unity, performed+uniting.\n\nI'd guess the largest is honest+uniting or performed+dividing. Let's approximate: honest+uniting 0.40, performed+dividing 0.35, performed+uniting 0.15, honest+dividing 0.10. Sum = 1.00. That seems plausible.\n\nBut we need at least three decimal places when needed. We can use e.g., 0.401, 0.352, 0.147, 0.100. But we should ensure sum 1. Let's do 0.400, 0.350, 0.150, 0.100 sums to 1.000. That's fine. But maybe we want more nuanced based on examples: For THERAPY honest+uniting 0.518, performed+uniting 0.218, honest+dividing 0.162, performed+dividing 0.102. For Greta, maybe less honest+uniting because she's public. So maybe honest+uniting 0.35, performed+uniting 0.20, performed+dividing 0.30, honest+dividing 0.15. Sum=1.00.\n\nAlternatively, we could think of Greta as similar to INTERNET? No, internet is a technology; Greta is a person. WORLD CUP is event. THERAPY is abstract. Greta might be closer to a person like \"TRUMP\" or \"OBAMA\" but we don't have.\n\nGiven the lack of direct analogy, I'll produce a reasonable distribution. I'll choose:\nperformed+uniting: 0.197\nhonest+uniting: 0.423\nperformed+dividing: 0.281\nhonest+dividing: 0.099\nSum = 0.197+0.423=0.620; +0.281=0.901; +0.099=1.000. Good.\n\nBut maybe we should make performed+dividing higher because of polarization. Let's adjust: performed+uniting: 0.15, honest+uniting: 0.35, performed+dividing: 0.40, honest+dividing: 0.10. Sum=1.00. That gives performed+dividing dominant, like internet but less extreme. However, Greta is not as divisive as internet? Actually she is divisive but also uniting. I think honest+uniting should be sizable.\n\nI'll go with a distribution that reflects a mix but with honest+uniting slightly highest, performed+dividing second. Let's pick:\nperformed+uniting: 0.172\nhonest+uniting: 0.461\nperformed+dividing: 0.267\nhonest+dividing: 0.100\nSum = 1.000.\n\nBut we need to output only JSON. No prose. So final answer: {\"performed+uniting\":0.172,\"honest+uniting\":0.461,\"performed+dividing\":0.267,\"honest+dividing\":0.100}\n\nCheck sum: 0.172+0.461=0.633; +0.267=0.900; +0.100=1.000. Good.\n\nAlternatively, we could use more decimals: 0.1723, 0.4612, 0.2665, 0.1000 sum = 1.0000. But not required. At least three decimal places when needed; we have three.\n\nI'll output exactly that.\n\nBut wait: The instruction says \"Use at least three decimal places when needed.\" That means if we have e.g., 0.1 we should write 0.100? It says \"when needed\" maybe meaning if not integer, use three decimals. To be safe, I'll use three decimals for all: 0.172, 0.461, 0.267, 0.100. That's fine.\n\nI'll produce the JSON.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"GRETA THUNBERG\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe need to output a single JSON object with these four keys, numeric probabilities summing to 1, at least three decimal places when needed. Use historical examples to inform.\n\nHistorical examples:\n1. prompt: THERAPY (submissions 303)\ndist: performed+uniting: 0.2178, honest+uniting: 0.5182, performed+dividing: 0.1023, honest+dividing: 0.1617\nSo THERAPY is seen mostly as honest+uniting (bringing together authentically) ~51.8%, some performed+uniting ~21.8%, honest+dividing ~16.2%, performed+dividing ~10.2%.\n\n2. prompt: THE INTERNET (submissions 92)\ndist: performed+uniting: 0.3261, honest+uniting: 0.0652, performed+dividing: 0.5543, honest+dividing: 0.0543\nSo THE INTERNET is seen mostly as performed+dividing (exploiting divisions deliberately) ~55.4%, performed+uniting ~32.6%, and both honest categories low (~6.5% each). So internet is divisive via performance.\n\n3. prompt: THE WORLD CUP (submissions 139)\ndist: performed+uniting: 0.8993, honest+uniting: 0.0360, performed+dividing: 0.0288, honest+dividing: 0.0360\nSo WORLD CUP is overwhelmingly performed+uniting (false unity) ~89.9%, other categories low.\n\nNow we need to estimate for GRETA THUNBERG. Greta Thunberg is a climate activist. She is a polarizing figure: some see her as uniting people around climate action authentically (honest+uniting), others see her as divisive, maybe exploited by media or political sides (performed+dividing or honest+dividing). Also some might see her as creating false unity (performed+uniting) e.g., superficial greenwashing or performative allyship.\n\nWe need to infer from audience's interpretations. The examples show that the audience tends to assign based on the concept's social perception. For THERAPY, a generally positive, authentic unifying concept -> honest+uniting high. For INTERNET, a tool that can be manipulative and divisive -> performed+dividing high, performed+uniting moderate (maybe echo chambers?). For WORLD CUP, a sports event that creates superficial national unity -> performed+uniting very high.\n\nGreta Thunberg: She is a real person, activist. The audience might see her as honest+uniting (bringing us together authentically around climate) or honest+dividing (fracturing us truthfully, because climate crisis is divisive and she speaks truth that divides). Or performed+dividing: media exploiting divisions, politicians using her to divide. Performed+uniting: maybe brands using her image for false unity (greenwashing). Which is most likely?\n\nWe should consider the political climate. Greta is often seen as a sincere activist (honest) but also a figure that sparks division. In the Mixed Messages project (I recall it's a project by something? Maybe it's from a specific dataset? Actually Mixed Messages is a generative art project by... I'm not sure. But we have these examples). The audience might be generally left-leaning or art-oriented? Not sure. But from examples: THERAPY (positive, personal) honest+uniting; INTERNET (ambiguous, manipulative) performed+dividing; WORLD CUP (mass event) performed+uniting.\n\nGreta Thunberg as an individual activist: could be seen as honest+uniting (she authentically tries to unite people for climate). But also she is controversial, so maybe honest+dividing (she truthfully fractures us because the truth about climate divides). Or performed+dividing (others exploit her to divide). Let's think of similar concepts: maybe \"ACTIVIST\" would be honest+uniting? But we don't have that.\n\nWe could approximate by averaging or using intuition. Since we need to produce a distribution, we can assign plausible numbers. Let's reason:\n\n- performed+uniting: creating false unity among us. This could be brands/leaders co-opting Greta for false unity. Probably moderate, maybe 0.15-0.25.\n- honest+uniting: bringing us together, authentically. She is a genuine figure inspiring youth climate movement. Could be high, maybe 0.35-0.45.\n- performed+dividing: exploiting our divisions, deliberately. Media or politicians using her to inflame culture wars. Could be significant, maybe 0.25-0.35.\n- honest+dividing: fracturing us, truthfully. The climate message itself is divisive truthfully. Could be moderate, maybe 0.10-0.20.\n\nBut we need to sum to 1. Let's look at the examples: For THERAPY, honest+uniting dominant (0.518). For INTERNET, performed+dividing dominant (0.554). For WORLD CUP, performed+uniting dominant (0.899). So each prompt tends to have one dominant quadrant, with others smaller.\n\nWhat would be dominant for Greta? I'd argue she is a polarizing figure, so maybe performed+dividing or honest+dividing could be high. But also many see her as authentic unifier. In the art audience, maybe they are sympathetic to climate activism, so honest+uniting might be high. However, the project might encourage cynical interpretations? Not sure.\n\nLet's consider the phrase \"Mixed Messages\" - it's about how words can be interpreted in these four ways. The audience submissions are interpretations. For a word like GRETA THUNBERG, participants might think: \"She unites us authentically\" (honest+uniting) OR \"She is used to divide us for political gain\" (performed+dividing) OR \"She honestly divides us because the truth hurts\" (honest+dividing) OR \"She is a token for fake unity\" (performed+uniting).\n\nGiven the examples, the distributions are not uniform; they are skewed. For a person who is a activist, maybe similar to THERAPY? But THERAPY is a concept, not a person. Greta is a person with controversy.\n\nMaybe we can think of \"GRETA THUNBERG\" as akin to a political figure. If we had \"POLITICIAN\" maybe performed+dividing. But we don't.\n\nWe could also consider that the audience might be inclined to see public figures as performed (i.e., mediated) rather than honest. The INTERNET example shows performed+dividing high, performed+uniting moderate. WORLD CUP performed+uniting high. So public spectacles are performed. Greta is a public figure mediated by internet and news. So performed quadrants might be larger than honest. In INTERNET, performed total = 0.326+0.554=0.880, honest total=0.119. In WORLD CUP, performed total=0.928, honest total=0.072. In THERAPY, performed total=0.320, honest total=0.680. So THERAPY is an exception (personal, not public spectacle). Greta is public, so likely performed dominates. Between performed+uniting and performed+dividing: For WORLD CUP (a uniting event) performed+uniting high. For INTERNET (a divisive tool) performed+dividing high. Greta is a figure that is both uniting for some, divisive for others. But which is more salient? The media often portrays her as divisive (culture wars). So performed+dividing might be high. But also there is a narrative of global climate strikes uniting youth (performed+uniting maybe). However, the \"performed\" aspect suggests inauthentic. Her unity might be seen as authentic by supporters, but the audience of Mixed Messages might be cynical about public figures? Not sure.\n\nLet's check the exact definitions:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nIf the audience thinks Greta is a genuine activist, they'd pick honest+uniting. If they think she's a pawn of media, performed+dividing. If they think she speaks hard truths that divide, honest+dividing. If they think she's used for greenwashing unity, performed+uniting.\n\nI'd guess the largest is honest+uniting or performed+dividing. Let's approximate: honest+uniting 0.40, performed+dividing 0.35, performed+uniting 0.15, honest+dividing 0.10. Sum = 1.00. That seems plausible.\n\nBut we need at least three decimal places when needed. We can use e.g., 0.401, 0.352, 0.147, 0.100. But we should ensure sum 1. Let's do 0.400, 0.350, 0.150, 0.100 sums to 1.000. That's fine. But maybe we want more nuanced based on examples: For THERAPY honest+uniting 0.518, performed+uniting 0.218, honest+dividing 0.162, performed+dividing 0.102. For Greta, maybe less honest+uniting because she's public. So maybe honest+uniting 0.35, performed+uniting 0.20, performed+dividing 0.30, honest+dividing 0.15. Sum=1.00.\n\nAlternatively, we could think of Greta as similar to INTERNET? No, internet is a technology; Greta is a person. WORLD CUP is event. THERAPY is abstract. Greta might be closer to a person like \"TRUMP\" or \"OBAMA\" but we don't have.\n\nGiven the lack of direct analogy, I'll produce a reasonable distribution. I'll choose:\nperformed+uniting: 0.197\nhonest+uniting: 0.423\nperformed+dividing: 0.281\nhonest+dividing: 0.099\nSum = 0.197+0.423=0.620; +0.281=0.901; +0.099=1.000. Good.\n\nBut maybe we should make performed+dividing higher because of polarization. Let's adjust: performed+uniting: 0.15, honest+uniting: 0.35, performed+dividing: 0.40, honest+dividing: 0.10. Sum=1.00. That gives performed+dividing dominant, like internet but less extreme. However, Greta is not as divisive as internet? Actually she is divisive but also uniting. I think honest+uniting should be sizable.\n\nI'll go with a distribution that reflects a mix but with honest+uniting slightly highest, performed+dividing second. Let's pick:\nperformed+uniting: 0.172\nhonest+uniting: 0.461\nperformed+dividing: 0.267\nhonest+dividing: 0.100\nSum = 1.000.\n\nBut we need to output only JSON. No prose. So final answer: {\"performed+uniting\":0.172,\"honest+uniting\":0.461,\"performed+dividing\":0.267,\"honest+dividing\":0.100}\n\nCheck sum: 0.172+0.461=0.633; +0.267=0.900; +0.100=1.000. Good.\n\nAlternatively, we could use more decimals: 0.1723, 0.4612, 0.2665, 0.1000 sum = 1.0000. But not required. At least three decimal places when needed; we have three.\n\nI'll output exactly that.\n\nBut wait: The instruction says \"Use at least three decimal places when needed.\" That means if we have e.g., 0.1 we should write 0.100? It says \"when needed\" maybe meaning if not integer, use three decimals. To be safe, I'll use three decimals for all: 0.172, 0.461, 0.267, 0.100. That's fine.\n\nI'll produce the JSON.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 503,
+          "completion_tokens": 2882,
+          "total_tokens": 3385,
+          "cost": 0.001588092,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001588092,
+            "upstream_inference_prompt_cost": 0.000066396,
+            "upstream_inference_completions_cost": 0.001521696
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2839,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 503,
+        "completion_tokens": 2882,
+        "total_tokens": 3385,
+        "cost": 0.001588092,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001588092,
+          "upstream_inference_prompt_cost": 0.000066396,
+          "upstream_inference_completions_cost": 0.001521696
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2839,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 125,
+      "finishedAt": "2026-11-15T05:04:39.556Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 91
+      },
+      "observation": {
+        "ok": true,
+        "id": 91,
+        "prompt": "THERAPY",
+        "distribution": {
+          "performed+uniting": 0.21782178217821782,
+          "honest+uniting": 0.5181518151815182,
+          "performed+dividing": 0.10231023102310231,
+          "honest+dividing": 0.1617161716171617
+        },
+        "submissions": 303,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 1
+      },
+      "observation": {
+        "ok": true,
+        "id": 1,
+        "prompt": "THE INTERNET",
+        "distribution": {
+          "performed+uniting": 0.32608695652173914,
+          "honest+uniting": 0.06521739130434782,
+          "performed+dividing": 0.5543478260869565,
+          "honest+dividing": 0.05434782608695652
+        },
+        "submissions": 92,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 35
+      },
+      "observation": {
+        "ok": true,
+        "id": 35,
+        "prompt": "THE WORLD CUP",
+        "distribution": {
+          "performed+uniting": 0.8992805755395683,
+          "honest+uniting": 0.03597122302158273,
+          "performed+dividing": 0.02877697841726619,
+          "honest+dividing": 0.03597122302158273
+        },
+        "submissions": 139,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.172,
+          "honest+uniting": 0.461,
+          "performed+dividing": 0.267,
+          "honest+dividing": 0.1
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.172,
+      "honest+uniting": 0.461,
+      "performed+dividing": 0.267,
+      "honest+dividing": 0.1
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.4062215664240381,
+    "score": 79.6889216787981,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

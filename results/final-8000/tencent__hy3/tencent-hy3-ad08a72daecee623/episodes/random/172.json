@@ -1,0 +1,607 @@
+{
+  "day": 172,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"THE US MILITARY\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":99,\"prompt\":\"ELON MUSK\",\"distribution\":{\"performed+uniting\":0.025817555938037865,\"honest+uniting\":0.01721170395869191,\"performed+dividing\":0.2547332185886403,\"honest+dividing\":0.7022375215146299},\"submissions\":581},{\"id\":54,\"prompt\":\"GEN ALPHA\",\"distribution\":{\"performed+uniting\":0.2727272727272727,\"honest+uniting\":0.34710743801652894,\"performed+dividing\":0.23140495867768596,\"honest+dividing\":0.1487603305785124},\"submissions\":121},{\"id\":84,\"prompt\":\"STARBUCKS\",\"distribution\":{\"performed+uniting\":0.7941176470588235,\"honest+uniting\":0.07352941176470588,\"performed+dividing\":0.051470588235294115,\"honest+dividing\":0.08088235294117647},\"submissions\":136}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:42:33.186Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.401,\"honest+uniting\":0.052,\"performed+dividing\":0.147,\"honest+dividing\":0.400}",
+      "response": {
+        "id": "gen-1794717753-rGhBPfBgyzNMFMClI1iM",
+        "object": "chat.completion",
+        "created": 1794717753,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.401,\"honest+uniting\":0.052,\"performed+dividing\":0.147,\"honest+dividing\":0.400}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"THE US MILITARY\" from participants in Mixed Messages, a generative art project. The audience interpretations are in four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"ELON MUSK\": performed+uniting: 0.0258, honest+uniting: 0.0172, performed+dividing: 0.2547, honest+dividing: 0.7022. So for Elon Musk, audience sees him as mostly honestly dividing (fracturing us truthfully) and performed dividing (exploiting divisions). Very low uniting.\n2. \"GEN ALPHA\": performed+uniting: 0.2727, honest+uniting: 0.3471, performed+dividing: 0.2314, honest+dividing: 0.1488. So Gen Alpha is seen more as uniting (both performed and honest) with honest uniting highest, and dividing lower.\n3. \"STARBUCKS\": performed+uniting: 0.7941, honest+uniting: 0.0735, performed+dividing: 0.0515, honest+dividing: 0.0809. So Starbucks is seen as performed uniting (false unity) overwhelmingly.\n\nNow we need to estimate for \"THE US MILITARY\". The US military is an institution. From the audience's perspective (likely art project participants, maybe left-leaning or critical?), how would they interpret? The examples: Elon Musk (controversial figure, seen as divisive), Gen Alpha (young generation, seen as more uniting), Starbucks (corporate, seen as false unity). The US military: could be seen as both uniting (bringing the country together, patriotism) but maybe performed (false unity, propaganda) or honest dividing (war, fracturing). Given the political climate, the military might be viewed with skepticism: either as creating false unity (performed uniting) or as honestly dividing (fracturing us truthfully via wars, imperialism) or performed dividing (exploiting divisions). Honest uniting might be low.\n\nWe need to assign probabilities summing to 1. Let's think about typical interpretations: The US military often portrayed as unifying symbol (but maybe superficially), or as divisive force (overseas, or domestically). In the examples, institutions like Starbucks got high performed uniting. Military might be similar but perhaps more dividing. Elon Musk got high honest dividing. Military could be seen as honest dividing (truthfully fracturing us, e.g., through war, violence) or performed uniting (rallying around flag). Possibly performed dividing (exploiting divisions, e.g., recruitment, political splits). \n\nWe should infer from the pattern: For a corporate brand (Starbucks) -> performed uniting dominant. For a controversial individual (Musk) -> honest dividing dominant. For a demographic (Gen Alpha) -> honest uniting dominant. The US military is an institution, like Starbucks but more governmental/force. Might be seen as performed uniting (propaganda of unity) but also honest dividing (actual harm). Could be a mix.\n\nWe need to produce a single JSON object with four keys, numeric probabilities sum to 1. Use at least three decimals when needed. We can choose reasonable values.\n\nLet's consider: performed+uniting: maybe 0.4 (false unity, patriotism). honest+uniting: 0.05 (some authentic bringing together? maybe low). performed+dividing: 0.2 (exploiting divisions deliberately, e.g., culture wars). honest+dividing: 0.35 (truthfully fracturing via war). Sum = 1.0. But we need to be informed by examples. The examples show extremes: Starbucks 0.79 performed uniting; Musk 0.70 honest dividing; Gen Alpha balanced. Military might be between Starbucks and Musk. Perhaps performed uniting 0.45, honest uniting 0.05, performed dividing 0.15, honest dividing 0.35. Sum = 1.0. Or performed uniting 0.5, honest uniting 0.02, performed dividing 0.18, honest dividing 0.30 = 1.0.\n\nWe could also think that military is often associated with national unity (performed) but also with actual division (honest dividing). I'd lean performed uniting moderate-high, honest dividing moderate, performed dividing low, honest uniting very low.\n\nLet's set:\nperformed+uniting: 0.482\nhonest+uniting: 0.038\nperformed+dividing: 0.160\nhonest+dividing: 0.320\nSum = 0.482+0.038=0.520; +0.160=0.680; +0.320=1.000. Good.\n\nBut we might want more decimals? At least three decimals when needed, these have three. Could also use 0.482, 0.038, 0.160, 0.320. But 0.160 is three decimals, fine. Or 0.482, 0.038, 0.160, 0.320 sum exactly 1.000.\n\nAlternatively, we could mimic the style: For Starbucks, performed uniting 0.794; for Musk honest dividing 0.702; for Gen Alpha honest uniting 0.347. So military might not be as extreme. I'll go with something like:\nperformed+uniting: 0.55\nhonest+uniting: 0.03\nperformed+dividing: 0.12\nhonest+dividing: 0.30\nSum = 1.00. But need three decimals: 0.550, 0.030, 0.120, 0.300. That's fine.\n\nBut maybe the audience is more cynical: performed uniting 0.35, honest dividing 0.45, performed dividing 0.15, honest uniting 0.05. Sum=1.0.\n\nI'll choose a distribution that seems plausible: The US military as an institution might be seen as creating false unity (performed uniting) around 0.4, honestly fracturing (honest dividing) around 0.4, performed dividing 0.15, honest uniting 0.05. Let's do:\nperformed+uniting: 0.401\nhonest+uniting: 0.052\nperformed+dividing: 0.147\nhonest+dividing: 0.400\nSum = 1.000.\n\nCheck: 0.401+0.052=0.453; +0.147=0.600; +0.400=1.000. Good.\n\nWe need to output only the JSON object, no prose or code fences. So:\n{\"performed+uniting\":0.401,\"honest+uniting\":0.052,\"performed+dividing\":0.147,\"honest+dividing\":0.400}\n\nBut ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll output that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"THE US MILITARY\" from participants in Mixed Messages, a generative art project. The audience interpretations are in four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"ELON MUSK\": performed+uniting: 0.0258, honest+uniting: 0.0172, performed+dividing: 0.2547, honest+dividing: 0.7022. So for Elon Musk, audience sees him as mostly honestly dividing (fracturing us truthfully) and performed dividing (exploiting divisions). Very low uniting.\n2. \"GEN ALPHA\": performed+uniting: 0.2727, honest+uniting: 0.3471, performed+dividing: 0.2314, honest+dividing: 0.1488. So Gen Alpha is seen more as uniting (both performed and honest) with honest uniting highest, and dividing lower.\n3. \"STARBUCKS\": performed+uniting: 0.7941, honest+uniting: 0.0735, performed+dividing: 0.0515, honest+dividing: 0.0809. So Starbucks is seen as performed uniting (false unity) overwhelmingly.\n\nNow we need to estimate for \"THE US MILITARY\". The US military is an institution. From the audience's perspective (likely art project participants, maybe left-leaning or critical?), how would they interpret? The examples: Elon Musk (controversial figure, seen as divisive), Gen Alpha (young generation, seen as more uniting), Starbucks (corporate, seen as false unity). The US military: could be seen as both uniting (bringing the country together, patriotism) but maybe performed (false unity, propaganda) or honest dividing (war, fracturing). Given the political climate, the military might be viewed with skepticism: either as creating false unity (performed uniting) or as honestly dividing (fracturing us truthfully via wars, imperialism) or performed dividing (exploiting divisions). Honest uniting might be low.\n\nWe need to assign probabilities summing to 1. Let's think about typical interpretations: The US military often portrayed as unifying symbol (but maybe superficially), or as divisive force (overseas, or domestically). In the examples, institutions like Starbucks got high performed uniting. Military might be similar but perhaps more dividing. Elon Musk got high honest dividing. Military could be seen as honest dividing (truthfully fracturing us, e.g., through war, violence) or performed uniting (rallying around flag). Possibly performed dividing (exploiting divisions, e.g., recruitment, political splits). \n\nWe should infer from the pattern: For a corporate brand (Starbucks) -> performed uniting dominant. For a controversial individual (Musk) -> honest dividing dominant. For a demographic (Gen Alpha) -> honest uniting dominant. The US military is an institution, like Starbucks but more governmental/force. Might be seen as performed uniting (propaganda of unity) but also honest dividing (actual harm). Could be a mix.\n\nWe need to produce a single JSON object with four keys, numeric probabilities sum to 1. Use at least three decimals when needed. We can choose reasonable values.\n\nLet's consider: performed+uniting: maybe 0.4 (false unity, patriotism). honest+uniting: 0.05 (some authentic bringing together? maybe low). performed+dividing: 0.2 (exploiting divisions deliberately, e.g., culture wars). honest+dividing: 0.35 (truthfully fracturing via war). Sum = 1.0. But we need to be informed by examples. The examples show extremes: Starbucks 0.79 performed uniting; Musk 0.70 honest dividing; Gen Alpha balanced. Military might be between Starbucks and Musk. Perhaps performed uniting 0.45, honest uniting 0.05, performed dividing 0.15, honest dividing 0.35. Sum = 1.0. Or performed uniting 0.5, honest uniting 0.02, performed dividing 0.18, honest dividing 0.30 = 1.0.\n\nWe could also think that military is often associated with national unity (performed) but also with actual division (honest dividing). I'd lean performed uniting moderate-high, honest dividing moderate, performed dividing low, honest uniting very low.\n\nLet's set:\nperformed+uniting: 0.482\nhonest+uniting: 0.038\nperformed+dividing: 0.160\nhonest+dividing: 0.320\nSum = 0.482+0.038=0.520; +0.160=0.680; +0.320=1.000. Good.\n\nBut we might want more decimals? At least three decimals when needed, these have three. Could also use 0.482, 0.038, 0.160, 0.320. But 0.160 is three decimals, fine. Or 0.482, 0.038, 0.160, 0.320 sum exactly 1.000.\n\nAlternatively, we could mimic the style: For Starbucks, performed uniting 0.794; for Musk honest dividing 0.702; for Gen Alpha honest uniting 0.347. So military might not be as extreme. I'll go with something like:\nperformed+uniting: 0.55\nhonest+uniting: 0.03\nperformed+dividing: 0.12\nhonest+dividing: 0.30\nSum = 1.00. But need three decimals: 0.550, 0.030, 0.120, 0.300. That's fine.\n\nBut maybe the audience is more cynical: performed uniting 0.35, honest dividing 0.45, performed dividing 0.15, honest uniting 0.05. Sum=1.0.\n\nI'll choose a distribution that seems plausible: The US military as an institution might be seen as creating false unity (performed uniting) around 0.4, honestly fracturing (honest dividing) around 0.4, performed dividing 0.15, honest uniting 0.05. Let's do:\nperformed+uniting: 0.401\nhonest+uniting: 0.052\nperformed+dividing: 0.147\nhonest+dividing: 0.400\nSum = 1.000.\n\nCheck: 0.401+0.052=0.453; +0.147=0.600; +0.400=1.000. Good.\n\nWe need to output only the JSON object, no prose or code fences. So:\n{\"performed+uniting\":0.401,\"honest+uniting\":0.052,\"performed+dividing\":0.147,\"honest+dividing\":0.400}\n\nBut ensure keys exactly as given: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll output that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 504,
+          "completion_tokens": 1667,
+          "total_tokens": 2171,
+          "cost": 0.000946704,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.000946704,
+            "upstream_inference_prompt_cost": 0.000066528,
+            "upstream_inference_completions_cost": 0.000880176
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1624,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 504,
+        "completion_tokens": 1667,
+        "total_tokens": 2171,
+        "cost": 0.000946704,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.000946704,
+          "upstream_inference_prompt_cost": 0.000066528,
+          "upstream_inference_completions_cost": 0.000880176
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1624,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 87,
+      "finishedAt": "2026-11-15T04:42:50.328Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 99
+      },
+      "observation": {
+        "ok": true,
+        "id": 99,
+        "prompt": "ELON MUSK",
+        "distribution": {
+          "performed+uniting": 0.025817555938037865,
+          "honest+uniting": 0.01721170395869191,
+          "performed+dividing": 0.2547332185886403,
+          "honest+dividing": 0.7022375215146299
+        },
+        "submissions": 581,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 54
+      },
+      "observation": {
+        "ok": true,
+        "id": 54,
+        "prompt": "GEN ALPHA",
+        "distribution": {
+          "performed+uniting": 0.2727272727272727,
+          "honest+uniting": 0.34710743801652894,
+          "performed+dividing": 0.23140495867768596,
+          "honest+dividing": 0.1487603305785124
+        },
+        "submissions": 121,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 84
+      },
+      "observation": {
+        "ok": true,
+        "id": 84,
+        "prompt": "STARBUCKS",
+        "distribution": {
+          "performed+uniting": 0.7941176470588235,
+          "honest+uniting": 0.07352941176470588,
+          "performed+dividing": 0.051470588235294115,
+          "honest+dividing": 0.08088235294117647
+        },
+        "submissions": 136,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.401,
+          "honest+uniting": 0.052,
+          "performed+dividing": 0.147,
+          "honest+dividing": 0.4
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.401,
+      "honest+uniting": 0.052,
+      "performed+dividing": 0.147,
+      "honest+dividing": 0.4
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.15466017293217404,
+    "score": 92.26699135339129,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

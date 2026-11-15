@@ -1,89 +1,171 @@
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["matplotlib>=3.9,<4"]
+# dependencies = ["matplotlib>=3.9,<4", "numpy>=2,<3"]
 # ///
-"""Plot the declared final results. Run: uv run scripts/chart-tracks.py
+"""Render the verified final results in the original RTR scatter style.
 
-Per-condition cost excludes comparison controls and other experiments.
-The historical dominant-quadrant figure is maintained by chart.mjs.
+Run the offline analyzer first, then: uv run scripts/chart-tracks.py
+An incomplete campaign can be previewed with --preview; publication requires 11.
 """
 import hashlib
 import json
+import math
+import sys
 from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
+from matplotlib.transforms import Bbox
 
 ROOT = Path(__file__).resolve().parents[1]
-# Deliberate publication list: never mix development runs or silently select a best repeat.
-RUNS = ["results/learn-room/z-ai-glm-5-3-flash-e9d0327447ef1856/report.json"]
+source = ROOT / "results/final-8000/verified-results.json"
+verified = json.loads(source.read_text())
+assert len(verified["results"]) == 11 or "--preview" in sys.argv
+assert verified["protocol"]["targets"] == list(range(130, 175))
+COLORS = {
+    "glm-5.3-flash": "#009E9E", "glm-5.3": "#0072B2",
+    "minimax-m3.1-flash": "#D55E00", "mimo-v2.6-flash": "#228833",
+    "deepseek-v4.1-flash-1017": "#8844AA", "hy3": "#CC6677",
+    "gemini-3.8-flash": "#AA8800", "gpt-6-luna": "#444444",
+    "claude-haiku-5.5": "#AA4499", "inkling-small": "#44AA99",
+    "gpt-oss-120b": "#886633",
+}
 records = []
-protocol = None
-for source in RUNS:
-    raw = (ROOT / source).read_bytes()
-    report = json.loads(raw)
+for r in verified["results"]:
+    assert r["offlineResumeVerified"]
+    report_path = ROOT / r["directory"] / "report.json"
+    report_raw = report_path.read_bytes()
+    report = json.loads(report_raw)
+    assert report["complete"] and len(report["rows"]) == 180
     c = report["manifest"]["config"]
-    assert report["complete"] and c["mode"] == "api" and c["partition"] == "evaluation"
-    assert c["targets"] == list(range(130, 175))
-    signature = {k: c[k] for k in ["datasetHash", "splitHash", "targets", "reference", "scorerVersion", "agentPromptHash", "budget", "maxActions", "maxModelCalls"]}
-    signature["generation"] = {k: c["settings"][k] for k in ["temperature", "maxTokens"]}
-    if protocol is None:
-        protocol = signature
-    assert signature == protocol, "Chart rows must use matching targets and protocol"
-    summaries = {s["strategy"]: s for s in report["summaries"]}
+    assert c["settings"]["maxTokens"] == 8000 and c["targets"] == list(range(130, 175))
     points = []
     for strategy, label in [("none", "Predict"), ("agent", "Learn")]:
-        s = summaries[strategy]
-        assert s["complete"] and s["pending"] == 0 and s["costUsd"]["unknownAttempts"] == 0
-        assert s["costUsd"]["known"] > 0 and 0 <= s["score"] <= 100
-        points.append({"track": label, "score": s["score"], "costUsd": s["costUsd"]["known"], "scoreCI": s["scoreCI"]})
-    comparison = next(p for p in report["comparisons"] if p["strategy"] == "agent" and p["control"] == "none")
-    assert abs(points[1]["score"] - points[0]["score"] - comparison["scoreGain"]) < 1e-10
-    records.append({"source": source, "sourceSha256": hashlib.sha256(raw).hexdigest(), "model": c["model"], "provider": c["spending"]["providerTag"], "agentPolicy": c["agentPolicy"], "points": points, "gain": comparison["scoreGain"], "gainCI": comparison["scoreGainCI"], "baselines": report["baselines"]})
+        s = next(s for s in r["summaries"] if s["strategy"] == strategy)
+        original = next(s for s in report["summaries"] if s["strategy"] == strategy)
+        assert s["score"] == original["score"] and s["costUsd"] == original["costUsd"]
+        assert s["pending"] == 0 and s["costUsd"]["known"] > 0
+        points.append({"track": label, "score": s["score"], "costUsd": s["costUsd"]["known"],
+                       "costIsLowerBound": s["unknownChargeReservations"] > 0, "valid": s["valid"]})
+    records.append({"model": r["model"].split("/")[-1], "provider": r["provider"],
+                    "source": str(report_path.relative_to(ROOT)),
+                    "sourceSha256": hashlib.sha256(report_raw).hexdigest(), "points": points})
 
-plt.rcParams.update({"font.family": "DejaVu Sans Mono", "font.size": 11, "svg.hashsalt": "rtr-predict-learn-v1"})
-fig, ax = plt.subplots(figsize=(12, 6.4), dpi=150)
-fig.subplots_adjust(left=.09, right=.96, top=.80, bottom=.23)
-fig.suptitle("RTR-bench · Predict and Learn", y=.96, fontsize=20)
-fig.text(.5, .885, "45 final targets · scores out of 100 · lower cost and higher score are better", ha="center", fontsize=10)
-ax.set_xscale("log")
-costs = [p["costUsd"] for r in records for p in r["points"]]
-ax.set_xlim(min(costs) / 2, max(costs) * 2)
-intervals = [p["scoreCI"] for r in records for p in r["points"]]
-ax.set_ylim(min(80, min(ci[0] for ci in intervals) - 2), max(95, max(ci[1] for ci in intervals) + 2))
-ax.xaxis.set_major_locator(FixedLocator(costs))
-ax.xaxis.set_major_formatter(FuncFormatter(lambda value, _: f"${value:.5f}"))
-ax.xaxis.set_minor_locator(NullLocator())
-ax.grid(axis="y", color="#eeeeee")
-ax.spines[["top", "right"]].set_visible(False)
-colors = plt.get_cmap("tab10")
-for i, r in enumerate(records):
-    predict, learn = r["points"]
-    color = colors(i)
-    ax.annotate("", xy=(learn["costUsd"], learn["score"]), xytext=(predict["costUsd"], predict["score"]), arrowprops={"arrowstyle": "->", "color": color, "lw": 1.6, "alpha": .65})
-    for p, marker in [(predict, "o"), (learn, "s")]:
-        lo, hi = p["scoreCI"]
-        ax.errorbar(p["costUsd"], p["score"], yerr=[[p["score"] - lo], [hi - p["score"]]], fmt=marker, color=color, markersize=9, capsize=5, elinewidth=1.1)
-        ax.annotate(f"{p['track']} {p['score']:.2f}", xy=(p["costUsd"], hi), xytext=(0, 10), textcoords="offset points", ha="center", color=color, weight="bold")
-    mid = (predict["costUsd"] * learn["costUsd"]) ** .5
-    ax.text(mid, (predict["score"] + learn["score"]) / 2 + .6, f"Learn gain {r['gain']:+.2f}", ha="center", color=color, fontsize=10)
-    fig.text(.5, .835 - i*.025, f"{r['model']} · {r['provider']} · {r['agentPolicy']}", ha="center", fontsize=10)
+plt.rcParams.update({"font.family": ["Menlo", "DejaVu Sans Mono"], "font.size": 7.92,
+                     "svg.hashsalt": "rtr-final-predict-learn-8000", "axes.linewidth": .72,
+                     "text.color": "#111111", "axes.labelcolor": "black"})
+all_scores = [p["score"] for r in records for p in r["points"]]
+ymin = max(0, math.floor((min(all_scores) - 3) / 5) * 5)
+ymax = min(100, math.ceil((max(all_scores) + 2) / 5) * 5)
 
-baseline = records[0]["baselines"]
-ax.axhline(baseline["constantScore"], color="#777777", ls="--", lw=1, label=f"Constant reference: {baseline['constantScore']:.2f}")
-ax.axhline(baseline["uniformScore"], color="#bbbbbb", ls=":", lw=1, label=f"Uniform: {baseline['uniformScore']:.2f}")
-ax.legend(loc="lower left", frameon=False, fontsize=9)
-ax.set_ylabel("Distribution score / 100")
-ax.set_xlabel("Cost per 45 targets (USD, log scale)", labelpad=12)
-fig.text(.5, .075, "Bars: exploratory 95% target-bootstrap intervals. Scores are not percentage accuracy.", ha="center", fontsize=9)
-fig.text(.5, .04, "Costs are per condition; Random and Similar controls are excluded.", ha="center", fontsize=9)
-for ext in ["svg", "png"]:
-    fig.savefig(ROOT / f"results/predict-learn-scatter.{ext}", metadata={"Date": None} if ext == "svg" else {})
-plt.close(fig)
-# Matplotlib path data may end lines with spaces; keep generated diffs clean.
-svg = ROOT / "results/predict-learn-scatter.svg"
-svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
-(ROOT / "results/predict-learn-scatter.json").write_text(json.dumps({"matplotlibVersion": matplotlib.__version__, "protocol": protocol, "runs": records}, indent=2) + "\n")
-print(f"Generated SVG, PNG, and source summary for {len(records)} declared final run(s).")
+def overlap(a, b):
+    return a.overlaps(b)
+
+def label_points(ax, points, labels):
+    """Place model names in display space without collisions or clipping."""
+    fig = ax.figure
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    bounds = ax.get_window_extent(renderer)
+    # Reserve every marker before placing any label.
+    placed = [Bbox.from_bounds(*[v - 6 for v in ax.transData.transform((p["costUsd"], p["score"]))], 12, 12) for p in points]
+    # Keep text clear of the colored connecting lines and Pareto steps as well.
+    for line in ax.lines:
+        if len(line.get_xdata()) < 2:
+            continue
+        vertices = line.get_transform().transform(line.get_path().vertices)
+        for start, end in zip(vertices[:-1], vertices[1:]):
+            steps = max(1, int(math.dist(start, end) / 6))
+            for i in range(steps + 1):
+                x, y = start + (end - start) * i / steps
+                placed.append(Bbox.from_bounds(x - 2, y - 2, 4, 4))
+    for point, label, color in sorted(labels, key=lambda x: -len(x[1])):
+        x, y = point["costUsd"], point["score"]
+        px, py = ax.transData.transform((x, y))
+        sides = [-1, 1] if px > bounds.x0 + bounds.width * .72 else [1, -1]
+        candidates = []
+        for distance in [10, 22, 40, 65, 95, 130]:
+            for dy in [-8, 10, -22, 24, -38, 40, -55, 58, -76, 80, -100, 105, -130, 135]:
+                for side in sides:
+                    t = ax.annotate(label, (x, y), xytext=(side * distance, dy), textcoords="offset points",
+                                    ha="left" if side == 1 else "right", va="center", fontsize=7.56, color=color,
+                                    zorder=5, annotation_clip=False)
+                    box = t.get_window_extent(renderer).expanded(1.03, 1.15)
+                    outside = box.x0 < bounds.x0 + 2 or box.x1 > bounds.x1 - 2 or box.y0 < bounds.y0 + 5 or box.y1 > bounds.y1 - 5
+                    collisions = sum(overlap(box, b) for b in placed)
+                    candidates.append((outside * 1e6 + collisions * 1e4 + distance + abs(dy), side, distance, dy, box))
+                    t.remove()
+        penalty, side, distance, dy, box = min(candidates, key=lambda v: v[0])
+        assert penalty < 10000, f"No clear label placement for {label}; adjust canvas or placement candidates"
+        placed.append(box)
+        ax.annotate(label, (x, y), xytext=(side * distance, dy), textcoords="offset points",
+                    ha="left" if side == 1 else "right", va="center", fontsize=7.56, color=color,
+                    arrowprops={"arrowstyle": "-", "color": "#9aa7c7", "lw": .7, "shrinkA": 2, "shrinkB": 5}, zorder=5)
+
+
+def draw(track, filename):
+    combined = track is None
+    points = [p for r in records for p in r["points"] if combined or p["track"] == track]
+    costs = [p["costUsd"] for p in points]
+    xmin, xmax = min(costs) * .75, max(costs) * 1.65
+    fig, ax = plt.subplots(figsize=(12, 6.4), dpi=100)
+    # Same 1200 x 640 canvas and margins as scripts/chart.mjs.
+    fig.subplots_adjust(left=80/1200, right=1126/1200, bottom=80/640, top=566/640)
+    fig.text(.5, 1-40/640, f"RTR-Bench ({'Learn + Predict' if combined else track})", ha="center", va="baseline", fontsize=14.4)
+    ax.set_xscale("log")
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+    ticks = [m * 10**e for e in range(-6, 4) for m in [1, 2, 5] if xmin <= m * 10**e <= xmax]
+    ax.xaxis.set_major_locator(FixedLocator(ticks))
+    ax.xaxis.set_minor_locator(NullLocator())
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"${v:.3f}" if v < .01 else f"${v:.2f}"))
+    ax.yaxis.set_major_locator(FixedLocator(list(range(ymin, ymax+1, 5))))
+    ax.tick_params(axis="y", length=0, pad=10)
+    ax.tick_params(axis="x", length=5, pad=8)
+    ax.grid(axis="y", color="#efefef", linewidth=.72)
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.set_ylabel("Score", fontsize=8.64, weight="bold")
+    ax.yaxis.set_label_coords(-56/1046, .5)
+    ax.set_xlabel("Cost per full run, log scale", fontsize=8.64, weight="bold")
+    ax.xaxis.set_label_coords(.5, -.13)
+    labels = []
+    frontier = []
+    if combined:
+        # Both endpoints use squares; P/L labels identify conditions even for negative gains.
+        for r in records:
+            p, l = r["points"]
+            color = COLORS[r["model"]]
+            ax.plot([p["costUsd"], l["costUsd"]], [p["score"], l["score"]], color=color, ls=":", lw=1.4, zorder=2)
+            for point in [p, l]:
+                ax.plot(point["costUsd"], point["score"], "s", color=color, ms=6.5, markeredgewidth=0, zorder=4)
+                labels.append((point, f"{r['model']} ({point['track'][0]})", color))
+    else:
+        best = -math.inf
+        # At equal cost, keep only the highest score (weakly dominated points omitted).
+        for p in sorted(points, key=lambda p: (p["costUsd"], -p["score"])):
+            if p["score"] > best:
+                frontier.append(p)
+                best = p["score"]
+        ax.step([p["costUsd"] for p in frontier] + [xmax], [p["score"] for p in frontier] + [frontier[-1]["score"]], where="post", color="#5555FF", lw=1.296, dashes=(6/1.8, 4/1.8), zorder=2)
+        for r in records:
+            p = next(p for p in r["points"] if p["track"] == track)
+            ax.plot(p["costUsd"], p["score"], "s", color="#56FFFF", ms=6.5, markeredgewidth=0, zorder=4)
+            labels.append((p, r["model"], "#111111"))
+    label_points(ax, points, labels)
+    for ext in ["svg", "png"]:
+        fig.savefig(ROOT / f"results/{filename}.{ext}", dpi=200, facecolor="white", metadata={"Date": None} if ext == "svg" else {})
+    plt.close(fig)
+    svg = ROOT / f"results/{filename}.svg"
+    svg.write_text("\n".join(line.rstrip() for line in svg.read_text().splitlines()) + "\n")
+    return {"title": f"RTR-Bench ({'Learn + Predict' if combined else track})", "file": filename,
+            "xAxis": "per-track known USD subtotal (log scale)", "yAxis": "distribution score out of 100",
+            "paretoUsesKnownSubtotals": not combined, "frontier": frontier}
+
+charts = [draw("Predict", "predict-scatter"), draw("Learn", "learn-scatter"), draw(None, "predict-learn-scatter")]
+(ROOT / "results/predict-learn-scatter.json").write_text(json.dumps({"matplotlibVersion": matplotlib.__version__,
+    "verifiedResultsSha256": hashlib.sha256(source.read_bytes()).hexdigest(), "protocol": verified["protocol"],
+    "costNote": "Unknown charges make some plotted costs lower bounds and the Pareto frontier provisional. Controls are excluded.",
+    "runs": records, "charts": charts}, indent=2) + "\n")
+print(f"Generated three SVG/PNG charts from {len(records)} verified models.")

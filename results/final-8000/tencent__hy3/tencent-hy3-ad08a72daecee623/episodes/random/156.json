@@ -1,0 +1,607 @@
+{
+  "day": 156,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"MOOD BOARDS\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":94,\"prompt\":\"COMFORT\",\"distribution\":{\"performed+uniting\":0.2605042016806723,\"honest+uniting\":0.47058823529411764,\"performed+dividing\":0.11764705882352941,\"honest+dividing\":0.15126050420168066},\"submissions\":119},{\"id\":78,\"prompt\":\"DATING APPS\",\"distribution\":{\"performed+uniting\":0.41975308641975306,\"honest+uniting\":0.04938271604938271,\"performed+dividing\":0.43950617283950616,\"honest+dividing\":0.09135802469135802},\"submissions\":405},{\"id\":50,\"prompt\":\"TRIBUTE LABS\",\"distribution\":{\"performed+uniting\":0.18654434250764526,\"honest+uniting\":0.6116207951070336,\"performed+dividing\":0.0061162079510703364,\"honest+dividing\":0.19571865443425077},\"submissions\":327}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:34:23.637Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.331,\"honest+uniting\":0.452,\"performed+dividing\":0.083,\"honest+dividing\":0.134}",
+      "response": {
+        "id": "gen-1794717263-ySvNFSlBij0SH6w1oV69",
+        "object": "chat.completion",
+        "created": 1794717263,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.331,\"honest+uniting\":0.452,\"performed+dividing\":0.083,\"honest+dividing\":0.134}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"MOOD BOARDS\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"COMFORT\": performed+uniting 0.2605, honest+uniting 0.4706, performed+dividing 0.1176, honest+dividing 0.1513 (submissions 119)\n2. \"DATING APPS\": performed+uniting 0.4198, honest+uniting 0.0494, performed+dividing 0.4395, honest+dividing 0.0914 (submissions 405)\n3. \"TRIBUTE LABS\": performed+uniting 0.1865, honest+uniting 0.6116, performed+dividing 0.0061, honest+dividing 0.1957 (submissions 327)\n\nWe need to estimate the share for \"MOOD BOARDS\". This is a creative audience; mood boards are typically collages of images, colors, textures used to set a mood or theme, often for design or inspiration. They can be seen as bringing people together (uniting) around a vibe, or they could be seen as performative (fake unity) because mood boards are aesthetic surfaces. They might also be dividing if they exclude or create cliques, or honestly fracturing if they reveal differences.\n\nWe need to infer from the examples. The examples show varying distributions based on the prompt word. \"COMFORT\" leans honest+uniting (47%), performed+uniting (26%), honest+dividing (15%), performed+dividing (12%). So comfort is mostly authentic togetherness. \"DATING APPS\" is highly performed+uniting (42%) and performed+dividing (44%), with very low honest+uniting (5%) and low honest+dividing (9%). So dating apps are seen as fake/performative, either fake unity or exploiting divisions. \"TRIBUTE LABS\" (maybe a specific project?) is heavily honest+uniting (61%), low performed+uniting (18.6%), very low performed+dividing (0.6%), honest+dividing (19.6%). So tribute labs are authentically uniting with some honest fracturing.\n\nNow \"MOOD BOARDS\": what would this audience think? Mood boards are visual collections, often used in design, fashion, art. They might be seen as performative because they are curated aesthetics, maybe creating a false sense of unity (performed+uniting) around a vibe. Or they could be honestly uniting as shared inspiration. They might also be dividing if they are exclusive or create in-groups. But given the nature of mood boards as a tool for inspiration and collaboration, perhaps they lean toward uniting rather than dividing. However, the \"performed\" aspect might be high because mood boards are inherently a presentation, a surface.\n\nWe need to produce a single JSON object with four probabilities summing to 1. We should use at least three decimal places when needed.\n\nLet's think about typical associations: Mood boards are often used in workshops to align a group (uniting). But they can be superficial (performed). So performed+uniting could be significant. Honest+uniting could also be significant if they are seen as genuine shared vision. Dividing aspects might be lower.\n\nCompare to \"COMFORT\" which is a feeling, got honest+uniting high. \"TRIBUTE LABS\" maybe a collaborative project, got honest+uniting high. \"DATING APPS\" a technology for matching but with performative profiles, got performed high. Mood boards are more like a creative artifact, maybe similar to tribute labs? Not exactly.\n\nWe could approximate by averaging the three examples? But that might not be appropriate because the prompt matters. Let's compute average distributions:\n\nAvg performed+uniting: (0.2605+0.4198+0.1865)/3 = (0.8668)/3 = 0.2889\nAvg honest+uniting: (0.4706+0.0494+0.6116)/3 = (1.1316)/3 = 0.3772\nAvg performed+dividing: (0.1176+0.4395+0.0061)/3 = (0.5632)/3 = 0.1877\nAvg honest+dividing: (0.1513+0.0914+0.1957)/3 = (0.4384)/3 = 0.1461\n\nSum = 0.2889+0.3772+0.1877+0.1461 = 1.0 approx. That's a generic average.\n\nBut we need to tailor to \"MOOD BOARDS\". Mood boards are more akin to a design tool, maybe less divisive than dating apps, less comfort-like, maybe more performed than tribute labs. I'd guess performed+uniting is moderately high, honest+uniting moderate, performed+dividing low-moderate, honest+dividing low-moderate.\n\nLet's consider the concept: \"mood boards\" could be seen as \"creating false unity among us\" because they impose a curated aesthetic that hides differences. That's performed+uniting. Or \"bringing us together authentically\" as shared vision. Or \"exploiting our divisions deliberately\" maybe not as much. Or \"fracturing us truthfully\" maybe if they reveal disparate tastes.\n\nGiven the examples, words that are more about human connection (comfort, tribute labs) get high honest+uniting. Words about mediated interaction (dating apps) get high performed both. Mood boards are mediated/artifact but not necessarily a social app. They are often used in groups to align. I'd lean honest+uniting somewhat high, performed+uniting also notable.\n\nMaybe we can draw from the \"COMFORT\" example: comfort is a personal feeling but got honest+uniting 47%, performed+uniting 26%. Mood boards might be more performed than comfort because it's an explicit artifact. So maybe performed+uniting around 0.35, honest+uniting around 0.40, performed+dividing 0.15, honest+dividing 0.10. Sum = 1.0.\n\nBut we need to be plausible. Let's think of the audience's interpretations: they might be cynical about mood boards as performative unity (like aesthetic homogeneity). In art projects, mood boards could be seen as superficial. So performed+uniting could be highest. Honest+uniting second. Dividing low.\n\nLook at dating apps: performed+uniting and performed+dividing both high, honest low. That suggests for transactional/appearance-based things, performed dominates. Mood boards are appearance-based but less transactional. So performed+uniting maybe 0.4, honest+uniting 0.3, performed+dividing 0.2, honest+dividing 0.1. Sum=1.0.\n\nAlternatively, from tribute labs: honest+uniting 0.61, performed+uniting 0.19, honest+dividing 0.20, performed+dividing 0.006. That's a collaborative lab. Mood boards could be like a lab? Not really.\n\nI think a reasonable prediction: performed+uniting: 0.35, honest+uniting: 0.45, performed+dividing: 0.12, honest+dividing: 0.08. Sum=1.0. But we need at least three decimals if needed; we can use 0.350, etc.\n\nBut we should maybe incorporate slight variation. Let's produce something like:\n{\"performed+uniting\":0.382,\"honest+uniting\":0.421,\"performed+dividing\":0.131,\"honest+dividing\":0.066} sum = 1.000? 0.382+0.421=0.803, +0.131=0.934, +0.066=1.000. That works.\n\nBut we need to be careful: the instruction says \"A sum differing from 1 by at most 0.001 will be normalized.\" So we can be approximate.\n\nI'll choose values that feel like a mix between comfort and dating apps but with more uniting. Let's do:\nperformed+uniting: 0.36\nhonest+uniting: 0.43\nperformed+dividing: 0.14\nhonest+dividing: 0.07\nSum = 1.00.\n\nTo have three decimals: 0.360, 0.430, 0.140, 0.070.\n\nBut maybe we should make it less round. Use 0.361, 0.427, 0.142, 0.070 => sum 1.000.\n\nI'll go with something like that.\n\nGiven the audience's previous responses, they seem to assign non-trivial probability to honest+dividing even for uniting words (comfort 0.151, tribute labs 0.196). So honest+dividing should be around 0.1-0.2. Performed+dividing for non-app words is low (comfort 0.118, tribute 0.006). So maybe performed+dividing low ~0.08. So:\n\nperformed+uniting: 0.33\nhonest+uniting: 0.45\nperformed+dividing: 0.08\nhonest+dividing: 0.14\nSum = 1.00.\n\nThat seems plausible: mood boards as mostly uniting (honest+performed) with some honest fracturing.\n\nI'll pick: {\"performed+uniting\":0.331,\"honest+uniting\":0.452,\"performed+dividing\":0.083,\"honest+dividing\":0.134} sum = 0.331+0.452=0.783, +0.083=0.866, +0.134=1.000.\n\nThat's fine.\n\nWe must output only the JSON object, no prose or code fences. So final answer: {\"performed+uniting\":0.331,\"honest+uniting\":0.452,\"performed+dividing\":0.083,\"honest+dividing\":0.134}\n\nCheck keys exactly as required: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll output that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"MOOD BOARDS\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"COMFORT\": performed+uniting 0.2605, honest+uniting 0.4706, performed+dividing 0.1176, honest+dividing 0.1513 (submissions 119)\n2. \"DATING APPS\": performed+uniting 0.4198, honest+uniting 0.0494, performed+dividing 0.4395, honest+dividing 0.0914 (submissions 405)\n3. \"TRIBUTE LABS\": performed+uniting 0.1865, honest+uniting 0.6116, performed+dividing 0.0061, honest+dividing 0.1957 (submissions 327)\n\nWe need to estimate the share for \"MOOD BOARDS\". This is a creative audience; mood boards are typically collages of images, colors, textures used to set a mood or theme, often for design or inspiration. They can be seen as bringing people together (uniting) around a vibe, or they could be seen as performative (fake unity) because mood boards are aesthetic surfaces. They might also be dividing if they exclude or create cliques, or honestly fracturing if they reveal differences.\n\nWe need to infer from the examples. The examples show varying distributions based on the prompt word. \"COMFORT\" leans honest+uniting (47%), performed+uniting (26%), honest+dividing (15%), performed+dividing (12%). So comfort is mostly authentic togetherness. \"DATING APPS\" is highly performed+uniting (42%) and performed+dividing (44%), with very low honest+uniting (5%) and low honest+dividing (9%). So dating apps are seen as fake/performative, either fake unity or exploiting divisions. \"TRIBUTE LABS\" (maybe a specific project?) is heavily honest+uniting (61%), low performed+uniting (18.6%), very low performed+dividing (0.6%), honest+dividing (19.6%). So tribute labs are authentically uniting with some honest fracturing.\n\nNow \"MOOD BOARDS\": what would this audience think? Mood boards are visual collections, often used in design, fashion, art. They might be seen as performative because they are curated aesthetics, maybe creating a false sense of unity (performed+uniting) around a vibe. Or they could be honestly uniting as shared inspiration. They might also be dividing if they are exclusive or create in-groups. But given the nature of mood boards as a tool for inspiration and collaboration, perhaps they lean toward uniting rather than dividing. However, the \"performed\" aspect might be high because mood boards are inherently a presentation, a surface.\n\nWe need to produce a single JSON object with four probabilities summing to 1. We should use at least three decimal places when needed.\n\nLet's think about typical associations: Mood boards are often used in workshops to align a group (uniting). But they can be superficial (performed). So performed+uniting could be significant. Honest+uniting could also be significant if they are seen as genuine shared vision. Dividing aspects might be lower.\n\nCompare to \"COMFORT\" which is a feeling, got honest+uniting high. \"TRIBUTE LABS\" maybe a collaborative project, got honest+uniting high. \"DATING APPS\" a technology for matching but with performative profiles, got performed high. Mood boards are more like a creative artifact, maybe similar to tribute labs? Not exactly.\n\nWe could approximate by averaging the three examples? But that might not be appropriate because the prompt matters. Let's compute average distributions:\n\nAvg performed+uniting: (0.2605+0.4198+0.1865)/3 = (0.8668)/3 = 0.2889\nAvg honest+uniting: (0.4706+0.0494+0.6116)/3 = (1.1316)/3 = 0.3772\nAvg performed+dividing: (0.1176+0.4395+0.0061)/3 = (0.5632)/3 = 0.1877\nAvg honest+dividing: (0.1513+0.0914+0.1957)/3 = (0.4384)/3 = 0.1461\n\nSum = 0.2889+0.3772+0.1877+0.1461 = 1.0 approx. That's a generic average.\n\nBut we need to tailor to \"MOOD BOARDS\". Mood boards are more akin to a design tool, maybe less divisive than dating apps, less comfort-like, maybe more performed than tribute labs. I'd guess performed+uniting is moderately high, honest+uniting moderate, performed+dividing low-moderate, honest+dividing low-moderate.\n\nLet's consider the concept: \"mood boards\" could be seen as \"creating false unity among us\" because they impose a curated aesthetic that hides differences. That's performed+uniting. Or \"bringing us together authentically\" as shared vision. Or \"exploiting our divisions deliberately\" maybe not as much. Or \"fracturing us truthfully\" maybe if they reveal disparate tastes.\n\nGiven the examples, words that are more about human connection (comfort, tribute labs) get high honest+uniting. Words about mediated interaction (dating apps) get high performed both. Mood boards are mediated/artifact but not necessarily a social app. They are often used in groups to align. I'd lean honest+uniting somewhat high, performed+uniting also notable.\n\nMaybe we can draw from the \"COMFORT\" example: comfort is a personal feeling but got honest+uniting 47%, performed+uniting 26%. Mood boards might be more performed than comfort because it's an explicit artifact. So maybe performed+uniting around 0.35, honest+uniting around 0.40, performed+dividing 0.15, honest+dividing 0.10. Sum = 1.0.\n\nBut we need to be plausible. Let's think of the audience's interpretations: they might be cynical about mood boards as performative unity (like aesthetic homogeneity). In art projects, mood boards could be seen as superficial. So performed+uniting could be highest. Honest+uniting second. Dividing low.\n\nLook at dating apps: performed+uniting and performed+dividing both high, honest low. That suggests for transactional/appearance-based things, performed dominates. Mood boards are appearance-based but less transactional. So performed+uniting maybe 0.4, honest+uniting 0.3, performed+dividing 0.2, honest+dividing 0.1. Sum=1.0.\n\nAlternatively, from tribute labs: honest+uniting 0.61, performed+uniting 0.19, honest+dividing 0.20, performed+dividing 0.006. That's a collaborative lab. Mood boards could be like a lab? Not really.\n\nI think a reasonable prediction: performed+uniting: 0.35, honest+uniting: 0.45, performed+dividing: 0.12, honest+dividing: 0.08. Sum=1.0. But we need at least three decimals if needed; we can use 0.350, etc.\n\nBut we should maybe incorporate slight variation. Let's produce something like:\n{\"performed+uniting\":0.382,\"honest+uniting\":0.421,\"performed+dividing\":0.131,\"honest+dividing\":0.066} sum = 1.000? 0.382+0.421=0.803, +0.131=0.934, +0.066=1.000. That works.\n\nBut we need to be careful: the instruction says \"A sum differing from 1 by at most 0.001 will be normalized.\" So we can be approximate.\n\nI'll choose values that feel like a mix between comfort and dating apps but with more uniting. Let's do:\nperformed+uniting: 0.36\nhonest+uniting: 0.43\nperformed+dividing: 0.14\nhonest+dividing: 0.07\nSum = 1.00.\n\nTo have three decimals: 0.360, 0.430, 0.140, 0.070.\n\nBut maybe we should make it less round. Use 0.361, 0.427, 0.142, 0.070 => sum 1.000.\n\nI'll go with something like that.\n\nGiven the audience's previous responses, they seem to assign non-trivial probability to honest+dividing even for uniting words (comfort 0.151, tribute labs 0.196). So honest+dividing should be around 0.1-0.2. Performed+dividing for non-app words is low (comfort 0.118, tribute 0.006). So maybe performed+dividing low ~0.08. So:\n\nperformed+uniting: 0.33\nhonest+uniting: 0.45\nperformed+dividing: 0.08\nhonest+dividing: 0.14\nSum = 1.00.\n\nThat seems plausible: mood boards as mostly uniting (honest+performed) with some honest fracturing.\n\nI'll pick: {\"performed+uniting\":0.331,\"honest+uniting\":0.452,\"performed+dividing\":0.083,\"honest+dividing\":0.134} sum = 0.331+0.452=0.783, +0.083=0.866, +0.134=1.000.\n\nThat's fine.\n\nWe must output only the JSON object, no prose or code fences. So final answer: {\"performed+uniting\":0.331,\"honest+uniting\":0.452,\"performed+dividing\":0.083,\"honest+dividing\":0.134}\n\nCheck keys exactly as required: \"performed+uniting\", \"honest+uniting\", \"performed+dividing\", \"honest+dividing\". Yes.\n\nI'll output that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 502,
+          "completion_tokens": 2361,
+          "total_tokens": 2863,
+          "cost": 0.001312872,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001312872,
+            "upstream_inference_prompt_cost": 0.000066264,
+            "upstream_inference_completions_cost": 0.001246608
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2318,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 502,
+        "completion_tokens": 2361,
+        "total_tokens": 2863,
+        "cost": 0.001312872,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001312872,
+          "upstream_inference_prompt_cost": 0.000066264,
+          "upstream_inference_completions_cost": 0.001246608
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2318,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 71,
+      "finishedAt": "2026-11-15T04:34:59.688Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 94
+      },
+      "observation": {
+        "ok": true,
+        "id": 94,
+        "prompt": "COMFORT",
+        "distribution": {
+          "performed+uniting": 0.2605042016806723,
+          "honest+uniting": 0.47058823529411764,
+          "performed+dividing": 0.11764705882352941,
+          "honest+dividing": 0.15126050420168066
+        },
+        "submissions": 119,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 78
+      },
+      "observation": {
+        "ok": true,
+        "id": 78,
+        "prompt": "DATING APPS",
+        "distribution": {
+          "performed+uniting": 0.41975308641975306,
+          "honest+uniting": 0.04938271604938271,
+          "performed+dividing": 0.43950617283950616,
+          "honest+dividing": 0.09135802469135802
+        },
+        "submissions": 405,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 50
+      },
+      "observation": {
+        "ok": true,
+        "id": 50,
+        "prompt": "TRIBUTE LABS",
+        "distribution": {
+          "performed+uniting": 0.18654434250764526,
+          "honest+uniting": 0.6116207951070336,
+          "performed+dividing": 0.0061162079510703364,
+          "honest+dividing": 0.19571865443425077
+        },
+        "submissions": 327,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.331,
+          "honest+uniting": 0.452,
+          "performed+dividing": 0.083,
+          "honest+dividing": 0.134
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.331,
+      "honest+uniting": 0.452,
+      "performed+dividing": 0.083,
+      "honest+dividing": 0.134
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.04381932792320852,
+    "score": 97.80903360383958,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

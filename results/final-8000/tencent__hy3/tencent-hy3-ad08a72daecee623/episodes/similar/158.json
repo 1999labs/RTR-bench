@@ -1,0 +1,607 @@
+{
+  "day": 158,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"THE US CONSTITUTION\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":1,\"prompt\":\"THE INTERNET\",\"distribution\":{\"performed+uniting\":0.32608695652173914,\"honest+uniting\":0.06521739130434782,\"performed+dividing\":0.5543478260869565,\"honest+dividing\":0.05434782608695652},\"submissions\":92},{\"id\":35,\"prompt\":\"THE WORLD CUP\",\"distribution\":{\"performed+uniting\":0.8992805755395683,\"honest+uniting\":0.03597122302158273,\"performed+dividing\":0.02877697841726619,\"honest+dividing\":0.03597122302158273},\"submissions\":139},{\"id\":21,\"prompt\":\"CONCESSION SPEECHES\",\"distribution\":{\"performed+uniting\":0.36813186813186816,\"honest+uniting\":0.14835164835164835,\"performed+dividing\":0.13736263736263737,\"honest+dividing\":0.34615384615384615},\"submissions\":182}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T05:02:18.978Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.450,\"honest+uniting\":0.100,\"performed+dividing\":0.150,\"honest+dividing\":0.300}",
+      "response": {
+        "id": "gen-1794718939-lQae7fkwpjOj5Ob8Li9J",
+        "object": "chat.completion",
+        "created": 1794718939,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.450,\"honest+uniting\":0.100,\"performed+dividing\":0.150,\"honest+dividing\":0.300}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"THE US CONSTITUTION\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given historical examples:\n1. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054. Submissions 92. So for internet, audience saw it as mostly performed dividing (exploiting divisions) and some performed uniting, very little honest.\n2. \"THE WORLD CUP\": performed+uniting 0.899, honest+uniting 0.036, performed+dividing 0.029, honest+dividing 0.036. Submissions 139. World cup is seen as creating false unity among us, almost entirely.\n3. \"CONCESSION SPEECHES\": performed+uniting 0.368, honest+uniting 0.148, performed+dividing 0.137, honest+dividing 0.346. Submissions 182. Concession speeches: mix of performed uniting, honest dividing (fracturing truthfully) high, and some others.\n\nNow we need to estimate for \"THE US CONSTITUTION\". The US Constitution is a foundational document. The audience's interpretations likely lean towards something about unity or division. Given the examples, topics that are traditionally about unity (World Cup) get high performed uniting (false unity). Topics that are about communication/technology (Internet) get performed dividing (exploiting divisions). Concession speeches (political but about gracefully accepting loss) get mix of performed uniting and honest dividing (maybe because they say they unite but actually reveal divisions). The Constitution is a political founding document, often invoked to unite or to divide. In current US context, it's often used both to claim unity and to justify divisions. The audience might see it as performed uniting (creating false unity) or performed dividing (exploiting divisions) or honest dividing (fracturing truthfully, i.e., the constitution itself fractures us truthfully? maybe it's a document that honestly shows divisions). Honest uniting seems low across all examples (max 0.148). So honest+uniting likely low.\n\nWe need to produce probabilities sum to 1. Let's think about likely distribution. The Constitution is a serious civic document. In Mixed Messages project, participants might be cynical about it? The Internet example shows high performed dividing (0.55) and performed uniting (0.33). World Cup shows overwhelming performed uniting (0.90). Concession speeches show performed uniting 0.37, honest dividing 0.35, performed dividing 0.14, honest uniting 0.15.\n\nFor US Constitution, maybe it's similar to concession speeches? Both political. But Constitution is more foundational, maybe more performed uniting (people claim it unites us) but also honest dividing (it sets up divisions of power, or reveals deep divides). Or performed dividing (politicians use it to exploit divisions). I'd guess performed uniting is significant, honest dividing also significant, performed dividing moderate, honest uniting low.\n\nLet's consider the audience's pattern: They seem to assign \"performed\" (false/deliberate) more than \"honest\" except for concession speeches honest dividing high. For Constitution, maybe they see it as creating false unity (performed uniting) because it's often cited as unifying symbol but actually masks divisions. Or they might see it as fracturing us truthfully (honest dividing) because the document itself establishes a system that divides power and maybe inherently divides. But the labels: \"honest+dividing: fracturing us, truthfully\" - meaning the thing itself truthfully fractures us, not a performance. The Constitution could be seen as truthfully fracturing (e.g., federalism, checks and balances, slavery compromises). But audience interpretations might be more about current discourse.\n\nGiven the examples, I'll approximate: performed+uniting around 0.4, honest+uniting around 0.1, performed+dividing around 0.2, honest+dividing around 0.3. Sum = 1.0. But we need at least three decimals if needed.\n\nAlternatively, look at average of the three examples? Not directly. But we can infer that for political topics (concession speeches) honest dividing is high. Constitution might be similar but maybe more performed uniting because it's a symbol of unity. I'll set:\nperformed+uniting: 0.45\nhonest+uniting: 0.08\nperformed+dividing: 0.17\nhonest+dividing: 0.30\nSum = 1.00. But check: 0.45+0.08=0.53, +0.17=0.70, +0.30=1.00.\n\nCould also be more performed dividing like internet? But Constitution is not like internet. I think performed uniting is plausible high. However, world cup is 0.9 performed uniting; constitution might not be that high because it's more contested. So 0.45 seems moderate.\n\nMaybe we should consider the submissions counts: they are just counts, not weight. But we could treat as evidence of typical distributions. The audience may have a bias toward performed uniting for celebratory topics, performed dividing for tech, mixed for political. Constitution is political but revered. I'll go with something like:\nperformed+uniting: 0.42\nhonest+uniting: 0.07\nperformed+dividing: 0.21\nhonest+dividing: 0.30\nSum = 1.00.\n\nBut we need to output only JSON object, no prose. Ensure keys exactly as given. Use numeric probabilities. I'll use three decimals: 0.420, 0.070, 0.210, 0.300. But they said at least three decimal places when needed; we can use more if we want. I'll use:\n{\"performed+uniting\":0.42,\"honest+uniting\":0.07,\"performed+dividing\":0.21,\"honest+dividing\":0.30} but that sums to 1.0 exactly? 0.42+0.07=0.49, +0.21=0.70, +0.30=1.00. Yes.\n\nBut maybe better to have more precise like 0.423, 0.072, 0.205, 0.300. Sum = 1.000. I'll do 0.423, 0.072, 0.205, 0.300. Check: 0.423+0.072=0.495, +0.205=0.700, +0.300=1.000. Good.\n\nAlternatively, we could mimic concession speeches but shift: concession speeches had performed uniting 0.368, honest uniting 0.148, performed dividing 0.137, honest dividing 0.346. For constitution, maybe performed uniting higher (more symbolic unity) and honest dividing slightly lower, performed dividing higher. So 0.40, 0.10, 0.20, 0.30. That's fine.\n\nI'll output:\n{\"performed+uniting\":0.4,\"honest+uniting\":0.1,\"performed+dividing\":0.2,\"honest+dividing\":0.3} but that's only one decimal; they said at least three decimal places when needed. It's not needed if exact? But to be safe, use three decimals: 0.400, 0.100, 0.200, 0.300. That sums to 1.0. That's acceptable.\n\nBut maybe we want to reflect more nuanced: from examples, honest+uniting never above 0.148, so 0.100 is fine. performed+uniting for political was 0.368, for celebratory 0.899, for tech 0.326. Constitution maybe between political and celebratory? I'll set 0.450. performed+dividing for political 0.137, tech 0.554, so maybe 0.150. honest+dividing political 0.346, so maybe 0.300. Then honest+uniting 0.100. Sum: 0.450+0.100+0.150+0.300=1.000. Use 0.450,0.100,0.150,0.300.\n\nI'll go with that.\n\nFinal answer: {\"performed+uniting\":0.45,\"honest+uniting\":0.1,\"performed+dividing\":0.15,\"honest+dividing\":0.3} but with three decimals: 0.450,0.100,0.150,0.300.\n\nMake sure no code fences, just JSON.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"THE US CONSTITUTION\" from participants in Mixed Messages, a generative art project. The audience interprets, not objective labels. We have four quadrants:\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe are given historical examples:\n1. \"THE INTERNET\": performed+uniting 0.326, honest+uniting 0.065, performed+dividing 0.554, honest+dividing 0.054. Submissions 92. So for internet, audience saw it as mostly performed dividing (exploiting divisions) and some performed uniting, very little honest.\n2. \"THE WORLD CUP\": performed+uniting 0.899, honest+uniting 0.036, performed+dividing 0.029, honest+dividing 0.036. Submissions 139. World cup is seen as creating false unity among us, almost entirely.\n3. \"CONCESSION SPEECHES\": performed+uniting 0.368, honest+uniting 0.148, performed+dividing 0.137, honest+dividing 0.346. Submissions 182. Concession speeches: mix of performed uniting, honest dividing (fracturing truthfully) high, and some others.\n\nNow we need to estimate for \"THE US CONSTITUTION\". The US Constitution is a foundational document. The audience's interpretations likely lean towards something about unity or division. Given the examples, topics that are traditionally about unity (World Cup) get high performed uniting (false unity). Topics that are about communication/technology (Internet) get performed dividing (exploiting divisions). Concession speeches (political but about gracefully accepting loss) get mix of performed uniting and honest dividing (maybe because they say they unite but actually reveal divisions). The Constitution is a political founding document, often invoked to unite or to divide. In current US context, it's often used both to claim unity and to justify divisions. The audience might see it as performed uniting (creating false unity) or performed dividing (exploiting divisions) or honest dividing (fracturing truthfully, i.e., the constitution itself fractures us truthfully? maybe it's a document that honestly shows divisions). Honest uniting seems low across all examples (max 0.148). So honest+uniting likely low.\n\nWe need to produce probabilities sum to 1. Let's think about likely distribution. The Constitution is a serious civic document. In Mixed Messages project, participants might be cynical about it? The Internet example shows high performed dividing (0.55) and performed uniting (0.33). World Cup shows overwhelming performed uniting (0.90). Concession speeches show performed uniting 0.37, honest dividing 0.35, performed dividing 0.14, honest uniting 0.15.\n\nFor US Constitution, maybe it's similar to concession speeches? Both political. But Constitution is more foundational, maybe more performed uniting (people claim it unites us) but also honest dividing (it sets up divisions of power, or reveals deep divides). Or performed dividing (politicians use it to exploit divisions). I'd guess performed uniting is significant, honest dividing also significant, performed dividing moderate, honest uniting low.\n\nLet's consider the audience's pattern: They seem to assign \"performed\" (false/deliberate) more than \"honest\" except for concession speeches honest dividing high. For Constitution, maybe they see it as creating false unity (performed uniting) because it's often cited as unifying symbol but actually masks divisions. Or they might see it as fracturing us truthfully (honest dividing) because the document itself establishes a system that divides power and maybe inherently divides. But the labels: \"honest+dividing: fracturing us, truthfully\" - meaning the thing itself truthfully fractures us, not a performance. The Constitution could be seen as truthfully fracturing (e.g., federalism, checks and balances, slavery compromises). But audience interpretations might be more about current discourse.\n\nGiven the examples, I'll approximate: performed+uniting around 0.4, honest+uniting around 0.1, performed+dividing around 0.2, honest+dividing around 0.3. Sum = 1.0. But we need at least three decimals if needed.\n\nAlternatively, look at average of the three examples? Not directly. But we can infer that for political topics (concession speeches) honest dividing is high. Constitution might be similar but maybe more performed uniting because it's a symbol of unity. I'll set:\nperformed+uniting: 0.45\nhonest+uniting: 0.08\nperformed+dividing: 0.17\nhonest+dividing: 0.30\nSum = 1.00. But check: 0.45+0.08=0.53, +0.17=0.70, +0.30=1.00.\n\nCould also be more performed dividing like internet? But Constitution is not like internet. I think performed uniting is plausible high. However, world cup is 0.9 performed uniting; constitution might not be that high because it's more contested. So 0.45 seems moderate.\n\nMaybe we should consider the submissions counts: they are just counts, not weight. But we could treat as evidence of typical distributions. The audience may have a bias toward performed uniting for celebratory topics, performed dividing for tech, mixed for political. Constitution is political but revered. I'll go with something like:\nperformed+uniting: 0.42\nhonest+uniting: 0.07\nperformed+dividing: 0.21\nhonest+dividing: 0.30\nSum = 1.00.\n\nBut we need to output only JSON object, no prose. Ensure keys exactly as given. Use numeric probabilities. I'll use three decimals: 0.420, 0.070, 0.210, 0.300. But they said at least three decimal places when needed; we can use more if we want. I'll use:\n{\"performed+uniting\":0.42,\"honest+uniting\":0.07,\"performed+dividing\":0.21,\"honest+dividing\":0.30} but that sums to 1.0 exactly? 0.42+0.07=0.49, +0.21=0.70, +0.30=1.00. Yes.\n\nBut maybe better to have more precise like 0.423, 0.072, 0.205, 0.300. Sum = 1.000. I'll do 0.423, 0.072, 0.205, 0.300. Check: 0.423+0.072=0.495, +0.205=0.700, +0.300=1.000. Good.\n\nAlternatively, we could mimic concession speeches but shift: concession speeches had performed uniting 0.368, honest uniting 0.148, performed dividing 0.137, honest dividing 0.346. For constitution, maybe performed uniting higher (more symbolic unity) and honest dividing slightly lower, performed dividing higher. So 0.40, 0.10, 0.20, 0.30. That's fine.\n\nI'll output:\n{\"performed+uniting\":0.4,\"honest+uniting\":0.1,\"performed+dividing\":0.2,\"honest+dividing\":0.3} but that's only one decimal; they said at least three decimal places when needed. It's not needed if exact? But to be safe, use three decimals: 0.400, 0.100, 0.200, 0.300. That sums to 1.0. That's acceptable.\n\nBut maybe we want to reflect more nuanced: from examples, honest+uniting never above 0.148, so 0.100 is fine. performed+uniting for political was 0.368, for celebratory 0.899, for tech 0.326. Constitution maybe between political and celebratory? I'll set 0.450. performed+dividing for political 0.137, tech 0.554, so maybe 0.150. honest+dividing political 0.346, so maybe 0.300. Then honest+uniting 0.100. Sum: 0.450+0.100+0.150+0.300=1.000. Use 0.450,0.100,0.150,0.300.\n\nI'll go with that.\n\nFinal answer: {\"performed+uniting\":0.45,\"honest+uniting\":0.1,\"performed+dividing\":0.15,\"honest+dividing\":0.3} but with three decimals: 0.450,0.100,0.150,0.300.\n\nMake sure no code fences, just JSON.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 506,
+          "completion_tokens": 2029,
+          "total_tokens": 2535,
+          "cost": 0.001138104,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001138104,
+            "upstream_inference_prompt_cost": 0.000066792,
+            "upstream_inference_completions_cost": 0.001071312
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1986,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 506,
+        "completion_tokens": 2029,
+        "total_tokens": 2535,
+        "cost": 0.001138104,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001138104,
+          "upstream_inference_prompt_cost": 0.000066792,
+          "upstream_inference_completions_cost": 0.001071312
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1986,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 121,
+      "finishedAt": "2026-11-15T05:02:41.326Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 1
+      },
+      "observation": {
+        "ok": true,
+        "id": 1,
+        "prompt": "THE INTERNET",
+        "distribution": {
+          "performed+uniting": 0.32608695652173914,
+          "honest+uniting": 0.06521739130434782,
+          "performed+dividing": 0.5543478260869565,
+          "honest+dividing": 0.05434782608695652
+        },
+        "submissions": 92,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 35
+      },
+      "observation": {
+        "ok": true,
+        "id": 35,
+        "prompt": "THE WORLD CUP",
+        "distribution": {
+          "performed+uniting": 0.8992805755395683,
+          "honest+uniting": 0.03597122302158273,
+          "performed+dividing": 0.02877697841726619,
+          "honest+dividing": 0.03597122302158273
+        },
+        "submissions": 139,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 21
+      },
+      "observation": {
+        "ok": true,
+        "id": 21,
+        "prompt": "CONCESSION SPEECHES",
+        "distribution": {
+          "performed+uniting": 0.36813186813186816,
+          "honest+uniting": 0.14835164835164835,
+          "performed+dividing": 0.13736263736263737,
+          "honest+dividing": 0.34615384615384615
+        },
+        "submissions": 182,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.45,
+          "honest+uniting": 0.1,
+          "performed+dividing": 0.15,
+          "honest+dividing": 0.3
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.45,
+      "honest+uniting": 0.1,
+      "performed+dividing": 0.15,
+      "honest+dividing": 0.3
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.38129815734976774,
+    "score": 80.93509213251161,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

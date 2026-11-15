@@ -5,7 +5,7 @@ Target: [noahmclaughlin/RTR-bench](https://huggingface.co/datasets/noahmclaughli
 The local release folder is [`huggingface/RTR-bench/`](../huggingface/RTR-bench/). Its [README](../huggingface/RTR-bench/README.md) is the dataset card. Preparation and validation are local; neither command below publishes anything or calls a model.
 
 
-## Published release
+## Original publication (historical)
 
 Published to the user's dataset repository on November 14, 2026 (America/New_York).
 
@@ -23,9 +23,10 @@ Published to the user's dataset repository on November 14, 2026 (America/New_Yor
 - Aggregate counts, full-precision quadrant shares, all co-winning quadrants, and original descriptive metrics.
 - Byte-identical source data and split manifest for compatibility with the runner.
 - CC0 data dedication, MIT documentation/metadata license, and citation.
-- A release manifest with provenance and file checksums.
+- Verified eleven-model result summaries, chart source metadata, and three SVG/PNG charts.
+- A release manifest with provenance and checksums for every package file.
 
-Hugging Face YAML configuration explicitly selects only the three JSONL files. The source JSON and release metadata are not extra dataset rows. The card leads with Learn the Room, identifies Distribution Prediction as the no-example control and standalone track, and documents the original RTR score separately.
+Hugging Face YAML configuration explicitly selects only the three JSONL files. The source JSON and release metadata are not extra dataset rows. The card describes **Predict** (no historical examples) and **Learn** (up to three selected examples), with the current eleven-model results, three charts, and concise findings. The original winning-quadrant benchmark remains separately documented.
 
 ## Prepare and verify
 
@@ -36,11 +37,11 @@ node scripts/prepare-hf.mjs
 uv run --with datasets --with huggingface_hub scripts/validate-hf.py
 ```
 
-The exporter validates the frozen source fingerprint and split before writing. It derives shares directly from integer counts and includes all crowd co-winners rather than relying on the legacy single-winner field. It never queries the production database or refreshes the source dataset. The package's card, license notice, CC0 text, and citation are authored files; the exporter regenerates JSONL, source copies, the MIT text, and the release manifest. Re-run it after editing package documentation to refresh checksums.
+The exporter validates the frozen source fingerprint and split before writing. It derives shares directly from integer counts and includes all crowd co-winners rather than relying on the legacy single-winner field. It never queries the production database or refreshes the source dataset. The package's card, license notice, CC0 text, and citation are authored files; the exporter regenerates JSONL, source copies, the MIT text, result/chart mirrors, and the release manifest. Re-run it after editing package documentation to refresh checksums.
 
 Validation loads the directory with the actual Hugging Face Datasets library, with Hub access disabled. It checks split assignment, source equivalence, all counts/shares, tie handling, hashes, card configuration, local links, Python example syntax, and the package file allowlist. Validation dependencies are installed in an isolated uv environment, outside project dependencies.
 
-The release manifest records the source checkout's HEAD. The current card pins protocol/result links and the fixture command to the source commit used for this release. When intentionally preparing a new version, update those links along with the manifest and review changes. A new dataset snapshot needs its own reviewed split/version; do not silently append future windows to this release.
+The release manifest records the source checkout’s HEAD and CLI version. Commit the final source/results and authored card before preparing the manifest; this identifies the source used for the package. The card links to current GitHub protocols and results; use the manifest’s source commit when reproducing the exact release. A new dataset snapshot needs its own reviewed split/version; do not silently append future windows to this release.
 
 ## Upload after review
 
@@ -54,10 +55,10 @@ hf auth login
 Upload only the prepared folder, explicitly to the dataset repository root:
 
 ```bash
-hf upload noahmclaughlin/RTR-bench huggingface/RTR-bench . --repo-type dataset --commit-message "Publish RTR-bench dataset release v1"
+hf upload noahmclaughlin/RTR-bench huggingface/RTR-bench . --repo-type dataset --commit-message "Publish verified Predict and Learn results for eleven models"
 ```
 
-This command was used for the published release above. For future updates it uploads the reviewed package without deleting unrelated remote files. Inspect any existing remote content before publishing. The current release requires no GPU, hosted model, or paid inference.
+This uploads the reviewed package without deleting unrelated remote files. Inspect any existing remote content before publishing. The current release requires no GPU, hosted model, or paid inference.
 
 After upload, record the Hugging Face commit and verify:
 

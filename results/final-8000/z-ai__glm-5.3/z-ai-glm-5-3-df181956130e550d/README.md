@@ -1,24 +1,27 @@
-# GLM 5.3 final evaluation — 8,000 tokens
+# glm-5.3 — final evaluation
 
-Provider: Wafer (`wafer/us`, fp4). All 45 evaluation targets were run in all four conditions under the [frozen campaign plan](../../../../docs/final-run-plan-8000.md).
+Provider: **Wafer (fp4)**, requested route `wafer/us`. Actual response providers: Wafer. All 45 targets ran in each condition under the [campaign protocol](../../README.md).
 
-| Condition | Score / 100 | vs baseline (points) | Valid / 45 | 95% score interval | Reported cost |
+| Condition | Score | vs historical baseline | Valid / 45 | 95% interval | Reported cost |
 |---|---:|---:|---:|---|---:|
-| Historical-average baseline | 85.56 | 0.00 | — | — | — |
-| Predict | 86.03929052 | +0.48 | 44/45 | 81.23 to 89.68 | $0.0055093041 |
-| Random examples | 85.62695726 | +0.07 | 45/45 | 81.64 to 89.36 | $0.0066868555 |
-| Similar examples | 87.11414688 | +1.56 | 45/45 | 83.31 to 90.60 | $0.0067966905 |
-| Learn | 82.86617669 | −2.69 | 44/45 | 77.64 to 87.50 | $0.0384206406 |
+| Predict | 86.03929052 | +0.48 | 44/45 | 81.23 to 89.68 | $0.00551 |
+| Random examples | 85.62695726 | +0.07 | 45/45 | 81.64 to 89.36 | $0.00669 |
+| Similar examples | 87.11414688 | +1.56 | 45/45 | 83.31 to 90.60 | $0.00680 |
+| Learn | 82.86617669 | −2.69 | 44/45 | 77.64 to 87.50 | $0.03842 |
 
-The historical-average baseline predicts the same distribution for every target, calculated only from reference windows. Uniform prediction scores 85.39. Differences use unrounded scores; failed terminal answers retain zero points. Learn gain measures the overall workflow difference, including answer-completion differences.
+Learn Gain: **−3.17** points; paired exploratory 95% interval **−9.10 to 3.09**. Historical-average baseline: 85.55744060; uniform baseline: 85.38589005.
 
-Learn gain: -3.17311383 points; exploratory paired 95% interval [-9.104741542233242, 3.0943995588071163]. Total reported cost: $0.0574134907, including controls; 356 HTTP attempts; 4.30 minutes.
+178/180 valid final predictions; 356 HTTP attempts, 0 API/transport errors, 0 responses stopped at the token limit. Wall-clock span: 4.30 minutes, including retries and pauses. Known total cost including controls: $0.0574134907; ledger accounted: $0.057413658; unresolved charges: 0.
 
-178/180 final predictions were valid. Predict day 158 returned no visible content despite HTTP 200 with a normal stop. Learn day 132 submitted a prediction with noncanonical keys. Both retain zero-point failure penalties. There were no transport/API errors or length stops. Failures were not rerolled.
+Terminal failures remain in the denominator with score zero; they were not rerolled:
 
-The verifier independently recomputed scores, replayed requests and traces, reconciled the ledger, and resumed with network calls disabled without changing the report. Scores measure distribution agreement, not percentage accuracy. Intervals are exploratory and do not capture all service/model variation.
+- none, day 158 (THE US CONSTITUTION): missing — Missing final model response.
+- agent, day 132 (THE OLYMPICS): invalid — Expected exactly four canonical quadrant keys.
+
+The offline verifier independently recomputed scores, replayed saved requests/traces, checked the spending ledger, and resumed this completed run with network calls forbidden. Learn Gain measures the whole workflow, including completion differences. Intervals describe target variation, not repeated model runs.
 
 - [Full report](report.md)
 - [Interactive traces](report.html)
 - [Raw report](report.json)
 - [Manifest](manifest.json)
+- [Spending ledger](spending.json)

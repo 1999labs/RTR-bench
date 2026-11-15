@@ -1,0 +1,607 @@
+{
+  "day": 159,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"FACEBOOK\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":49,\"prompt\":\"FAST FASHION\",\"distribution\":{\"performed+uniting\":0.045454545454545456,\"honest+uniting\":0,\"performed+dividing\":0.24242424242424243,\"honest+dividing\":0.7121212121212122},\"submissions\":66},{\"id\":57,\"prompt\":\"FAMILY DINNERS\",\"distribution\":{\"performed+uniting\":0.2537313432835821,\"honest+uniting\":0.746268656716418,\"performed+dividing\":0,\"honest+dividing\":0},\"submissions\":67},{\"id\":1,\"prompt\":\"THE INTERNET\",\"distribution\":{\"performed+uniting\":0.32608695652173914,\"honest+uniting\":0.06521739130434782,\"performed+dividing\":0.5543478260869565,\"honest+dividing\":0.05434782608695652},\"submissions\":92}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T05:02:41.335Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.280,\"honest+uniting\":0.040,\"performed+dividing\":0.620,\"honest+dividing\":0.060}",
+      "response": {
+        "id": "gen-1794718961-YdheXsim1x0d4bxTVv8M",
+        "object": "chat.completion",
+        "created": 1794718961,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.280,\"honest+uniting\":0.040,\"performed+dividing\":0.620,\"honest+dividing\":0.060}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"FACEBOOK\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"FAST FASHION\": performed+uniting: 0.045, honest+uniting: 0, performed+dividing: 0.242, honest+dividing: 0.712. Submissions 66. So mostly honest+dividing (truthfully fracturing us) and some performed+dividing.\n2. \"FAMILY DINNERS\": performed+uniting: 0.254, honest+uniting: 0.746, performed+dividing: 0, honest+dividing: 0. So mostly honest+uniting (authentically bringing together) and some performed+uniting.\n3. \"THE INTERNET\": performed+uniting: 0.326, honest+uniting: 0.065, performed+dividing: 0.554, honest+dividing: 0.054. So performed+dividing dominates, then performed+uniting, then small honest.\n\nNow we need to estimate for \"FACEBOOK\". Facebook is a social media platform. It's often criticized for creating echo chambers, exploiting divisions for engagement (performed+dividing), also sometimes bringing people together (honest+uniting? but maybe performed+uniting: creating false unity, like \"we're all connected\" but actually not). Also honest+dividing: fracturing us truthfully? Maybe Facebook does fracture us truthfully? But typical audience interpretations from these examples: For \"THE INTERNET\", they saw it as performed+dividing (exploiting divisions deliberately) and performed+uniting (creating false unity). For \"FAST FASHION\", they saw it as honest+dividing (truthfully fracturing us) and performed+dividing. For \"FAMILY DINNERS\", they saw it as honest+uniting and performed+uniting.\n\nFacebook is a specific platform. It is known for both connecting people (bring us together) but also for divisiveness (exploiting divisions). The audience seems to be cynical about tech? For THE INTERNET, they gave high performed+dividing (0.554) and performed+uniting (0.326). So they see internet as performatively doing both: falsely uniting and deliberately dividing. Honest categories are low.\n\nFor FACEBOOK, likely similar to THE INTERNET but maybe more negative? Facebook has been specifically called out for dividing people (e.g., misinformation, algorithmic polarization). So performed+dividing might be high. Also performed+uniting: \"creating false unity among us\" - Facebook's slogan \"bring the world closer together\" but false. So some performed+uniting. Honest+uniting likely low (maybe some authentic connections but audience may not credit). Honest+dividing: fracturing us truthfully - maybe some but less than performed+dividing because the division is deliberate exploitation rather than truthful fracturing? Actually \"honest+dividing: fracturing us, truthfully\" might mean it genuinely fractures without pretense? But Facebook pretends to unite, so its dividing is performed (deliberate exploitation) not honest. So honest+dividing low.\n\nThus we can approximate: performed+dividing highest, performed+uniting second, honest+uniting small, honest+dividing small.\n\nLet's look at numbers: THE INTERNET: p+u=0.326, h+u=0.065, p+d=0.554, h+d=0.054. Sum=1. For FACEBOOK, maybe more negative: p+d even higher, p+u maybe similar or slightly lower, h+u maybe 0.05, h+d maybe 0.02? But we need to sum to 1.\n\nAlternatively, consider FAST FASHION: h+d=0.712, p+d=0.242, p+u=0.045. That's a different pattern: honest fracturing. Facebook might not be seen as honestly fracturing; it's more deceptive.\n\nGiven the word \"FACEBOOK\", it's a corporate entity, like fast fashion? Fast fashion is industry exploiting etc. Facebook is tech giant. The audience might see it as exploitative, so performed+dividing high. Also maybe performed+uniting as facade.\n\nI'll predict something like:\nperformed+uniting: 0.25\nhonest+uniting: 0.05\nperformed+dividing: 0.65\nhonest+dividing: 0.05\nSum = 1.0. But need at least three decimals if needed. Could do 0.250, 0.050, 0.650, 0.050. But maybe more nuanced: 0.280, 0.040, 0.620, 0.060? Let's think.\n\nWe can also consider that submissions count not given for target, but we just need distribution.\n\nMaybe the audience for Mixed Messages (generative art project) tends to interpret words with a mix of cynicism and some positivity. For FAMILY DINNERS they were positive. For FAST FASHION negative. For THE INTERNET mixed negative with performative. Facebook is like THE INTERNET but more specific brand. Could be similar to THE INTERNET but with higher performed+dividing because Facebook is often blamed for division. So p+d ~0.6, p+u ~0.3, h+u ~0.05, h+d ~0.05. That sums 1.0.\n\nBut we should maybe adjust to have h+d slightly higher than h+u? In THE INTERNET h+d=0.054, h+u=0.065. Similar. For FAST FASHION h+d huge. For FACEBOOK, maybe h+d a bit more than h+u because fracturing is truthful? Not sure.\n\nI'll set:\nperformed+uniting: 0.300\nhonest+uniting: 0.050\nperformed+dividing: 0.600\nhonest+dividing: 0.050\nSum = 1.000.\n\nBut to have three decimals: 0.300, 0.050, 0.600, 0.050. That's fine.\n\nAlternatively, use 0.327, 0.065, 0.554, 0.054 like internet but tweak: 0.250, 0.040, 0.660, 0.050 = 1.000. I'll go with something plausible.\n\nGiven the instruction: \"Estimate the share of this audience's submissions in each quadrant... Return exactly these four keys with numeric probabilities between 0 and 1 that sum to 1... A sum differing from 1 by at most 0.001 will be normalized.\"\n\nSo we can output JSON object only.\n\nI'll produce: {\"performed+uniting\":0.28,\"honest+uniting\":0.04,\"performed+dividing\":0.62,\"honest+dividing\":0.06} sum=1.00.\n\nBut maybe more precise: 0.280, 0.040, 0.620, 0.060.\n\nI'll use 0.28, 0.04, 0.62, 0.06. That's fine.\n\nBut to be safe with three decimals: 0.280, 0.040, 0.620, 0.060.\n\nLet's output exactly: {\"performed+uniting\":0.280,\"honest+uniting\":0.040,\"performed+dividing\":0.620,\"honest+dividing\":0.060}\n\nCheck sum: 0.28+0.04=0.32, +0.62=0.94, +0.06=1.00. Good.\n\nNo other text.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"FACEBOOK\" from participants in Mixed Messages, a generative art project. The audience interprets the word in four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"FAST FASHION\": performed+uniting: 0.045, honest+uniting: 0, performed+dividing: 0.242, honest+dividing: 0.712. Submissions 66. So mostly honest+dividing (truthfully fracturing us) and some performed+dividing.\n2. \"FAMILY DINNERS\": performed+uniting: 0.254, honest+uniting: 0.746, performed+dividing: 0, honest+dividing: 0. So mostly honest+uniting (authentically bringing together) and some performed+uniting.\n3. \"THE INTERNET\": performed+uniting: 0.326, honest+uniting: 0.065, performed+dividing: 0.554, honest+dividing: 0.054. So performed+dividing dominates, then performed+uniting, then small honest.\n\nNow we need to estimate for \"FACEBOOK\". Facebook is a social media platform. It's often criticized for creating echo chambers, exploiting divisions for engagement (performed+dividing), also sometimes bringing people together (honest+uniting? but maybe performed+uniting: creating false unity, like \"we're all connected\" but actually not). Also honest+dividing: fracturing us truthfully? Maybe Facebook does fracture us truthfully? But typical audience interpretations from these examples: For \"THE INTERNET\", they saw it as performed+dividing (exploiting divisions deliberately) and performed+uniting (creating false unity). For \"FAST FASHION\", they saw it as honest+dividing (truthfully fracturing us) and performed+dividing. For \"FAMILY DINNERS\", they saw it as honest+uniting and performed+uniting.\n\nFacebook is a specific platform. It is known for both connecting people (bring us together) but also for divisiveness (exploiting divisions). The audience seems to be cynical about tech? For THE INTERNET, they gave high performed+dividing (0.554) and performed+uniting (0.326). So they see internet as performatively doing both: falsely uniting and deliberately dividing. Honest categories are low.\n\nFor FACEBOOK, likely similar to THE INTERNET but maybe more negative? Facebook has been specifically called out for dividing people (e.g., misinformation, algorithmic polarization). So performed+dividing might be high. Also performed+uniting: \"creating false unity among us\" - Facebook's slogan \"bring the world closer together\" but false. So some performed+uniting. Honest+uniting likely low (maybe some authentic connections but audience may not credit). Honest+dividing: fracturing us truthfully - maybe some but less than performed+dividing because the division is deliberate exploitation rather than truthful fracturing? Actually \"honest+dividing: fracturing us, truthfully\" might mean it genuinely fractures without pretense? But Facebook pretends to unite, so its dividing is performed (deliberate exploitation) not honest. So honest+dividing low.\n\nThus we can approximate: performed+dividing highest, performed+uniting second, honest+uniting small, honest+dividing small.\n\nLet's look at numbers: THE INTERNET: p+u=0.326, h+u=0.065, p+d=0.554, h+d=0.054. Sum=1. For FACEBOOK, maybe more negative: p+d even higher, p+u maybe similar or slightly lower, h+u maybe 0.05, h+d maybe 0.02? But we need to sum to 1.\n\nAlternatively, consider FAST FASHION: h+d=0.712, p+d=0.242, p+u=0.045. That's a different pattern: honest fracturing. Facebook might not be seen as honestly fracturing; it's more deceptive.\n\nGiven the word \"FACEBOOK\", it's a corporate entity, like fast fashion? Fast fashion is industry exploiting etc. Facebook is tech giant. The audience might see it as exploitative, so performed+dividing high. Also maybe performed+uniting as facade.\n\nI'll predict something like:\nperformed+uniting: 0.25\nhonest+uniting: 0.05\nperformed+dividing: 0.65\nhonest+dividing: 0.05\nSum = 1.0. But need at least three decimals if needed. Could do 0.250, 0.050, 0.650, 0.050. But maybe more nuanced: 0.280, 0.040, 0.620, 0.060? Let's think.\n\nWe can also consider that submissions count not given for target, but we just need distribution.\n\nMaybe the audience for Mixed Messages (generative art project) tends to interpret words with a mix of cynicism and some positivity. For FAMILY DINNERS they were positive. For FAST FASHION negative. For THE INTERNET mixed negative with performative. Facebook is like THE INTERNET but more specific brand. Could be similar to THE INTERNET but with higher performed+dividing because Facebook is often blamed for division. So p+d ~0.6, p+u ~0.3, h+u ~0.05, h+d ~0.05. That sums 1.0.\n\nBut we should maybe adjust to have h+d slightly higher than h+u? In THE INTERNET h+d=0.054, h+u=0.065. Similar. For FAST FASHION h+d huge. For FACEBOOK, maybe h+d a bit more than h+u because fracturing is truthful? Not sure.\n\nI'll set:\nperformed+uniting: 0.300\nhonest+uniting: 0.050\nperformed+dividing: 0.600\nhonest+dividing: 0.050\nSum = 1.000.\n\nBut to have three decimals: 0.300, 0.050, 0.600, 0.050. That's fine.\n\nAlternatively, use 0.327, 0.065, 0.554, 0.054 like internet but tweak: 0.250, 0.040, 0.660, 0.050 = 1.000. I'll go with something plausible.\n\nGiven the instruction: \"Estimate the share of this audience's submissions in each quadrant... Return exactly these four keys with numeric probabilities between 0 and 1 that sum to 1... A sum differing from 1 by at most 0.001 will be normalized.\"\n\nSo we can output JSON object only.\n\nI'll produce: {\"performed+uniting\":0.28,\"honest+uniting\":0.04,\"performed+dividing\":0.62,\"honest+dividing\":0.06} sum=1.00.\n\nBut maybe more precise: 0.280, 0.040, 0.620, 0.060.\n\nI'll use 0.28, 0.04, 0.62, 0.06. That's fine.\n\nBut to be safe with three decimals: 0.280, 0.040, 0.620, 0.060.\n\nLet's output exactly: {\"performed+uniting\":0.280,\"honest+uniting\":0.040,\"performed+dividing\":0.620,\"honest+dividing\":0.060}\n\nCheck sum: 0.28+0.04=0.32, +0.62=0.94, +0.06=1.00. Good.\n\nNo other text.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 481,
+          "completion_tokens": 1795,
+          "total_tokens": 2276,
+          "cost": 0.001011252,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001011252,
+            "upstream_inference_prompt_cost": 0.000063492,
+            "upstream_inference_completions_cost": 0.00094776
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1752,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 481,
+        "completion_tokens": 1795,
+        "total_tokens": 2276,
+        "cost": 0.001011252,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001011252,
+          "upstream_inference_prompt_cost": 0.000063492,
+          "upstream_inference_completions_cost": 0.00094776
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1752,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 122,
+      "finishedAt": "2026-11-15T05:02:59.163Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 49
+      },
+      "observation": {
+        "ok": true,
+        "id": 49,
+        "prompt": "FAST FASHION",
+        "distribution": {
+          "performed+uniting": 0.045454545454545456,
+          "honest+uniting": 0,
+          "performed+dividing": 0.24242424242424243,
+          "honest+dividing": 0.7121212121212122
+        },
+        "submissions": 66,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 57
+      },
+      "observation": {
+        "ok": true,
+        "id": 57,
+        "prompt": "FAMILY DINNERS",
+        "distribution": {
+          "performed+uniting": 0.2537313432835821,
+          "honest+uniting": 0.746268656716418,
+          "performed+dividing": 0,
+          "honest+dividing": 0
+        },
+        "submissions": 67,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 1
+      },
+      "observation": {
+        "ok": true,
+        "id": 1,
+        "prompt": "THE INTERNET",
+        "distribution": {
+          "performed+uniting": 0.32608695652173914,
+          "honest+uniting": 0.06521739130434782,
+          "performed+dividing": 0.5543478260869565,
+          "honest+dividing": 0.05434782608695652
+        },
+        "submissions": 92,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.28,
+          "honest+uniting": 0.04,
+          "performed+dividing": 0.62,
+          "honest+dividing": 0.06
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.28,
+      "honest+uniting": 0.04,
+      "performed+dividing": 0.62,
+      "honest+dividing": 0.06
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.09101131733816206,
+    "score": 95.4494341330919,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

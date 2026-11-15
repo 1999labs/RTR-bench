@@ -1,0 +1,607 @@
+{
+  "day": 169,
+  "strategy": "random",
+  "request": {
+    "model": "thinkingmachines/inkling-small",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"HONOR\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":94,\"prompt\":\"COMFORT\",\"distribution\":{\"performed+uniting\":0.2605042016806723,\"honest+uniting\":0.47058823529411764,\"performed+dividing\":0.11764705882352941,\"honest+dividing\":0.15126050420168066},\"submissions\":119},{\"id\":5,\"prompt\":\"READ RECEIPTS\",\"distribution\":{\"performed+uniting\":0.15492957746478872,\"honest+uniting\":0.2112676056338028,\"performed+dividing\":0.22535211267605634,\"honest+dividing\":0.4084507042253521},\"submissions\":71},{\"id\":62,\"prompt\":\"JEFFREY EPSTEIN\",\"distribution\":{\"performed+uniting\":0.10071942446043165,\"honest+uniting\":0.08992805755395683,\"performed+dividing\":0.7014388489208633,\"honest+dividing\":0.1079136690647482},\"submissions\":278}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "deepinfra/fp4"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.44999999999999996,
+        "completion": 1.2,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T08:02:08.328Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\": 0.200, \"honest+uniting\": 0.250, \"performed+dividing\": 0.450, \"honest+dividing\": 0.100}",
+      "response": {
+        "id": "gen-1794729728-GOZN1k1F8Y5AaPvy5PU4",
+        "object": "chat.completion",
+        "created": 1794729728,
+        "model": "thinkingmachines/inkling-small",
+        "provider": "DeepInfra",
+        "system_fingerprint": null,
+        "service_tier": "default",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\": 0.200, \"honest+uniting\": 0.250, \"performed+dividing\": 0.450, \"honest+dividing\": 0.100}",
+              "refusal": null,
+              "reasoning": "We need parse: The user asks: Predict distribution of responses from participants in Mixed Messages, a generative art project. Word: \"HONOR\". Estimate share of audience's submissions in each quadrant: performed+uniting, honest+uniting, performed+dividing, honest+dividing.\n\nWe have historical examples from same audience: For COMFORT: performed+uniting 0.26, honest+uniting 0.47, performed+dividing 0.12, honest+dividing 0.15. For READ RECEIPTS: 0.15, 0.21, 0.23, 0.41. For JEFFREY EPSTEIN: 0.10, 0.09, 0.70, 0.11.\n\nThese are likely different prompts with different semantics. We need to infer likely distribution for word \"HONOR\". What does honor evoke? Could be about virtue, respect, possibly divisive because \"honor\" can be used to justify violence, or uniting as shared value. We need to choose probabilities summing to 1.\n\nLet's think: The audience seems to interpret words in context of \"mixed messages\" - perhaps they categorize whether the word's usage is performed (inauthentic) or honest, and whether it unites or divides.\n\nFor \"COMFORT\", mostly honest+uniting (0.47) and performed+uniting (0.26). So comfort is seen as uniting more often (0.73 uniting) than dividing (0.27). For \"READ RECEIPTS\", more dividing (0.63) than uniting (0.37). For \"JEFFREY EPSTEIN\", heavily performed+dividing (0.70) and dividing overall 0.81.\n\nSo \"HONOR\" likely is a word that can be both. But which? Honor is often invoked in cultures, military, national pride. Could be seen as performed+dividing? Or honest+uniting? Let's think about the semantics: \"Honor\" as a concept: people say \"honor\" to unify (honor code, honor your country) but also it can be divisive (honor killings, toxic honor). Which quadrant would this audience lean?\n\nWe have no direct prior for honor. But we can interpolate based on word abstractness and positivity. \"Comfort\" is positive, uniting. \"Read receipts\" is technology, maybe anxiety, dividing. \"Jeffrey Epstein\" is a person, negative, performed+dividing.\n\n\"Honor\" is somewhat positive but also can be performative (performing honor). The phrase \"mixed messages\" suggests ambiguity.\n\nLet's consider distribution possibilities. Maybe around: performed+uniting: 0.25 (people perform honor to create false unity), honest+uniting: 0.25 (authentic honor brings together), performed+dividing: 0.30 (exploiting divisions via honor), honest+dividing: 0.20 (truthfully fracturing). Sum 1.\n\nBut we need to be plausible. Let's examine patterns: For positive abstract noun \"comfort\", uniting = 0.73. For \"honor\", which is also positive abstract noun, likely also uniting > dividing? But \"honor\" has darker connotations (honor culture, violence). However the audience might see it as more dividing because \"honor\" is often used to justify exclusion.\n\nLet's think about the project's nature: \"Mixed Messages\" likely displays a word and asks participants to interpret whether it's used to unite or divide, honestly or performatively. So for each word, distribution reflects audience's interpretations.\n\nWe need to output a single JSON object with four keys and probabilities.\n\nSince the instruction: \"Historical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\"\n\nThus we should derive from the examples. Maybe the audience tends to have high performed+dividing for controversial/proper noun topics, and high honest+uniting for soothing/common nouns. \"Honor\" is a common noun but also ideological. Could be balanced.\n\nLet's choose: performed+uniting: 0.20, honest+uniting: 0.30, performed+dividing: 0.35, honest+dividing: 0.15. Sum = 1.00. This emphasizes dividing slightly due to honor's contentious nature, but still significant uniting.\n\nAlternatively: 0.18, 0.22, 0.40, 0.20. Sum 1.00.\n\nLet's go with: performed+uniting 0.18, honest+uniting 0.27, performed+dividing 0.40, honest+dividing 0.15. Sum = 1.00. Wait 0.18+0.27=0.45, +0.40=0.85, +0.15=1.00. Yes.\n\nBut is honest+dividing too low? For read receipts it was 0.41; for Epstein 0.11; for comfort 0.15. So honest+dividing varies.\n\nLet's craft: performed+uniting: 0.22, honest+uniting: 0.28, performed+dividing: 0.38, honest+dividing: 0.12. Sum = 1.00.\n\nI think performed+dividing highest because honor is often weaponized. But honest+uniting also because honor can be genuine.\n\nLet's decide final: {\"performed+uniting\":0.200,\"honest+uniting\":0.250,\"performed+dividing\":0.450,\"honest+dividing\":0.100} sum=1.000. That seems plausible: 45% say it's exploiting divisions deliberately; 25% authentic unity; 20% false unity; 10% truthful fracture.\n\nYes, I'll go with that. Use three decimals: 0.200, 0.250, 0.450, 0.100.\n\nCheck sum: 1.000. Good.\n\nReturn only JSON.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need parse: The user asks: Predict distribution of responses from participants in Mixed Messages, a generative art project. Word: \"HONOR\". Estimate share of audience's submissions in each quadrant: performed+uniting, honest+uniting, performed+dividing, honest+dividing.\n\nWe have historical examples from same audience: For COMFORT: performed+uniting 0.26, honest+uniting 0.47, performed+dividing 0.12, honest+dividing 0.15. For READ RECEIPTS: 0.15, 0.21, 0.23, 0.41. For JEFFREY EPSTEIN: 0.10, 0.09, 0.70, 0.11.\n\nThese are likely different prompts with different semantics. We need to infer likely distribution for word \"HONOR\". What does honor evoke? Could be about virtue, respect, possibly divisive because \"honor\" can be used to justify violence, or uniting as shared value. We need to choose probabilities summing to 1.\n\nLet's think: The audience seems to interpret words in context of \"mixed messages\" - perhaps they categorize whether the word's usage is performed (inauthentic) or honest, and whether it unites or divides.\n\nFor \"COMFORT\", mostly honest+uniting (0.47) and performed+uniting (0.26). So comfort is seen as uniting more often (0.73 uniting) than dividing (0.27). For \"READ RECEIPTS\", more dividing (0.63) than uniting (0.37). For \"JEFFREY EPSTEIN\", heavily performed+dividing (0.70) and dividing overall 0.81.\n\nSo \"HONOR\" likely is a word that can be both. But which? Honor is often invoked in cultures, military, national pride. Could be seen as performed+dividing? Or honest+uniting? Let's think about the semantics: \"Honor\" as a concept: people say \"honor\" to unify (honor code, honor your country) but also it can be divisive (honor killings, toxic honor). Which quadrant would this audience lean?\n\nWe have no direct prior for honor. But we can interpolate based on word abstractness and positivity. \"Comfort\" is positive, uniting. \"Read receipts\" is technology, maybe anxiety, dividing. \"Jeffrey Epstein\" is a person, negative, performed+dividing.\n\n\"Honor\" is somewhat positive but also can be performative (performing honor). The phrase \"mixed messages\" suggests ambiguity.\n\nLet's consider distribution possibilities. Maybe around: performed+uniting: 0.25 (people perform honor to create false unity), honest+uniting: 0.25 (authentic honor brings together), performed+dividing: 0.30 (exploiting divisions via honor), honest+dividing: 0.20 (truthfully fracturing). Sum 1.\n\nBut we need to be plausible. Let's examine patterns: For positive abstract noun \"comfort\", uniting = 0.73. For \"honor\", which is also positive abstract noun, likely also uniting > dividing? But \"honor\" has darker connotations (honor culture, violence). However the audience might see it as more dividing because \"honor\" is often used to justify exclusion.\n\nLet's think about the project's nature: \"Mixed Messages\" likely displays a word and asks participants to interpret whether it's used to unite or divide, honestly or performatively. So for each word, distribution reflects audience's interpretations.\n\nWe need to output a single JSON object with four keys and probabilities.\n\nSince the instruction: \"Historical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\"\n\nThus we should derive from the examples. Maybe the audience tends to have high performed+dividing for controversial/proper noun topics, and high honest+uniting for soothing/common nouns. \"Honor\" is a common noun but also ideological. Could be balanced.\n\nLet's choose: performed+uniting: 0.20, honest+uniting: 0.30, performed+dividing: 0.35, honest+dividing: 0.15. Sum = 1.00. This emphasizes dividing slightly due to honor's contentious nature, but still significant uniting.\n\nAlternatively: 0.18, 0.22, 0.40, 0.20. Sum 1.00.\n\nLet's go with: performed+uniting 0.18, honest+uniting 0.27, performed+dividing 0.40, honest+dividing 0.15. Sum = 1.00. Wait 0.18+0.27=0.45, +0.40=0.85, +0.15=1.00. Yes.\n\nBut is honest+dividing too low? For read receipts it was 0.41; for Epstein 0.11; for comfort 0.15. So honest+dividing varies.\n\nLet's craft: performed+uniting: 0.22, honest+uniting: 0.28, performed+dividing: 0.38, honest+dividing: 0.12. Sum = 1.00.\n\nI think performed+dividing highest because honor is often weaponized. But honest+uniting also because honor can be genuine.\n\nLet's decide final: {\"performed+uniting\":0.200,\"honest+uniting\":0.250,\"performed+dividing\":0.450,\"honest+dividing\":0.100} sum=1.000. That seems plausible: 45% say it's exploiting divisions deliberately; 25% authentic unity; 20% false unity; 10% truthful fracture.\n\nYes, I'll go with that. Use three decimals: 0.200, 0.250, 0.450, 0.100.\n\nCheck sum: 1.000. Good.\n\nReturn only JSON.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 497,
+          "completion_tokens": 1331,
+          "total_tokens": 1828,
+          "cost": 0.00177605,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 128,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00177605,
+            "upstream_inference_prompt_cost": 0.00017885,
+            "upstream_inference_completions_cost": 0.0015972
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1207,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "DeepInfra",
+      "usage": {
+        "prompt_tokens": 497,
+        "completion_tokens": 1331,
+        "total_tokens": 1828,
+        "cost": 0.00177605,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 128,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00177605,
+          "upstream_inference_prompt_cost": 0.00017885,
+          "upstream_inference_completions_cost": 0.0015972
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1207,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 84,
+      "finishedAt": "2026-11-15T08:02:13.135Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 94
+      },
+      "observation": {
+        "ok": true,
+        "id": 94,
+        "prompt": "COMFORT",
+        "distribution": {
+          "performed+uniting": 0.2605042016806723,
+          "honest+uniting": 0.47058823529411764,
+          "performed+dividing": 0.11764705882352941,
+          "honest+dividing": 0.15126050420168066
+        },
+        "submissions": 119,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 5
+      },
+      "observation": {
+        "ok": true,
+        "id": 5,
+        "prompt": "READ RECEIPTS",
+        "distribution": {
+          "performed+uniting": 0.15492957746478872,
+          "honest+uniting": 0.2112676056338028,
+          "performed+dividing": 0.22535211267605634,
+          "honest+dividing": 0.4084507042253521
+        },
+        "submissions": 71,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 62
+      },
+      "observation": {
+        "ok": true,
+        "id": 62,
+        "prompt": "JEFFREY EPSTEIN",
+        "distribution": {
+          "performed+uniting": 0.10071942446043165,
+          "honest+uniting": 0.08992805755395683,
+          "performed+dividing": 0.7014388489208633,
+          "honest+dividing": 0.1079136690647482
+        },
+        "submissions": 278,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.2,
+          "honest+uniting": 0.25,
+          "performed+dividing": 0.45,
+          "honest+dividing": 0.1
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.2,
+      "honest+uniting": 0.25,
+      "performed+dividing": 0.45,
+      "honest+dividing": 0.1
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.28444969544213405,
+    "score": 85.7775152278933,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

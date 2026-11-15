@@ -1,0 +1,607 @@
+{
+  "day": 145,
+  "strategy": "similar",
+  "request": {
+    "model": "openai/gpt-6-luna",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"AI SAFETY\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":7,\"prompt\":\"AI PSYCHOSIS\",\"distribution\":{\"performed+uniting\":0.27586206896551724,\"honest+uniting\":0.014778325123152709,\"performed+dividing\":0.6699507389162561,\"honest+dividing\":0.03940886699507389},\"submissions\":203},{\"id\":58,\"prompt\":\"SOBRIETY\",\"distribution\":{\"performed+uniting\":0.21929824561403508,\"honest+uniting\":0.2777777777777778,\"performed+dividing\":0.23976608187134502,\"honest+dividing\":0.2631578947368421},\"submissions\":342},{\"id\":87,\"prompt\":\"SAME-SEX MARRIAGE\",\"distribution\":{\"performed+uniting\":0.02654867256637168,\"honest+uniting\":0.6194690265486725,\"performed+dividing\":0.02654867256637168,\"honest+dividing\":0.3274336283185841},\"submissions\":113}]"
+      }
+    ],
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "openai/flex"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.125,
+        "completion": 0.375,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T07:23:18.674Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.110,\"honest+uniting\":0.190,\"performed+dividing\":0.480,\"honest+dividing\":0.220}",
+      "response": {
+        "id": "gen-1794727398-A0ZzMTIkTeMkfQyoMEwu",
+        "object": "chat.completion",
+        "created": 1794727398,
+        "model": "openai/gpt-6-luna",
+        "provider": "OpenAI",
+        "system_fingerprint": null,
+        "service_tier": "flex",
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "completed",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.110,\"honest+uniting\":0.190,\"performed+dividing\":0.480,\"honest+dividing\":0.220}",
+              "refusal": null,
+              "reasoning": null,
+              "reasoning_details": [
+                {
+                  "type": "reasoning.encrypted",
+                  "data": "gAAAAABq-V3ybMbfhG_iJz3q3K2tB4lMd73tFRKtjIIWyzi4Ej76zTkXCtbUsHdPctWK8_s79O_AeKRaWMyIFbeOg3gXtZKNoyvEAYtMVrRDy9WScXv029thIO7-e3VdCG2ESV7j6QNjZ0JY5wjg87bXd2X3d0vaygwVETOKYE0EoVweZKsp4IemxahJ6S1Ac_0BIG6zKKPnzHz-MLq4Gja0X-ggNJS6nx7KxXuTwqriTbdsRO1ZrcWLTMq1iRjClbF0y3sxnrv1GdNSp4zEkhR5L9N3WmkshIf9A4ppEtw0S71G5a1l9f_a0YJKUZxEAtWFT6SB-JpLuYyqj9tqyYqXtnfOSfzOwmfxDmeNO-JUcSC2OV-fw0YWZhigi0AmJf4Sxl_xt2HCSn1eK0Kcm0PvqBLKyD6ghIT2yRIVwaqv6-fDoicA38spjB04LYEIVXKWGqG6iTmY31Ws8XT8_q8a2gwmIuX_t1aZ2kBgjZdGD2ex-LXDVtjWpDxBd_HGjb3E7aWrHxDTotIWITBgYYRtGPQEM2Au6u3fttSWgYbYqQTfIDORuAn-n-QBPVctZCUWurhh7hG_CKT3QGbst-WepSyEsndQxGWazC2w9r8C7HWz3zf_CzwFP5WEeCYQRPe1ikQfgTkfR-TEGDr4Ktp0_woSkU3ojEzb5lybUV3Lps3swVa5PinoA98uTSUOCxbQH3CIhE3MzjwFYRo1MsW1Qk5UsCbTu5Bce7oaYMSEKHO_CE2QaQspVxShg7vOE7e_cXRSI6tkA7EfJ7JyhcDgpReX8LxMaDFcT8OwjtidYgd-8IO2YTnS_hvSV6HBWMLeGzUNbJIofReFztZIv9Va4AJ-nBo5_CBPWc078maQEzUEzyiN9PQroXLMLikBqOfRGNCtjrRzE2RA-zIVXWhD8boNcaqbDC0TK74sqsAy9hwJpK-NaGIXGuIRMqUZLOOca58Nqd9KN7uMN8pvMScBVFbJUfCIWUvNG644-02SukyiPkCSCkn_vHW6cbbBTqFhadIcEnf88fw8rxcI8jLcuNGHLymapJl8VVRuqd3YMgTKTdeNRY0p6X5YC6N55gnbzbSP8ktEvlx3ONmNhbUfKBWBG_u41nTM7wZpxcI_arhSSBM0z0I6hq6IzT8CGpTSeAJmHLUeilfY4Pg01IzJAtVDCI45ZXKe1ywUiuBogw2fIRCKGYirgM44tSJ04WKHJeAK6SJmi9s4bz4c-tVCUI87MbI2P5O89QYBvZuHWZ5_VEOOH6FSwabmlQt-idfx_TpNp1aquzBm5o8EJoMwI6s2izaG6fh3ISyuJqefw-XOs80_hLQGUKQhf70clohzu97YHPSN2VWdxBA805wGAxG7KrNK_XIFr7PAXeZbw1_mTrkFU-Ppt6ayaGq37U_MGaavWFwMLT9g-NxlbeEy4UnpUDpTubKKpb3K9w5POO3MGhXrNuqrI5rTn7Jytaeb0ifBAFs6GkJEF8kn3Oemeb-qukgxGuJbd7IFJqbNBD2pkl7mGWkROoTr2uUig2hclPxDS78bStzT9ITLWdx7cE4y3YcLgnHyyYYrGweuCkmAbgtaMKPGkKAVColcStlEC8TPukKu-DKrQDw891z7mu4TcYYrQD8Ew9NYsV1J9lV4aLvUUhV3oFyCwQ5W9VxC8vr1-iz3F8bniwaGiIuxB9oQLfbe6gd-3xvtMxrBlJQIvqnBEPS_t76q-mObSjn_g6i0_N0WLRf32E7SnOpEv3BAMJR4jOrFG-ErlsDXP7mn7XC1CiHCmdP1vKqjeqFQqIDmf_cMp_g7MegdUCiVwmxUY21vhK1t0hdiPLV5JN4ht6w9FyzubH5IGvr8Cp7_ZNhDPu6JvGcNKREFK9DE0RPZZat9RqCtPjXorslnlQaxwERASVFxjwnymqBtMfaFkkUGT-IWN0ajbND2UAjZ2fVdXZDi5xs7YwFwcYINKO3QJmEZlEqrFfgcHVr5lHUwbobLUTZYwHFnkPLWbnNucmdBY6K6bTImgFruMB35OqIOYKT5MvqpnvKbuDam1wzwTOwTpJHeU_Lq84qyYg-60n6l23OHs7uI0mb0qGv2SW-4JGrRRqkblOU5K8SmPn0tb6X7rz3R2iTrRhYELrzvWJmZ5pCBNonvABvOq4YQ46sYiFPF-2mfPoFIxZglLLWYovNAsEhtrmrFlxa3QRg3gxOvo5RuPDtZU0BWADAsCkUTN1JF1vbQPO7IftcOeO-C8tTmMMyL1-aE1RVUUkgqsCbjsVddAUY9dIkZPJDqteb8IgSc4cMrtcDF6oKJj6HRux5pKpxbVJNjssQ7I873uUQf6ZVWtM3HcUk0bmwQ_frNfnLBkFqi8I40AYP_ReTxd5vqYtro5njzffmoXscVlm0Qeq3ftxdmibYE5H8iKO9RR628RoKqB6WwBecRy-VG4-gqXbbvB692wVKV9K7iJrnVJmcjXVH0D7HcuRwBkCV_9EIDA4DNEhW4jHZ9pepFThPfxK6Nj786ZFgtB2wPMjQgZW7tjB0jmXraRzSSTgXtUsr5mClvxEHwaAyJKF-pZaMJ3Pvr2ZTBYbhFwAUioWInczebg87FpjdbjGVTgu8JA0xoyQKvlg8LE61mUsZss8HY07IP7c8pdJvGulMo8sx_yB2xk_fhUZjlNOdqWtH9Uns80-PLv8AOSmXgmpB_ybj-nqxb0xg_rVSZIXru-AOZC85JtiHrVzwnNIDYfHWsSAssS_PJvDwsr7aLaOrtazoxPn2tufW7zvLYOIhHes_4gu0Tr8-dogsv-Vu1YAMDUi2lsVlpWGroCYFuyoMMLZBJ9fnkPDMgV85AtEgiHjLTPoVis3EXvKf_-Tp55ekc2JOtFzBv3kRg6RAJVAoKpOhKR9zAjFwH4LywOeGNL98FQAa86bbuQ33do_wvHjdGwuz7J_ArhLZ1uqqXzs4SF9Uq2ljBKJwFPCgaKWrzvJEPOUZmYgXu8ak7znz2uPL55KcqukH1Tw6M1MYCEEO1euKZuuv1zSwOucsnSvd5-jlsyb6oQ6f-dvuw-19VFzJJmpZce9N-1cDx6aVFflu3CSp7aoxGYFbbEjs3vJp_FDWjnEiS_93jdHtjocmKnVRnFlg8j-vDhFgef4md1-VCzFpdUItQVkbJB5xBZ8gjFVFFwjJtW5xif2kfXZSIME2Q0dmV-BoDAyBff2KEhnc-DISePNPwIGlftBwOch7358cd8XV_OW4yKID2fVrgykSAPT6zNpToFjHOcoo0zGBMi2cwpePkmLg8JqE2KqvNaDnl6eZhdlbbgEzHAf5OvYLawzmnfrPmXtu-vgwHkxMFz5hNJwBX0Bdg4QhYpeiphDNKYdoXVMb_d9vMNPaRW7Q-MqOyo1EiNsSL9vntKXOZCde2OWYE-3H7M3jd_fpd465Ohn-ogM9juFEBUHLDfHwwaAoUKOLp8zAUUo9q5BMQszFUpOACVA-Eqhu2hOryDNrGeJ9Jb_X8yaNyCfJDkScXOb9H_DnIeqaHXKqQfRJshFyUyesRCTZySiWIvJVprMmNvNho3oVbDmEtx20OPckVJwuhyJU5ka3PT-XTK2YmyL4MwgNirEfFrmtCjHuAAeL3Kn4_zpF1CCGTorJxaViQljfZtmgpF3sMenMLuR_VTuSmnyXIVr_B4jzulQ6H04u7LSvzyDsI-oLiOs-fQyrjavytc5Zn88UINrF-s4dWaqxiwbfQAwwZjjFPOpZ_Bh4nTVOJV6CO-CL8GVWdYlyc6X7PUJp8dMLv4QQnDjBbzkoFSCA6d6_H4kzrGEoc7R_k-o7eKibsRI9xoqtLjdAzGn-txj_paexqpY3KTsAMQKFKBcBGUkI25f8TWyPPICcg7BJw_649orBKc9x8ic2_g68GHBCqpH8M-LOxPY4zzfl2kvqOUd3IFkguWqSK58W2CbSriZGSpdkqlG7j2lAGqkWhTx0-o9_3DDKFKZBEdEF1feqUfLqjlLcZCOLVvJHEekjTBCsXwLkMDmVcmURrByrxZ2kJe8cY6SMfME_JZSNPtUxi8kbj7qj66ZfNSfvhk8ga5Vf9XPr9CTNXJgd0mV9z1FnEmKPeDM-iQivxOSorgtPAuKz26fAVsQhd1lEnA2pINocTwwGYQQOpKZoCQ7MNx8QxHXPgGUcBYHkLfqrWLc1FAD0yOkpkLh8FwslYJ4kpZpygcxgbhwqII1rJZXQ18owEyxiN1MVXzOWpUvKSfeXqK8R1kWjvCMN_UzMQA-nywqQacKfz9tyBNDY4TxHJhhtRP7n_pKCKCcTV2IL9-PZnKu6sryoE9ruOreKiu-J63MMiqg2hqpVlaNHaidgKhSWZQ7aWzoaI0F_30aTNnaY-l7o4MdBTAR6wHJ5uKLLYRPB6u-XyQVfv2aeexmDZNwdWXAU-DuhcgIzdP_sXHfZtQvstvi6Q56H0EDd3Bl7RXUHJePoW9GQLMsW3Ldlp4wNh5mtI_yiMua7myOey5hMA7BdkmsbloK6tsRHmNCsEg4guouk6_s70G90gk1_-n-jBwrxIusQOlVbuWsGrHpATmv8Ka8suwVL5iGMUBoA2MU6Lg34-DEcjCDcOG_umarptrBktmZE_F3wrMucBbiQw8UQ6f65SkO6hoaZIsiJ8SLOAuszascu9FZJZo7kKy2ydaSp4auZ1LD7PzRDbwb--hCVlP5A5i7vsSFAJhfSI62Qa2NSKs2SBZ1aCTsEvcEuytsmhJD7wiNU0hlUxVLx3VQpcKlCKjHfwSAh6cDfSoWlnvEsj9PGAGiN_UNEF-W_S8Nz3-P4JE9VxFFn6n2CT6Fu8tTlKU8dAd7I-RJJXwLJEIQ4xy-X_kh_BkCTRex93o4BS06hdRBR0ePa7P3Has_deHF9Eg6UyLYAJmXOgYfi8b-ZONiS5NtwmQeiAQ70ypDyDcU0DEp6GYV8-_cz7G9MSNzj3HDFDaeOXNOCr4vA4JwdKfbc7XzVBxgQJiuqZegmRLfsLpHCY8eFgPxr-xX7iRDTwMiHvgevjcs0p5aF4TppdqOl4EsOk0kuNuGihNRzCLQeGAJa9Lkir-ky0gy3OWRlrJv-b2ebbqqOqzVQ5HCOP9UqsR83CSeV1z_CkKKWk9XNz7oWykxwqiCJG8n5E7zeunoDRGYvfXhCs4oqotgy_eZRNjF6zQLlruUHrql6EG2uYrL8upX5R3OTdkj5W5G88Li6Zfbrg8TBYYQIRvndH3ISOlNGmmkWX4WYYNzCKvqFJGfkjZzHUHQgcp7BK9Y-5lQHaC0wxkIBKbhepbgX2OU0h7I7LncDFjz2VXWh7xFqCkhiXR3zFOAgPH0zVn_Ux6BzE44mmhNajOssAoiFZcSV5KdIXmk83yxluY0qwV4oKTuHukTjpvBK9jK6iyOdg_BVFMIC-sBQcs6aG09HfwAyS6UeULSTMJAT5n-AcfxAsP0a5k9YXlt9W_CMXTESm2lLJAAY_DaFTFnuWB7D6x9VbXkplr-jTZ_UWGPNoRVQI4_I8P4wXlnX4ZsERYBCBeBExCv8CKWxLC5qAp8eLmzsPLJcn-_urVbmyY6E16fULLrvaL7lmyKfQpzfNILr9Rj_erjWihQkU0KwMxGEd5p9Z_CTXBPWzmbEU_1Jg6NZUjsaIoKko-4NhIF5dfYxB2K184IW09uZn3za93rlnj7693eQA1sgQHC1viiQGfIxjeTeFSs0DioSKNstKxKZLPq6CekryBRvxURqRQUHH5WrqlxvuaJmOT83tgOepgLogOvv67HGPdh6o.eyJlbmRwb2ludF9zbHVnIjoib3BlbmFpL2dwdC02LWx1bmEtMjAyNjA5MjJ8b3BlbmFpIn0",
+                  "format": "openai-responses-v1",
+                  "id": "rs_0f7afc1a82cc028e016af95dedb36c87d1a5caf8b012c00051",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 496,
+          "completion_tokens": 329,
+          "total_tokens": 825,
+          "cost": 0.00010705,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.00010705,
+            "upstream_inference_prompt_cost": 0.0000248,
+            "upstream_inference_completions_cost": 0.00008225
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 284,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "OpenAI",
+      "usage": {
+        "prompt_tokens": 496,
+        "completion_tokens": 329,
+        "total_tokens": 825,
+        "cost": 0.00010705,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.00010705,
+          "upstream_inference_prompt_cost": 0.0000248,
+          "upstream_inference_completions_cost": 0.00008225
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 284,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 105,
+      "finishedAt": "2026-11-15T07:23:30.664Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 7
+      },
+      "observation": {
+        "ok": true,
+        "id": 7,
+        "prompt": "AI PSYCHOSIS",
+        "distribution": {
+          "performed+uniting": 0.27586206896551724,
+          "honest+uniting": 0.014778325123152709,
+          "performed+dividing": 0.6699507389162561,
+          "honest+dividing": 0.03940886699507389
+        },
+        "submissions": 203,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 58
+      },
+      "observation": {
+        "ok": true,
+        "id": 58,
+        "prompt": "SOBRIETY",
+        "distribution": {
+          "performed+uniting": 0.21929824561403508,
+          "honest+uniting": 0.2777777777777778,
+          "performed+dividing": 0.23976608187134502,
+          "honest+dividing": 0.2631578947368421
+        },
+        "submissions": 342,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 87
+      },
+      "observation": {
+        "ok": true,
+        "id": 87,
+        "prompt": "SAME-SEX MARRIAGE",
+        "distribution": {
+          "performed+uniting": 0.02654867256637168,
+          "honest+uniting": 0.6194690265486725,
+          "performed+dividing": 0.02654867256637168,
+          "honest+dividing": 0.3274336283185841
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.11,
+          "honest+uniting": 0.19,
+          "performed+dividing": 0.48,
+          "honest+dividing": 0.22
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.11,
+      "honest+uniting": 0.19,
+      "performed+dividing": 0.48,
+      "honest+dividing": 0.22
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.034009259259259274,
+    "score": 98.29953703703703,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

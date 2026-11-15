@@ -1,0 +1,620 @@
+{
+  "day": 149,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"COMMITMENT\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":38,\"prompt\":\"COMPLIMENTS\",\"distribution\":{\"performed+uniting\":0.5267379679144385,\"honest+uniting\":0.058823529411764705,\"performed+dividing\":0.045454545454545456,\"honest+dividing\":0.3689839572192513},\"submissions\":374},{\"id\":68,\"prompt\":\"POLICE DEPARTMENTS\",\"distribution\":{\"performed+uniting\":0.017699115044247787,\"honest+uniting\":0.02654867256637168,\"performed+dividing\":0.4778761061946903,\"honest+dividing\":0.4778761061946903},\"submissions\":113},{\"id\":2,\"prompt\":\"CONTENT CREATORS\",\"distribution\":{\"performed+uniting\":0.1320754716981132,\"honest+uniting\":0.09433962264150944,\"performed+dividing\":0.16981132075471697,\"honest+dividing\":0.6037735849056604},\"submissions\":53}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:56:00.699Z",
+      "status": "error",
+      "raw": "",
+      "response": null,
+      "provider": null,
+      "usage": null,
+      "error": "TimeoutError: The operation was aborted due to timeout",
+      "retriable": true,
+      "spendingReservation": 111,
+      "finishedAt": "2026-11-15T04:57:00.704Z"
+    },
+    {
+      "index": 2,
+      "startedAt": "2026-11-15T04:57:01.708Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.427,\"honest+uniting\":0.059,\"performed+dividing\":0.080,\"honest+dividing\":0.434}",
+      "response": {
+        "id": "gen-1794718621-mCe9AkpUzZLSbSCVnHwh",
+        "object": "chat.completion",
+        "created": 1794718621,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.427,\"honest+uniting\":0.059,\"performed+dividing\":0.080,\"honest+dividing\":0.434}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"COMMITMENT\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"COMPLIMENTS\": performed+uniting 0.5267, honest+uniting 0.0588, performed+dividing 0.0455, honest+dividing 0.3690. Submissions 374.\n2. \"POLICE DEPARTMENTS\": performed+uniting 0.0177, honest+uniting 0.0265, performed+dividing 0.4779, honest+dividing 0.4779. Submissions 113.\n3. \"CONTENT CREATORS\": performed+uniting 0.1321, honest+uniting 0.0943, performed+dividing 0.1698, honest+dividing 0.6038. Submissions 53.\n\nWe need to estimate share for \"COMMITMENT\". This is a word that could be seen as positive or negative. \"Commitment\" can mean dedication, promise, but also can be performative (e.g., corporate commitment, empty promises) or dividing (e.g., commitment to a cause dividing people). The audience seems to interpret words with a cynical or critical lens often. For \"COMPLIMENTS\", they saw mostly performed+uniting (false unity) and honest+dividing (fracturing truthfully) - interesting: compliments can be fake unity, or honest criticism that divides? Actually honest+dividing: fracturing us truthfully, maybe compliments that are honest but cause division? Not sure.\n\nFor \"POLICE DEPARTMENTS\", they saw both dividing quadrants high (performed+dividing and honest+dividing each ~0.478), low uniting. So police departments are seen as divisive.\n\nFor \"CONTENT CREATORS\", honest+dividing dominates (0.604), some performed+dividing, low uniting.\n\nNow \"COMMITMENT\": likely a word that can be about unity or division. Commitment to each other could bring together authentically (honest+uniting) or performatively (performed+uniting, like public commitments to diversity etc). Commitment to an ideology could divide (honest+dividing if truthfully fracturing, or performed+dividing if exploiting divisions). Given the audience's tendency to be skeptical, maybe performed+uniting is high (empty commitments creating false unity) and honest+dividing also high (true commitments that fracture society). But we need to estimate probabilities.\n\nWe can think of similarities: \"COMPLIMENTS\" is a social nicety, often performative unity, and honest dividing maybe because compliments can be backhanded? Actually honest+dividing for compliments: maybe truthful compliments that highlight differences? Not sure. But commitment is like a promise, similar to compliments? Not exactly.\n\nMaybe we can use the average of these examples? But they vary widely. The word \"COMMITMENT\" might be more like \"CONTENT CREATORS\"? Not really.\n\nWe need to infer from the project's nature: Mixed Messages generates art from audience interpretations of words, mapping to quadrants of performed/honest and uniting/dividing. The audience likely is from a contemporary art / critical theory background, so they might lean towards cynical readings.\n\nLet's consider the word \"COMMITMENT\". In social/political context: \"commitment\" can be used by institutions to appear united (performed+uniting). Also, genuine commitment to a community can bring together authentically (honest+uniting). But also commitment to a partisan side divides (honest+dividing) or performed division (exploiting divisions). Which is more prevalent?\n\nLooking at examples: For \"COMPLIMENTS\", performed+uniting is huge (0.527). That suggests that for a word that is superficially positive social interaction, they see it as false unity. \"COMMITMENT\" is also a positive social value, often invoked superficially (e.g., \"we are committed to...\"). So performed+uniting could be high. But also commitment can be a personal genuine bond (honest+uniting) maybe low. And commitment can cause division when it's exclusive (honest+dividing). Performed+dividing maybe lower.\n\nCompare to \"COMPLIMENTS\": performed+uniting 0.527, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.369. So for a superficially nice word, they gave majority to performed unity and honest dividing. For commitment, maybe similar but perhaps more honest dividing? Because commitment is stronger than compliments, might fracture more truthfully. Or maybe performed unity even higher because commitments are often empty promises.\n\nBut we also have \"CONTENT CREATORS\": honest+dividing 0.604, performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170. That's a profession, seen as divisive truthfully.\n\n\"POLICE DEPARTMENTS\": both dividing ~0.478 each, uniting very low.\n\nSo the quadrants depend on word semantics.\n\nWe need to produce a single JSON object with four probabilities summing to 1. We can choose values that seem plausible. Let's reason:\n\n- performed+uniting: creating false unity among us. Commitment language is often used to project unity (e.g., \"committed to our shared values\") without substance. So moderate to high. Maybe ~0.35-0.45.\n- honest+uniting: bringing us together, authentically. Some may see genuine commitment as bonding. But audience cynical, so low, maybe ~0.05-0.10.\n- performed+dividing: exploiting our divisions, deliberately. Could be using commitment to exacerbate divides (e.g., \"commitment to our side against them\" as performative). Maybe ~0.10-0.15.\n- honest+dividing: fracturing us, truthfully. Genuine commitment often requires choosing sides, thus fracturing. Could be high, ~0.35-0.45.\n\nWe want sum to 1. Let's try to approximate based on COMPLIMENTS but adjust: COMPLIMENTS had performed+uniting 0.527, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.369. Commitment might be more weighty, so honest+dividing might increase, performed+uniting might decrease a bit. Perhaps performed+uniting 0.40, honest+uniting 0.07, performed+dividing 0.08, honest+dividing 0.45. Sum = 1.00. That seems plausible.\n\nBut we should consider if there is any pattern: words that are \"positive social\" (compliments) -> high performed uniting, high honest dividing. Words that are \"institutions\" (police) -> high dividing both. Words that are \"roles\" (content creators) -> high honest dividing. Commitment is an abstract noun, more like compliments? Both are abstract social concepts. So maybe similar to compliments but commitment is more about binding, so maybe more honest dividing (since commitment excludes or fractures) and less performed uniting? Actually compliments are fleeting, commitment is deeper. So performed uniting might be lower because empty commitments are sometimes seen as obvious? But corporate commitments are rampant. Hmm.\n\nAlternatively, we could take a weighted average of the three examples? But they are different words. Not sure.\n\nMaybe we can think of the audience's overall bias: Across examples, honest+dividing seems consistently significant (0.369, 0.478, 0.604). Performed+uniting varies (0.527, 0.018, 0.132). So honest+dividing is always there. For commitment, likely honest+dividing high. Performed+uniting maybe medium.\n\nLet's propose: performed+uniting: 0.35, honest+uniting: 0.05, performed+dividing: 0.10, honest+dividing: 0.50. Sum = 1.00. That gives honest+dividing dominant, performed+uniting second.\n\nBut we need at least three decimal places when needed. We can use e.g., 0.35 as 0.350? The instruction: \"Use at least three decimal places when needed.\" It's okay to have 0.35? Better to use three decimals: 0.350, 0.050, 0.100, 0.500. But they said \"when needed\" meaning if not integer, use three decimals. To be safe, use three decimals for all: 0.350, 0.050, 0.100, 0.500 sum = 1.000.\n\nBut maybe we want more nuanced: 0.382, 0.071, 0.113, 0.434? Sum = 1.000. Let's compute: 0.382+0.071=0.453, +0.113=0.566, +0.434=1.000. That looks like interpolated from compliments (0.527,0.059,0.045,0.369) and content creators (0.132,0.094,0.170,0.604) maybe average? Average of those two: (0.527+0.132)/2=0.3295, (0.059+0.094)/2=0.0765, (0.045+0.170)/2=0.1075, (0.369+0.604)/2=0.4865 sum=1.000. That's 0.330,0.077,0.108,0.487. That seems plausible.\n\nBut we also have police departments which is outlier. We might ignore it as unrelated.\n\nGiven the word \"COMMITMENT\", it's not an institution or role, it's a concept like compliments. So leaning towards compliments distribution but maybe slightly more honest dividing. I'll go with something like: performed+uniting 0.420, honest+uniting 0.065, performed+dividing 0.075, honest+dividing 0.440. Sum = 1.000. That's reasonable.\n\nBut we need to output only JSON, no prose. So final answer: {\"performed+uniting\":0.420,\"honest+uniting\":0.065,\"performed+dividing\":0.075,\"honest+dividing\":0.440} but ensure sum exactly 1? 0.420+0.065=0.485, +0.075=0.560, +0.440=1.000. Good.\n\nAlternatively use more decimals: 0.421, 0.063, 0.076, 0.440 -> sum 1.000. Let's just pick clean numbers.\n\nI'll choose: {\"performed+uniting\":0.427,\"honest+uniting\":0.058,\"performed+dividing\":0.067,\"honest+dividing\":0.448} sum = 0.427+0.058=0.485, +0.067=0.552, +0.448=1.000. That's close to compliments but shifted.\n\nActually compliments had performed+uniting 0.527, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.369. If we shift some from performed uniting to honest dividing: reduce performed uniting by 0.1, increase honest dividing by 0.1, keep others similar. So 0.427, 0.059, 0.045, 0.469 -> sum 1.000. That's even simpler. Let's do: performed+uniting 0.427, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.469. Sum = 1.000. That mirrors compliments but with more honest dividing.\n\nBut maybe performed+dividing should be a bit higher for commitment because commitment can be used to exploit divisions (e.g., \"commitment to the cause\" as us vs them performatively). So bump performed+dividing to 0.08, reduce honest+dividing to 0.434, keep others: 0.427+0.059+0.08+0.434=1.000. That's fine.\n\nI'll output: {\"performed+uniting\":0.427,\"honest+uniting\":0.059,\"performed+dividing\":0.080,\"honest+dividing\":0.434}\n\nCheck sum: 0.427+0.059=0.486; +0.080=0.566; +0.434=1.000. Good.\n\nWe should not include any other text. So final message is exactly that JSON.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"COMMITMENT\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"COMPLIMENTS\": performed+uniting 0.5267, honest+uniting 0.0588, performed+dividing 0.0455, honest+dividing 0.3690. Submissions 374.\n2. \"POLICE DEPARTMENTS\": performed+uniting 0.0177, honest+uniting 0.0265, performed+dividing 0.4779, honest+dividing 0.4779. Submissions 113.\n3. \"CONTENT CREATORS\": performed+uniting 0.1321, honest+uniting 0.0943, performed+dividing 0.1698, honest+dividing 0.6038. Submissions 53.\n\nWe need to estimate share for \"COMMITMENT\". This is a word that could be seen as positive or negative. \"Commitment\" can mean dedication, promise, but also can be performative (e.g., corporate commitment, empty promises) or dividing (e.g., commitment to a cause dividing people). The audience seems to interpret words with a cynical or critical lens often. For \"COMPLIMENTS\", they saw mostly performed+uniting (false unity) and honest+dividing (fracturing truthfully) - interesting: compliments can be fake unity, or honest criticism that divides? Actually honest+dividing: fracturing us truthfully, maybe compliments that are honest but cause division? Not sure.\n\nFor \"POLICE DEPARTMENTS\", they saw both dividing quadrants high (performed+dividing and honest+dividing each ~0.478), low uniting. So police departments are seen as divisive.\n\nFor \"CONTENT CREATORS\", honest+dividing dominates (0.604), some performed+dividing, low uniting.\n\nNow \"COMMITMENT\": likely a word that can be about unity or division. Commitment to each other could bring together authentically (honest+uniting) or performatively (performed+uniting, like public commitments to diversity etc). Commitment to an ideology could divide (honest+dividing if truthfully fracturing, or performed+dividing if exploiting divisions). Given the audience's tendency to be skeptical, maybe performed+uniting is high (empty commitments creating false unity) and honest+dividing also high (true commitments that fracture society). But we need to estimate probabilities.\n\nWe can think of similarities: \"COMPLIMENTS\" is a social nicety, often performative unity, and honest dividing maybe because compliments can be backhanded? Actually honest+dividing for compliments: maybe truthful compliments that highlight differences? Not sure. But commitment is like a promise, similar to compliments? Not exactly.\n\nMaybe we can use the average of these examples? But they vary widely. The word \"COMMITMENT\" might be more like \"CONTENT CREATORS\"? Not really.\n\nWe need to infer from the project's nature: Mixed Messages generates art from audience interpretations of words, mapping to quadrants of performed/honest and uniting/dividing. The audience likely is from a contemporary art / critical theory background, so they might lean towards cynical readings.\n\nLet's consider the word \"COMMITMENT\". In social/political context: \"commitment\" can be used by institutions to appear united (performed+uniting). Also, genuine commitment to a community can bring together authentically (honest+uniting). But also commitment to a partisan side divides (honest+dividing) or performed division (exploiting divisions). Which is more prevalent?\n\nLooking at examples: For \"COMPLIMENTS\", performed+uniting is huge (0.527). That suggests that for a word that is superficially positive social interaction, they see it as false unity. \"COMMITMENT\" is also a positive social value, often invoked superficially (e.g., \"we are committed to...\"). So performed+uniting could be high. But also commitment can be a personal genuine bond (honest+uniting) maybe low. And commitment can cause division when it's exclusive (honest+dividing). Performed+dividing maybe lower.\n\nCompare to \"COMPLIMENTS\": performed+uniting 0.527, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.369. So for a superficially nice word, they gave majority to performed unity and honest dividing. For commitment, maybe similar but perhaps more honest dividing? Because commitment is stronger than compliments, might fracture more truthfully. Or maybe performed unity even higher because commitments are often empty promises.\n\nBut we also have \"CONTENT CREATORS\": honest+dividing 0.604, performed+uniting 0.132, honest+uniting 0.094, performed+dividing 0.170. That's a profession, seen as divisive truthfully.\n\n\"POLICE DEPARTMENTS\": both dividing ~0.478 each, uniting very low.\n\nSo the quadrants depend on word semantics.\n\nWe need to produce a single JSON object with four probabilities summing to 1. We can choose values that seem plausible. Let's reason:\n\n- performed+uniting: creating false unity among us. Commitment language is often used to project unity (e.g., \"committed to our shared values\") without substance. So moderate to high. Maybe ~0.35-0.45.\n- honest+uniting: bringing us together, authentically. Some may see genuine commitment as bonding. But audience cynical, so low, maybe ~0.05-0.10.\n- performed+dividing: exploiting our divisions, deliberately. Could be using commitment to exacerbate divides (e.g., \"commitment to our side against them\" as performative). Maybe ~0.10-0.15.\n- honest+dividing: fracturing us, truthfully. Genuine commitment often requires choosing sides, thus fracturing. Could be high, ~0.35-0.45.\n\nWe want sum to 1. Let's try to approximate based on COMPLIMENTS but adjust: COMPLIMENTS had performed+uniting 0.527, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.369. Commitment might be more weighty, so honest+dividing might increase, performed+uniting might decrease a bit. Perhaps performed+uniting 0.40, honest+uniting 0.07, performed+dividing 0.08, honest+dividing 0.45. Sum = 1.00. That seems plausible.\n\nBut we should consider if there is any pattern: words that are \"positive social\" (compliments) -> high performed uniting, high honest dividing. Words that are \"institutions\" (police) -> high dividing both. Words that are \"roles\" (content creators) -> high honest dividing. Commitment is an abstract noun, more like compliments? Both are abstract social concepts. So maybe similar to compliments but commitment is more about binding, so maybe more honest dividing (since commitment excludes or fractures) and less performed uniting? Actually compliments are fleeting, commitment is deeper. So performed uniting might be lower because empty commitments are sometimes seen as obvious? But corporate commitments are rampant. Hmm.\n\nAlternatively, we could take a weighted average of the three examples? But they are different words. Not sure.\n\nMaybe we can think of the audience's overall bias: Across examples, honest+dividing seems consistently significant (0.369, 0.478, 0.604). Performed+uniting varies (0.527, 0.018, 0.132). So honest+dividing is always there. For commitment, likely honest+dividing high. Performed+uniting maybe medium.\n\nLet's propose: performed+uniting: 0.35, honest+uniting: 0.05, performed+dividing: 0.10, honest+dividing: 0.50. Sum = 1.00. That gives honest+dividing dominant, performed+uniting second.\n\nBut we need at least three decimal places when needed. We can use e.g., 0.35 as 0.350? The instruction: \"Use at least three decimal places when needed.\" It's okay to have 0.35? Better to use three decimals: 0.350, 0.050, 0.100, 0.500. But they said \"when needed\" meaning if not integer, use three decimals. To be safe, use three decimals for all: 0.350, 0.050, 0.100, 0.500 sum = 1.000.\n\nBut maybe we want more nuanced: 0.382, 0.071, 0.113, 0.434? Sum = 1.000. Let's compute: 0.382+0.071=0.453, +0.113=0.566, +0.434=1.000. That looks like interpolated from compliments (0.527,0.059,0.045,0.369) and content creators (0.132,0.094,0.170,0.604) maybe average? Average of those two: (0.527+0.132)/2=0.3295, (0.059+0.094)/2=0.0765, (0.045+0.170)/2=0.1075, (0.369+0.604)/2=0.4865 sum=1.000. That's 0.330,0.077,0.108,0.487. That seems plausible.\n\nBut we also have police departments which is outlier. We might ignore it as unrelated.\n\nGiven the word \"COMMITMENT\", it's not an institution or role, it's a concept like compliments. So leaning towards compliments distribution but maybe slightly more honest dividing. I'll go with something like: performed+uniting 0.420, honest+uniting 0.065, performed+dividing 0.075, honest+dividing 0.440. Sum = 1.000. That's reasonable.\n\nBut we need to output only JSON, no prose. So final answer: {\"performed+uniting\":0.420,\"honest+uniting\":0.065,\"performed+dividing\":0.075,\"honest+dividing\":0.440} but ensure sum exactly 1? 0.420+0.065=0.485, +0.075=0.560, +0.440=1.000. Good.\n\nAlternatively use more decimals: 0.421, 0.063, 0.076, 0.440 -> sum 1.000. Let's just pick clean numbers.\n\nI'll choose: {\"performed+uniting\":0.427,\"honest+uniting\":0.058,\"performed+dividing\":0.067,\"honest+dividing\":0.448} sum = 0.427+0.058=0.485, +0.067=0.552, +0.448=1.000. That's close to compliments but shifted.\n\nActually compliments had performed+uniting 0.527, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.369. If we shift some from performed uniting to honest dividing: reduce performed uniting by 0.1, increase honest dividing by 0.1, keep others similar. So 0.427, 0.059, 0.045, 0.469 -> sum 1.000. That's even simpler. Let's do: performed+uniting 0.427, honest+uniting 0.059, performed+dividing 0.045, honest+dividing 0.469. Sum = 1.000. That mirrors compliments but with more honest dividing.\n\nBut maybe performed+dividing should be a bit higher for commitment because commitment can be used to exploit divisions (e.g., \"commitment to the cause\" as us vs them performatively). So bump performed+dividing to 0.08, reduce honest+dividing to 0.434, keep others: 0.427+0.059+0.08+0.434=1.000. That's fine.\n\nI'll output: {\"performed+uniting\":0.427,\"honest+uniting\":0.059,\"performed+dividing\":0.080,\"honest+dividing\":0.434}\n\nCheck sum: 0.427+0.059=0.486; +0.080=0.566; +0.434=1.000. Good.\n\nWe should not include any other text. So final message is exactly that JSON.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 503,
+          "completion_tokens": 2914,
+          "total_tokens": 3417,
+          "cost": 0.001566972,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 384,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001566972,
+            "upstream_inference_prompt_cost": 0.00002838,
+            "upstream_inference_completions_cost": 0.001538592
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2871,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 503,
+        "completion_tokens": 2914,
+        "total_tokens": 3417,
+        "cost": 0.001566972,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 384,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001566972,
+          "upstream_inference_prompt_cost": 0.00002838,
+          "upstream_inference_completions_cost": 0.001538592
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2871,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 112,
+      "finishedAt": "2026-11-15T04:57:44.755Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 38
+      },
+      "observation": {
+        "ok": true,
+        "id": 38,
+        "prompt": "COMPLIMENTS",
+        "distribution": {
+          "performed+uniting": 0.5267379679144385,
+          "honest+uniting": 0.058823529411764705,
+          "performed+dividing": 0.045454545454545456,
+          "honest+dividing": 0.3689839572192513
+        },
+        "submissions": 374,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 68
+      },
+      "observation": {
+        "ok": true,
+        "id": 68,
+        "prompt": "POLICE DEPARTMENTS",
+        "distribution": {
+          "performed+uniting": 0.017699115044247787,
+          "honest+uniting": 0.02654867256637168,
+          "performed+dividing": 0.4778761061946903,
+          "honest+dividing": 0.4778761061946903
+        },
+        "submissions": 113,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 2
+      },
+      "observation": {
+        "ok": true,
+        "id": 2,
+        "prompt": "CONTENT CREATORS",
+        "distribution": {
+          "performed+uniting": 0.1320754716981132,
+          "honest+uniting": 0.09433962264150944,
+          "performed+dividing": 0.16981132075471697,
+          "honest+dividing": 0.6037735849056604
+        },
+        "submissions": 53,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.427,
+          "honest+uniting": 0.059,
+          "performed+dividing": 0.08,
+          "honest+dividing": 0.434
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.427,
+      "honest+uniting": 0.059,
+      "performed+dividing": 0.08,
+      "honest+dividing": 0.434
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.21440987314693188,
+    "score": 89.2795063426534,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}

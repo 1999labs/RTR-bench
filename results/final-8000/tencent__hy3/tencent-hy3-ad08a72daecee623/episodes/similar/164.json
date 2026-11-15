@@ -1,0 +1,607 @@
+{
+  "day": 164,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"HEARTBREAK\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":15,\"prompt\":\"ART BASEL\",\"distribution\":{\"performed+uniting\":0.37349397590361444,\"honest+uniting\":0.5341365461847389,\"performed+dividing\":0.040160642570281124,\"honest+dividing\":0.05220883534136546},\"submissions\":249},{\"id\":5,\"prompt\":\"READ RECEIPTS\",\"distribution\":{\"performed+uniting\":0.15492957746478872,\"honest+uniting\":0.2112676056338028,\"performed+dividing\":0.22535211267605634,\"honest+dividing\":0.4084507042253521},\"submissions\":71},{\"id\":22,\"prompt\":\"ART BLOCKS\",\"distribution\":{\"performed+uniting\":0.08615384615384615,\"honest+uniting\":0.10153846153846154,\"performed+dividing\":0.11384615384615385,\"honest+dividing\":0.6984615384615385},\"submissions\":325}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T05:06:16.495Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}",
+      "response": {
+        "id": "gen-1794719176-fDgAT3AVRNvkqnUi7RGf",
+        "object": "chat.completion",
+        "created": 1794719176,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"HEARTBREAK\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. prompt: \"ART BASEL\", submissions:249, distribution: performed+uniting:0.373, honest+uniting:0.534, performed+dividing:0.040, honest+dividing:0.052. So for ART BASEL, audience saw it as mostly uniting (honest+performed = 0.907), with very little dividing.\n2. prompt: \"READ RECEIPTS\", submissions:71, distribution: performed+uniting:0.155, honest+uniting:0.211, performed+dividing:0.225, honest+dividing:0.408. So more dividing (0.633), with honest dividing dominant.\n3. prompt: \"ART BLOCKS\", submissions:325, distribution: performed+uniting:0.086, honest+uniting:0.102, performed+dividing:0.114, honest+dividing:0.698. So heavily honest dividing (0.698), almost all dividing (0.812).\n\nWe need to estimate for \"HEARTBREAK\". Heartbreak is a personal emotional experience, often associated with separation, pain, division, fracturing relationships. It is not typically about unity. So we would expect high dividing, especially honest dividing (truthfully fracturing us). However, there might be some performed aspects (e.g., making a show of heartbreak, or using heartbreak to bring people together falsely? Like shared sadness as false unity? Or honest unity? Possibly some honest uniting: shared experience of heartbreak bringing people together authentically? But likely less than dividing.\n\nLook at the examples: words like \"ART BASEL\" (an art fair) => uniting (maybe community). \"READ RECEIPTS\" (a feature in messaging) => dividing, because it's about anxiety, avoidance, truthful fracturing. \"ART BLOCKS\" (creative block?) => heavily honest dividing (fracturing us truthfully). Heartbreak is emotionally charged, likely similar to read receipts or art blocks but maybe more honest dividing.\n\nWe need to assign probabilities summing to 1. Let's think about typical interpretations: Heartbreak is real pain, so honest dividing high. Could also be performed dividing? Like exploiting divisions deliberately? Maybe some. Performed uniting? Creating false unity (e.g., \"we all love together\" but fake)? Honest uniting? Bringing us together authentically through shared vulnerability? Possibly some but lower.\n\nBased on the examples, the dividing quadrants sum: for READ RECEIPTS 0.633, for ART BLOCKS 0.812. For ART BASEL 0.092 dividing. So heartbreak likely high dividing, maybe around 0.7-0.9. Honest dividing likely dominant. Compare ART BLOCKS: honest dividing 0.698, performed dividing 0.114. READ RECEIPTS: honest dividing 0.408, performed dividing 0.225. So performed dividing varies.\n\nFor heartbreak, it's a genuine emotion, so honest dividing should be high, performed dividing maybe moderate (like people performing heartbreak for attention). Honest uniting maybe small (like support groups), performed uniting maybe small.\n\nWe can approximate: honest+dividing: 0.65, performed+dividing: 0.15, honest+uniting: 0.10, performed+uniting: 0.10? Sum = 1.0. But we should consider the submissions counts? They are just examples, not weighted necessarily. But we can use them as evidence of audience bias: they tend to assign high honest dividing for negative concepts (art blocks, read receipts). Heartbreak is negative, so likely similar to art blocks but maybe a bit more uniting because heartbreak can bring people together? Actually art blocks is about creative block, maybe more internal. Heartbreak is relational, so dividing is inherent.\n\nLet's set:\nperformed+uniting: 0.08 (low, like art blocks 0.086)\nhonest+uniting: 0.12 (slightly higher than art blocks 0.102, because heartbreak can authentically connect)\nperformed+dividing: 0.15 (between art blocks 0.114 and read receipts 0.225)\nhonest+dividing: 0.65 (between read receipts 0.408 and art blocks 0.698, but closer to art blocks maybe 0.65)\n\nSum = 0.08+0.12+0.15+0.65 = 1.00. That works.\n\nAlternatively, we could do 0.09, 0.11, 0.15, 0.65 = 1.00. Or use more decimals: 0.085, 0.115, 0.150, 0.650 = 1.000.\n\nWe need at least three decimal places when needed. So we can output something like:\n{\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}\n\nBut check sum: 0.085+0.115=0.2, +0.15=0.35, +0.65=1.0. Good.\n\nCould also be more like read receipts: honest dividing 0.45, performed dividing 0.25, honest uniting 0.2, performed uniting 0.1? But heartbreak feels more like art blocks (heavy honest dividing) because it's a deep truthful fracture. I'll go with a distribution leaning honest dividing ~0.7, performed dividing ~0.12, honest uniting ~0.10, performed uniting ~0.08 (like art blocks exactly but tweak). Art blocks: 0.086, 0.102, 0.114, 0.698. For heartbreak, maybe a bit more uniting because it's shared human experience: honest uniting 0.12, performed uniting 0.09, performed dividing 0.13, honest dividing 0.69. Sum = 0.09+0.12+0.13+0.69 = 1.03? Wait 0.09+0.12=0.21, +0.13=0.34, +0.69=1.03, too high. Adjust: 0.08+0.12+0.12+0.68 = 1.00. That's fine.\n\nLet's pick: performed+uniting: 0.080, honest+uniting: 0.120, performed+dividing: 0.120, honest+dividing: 0.680. Sum = 1.000.\n\nOr to be more precise: 0.083, 0.117, 0.130, 0.670 = 1.000. I'll just choose reasonable numbers.\n\nGiven the instruction: \"Return exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can provide three decimals.\n\nI'll output: {\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}\n\nBut maybe we should consider that heartbreak might have more performed uniting (like \"heartbreak makes us all one\" fake) but I think low.\n\nI'll go with that.\n\nNo prose, no code fences, single JSON object only.\n\nThus final answer: {\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"HEARTBREAK\" from participants in Mixed Messages, a generative art project. The audience interprets the word into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. prompt: \"ART BASEL\", submissions:249, distribution: performed+uniting:0.373, honest+uniting:0.534, performed+dividing:0.040, honest+dividing:0.052. So for ART BASEL, audience saw it as mostly uniting (honest+performed = 0.907), with very little dividing.\n2. prompt: \"READ RECEIPTS\", submissions:71, distribution: performed+uniting:0.155, honest+uniting:0.211, performed+dividing:0.225, honest+dividing:0.408. So more dividing (0.633), with honest dividing dominant.\n3. prompt: \"ART BLOCKS\", submissions:325, distribution: performed+uniting:0.086, honest+uniting:0.102, performed+dividing:0.114, honest+dividing:0.698. So heavily honest dividing (0.698), almost all dividing (0.812).\n\nWe need to estimate for \"HEARTBREAK\". Heartbreak is a personal emotional experience, often associated with separation, pain, division, fracturing relationships. It is not typically about unity. So we would expect high dividing, especially honest dividing (truthfully fracturing us). However, there might be some performed aspects (e.g., making a show of heartbreak, or using heartbreak to bring people together falsely? Like shared sadness as false unity? Or honest unity? Possibly some honest uniting: shared experience of heartbreak bringing people together authentically? But likely less than dividing.\n\nLook at the examples: words like \"ART BASEL\" (an art fair) => uniting (maybe community). \"READ RECEIPTS\" (a feature in messaging) => dividing, because it's about anxiety, avoidance, truthful fracturing. \"ART BLOCKS\" (creative block?) => heavily honest dividing (fracturing us truthfully). Heartbreak is emotionally charged, likely similar to read receipts or art blocks but maybe more honest dividing.\n\nWe need to assign probabilities summing to 1. Let's think about typical interpretations: Heartbreak is real pain, so honest dividing high. Could also be performed dividing? Like exploiting divisions deliberately? Maybe some. Performed uniting? Creating false unity (e.g., \"we all love together\" but fake)? Honest uniting? Bringing us together authentically through shared vulnerability? Possibly some but lower.\n\nBased on the examples, the dividing quadrants sum: for READ RECEIPTS 0.633, for ART BLOCKS 0.812. For ART BASEL 0.092 dividing. So heartbreak likely high dividing, maybe around 0.7-0.9. Honest dividing likely dominant. Compare ART BLOCKS: honest dividing 0.698, performed dividing 0.114. READ RECEIPTS: honest dividing 0.408, performed dividing 0.225. So performed dividing varies.\n\nFor heartbreak, it's a genuine emotion, so honest dividing should be high, performed dividing maybe moderate (like people performing heartbreak for attention). Honest uniting maybe small (like support groups), performed uniting maybe small.\n\nWe can approximate: honest+dividing: 0.65, performed+dividing: 0.15, honest+uniting: 0.10, performed+uniting: 0.10? Sum = 1.0. But we should consider the submissions counts? They are just examples, not weighted necessarily. But we can use them as evidence of audience bias: they tend to assign high honest dividing for negative concepts (art blocks, read receipts). Heartbreak is negative, so likely similar to art blocks but maybe a bit more uniting because heartbreak can bring people together? Actually art blocks is about creative block, maybe more internal. Heartbreak is relational, so dividing is inherent.\n\nLet's set:\nperformed+uniting: 0.08 (low, like art blocks 0.086)\nhonest+uniting: 0.12 (slightly higher than art blocks 0.102, because heartbreak can authentically connect)\nperformed+dividing: 0.15 (between art blocks 0.114 and read receipts 0.225)\nhonest+dividing: 0.65 (between read receipts 0.408 and art blocks 0.698, but closer to art blocks maybe 0.65)\n\nSum = 0.08+0.12+0.15+0.65 = 1.00. That works.\n\nAlternatively, we could do 0.09, 0.11, 0.15, 0.65 = 1.00. Or use more decimals: 0.085, 0.115, 0.150, 0.650 = 1.000.\n\nWe need at least three decimal places when needed. So we can output something like:\n{\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}\n\nBut check sum: 0.085+0.115=0.2, +0.15=0.35, +0.65=1.0. Good.\n\nCould also be more like read receipts: honest dividing 0.45, performed dividing 0.25, honest uniting 0.2, performed uniting 0.1? But heartbreak feels more like art blocks (heavy honest dividing) because it's a deep truthful fracture. I'll go with a distribution leaning honest dividing ~0.7, performed dividing ~0.12, honest uniting ~0.10, performed uniting ~0.08 (like art blocks exactly but tweak). Art blocks: 0.086, 0.102, 0.114, 0.698. For heartbreak, maybe a bit more uniting because it's shared human experience: honest uniting 0.12, performed uniting 0.09, performed dividing 0.13, honest dividing 0.69. Sum = 0.09+0.12+0.13+0.69 = 1.03? Wait 0.09+0.12=0.21, +0.13=0.34, +0.69=1.03, too high. Adjust: 0.08+0.12+0.12+0.68 = 1.00. That's fine.\n\nLet's pick: performed+uniting: 0.080, honest+uniting: 0.120, performed+dividing: 0.120, honest+dividing: 0.680. Sum = 1.000.\n\nOr to be more precise: 0.083, 0.117, 0.130, 0.670 = 1.000. I'll just choose reasonable numbers.\n\nGiven the instruction: \"Return exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can provide three decimals.\n\nI'll output: {\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}\n\nBut maybe we should consider that heartbreak might have more performed uniting (like \"heartbreak makes us all one\" fake) but I think low.\n\nI'll go with that.\n\nNo prose, no code fences, single JSON object only.\n\nThus final answer: {\"performed+uniting\":0.085,\"honest+uniting\":0.115,\"performed+dividing\":0.150,\"honest+dividing\":0.650}",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 501,
+          "completion_tokens": 1820,
+          "total_tokens": 2321,
+          "cost": 0.001027092,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001027092,
+            "upstream_inference_prompt_cost": 0.000066132,
+            "upstream_inference_completions_cost": 0.00096096
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1777,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 501,
+        "completion_tokens": 1820,
+        "total_tokens": 2321,
+        "cost": 0.001027092,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001027092,
+          "upstream_inference_prompt_cost": 0.000066132,
+          "upstream_inference_completions_cost": 0.00096096
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1777,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 128,
+      "finishedAt": "2026-11-15T05:06:43.394Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 15
+      },
+      "observation": {
+        "ok": true,
+        "id": 15,
+        "prompt": "ART BASEL",
+        "distribution": {
+          "performed+uniting": 0.37349397590361444,
+          "honest+uniting": 0.5341365461847389,
+          "performed+dividing": 0.040160642570281124,
+          "honest+dividing": 0.05220883534136546
+        },
+        "submissions": 249,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 5
+      },
+      "observation": {
+        "ok": true,
+        "id": 5,
+        "prompt": "READ RECEIPTS",
+        "distribution": {
+          "performed+uniting": 0.15492957746478872,
+          "honest+uniting": 0.2112676056338028,
+          "performed+dividing": 0.22535211267605634,
+          "honest+dividing": 0.4084507042253521
+        },
+        "submissions": 71,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 22
+      },
+      "observation": {
+        "ok": true,
+        "id": 22,
+        "prompt": "ART BLOCKS",
+        "distribution": {
+          "performed+uniting": 0.08615384615384615,
+          "honest+uniting": 0.10153846153846154,
+          "performed+dividing": 0.11384615384615385,
+          "honest+dividing": 0.6984615384615385
+        },
+        "submissions": 325,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.085,
+          "honest+uniting": 0.115,
+          "performed+dividing": 0.15,
+          "honest+dividing": 0.65
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.085,
+      "honest+uniting": 0.115,
+      "performed+dividing": 0.15,
+      "honest+dividing": 0.65
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.21026893491124263,
+    "score": 89.48655325443788,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

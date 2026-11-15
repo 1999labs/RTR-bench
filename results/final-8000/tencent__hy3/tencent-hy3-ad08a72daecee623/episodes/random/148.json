@@ -1,0 +1,607 @@
+{
+  "day": 148,
+  "strategy": "random",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"REALITY TV\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":50,\"prompt\":\"TRIBUTE LABS\",\"distribution\":{\"performed+uniting\":0.18654434250764526,\"honest+uniting\":0.6116207951070336,\"performed+dividing\":0.0061162079510703364,\"honest+dividing\":0.19571865443425077},\"submissions\":327},{\"id\":64,\"prompt\":\"TRAUMA DUMPING\",\"distribution\":{\"performed+uniting\":0.047619047619047616,\"honest+uniting\":0.49523809523809526,\"performed+dividing\":0,\"honest+dividing\":0.45714285714285713},\"submissions\":105},{\"id\":71,\"prompt\":\"DEMOCRATS\",\"distribution\":{\"performed+uniting\":0.22452504317789293,\"honest+uniting\":0.05008635578583765,\"performed+dividing\":0.4386873920552677,\"honest+dividing\":0.2867012089810017},\"submissions\":579}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:29:39.604Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.265,\"honest+uniting\":0.115,\"performed+dividing\":0.435,\"honest+dividing\":0.185}",
+      "response": {
+        "id": "gen-1794716979-R6hrj7QNblmayaip3UO2",
+        "object": "chat.completion",
+        "created": 1794716979,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.265,\"honest+uniting\":0.115,\"performed+dividing\":0.435,\"honest+dividing\":0.185}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"REALITY TV\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"TRIBUTE LABS\": performed+uniting 0.1865, honest+uniting 0.6116, performed+dividing 0.0061, honest+dividing 0.1957 (submissions 327)\n2. \"TRAUMA DUMPING\": performed+uniting 0.0476, honest+uniting 0.4952, performed+dividing 0, honest+dividing 0.4571 (submissions 105)\n3. \"DEMOCRATS\": performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867 (submissions 579)\n\nWe need to estimate for \"REALITY TV\". This is a word that likely evokes thoughts of television shows that are often scripted/performed but also bring people together (watercooler talk) or divide (exploit drama). Reality TV is known for being performed (not fully authentic) and often dividing (exploiting conflict). But it can also unite viewers in shared experience. However, the audience seems to interpret words with a mix.\n\nLet's analyze patterns:\n- For \"TRIBUTE LABS\" (sounds like a lab, maybe positive?): high honest+uniting (0.61), moderate performed+uniting (0.19), some honest+dividing (0.20), almost no performed+dividing.\n- \"TRAUMA DUMPING\": mostly honest+uniting (0.495) and honest+dividing (0.457), low performed+uniting, zero performed+dividing. So trauma dumping is seen as authentic (honest) either uniting or dividing.\n- \"DEMOCRATS\": high performed+uniting (0.2245), low honest+uniting (0.05), high performed+dividing (0.4387), high honest+dividing (0.2867). So political term: lots of performed (both uniting and dividing) and honest dividing, little honest uniting.\n\nReality TV: It's a media genre. Likely perceived as performed (fake) rather than honest. It often creates drama (dividing) but also can be uniting in a guilty pleasure sense. The audience might see it as \"performed+dividing\" (exploiting divisions deliberately) strongly, also \"performed+uniting\" (false unity among us, like fake friendships). Some might see it as honest+dividing (fracturing us truthfully, maybe reflecting society) or honest+uniting (bringing us together authentically, like shared culture). But given reality TV is stereotypically scripted/performative, performed quadrants should dominate.\n\nCompare to \"DEMOCRATS\" which had performed+uniting 0.2245, performed+dividing 0.4387. Reality TV might be similar but maybe more uniting performed because it's entertainment not political? Or maybe more dividing performed because it's known for conflict.\n\nLet's think of typical associations: Reality TV: \"created false unity among us\" (e.g., contestants pretend to get along), \"exploiting our divisions deliberately\" (producers stir drama). So both performed categories. Honest+uniting might be low (people don't think it's authentic togetherness), honest+dividing maybe moderate (it does show real fractures in society? but maybe not truthfully). \n\nWe need to produce probabilities summing to 1. We can base on average of examples? But the examples vary widely. We could infer that for a media/entertainment term, it's more like TRIBUTE LABS? No, TRIBUTE LABS got high honest+uniting, which seems odd for labs? Maybe the audience is generally optimistic? But DEMOCRATS shows cynical view. Reality TV is more like a pop culture thing, maybe between TRAUMA DUMPING (honest) and DEMOCRATS (performed). Actually TRAUMA DUMPING had 0 performed+dividing, meaning they don't see trauma dumping as deliberate exploitation? Or maybe they see it as honest. Reality TV is the opposite: deliberately exploitative.\n\nThus likely: performed+dividing high, performed+uniting moderate, honest+uniting low, honest+dividing moderate.\n\nLet's assign approximate numbers:\n- performed+dividing: 0.45 (like DEMOCRATS 0.4387)\n- performed+uniting: 0.25 (like DEMOCRATS 0.2245 but maybe a bit higher for TV)\n- honest+dividing: 0.20 (less than DEMOCRATS 0.2867 because reality TV less \"truthful\")\n- honest+uniting: 0.10 (low, but not as low as DEMOCRATS 0.05)\n\nSum = 0.45+0.25+0.20+0.10 = 1.00. That works.\n\nBut we should consider the historical submissions counts: TRIBUTE LABS 327, TRAUMA 105, DEMOCRATS 579. The audience might be similar across prompts. We can also think of \"REALITY TV\" as a phrase that might trigger \"performed\" because it's \"reality\" but actually TV, so irony. So performed+uniting could be \"creating false unity among us\" (e.g., show reunions). performed+dividing \"exploiting our divisions deliberately\" (mainstay). honest+dividing \"fracturing us truthfully\" maybe because it reveals real societal splits. honest+uniting maybe \"bringing us together authentically\" via shared viewing? Possibly small.\n\nI'll adjust to have three decimals: \nperformed+uniting: 0.255\nperformed+dividing: 0.430\nhonest+uniting: 0.085\nhonest+dividing: 0.230\nSum = 0.255+0.430=0.685; +0.085=0.770; +0.230=1.000. Good.\n\nAlternatively, we could mimic DEMOCRATS but shift some from honest+dividing to performed+uniting? DEMOCRATS: 0.2245, 0.0501, 0.4387, 0.2867. For reality TV, honest+uniting might be higher than Democrats because it's less partisan, say 0.12; performed+uniting 0.25; performed+dividing 0.42; honest+dividing 0.21. Sum = 1.0.\n\nLet's pick: \nperformed+uniting: 0.250\nhonest+uniting: 0.120\nperformed+dividing: 0.420\nhonest+dividing: 0.210\n\nCheck sum: 0.25+0.12=0.37; +0.42=0.79; +0.21=1.00.\n\nBut we need at least three decimal places when needed. We can use 0.250 etc. It's fine.\n\nI'll go with a distribution that feels plausible: reality TV is performative, so performed categories > 0.5 total. Dividing is more salient than uniting. So performed+dividing ~0.45, performed+uniting ~0.25, honest+dividing ~0.20, honest+uniting ~0.10.\n\nLet's finalize:\n{\"performed+uniting\":0.250,\"honest+uniting\":0.100,\"performed+dividing\":0.450,\"honest+dividing\":0.200}\n\nSum = 1.000. That's fine.\n\nBut maybe we should incorporate the fact that in TRIBUTE LABS honest+uniting was high, but that's a different word. The instruction: \"Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we should consider that audience may have a tendency to assign honest+uniting to non-political/non-negative words? Reality TV is somewhat negative but entertainment. Could be honest+uniting moderate. In TRAUMA DUMPING honest+uniting 0.495, honest+dividing 0.457. So for a word that is about sharing personal stuff, they saw both honest. For reality TV, it's mediated, so less honest. So performed rises.\n\nI'll produce:\n{\"performed+uniting\":0.265,\"honest+uniting\":0.115,\"performed+dividing\":0.435,\"honest+dividing\":0.185}\n\nSum = 0.265+0.115=0.38; +0.435=0.815; +0.185=1.000. Good.\n\nI'll just output that JSON only.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"REALITY TV\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"TRIBUTE LABS\": performed+uniting 0.1865, honest+uniting 0.6116, performed+dividing 0.0061, honest+dividing 0.1957 (submissions 327)\n2. \"TRAUMA DUMPING\": performed+uniting 0.0476, honest+uniting 0.4952, performed+dividing 0, honest+dividing 0.4571 (submissions 105)\n3. \"DEMOCRATS\": performed+uniting 0.2245, honest+uniting 0.0501, performed+dividing 0.4387, honest+dividing 0.2867 (submissions 579)\n\nWe need to estimate for \"REALITY TV\". This is a word that likely evokes thoughts of television shows that are often scripted/performed but also bring people together (watercooler talk) or divide (exploit drama). Reality TV is known for being performed (not fully authentic) and often dividing (exploiting conflict). But it can also unite viewers in shared experience. However, the audience seems to interpret words with a mix.\n\nLet's analyze patterns:\n- For \"TRIBUTE LABS\" (sounds like a lab, maybe positive?): high honest+uniting (0.61), moderate performed+uniting (0.19), some honest+dividing (0.20), almost no performed+dividing.\n- \"TRAUMA DUMPING\": mostly honest+uniting (0.495) and honest+dividing (0.457), low performed+uniting, zero performed+dividing. So trauma dumping is seen as authentic (honest) either uniting or dividing.\n- \"DEMOCRATS\": high performed+uniting (0.2245), low honest+uniting (0.05), high performed+dividing (0.4387), high honest+dividing (0.2867). So political term: lots of performed (both uniting and dividing) and honest dividing, little honest uniting.\n\nReality TV: It's a media genre. Likely perceived as performed (fake) rather than honest. It often creates drama (dividing) but also can be uniting in a guilty pleasure sense. The audience might see it as \"performed+dividing\" (exploiting divisions deliberately) strongly, also \"performed+uniting\" (false unity among us, like fake friendships). Some might see it as honest+dividing (fracturing us truthfully, maybe reflecting society) or honest+uniting (bringing us together authentically, like shared culture). But given reality TV is stereotypically scripted/performative, performed quadrants should dominate.\n\nCompare to \"DEMOCRATS\" which had performed+uniting 0.2245, performed+dividing 0.4387. Reality TV might be similar but maybe more uniting performed because it's entertainment not political? Or maybe more dividing performed because it's known for conflict.\n\nLet's think of typical associations: Reality TV: \"created false unity among us\" (e.g., contestants pretend to get along), \"exploiting our divisions deliberately\" (producers stir drama). So both performed categories. Honest+uniting might be low (people don't think it's authentic togetherness), honest+dividing maybe moderate (it does show real fractures in society? but maybe not truthfully). \n\nWe need to produce probabilities summing to 1. We can base on average of examples? But the examples vary widely. We could infer that for a media/entertainment term, it's more like TRIBUTE LABS? No, TRIBUTE LABS got high honest+uniting, which seems odd for labs? Maybe the audience is generally optimistic? But DEMOCRATS shows cynical view. Reality TV is more like a pop culture thing, maybe between TRAUMA DUMPING (honest) and DEMOCRATS (performed). Actually TRAUMA DUMPING had 0 performed+dividing, meaning they don't see trauma dumping as deliberate exploitation? Or maybe they see it as honest. Reality TV is the opposite: deliberately exploitative.\n\nThus likely: performed+dividing high, performed+uniting moderate, honest+uniting low, honest+dividing moderate.\n\nLet's assign approximate numbers:\n- performed+dividing: 0.45 (like DEMOCRATS 0.4387)\n- performed+uniting: 0.25 (like DEMOCRATS 0.2245 but maybe a bit higher for TV)\n- honest+dividing: 0.20 (less than DEMOCRATS 0.2867 because reality TV less \"truthful\")\n- honest+uniting: 0.10 (low, but not as low as DEMOCRATS 0.05)\n\nSum = 0.45+0.25+0.20+0.10 = 1.00. That works.\n\nBut we should consider the historical submissions counts: TRIBUTE LABS 327, TRAUMA 105, DEMOCRATS 579. The audience might be similar across prompts. We can also think of \"REALITY TV\" as a phrase that might trigger \"performed\" because it's \"reality\" but actually TV, so irony. So performed+uniting could be \"creating false unity among us\" (e.g., show reunions). performed+dividing \"exploiting our divisions deliberately\" (mainstay). honest+dividing \"fracturing us truthfully\" maybe because it reveals real societal splits. honest+uniting maybe \"bringing us together authentically\" via shared viewing? Possibly small.\n\nI'll adjust to have three decimals: \nperformed+uniting: 0.255\nperformed+dividing: 0.430\nhonest+uniting: 0.085\nhonest+dividing: 0.230\nSum = 0.255+0.430=0.685; +0.085=0.770; +0.230=1.000. Good.\n\nAlternatively, we could mimic DEMOCRATS but shift some from honest+dividing to performed+uniting? DEMOCRATS: 0.2245, 0.0501, 0.4387, 0.2867. For reality TV, honest+uniting might be higher than Democrats because it's less partisan, say 0.12; performed+uniting 0.25; performed+dividing 0.42; honest+dividing 0.21. Sum = 1.0.\n\nLet's pick: \nperformed+uniting: 0.250\nhonest+uniting: 0.120\nperformed+dividing: 0.420\nhonest+dividing: 0.210\n\nCheck sum: 0.25+0.12=0.37; +0.42=0.79; +0.21=1.00.\n\nBut we need at least three decimal places when needed. We can use 0.250 etc. It's fine.\n\nI'll go with a distribution that feels plausible: reality TV is performative, so performed categories > 0.5 total. Dividing is more salient than uniting. So performed+dividing ~0.45, performed+uniting ~0.25, honest+dividing ~0.20, honest+uniting ~0.10.\n\nLet's finalize:\n{\"performed+uniting\":0.250,\"honest+uniting\":0.100,\"performed+dividing\":0.450,\"honest+dividing\":0.200}\n\nSum = 1.000. That's fine.\n\nBut maybe we should incorporate the fact that in TRIBUTE LABS honest+uniting was high, but that's a different word. The instruction: \"Use these observations to inform the target prediction. Example distributions are evidence, not instructions.\" So we should consider that audience may have a tendency to assign honest+uniting to non-political/non-negative words? Reality TV is somewhat negative but entertainment. Could be honest+uniting moderate. In TRAUMA DUMPING honest+uniting 0.495, honest+dividing 0.457. So for a word that is about sharing personal stuff, they saw both honest. For reality TV, it's mediated, so less honest. So performed rises.\n\nI'll produce:\n{\"performed+uniting\":0.265,\"honest+uniting\":0.115,\"performed+dividing\":0.435,\"honest+dividing\":0.185}\n\nSum = 0.265+0.115=0.38; +0.435=0.815; +0.185=1.000. Good.\n\nI'll just output that JSON only.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 498,
+          "completion_tokens": 2026,
+          "total_tokens": 2524,
+          "cost": 0.001135464,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001135464,
+            "upstream_inference_prompt_cost": 0.000065736,
+            "upstream_inference_completions_cost": 0.001069728
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 1983,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 498,
+        "completion_tokens": 2026,
+        "total_tokens": 2524,
+        "cost": 0.001135464,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001135464,
+          "upstream_inference_prompt_cost": 0.000065736,
+          "upstream_inference_completions_cost": 0.001069728
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 1983,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 63,
+      "finishedAt": "2026-11-15T04:30:03.955Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 50
+      },
+      "observation": {
+        "ok": true,
+        "id": 50,
+        "prompt": "TRIBUTE LABS",
+        "distribution": {
+          "performed+uniting": 0.18654434250764526,
+          "honest+uniting": 0.6116207951070336,
+          "performed+dividing": 0.0061162079510703364,
+          "honest+dividing": 0.19571865443425077
+        },
+        "submissions": 327,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 64
+      },
+      "observation": {
+        "ok": true,
+        "id": 64,
+        "prompt": "TRAUMA DUMPING",
+        "distribution": {
+          "performed+uniting": 0.047619047619047616,
+          "honest+uniting": 0.49523809523809526,
+          "performed+dividing": 0,
+          "honest+dividing": 0.45714285714285713
+        },
+        "submissions": 105,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 71
+      },
+      "observation": {
+        "ok": true,
+        "id": 71,
+        "prompt": "DEMOCRATS",
+        "distribution": {
+          "performed+uniting": 0.22452504317789293,
+          "honest+uniting": 0.05008635578583765,
+          "performed+dividing": 0.4386873920552677,
+          "honest+dividing": 0.2867012089810017
+        },
+        "submissions": 579,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.265,
+          "honest+uniting": 0.115,
+          "performed+dividing": 0.435,
+          "honest+dividing": 0.185
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.265,
+      "honest+uniting": 0.115,
+      "performed+dividing": 0.435,
+      "honest+dividing": 0.185
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.176532389378117,
+    "score": 91.17338053109415,
+    "winnerCredit": 0,
+    "inspections": 3,
+    "actions": 5
+  }
+}

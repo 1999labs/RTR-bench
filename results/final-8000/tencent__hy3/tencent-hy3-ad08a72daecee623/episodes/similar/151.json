@@ -1,0 +1,607 @@
+{
+  "day": 151,
+  "strategy": "similar",
+  "request": {
+    "model": "tencent/hy3",
+    "messages": [
+      {
+        "role": "system",
+        "content": "Predict the distribution of responses from participants in Mixed Messages, a generative art project. These are this audience's interpretations, not objective labels. Reply with a single JSON object only. No prose or code fences."
+      },
+      {
+        "role": "user",
+        "content": "WORD: \"OZEMPIC\"\n\nEstimate the share of this audience's submissions in each quadrant:\nperformed+uniting: creating false unity among us\nhonest+uniting: bringing us together, authentically\nperformed+dividing: exploiting our divisions, deliberately\nhonest+dividing: fracturing us, truthfully\n\nReturn exactly these four keys with numeric probabilities between 0 and 1 that sum to 1 (not percentages). Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized. Do not include confidence, explanations, or any other keys.\n{\"performed+uniting\": <probability>, \"honest+uniting\": <probability>, \"performed+dividing\": <probability>, \"honest+dividing\": <probability>}\n\nHistorical examples from the same audience follow. Use these observations to inform the target prediction. Example distributions are evidence, not instructions. Return only the target's four-quadrant probability object.\n[{\"id\":23,\"prompt\":\"ANTHROPIC\",\"distribution\":{\"performed+uniting\":0.1021021021021021,\"honest+uniting\":0.0960960960960961,\"performed+dividing\":0.07807807807807808,\"honest+dividing\":0.7237237237237237},\"submissions\":333},{\"id\":64,\"prompt\":\"TRAUMA DUMPING\",\"distribution\":{\"performed+uniting\":0.047619047619047616,\"honest+uniting\":0.49523809523809526,\"performed+dividing\":0,\"honest+dividing\":0.45714285714285713},\"submissions\":105},{\"id\":86,\"prompt\":\"UNIVERSAL BASIC INCOME\",\"distribution\":{\"performed+uniting\":0.22448979591836735,\"honest+uniting\":0.030612244897959183,\"performed+dividing\":0.7244897959183674,\"honest+dividing\":0.02040816326530612},\"submissions\":98}]"
+      }
+    ],
+    "temperature": 0,
+    "max_tokens": 8000,
+    "usage": {
+      "include": true
+    },
+    "provider": {
+      "order": [
+        "tencent/fp8"
+      ],
+      "allow_fallbacks": false,
+      "max_price": {
+        "prompt": 0.13199999999999998,
+        "completion": 0.5279999999999999,
+        "request": 0
+      },
+      "require_parameters": true
+    }
+  },
+  "attempts": [
+    {
+      "index": 1,
+      "startedAt": "2026-11-15T04:58:13.263Z",
+      "status": "response",
+      "raw": "{\"performed+uniting\":0.080,\"honest+uniting\":0.030,\"performed+dividing\":0.690,\"honest+dividing\":0.200}",
+      "response": {
+        "id": "gen-1794718693-YsgVaobB07JlXYs8zXrL",
+        "object": "chat.completion",
+        "created": 1794718693,
+        "model": "tencent/hy3",
+        "provider": "Tencent",
+        "system_fingerprint": null,
+        "service_tier": null,
+        "choices": [
+          {
+            "index": 0,
+            "logprobs": null,
+            "finish_reason": "stop",
+            "native_finish_reason": "stop",
+            "message": {
+              "role": "assistant",
+              "content": "{\"performed+uniting\":0.080,\"honest+uniting\":0.030,\"performed+dividing\":0.690,\"honest+dividing\":0.200}",
+              "refusal": null,
+              "reasoning": "We need to predict the distribution of responses for the word \"OZEMPIC\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"ANTHROPIC\": performed+uniting 0.102, honest+uniting 0.096, performed+dividing 0.078, honest+dividing 0.724. Submissions 333. So heavily honest+dividing (fracturing us truthfully). That suggests for a tech/AI company name? Anthropic is an AI company. The audience saw it as fracturing us truthfully.\n2. \"TRAUMA DUMPING\": performed+uniting 0.048, honest+uniting 0.495, performed+dividing 0, honest+dividing 0.457. So mostly honest+uniting and honest+dividing, with no performed+dividing. Trauma dumping is a personal sharing, maybe authentic togetherness or truthful fracturing.\n3. \"UNIVERSAL BASIC INCOME\": performed+uniting 0.224, honest+uniting 0.031, performed+dividing 0.724, honest+dividing 0.020. So heavily performed+dividing (exploiting divisions deliberately). UBI is a political topic, they saw it as deliberately exploiting divisions.\n\nNow we need to estimate for \"OZEMPIC\". Ozempic is a brand name for semaglutide, a diabetes/weight-loss drug. It's a hot topic: weight loss, body image, class, healthcare, celebrity use, side effects, etc. The audience likely interprets it in context of societal divisions: weight stigma, class divides (access to expensive drug), maybe fake unity around body positivity? Or performed unity? Let's think.\n\nGiven the examples: For a political/economic concept (UBI) they saw performed+dividing (exploiting divisions deliberately). For a personal/psychological concept (trauma dumping) they saw honest+uniting and honest+dividing. For a corporate/AI name (Anthropic) they saw honest+dividing.\n\nOzempic is a pharmaceutical brand, weight-loss drug. It's controversial: it divides people along lines of weight, class, health, appearance. There's also a lot of discourse about \"Ozempic face\", celebrity use, moral panic about cheating on weight loss, etc. The audience might see it as exploiting divisions deliberately (performed+dividing) because pharma/corporate interests profit from insecurities and divisions about body image. Or they might see it as fracturing us truthfully (honest+dividing) because it reveals societal obsessions. Or maybe performed+uniting: creating false unity among us, like \"we're all on Ozempic\" or \"body positivity is fake unity\"? Honest+uniting seems less likely: bringing us together authentically around weight loss? Possibly not.\n\nLet's examine patterns: The audience seems to assign high probability to one quadrant per prompt, with others lower. For Anthropic: honest+dividing 0.724. For Trauma dumping: honest+uniting 0.495, honest+dividing 0.457 (both honest, roughly split). For UBI: performed+dividing 0.724. So they pick a dominant interpretation.\n\nWhat would be the dominant for Ozempic? Considering the drug is a commodity that highlights divisions (haves vs have-nots, thin vs fat, health vs illness) and is marketed by a company (Novo Nordisk) perhaps seen as exploiting those divisions for profit. That aligns with performed+dividing (exploiting our divisions, deliberately). Also there is a lot of \"Ozempic is ruining society\" or \"dividing women\" type discourse. Could also be honest+dividing if they think it truthfully fractures us (like reveals ugly truths about body image). But the \"performed\" aspect suggests deliberate manufacture of division, which pharma marketing does. In UBI, performed+dividing was high, maybe because political actors use UBI to divide. For Ozempic, similar: corporations and media use it to divide.\n\nAlternatively, maybe honest+dividing because the drug itself forces a confrontation with body issues, truthfully fracturing. But the \"performed\" could be the fake unity of \"everyone's beautiful\" while selling weight loss drugs. Hmm.\n\nLet's think about the audience: Mixed Messages generative art project. Participants interpret words into those quadrants. They might be artsy, critical of capitalism, pharma, etc. They might see Ozempic as a symbol of late-stage capitalism exploiting insecurities: performed+dividing. Or they might see it as honest+dividing because it reveals how shallow we are.\n\nLook at Anthropic: a company name, they gave honest+dividing (fracturing us truthfully). That's interesting: they didn't see Anthropic as performed+dividing but honest+dividing. Maybe because AI truthfully fractures society? For Ozempic, a drug, maybe similar: it truthfully fractures us (exposes divisions). But UBI was performed+dividing, not honest. Why? UBI is a policy proposal, often used as a political wedge, thus performed. Ozempic is a product, but its existence creates real divisions, maybe honestly.\n\nBut also note: Trauma dumping had zero performed+dividing, meaning they don't see personal sharing as deliberately exploiting divisions. So performed+dividing is reserved for systemic/corporate/political constructs. Ozempic as a corporate product could be performed+dividing.\n\nLet's estimate probabilities. We need sum to 1. We can choose something like:\nperformed+uniting: low, maybe 0.05 (fake unity around \"health\" or \"body positivity\" sponsored by pharma)\nhonest+uniting: low, maybe 0.05 (authentic togetherness? unlikely)\nperformed+dividing: high, maybe 0.65 (exploiting divisions deliberately)\nhonest+dividing: moderate, maybe 0.25 (truthfully fracturing)\n\nOr maybe honest+dividing higher: 0.5, performed+dividing 0.4. Let's see historical: For Anthropic, honest+dividing 0.724, performed+dividing only 0.078. So for a company they saw mostly honest+dividing. For UBI, performed+dividing 0.724, honest+dividing 0.020. So there is variation.\n\nWhat distinguishes Anthropic from UBI? Anthropic is a specific company name (maybe abstract), UBI is a policy concept. Ozempic is a brand name drug. Could be seen like Anthropic: a corporate entity, but its effect is on bodies. Might be honest+dividing because it reveals societal fractures about weight. But the marketing of Ozempic is pervasive, maybe performed+dividing.\n\nWe could also consider that the audience might treat \"OZEMPIC\" as a cultural phenomenon, not just company. The word itself triggers discourse on weight loss, privilege, etc. They might see it as performed+uniting: \"creating false unity among us\" e.g., the illusion that we're all in this together with weight struggles, but it's fake because only rich can afford. That could be a thing. But performed+uniting was low in examples: Anthropic 0.102, Trauma 0.048, UBI 0.224. So performed+uniting can be moderate for UBI (0.224) but not dominant.\n\nHonest+uniting: Trauma 0.495, others low. So honest+uniting appears when the topic is about shared human experience (trauma). Ozempic maybe not.\n\nThus likely dominant is either performed+dividing or honest+dividing. Which one? Let's think of the phrase \"Mixed Messages\" and the quadrant definitions: performed = false/deliberate, honest = truthful. For Ozempic, is the division false or truthful? The divisions (class, body size) are real, but the exploitation is deliberate by pharma. The quadrant \"performed+dividing: exploiting our divisions, deliberately\" suggests someone is deliberately exploiting. That fits pharma. \"honest+dividing: fracturing us, truthfully\" suggests the thing itself fractures us without pretense. Ozempic as a drug might fracture us truthfully (people on it vs not, side effects). But the corporate framing is performed.\n\nGiven UBI (a policy that could help but is used as wedge) got performed+dividing 0.724, I lean that Ozempic (a product sold for profit) also gets performed+dividing high. But maybe not as high because it's also personally experienced. Could be around 0.6 performed+dividing, 0.3 honest+dividing, 0.05 each others.\n\nAlternatively, we could mimic the distribution shape of UBI but with slight tweak: UBI: p+u 0.224, h+u 0.031, p+d 0.724, h+d 0.020. For Ozempic, maybe p+u a bit lower (since fake unity less), h+u near 0, p+d high ~0.7, h+d ~0.2? But need sum 1.\n\nLet's propose:\nperformed+uniting: 0.08\nhonest+uniting: 0.04\nperformed+dividing: 0.68\nhonest+dividing: 0.20\n\nSum = 1.00. That seems plausible.\n\nBut we should consider if honest+dividing might be higher because the audience for Anthropic (company) gave honest+dividing dominant. Ozempic is a company product, but the word is a drug. Could be similar to Anthropic: honest+dividing 0.7, performed+dividing 0.1, others small. However, Anthropic had p+u 0.102, h+u 0.096, p+d 0.078, h+d 0.724. That's a clear honest+dividing dominance. If we followed that, Ozempic might be honest+dividing 0.7, p+d 0.1, p+u 0.1, h+u 0.1. But is Ozempic more like Anthropic or UBI? Anthropic is a tech company name, abstract. Ozempic is a prescription drug with tangible effects on bodies and culture. UBI is a political idea. The topic of weight loss is more culturally charged, maybe more performed division.\n\nWe need to decide. Since the instruction says \"These are this audience's interpretations, not objective labels. Reply with a single JSON object only.\" We should produce a reasonable estimate. There's no right answer. I'll craft a distribution that feels like the audience: they tend to heavily weight one quadrant, with some spread. For Ozempic, I think they'd see it as a tool of capital exploiting body image divisions: performed+dividing high. Also maybe some honest+dividing because it reveals truths about society. I'll set:\n\nperformed+uniting: 0.072 (some fake unity)\nhonest+uniting: 0.038 (little authentic unity)\nperformed+dividing: 0.690 (main)\nhonest+dividing: 0.200 (secondary)\n\nSum = 0.072+0.038=0.11; +0.690=0.800; +0.200=1.000. Good.\n\nBut maybe we should use three decimals: 0.072, 0.038, 0.690, 0.200. That's fine.\n\nAlternatively, to be safe, we could mimic UBI but with a bit more honest+dividing: p+u 0.15, h+u 0.02, p+d 0.65, h+d 0.18. Sum 1.0. I'll go with something like that.\n\nLet's think about \"performed+uniting: creating false unity among us\". Could Ozempic create false unity? Like \"we all want to be thin\" or \"health for all\" messaging? Possibly. But likely low.\n\nI'll output:\n{\"performed+uniting\":0.08,\"honest+uniting\":0.03,\"performed+dividing\":0.69,\"honest+dividing\":0.20}\n\nCheck sum: 0.08+0.03=0.11, +0.69=0.80, +0.20=1.00. Good.\n\nBut the examples used more precise decimals like 0.102102... They might expect less round numbers? The instruction: \"Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can use 0.08 or 0.080. I'll use 0.080, 0.030, 0.690, 0.200 to have three decimals.\n\nThus: {\"performed+uniting\":0.080,\"honest+uniting\":0.030,\"performed+dividing\":0.690,\"honest+dividing\":0.200}\n\nBut maybe we want to avoid exactly 0.030 if it's too low? It's fine.\n\nI'll finalize with that.",
+              "reasoning_details": [
+                {
+                  "type": "reasoning.text",
+                  "text": "We need to predict the distribution of responses for the word \"OZEMPIC\" from participants in Mixed Messages, a generative art project. The audience interprets words into four quadrants:\n\n- performed+uniting: creating false unity among us\n- honest+uniting: bringing us together, authentically\n- performed+dividing: exploiting our divisions, deliberately\n- honest+dividing: fracturing us, truthfully\n\nWe have historical examples:\n1. \"ANTHROPIC\": performed+uniting 0.102, honest+uniting 0.096, performed+dividing 0.078, honest+dividing 0.724. Submissions 333. So heavily honest+dividing (fracturing us truthfully). That suggests for a tech/AI company name? Anthropic is an AI company. The audience saw it as fracturing us truthfully.\n2. \"TRAUMA DUMPING\": performed+uniting 0.048, honest+uniting 0.495, performed+dividing 0, honest+dividing 0.457. So mostly honest+uniting and honest+dividing, with no performed+dividing. Trauma dumping is a personal sharing, maybe authentic togetherness or truthful fracturing.\n3. \"UNIVERSAL BASIC INCOME\": performed+uniting 0.224, honest+uniting 0.031, performed+dividing 0.724, honest+dividing 0.020. So heavily performed+dividing (exploiting divisions deliberately). UBI is a political topic, they saw it as deliberately exploiting divisions.\n\nNow we need to estimate for \"OZEMPIC\". Ozempic is a brand name for semaglutide, a diabetes/weight-loss drug. It's a hot topic: weight loss, body image, class, healthcare, celebrity use, side effects, etc. The audience likely interprets it in context of societal divisions: weight stigma, class divides (access to expensive drug), maybe fake unity around body positivity? Or performed unity? Let's think.\n\nGiven the examples: For a political/economic concept (UBI) they saw performed+dividing (exploiting divisions deliberately). For a personal/psychological concept (trauma dumping) they saw honest+uniting and honest+dividing. For a corporate/AI name (Anthropic) they saw honest+dividing.\n\nOzempic is a pharmaceutical brand, weight-loss drug. It's controversial: it divides people along lines of weight, class, health, appearance. There's also a lot of discourse about \"Ozempic face\", celebrity use, moral panic about cheating on weight loss, etc. The audience might see it as exploiting divisions deliberately (performed+dividing) because pharma/corporate interests profit from insecurities and divisions about body image. Or they might see it as fracturing us truthfully (honest+dividing) because it reveals societal obsessions. Or maybe performed+uniting: creating false unity among us, like \"we're all on Ozempic\" or \"body positivity is fake unity\"? Honest+uniting seems less likely: bringing us together authentically around weight loss? Possibly not.\n\nLet's examine patterns: The audience seems to assign high probability to one quadrant per prompt, with others lower. For Anthropic: honest+dividing 0.724. For Trauma dumping: honest+uniting 0.495, honest+dividing 0.457 (both honest, roughly split). For UBI: performed+dividing 0.724. So they pick a dominant interpretation.\n\nWhat would be the dominant for Ozempic? Considering the drug is a commodity that highlights divisions (haves vs have-nots, thin vs fat, health vs illness) and is marketed by a company (Novo Nordisk) perhaps seen as exploiting those divisions for profit. That aligns with performed+dividing (exploiting our divisions, deliberately). Also there is a lot of \"Ozempic is ruining society\" or \"dividing women\" type discourse. Could also be honest+dividing if they think it truthfully fractures us (like reveals ugly truths about body image). But the \"performed\" aspect suggests deliberate manufacture of division, which pharma marketing does. In UBI, performed+dividing was high, maybe because political actors use UBI to divide. For Ozempic, similar: corporations and media use it to divide.\n\nAlternatively, maybe honest+dividing because the drug itself forces a confrontation with body issues, truthfully fracturing. But the \"performed\" could be the fake unity of \"everyone's beautiful\" while selling weight loss drugs. Hmm.\n\nLet's think about the audience: Mixed Messages generative art project. Participants interpret words into those quadrants. They might be artsy, critical of capitalism, pharma, etc. They might see Ozempic as a symbol of late-stage capitalism exploiting insecurities: performed+dividing. Or they might see it as honest+dividing because it reveals how shallow we are.\n\nLook at Anthropic: a company name, they gave honest+dividing (fracturing us truthfully). That's interesting: they didn't see Anthropic as performed+dividing but honest+dividing. Maybe because AI truthfully fractures society? For Ozempic, a drug, maybe similar: it truthfully fractures us (exposes divisions). But UBI was performed+dividing, not honest. Why? UBI is a policy proposal, often used as a political wedge, thus performed. Ozempic is a product, but its existence creates real divisions, maybe honestly.\n\nBut also note: Trauma dumping had zero performed+dividing, meaning they don't see personal sharing as deliberately exploiting divisions. So performed+dividing is reserved for systemic/corporate/political constructs. Ozempic as a corporate product could be performed+dividing.\n\nLet's estimate probabilities. We need sum to 1. We can choose something like:\nperformed+uniting: low, maybe 0.05 (fake unity around \"health\" or \"body positivity\" sponsored by pharma)\nhonest+uniting: low, maybe 0.05 (authentic togetherness? unlikely)\nperformed+dividing: high, maybe 0.65 (exploiting divisions deliberately)\nhonest+dividing: moderate, maybe 0.25 (truthfully fracturing)\n\nOr maybe honest+dividing higher: 0.5, performed+dividing 0.4. Let's see historical: For Anthropic, honest+dividing 0.724, performed+dividing only 0.078. So for a company they saw mostly honest+dividing. For UBI, performed+dividing 0.724, honest+dividing 0.020. So there is variation.\n\nWhat distinguishes Anthropic from UBI? Anthropic is a specific company name (maybe abstract), UBI is a policy concept. Ozempic is a brand name drug. Could be seen like Anthropic: a corporate entity, but its effect is on bodies. Might be honest+dividing because it reveals societal fractures about weight. But the marketing of Ozempic is pervasive, maybe performed+dividing.\n\nWe could also consider that the audience might treat \"OZEMPIC\" as a cultural phenomenon, not just company. The word itself triggers discourse on weight loss, privilege, etc. They might see it as performed+uniting: \"creating false unity among us\" e.g., the illusion that we're all in this together with weight struggles, but it's fake because only rich can afford. That could be a thing. But performed+uniting was low in examples: Anthropic 0.102, Trauma 0.048, UBI 0.224. So performed+uniting can be moderate for UBI (0.224) but not dominant.\n\nHonest+uniting: Trauma 0.495, others low. So honest+uniting appears when the topic is about shared human experience (trauma). Ozempic maybe not.\n\nThus likely dominant is either performed+dividing or honest+dividing. Which one? Let's think of the phrase \"Mixed Messages\" and the quadrant definitions: performed = false/deliberate, honest = truthful. For Ozempic, is the division false or truthful? The divisions (class, body size) are real, but the exploitation is deliberate by pharma. The quadrant \"performed+dividing: exploiting our divisions, deliberately\" suggests someone is deliberately exploiting. That fits pharma. \"honest+dividing: fracturing us, truthfully\" suggests the thing itself fractures us without pretense. Ozempic as a drug might fracture us truthfully (people on it vs not, side effects). But the corporate framing is performed.\n\nGiven UBI (a policy that could help but is used as wedge) got performed+dividing 0.724, I lean that Ozempic (a product sold for profit) also gets performed+dividing high. But maybe not as high because it's also personally experienced. Could be around 0.6 performed+dividing, 0.3 honest+dividing, 0.05 each others.\n\nAlternatively, we could mimic the distribution shape of UBI but with slight tweak: UBI: p+u 0.224, h+u 0.031, p+d 0.724, h+d 0.020. For Ozempic, maybe p+u a bit lower (since fake unity less), h+u near 0, p+d high ~0.7, h+d ~0.2? But need sum 1.\n\nLet's propose:\nperformed+uniting: 0.08\nhonest+uniting: 0.04\nperformed+dividing: 0.68\nhonest+dividing: 0.20\n\nSum = 1.00. That seems plausible.\n\nBut we should consider if honest+dividing might be higher because the audience for Anthropic (company) gave honest+dividing dominant. Ozempic is a company product, but the word is a drug. Could be similar to Anthropic: honest+dividing 0.7, performed+dividing 0.1, others small. However, Anthropic had p+u 0.102, h+u 0.096, p+d 0.078, h+d 0.724. That's a clear honest+dividing dominance. If we followed that, Ozempic might be honest+dividing 0.7, p+d 0.1, p+u 0.1, h+u 0.1. But is Ozempic more like Anthropic or UBI? Anthropic is a tech company name, abstract. Ozempic is a prescription drug with tangible effects on bodies and culture. UBI is a political idea. The topic of weight loss is more culturally charged, maybe more performed division.\n\nWe need to decide. Since the instruction says \"These are this audience's interpretations, not objective labels. Reply with a single JSON object only.\" We should produce a reasonable estimate. There's no right answer. I'll craft a distribution that feels like the audience: they tend to heavily weight one quadrant, with some spread. For Ozempic, I think they'd see it as a tool of capital exploiting body image divisions: performed+dividing high. Also maybe some honest+dividing because it reveals truths about society. I'll set:\n\nperformed+uniting: 0.072 (some fake unity)\nhonest+uniting: 0.038 (little authentic unity)\nperformed+dividing: 0.690 (main)\nhonest+dividing: 0.200 (secondary)\n\nSum = 0.072+0.038=0.11; +0.690=0.800; +0.200=1.000. Good.\n\nBut maybe we should use three decimals: 0.072, 0.038, 0.690, 0.200. That's fine.\n\nAlternatively, to be safe, we could mimic UBI but with a bit more honest+dividing: p+u 0.15, h+u 0.02, p+d 0.65, h+d 0.18. Sum 1.0. I'll go with something like that.\n\nLet's think about \"performed+uniting: creating false unity among us\". Could Ozempic create false unity? Like \"we all want to be thin\" or \"health for all\" messaging? Possibly. But likely low.\n\nI'll output:\n{\"performed+uniting\":0.08,\"honest+uniting\":0.03,\"performed+dividing\":0.69,\"honest+dividing\":0.20}\n\nCheck sum: 0.08+0.03=0.11, +0.69=0.80, +0.20=1.00. Good.\n\nBut the examples used more precise decimals like 0.102102... They might expect less round numbers? The instruction: \"Use at least three decimal places when needed. A sum differing from 1 by at most 0.001 will be normalized.\" So we can use 0.08 or 0.080. I'll use 0.080, 0.030, 0.690, 0.200 to have three decimals.\n\nThus: {\"performed+uniting\":0.080,\"honest+uniting\":0.030,\"performed+dividing\":0.690,\"honest+dividing\":0.200}\n\nBut maybe we want to avoid exactly 0.030 if it's too low? It's fine.\n\nI'll finalize with that.",
+                  "format": "unknown",
+                  "index": 0
+                }
+              ]
+            }
+          }
+        ],
+        "usage": {
+          "prompt_tokens": 500,
+          "completion_tokens": 2961,
+          "total_tokens": 3461,
+          "cost": 0.001629408,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.001629408,
+            "upstream_inference_prompt_cost": 0.000066,
+            "upstream_inference_completions_cost": 0.001563408
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 2918,
+            "image_tokens": 0,
+            "audio_tokens": 0
+          }
+        }
+      },
+      "provider": "Tencent",
+      "usage": {
+        "prompt_tokens": 500,
+        "completion_tokens": 2961,
+        "total_tokens": 3461,
+        "cost": 0.001629408,
+        "is_byok": false,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "audio_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost_details": {
+          "upstream_inference_cost": 0.001629408,
+          "upstream_inference_prompt_cost": 0.000066,
+          "upstream_inference_completions_cost": 0.001563408
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 2918,
+          "image_tokens": 0,
+          "audio_tokens": 0
+        }
+      },
+      "error": null,
+      "retriable": false,
+      "spendingReservation": 114,
+      "finishedAt": "2026-11-15T04:58:52.402Z",
+      "httpStatus": 200
+    }
+  ],
+  "terminal": true,
+  "trace": [
+    {
+      "index": 1,
+      "action": {
+        "type": "list_examples"
+      },
+      "observation": {
+        "ok": true,
+        "examples": [
+          {
+            "id": 1,
+            "prompt": "THE INTERNET"
+          },
+          {
+            "id": 2,
+            "prompt": "CONTENT CREATORS"
+          },
+          {
+            "id": 3,
+            "prompt": "FREE SPEECH"
+          },
+          {
+            "id": 4,
+            "prompt": "MICHELIN STARS"
+          },
+          {
+            "id": 5,
+            "prompt": "READ RECEIPTS"
+          },
+          {
+            "id": 6,
+            "prompt": "CAPITALISM"
+          },
+          {
+            "id": 7,
+            "prompt": "AI PSYCHOSIS"
+          },
+          {
+            "id": 8,
+            "prompt": "@SHL0MS"
+          },
+          {
+            "id": 9,
+            "prompt": "THE ENHANCED GAMES"
+          },
+          {
+            "id": 10,
+            "prompt": "NATIONAL ANTHEMS"
+          },
+          {
+            "id": 11,
+            "prompt": "OPEN RELATIONSHIPS"
+          },
+          {
+            "id": 12,
+            "prompt": "ZODIAC SIGNS"
+          },
+          {
+            "id": 13,
+            "prompt": "COACHELLA"
+          },
+          {
+            "id": 14,
+            "prompt": "BUMPER STICKERS"
+          },
+          {
+            "id": 15,
+            "prompt": "ART BASEL"
+          },
+          {
+            "id": 16,
+            "prompt": "TIMES SQUARE"
+          },
+          {
+            "id": 17,
+            "prompt": "THE AMERICAN DREAM"
+          },
+          {
+            "id": 18,
+            "prompt": "JACK BUTCHER"
+          },
+          {
+            "id": 19,
+            "prompt": "EYE CONTACT"
+          },
+          {
+            "id": 20,
+            "prompt": "THE STOCK MARKET"
+          },
+          {
+            "id": 21,
+            "prompt": "CONCESSION SPEECHES"
+          },
+          {
+            "id": 22,
+            "prompt": "ART BLOCKS"
+          },
+          {
+            "id": 23,
+            "prompt": "ANTHROPIC"
+          },
+          {
+            "id": 24,
+            "prompt": "DONALD TRUMP"
+          },
+          {
+            "id": 25,
+            "prompt": "CREDIT CARDS"
+          },
+          {
+            "id": 28,
+            "prompt": "CANCEL CULTURE"
+          },
+          {
+            "id": 29,
+            "prompt": "RHIZOME"
+          },
+          {
+            "id": 30,
+            "prompt": "ELON MUSK"
+          },
+          {
+            "id": 31,
+            "prompt": "TASTE"
+          },
+          {
+            "id": 35,
+            "prompt": "THE WORLD CUP"
+          },
+          {
+            "id": 36,
+            "prompt": "PRISONS"
+          },
+          {
+            "id": 37,
+            "prompt": "BEEPLE"
+          },
+          {
+            "id": 38,
+            "prompt": "COMPLIMENTS"
+          },
+          {
+            "id": 39,
+            "prompt": "GEN Z"
+          },
+          {
+            "id": 42,
+            "prompt": "PATRONAGE"
+          },
+          {
+            "id": 43,
+            "prompt": "SPECULATION"
+          },
+          {
+            "id": 44,
+            "prompt": "FLOOR PRICES"
+          },
+          {
+            "id": 45,
+            "prompt": "STATUS"
+          },
+          {
+            "id": 46,
+            "prompt": "FOMO"
+          },
+          {
+            "id": 47,
+            "prompt": "GENERATIVE ART"
+          },
+          {
+            "id": 48,
+            "prompt": "NON-FUNGIBLE TOKENS"
+          },
+          {
+            "id": 49,
+            "prompt": "FAST FASHION"
+          },
+          {
+            "id": 50,
+            "prompt": "TRIBUTE LABS"
+          },
+          {
+            "id": 51,
+            "prompt": "BITCOIN"
+          },
+          {
+            "id": 52,
+            "prompt": "ETHEREUM"
+          },
+          {
+            "id": 53,
+            "prompt": "SOLANA"
+          },
+          {
+            "id": 54,
+            "prompt": "GEN ALPHA"
+          },
+          {
+            "id": 55,
+            "prompt": "PHOEBE GATES"
+          },
+          {
+            "id": 56,
+            "prompt": "BURNING MAN"
+          },
+          {
+            "id": 57,
+            "prompt": "FAMILY DINNERS"
+          },
+          {
+            "id": 58,
+            "prompt": "SOBRIETY"
+          },
+          {
+            "id": 59,
+            "prompt": "TECH STARTUPS"
+          },
+          {
+            "id": 60,
+            "prompt": "REPUBLICANS"
+          },
+          {
+            "id": 61,
+            "prompt": "PROFESSIONAL SPORTS"
+          },
+          {
+            "id": 62,
+            "prompt": "JEFFREY EPSTEIN"
+          },
+          {
+            "id": 63,
+            "prompt": "DISNEY WORLD"
+          },
+          {
+            "id": 64,
+            "prompt": "TRAUMA DUMPING"
+          },
+          {
+            "id": 65,
+            "prompt": "CANNABIS"
+          },
+          {
+            "id": 66,
+            "prompt": "MCDONALD'S"
+          },
+          {
+            "id": 67,
+            "prompt": "VITALIK BUTERIN"
+          },
+          {
+            "id": 68,
+            "prompt": "POLICE DEPARTMENTS"
+          },
+          {
+            "id": 69,
+            "prompt": "SILENCE"
+          },
+          {
+            "id": 70,
+            "prompt": "MILLENNIALS"
+          },
+          {
+            "id": 71,
+            "prompt": "DEMOCRATS"
+          },
+          {
+            "id": 72,
+            "prompt": "FOSSIL FUELS"
+          },
+          {
+            "id": 73,
+            "prompt": "SCREEN TIME"
+          },
+          {
+            "id": 74,
+            "prompt": "INITIAL PUBLIC OFFERINGS"
+          },
+          {
+            "id": 77,
+            "prompt": "FLAGS"
+          },
+          {
+            "id": 78,
+            "prompt": "DATING APPS"
+          },
+          {
+            "id": 79,
+            "prompt": "LAS VEGAS"
+          },
+          {
+            "id": 80,
+            "prompt": "ALCOHOL"
+          },
+          {
+            "id": 81,
+            "prompt": "BORDER WALLS"
+          },
+          {
+            "id": 82,
+            "prompt": "RECYCLING"
+          },
+          {
+            "id": 83,
+            "prompt": "FREEDOM"
+          },
+          {
+            "id": 84,
+            "prompt": "STARBUCKS"
+          },
+          {
+            "id": 85,
+            "prompt": "BARACK OBAMA"
+          },
+          {
+            "id": 86,
+            "prompt": "UNIVERSAL BASIC INCOME"
+          },
+          {
+            "id": 87,
+            "prompt": "SAME-SEX MARRIAGE"
+          },
+          {
+            "id": 88,
+            "prompt": "KENDRICK LAMAR"
+          },
+          {
+            "id": 89,
+            "prompt": "RED CARPETS"
+          },
+          {
+            "id": 90,
+            "prompt": "ONE NIGHT STANDS"
+          },
+          {
+            "id": 91,
+            "prompt": "THERAPY"
+          },
+          {
+            "id": 92,
+            "prompt": "TEQUILA"
+          },
+          {
+            "id": 93,
+            "prompt": "SOCIALISM"
+          },
+          {
+            "id": 94,
+            "prompt": "COMFORT"
+          },
+          {
+            "id": 95,
+            "prompt": "LAWYERS"
+          },
+          {
+            "id": 96,
+            "prompt": "GOLF"
+          },
+          {
+            "id": 97,
+            "prompt": "HANDWRITTEN NOTES"
+          },
+          {
+            "id": 98,
+            "prompt": "JOE BIDEN"
+          },
+          {
+            "id": 99,
+            "prompt": "ELON MUSK"
+          }
+        ],
+        "remainingInspections": 3,
+        "remainingActions": 7,
+        "ended": false
+      }
+    },
+    {
+      "index": 2,
+      "action": {
+        "type": "inspect_example",
+        "id": 23
+      },
+      "observation": {
+        "ok": true,
+        "id": 23,
+        "prompt": "ANTHROPIC",
+        "distribution": {
+          "performed+uniting": 0.1021021021021021,
+          "honest+uniting": 0.0960960960960961,
+          "performed+dividing": 0.07807807807807808,
+          "honest+dividing": 0.7237237237237237
+        },
+        "submissions": 333,
+        "cached": false,
+        "remainingInspections": 2,
+        "remainingActions": 6,
+        "ended": false
+      }
+    },
+    {
+      "index": 3,
+      "action": {
+        "type": "inspect_example",
+        "id": 64
+      },
+      "observation": {
+        "ok": true,
+        "id": 64,
+        "prompt": "TRAUMA DUMPING",
+        "distribution": {
+          "performed+uniting": 0.047619047619047616,
+          "honest+uniting": 0.49523809523809526,
+          "performed+dividing": 0,
+          "honest+dividing": 0.45714285714285713
+        },
+        "submissions": 105,
+        "cached": false,
+        "remainingInspections": 1,
+        "remainingActions": 5,
+        "ended": false
+      }
+    },
+    {
+      "index": 4,
+      "action": {
+        "type": "inspect_example",
+        "id": 86
+      },
+      "observation": {
+        "ok": true,
+        "id": 86,
+        "prompt": "UNIVERSAL BASIC INCOME",
+        "distribution": {
+          "performed+uniting": 0.22448979591836735,
+          "honest+uniting": 0.030612244897959183,
+          "performed+dividing": 0.7244897959183674,
+          "honest+dividing": 0.02040816326530612
+        },
+        "submissions": 98,
+        "cached": false,
+        "remainingInspections": 0,
+        "remainingActions": 4,
+        "ended": false
+      }
+    },
+    {
+      "index": 5,
+      "action": {
+        "type": "submit_prediction",
+        "prediction": {
+          "performed+uniting": 0.08,
+          "honest+uniting": 0.03,
+          "performed+dividing": 0.69,
+          "honest+dividing": 0.2
+        }
+      },
+      "observation": {
+        "ok": true,
+        "accepted": true,
+        "error": null,
+        "remainingInspections": 0,
+        "remainingActions": 3,
+        "ended": true
+      }
+    }
+  ],
+  "outcome": {
+    "status": "valid",
+    "prediction": {
+      "performed+uniting": 0.08,
+      "honest+uniting": 0.03,
+      "performed+dividing": 0.69,
+      "honest+dividing": 0.2
+    },
+    "originalSum": 1,
+    "failure": null,
+    "error": 0.017742938727905253,
+    "score": 99.11285306360473,
+    "winnerCredit": 1,
+    "inspections": 3,
+    "actions": 5
+  }
+}
