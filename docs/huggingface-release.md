@@ -5,6 +5,16 @@ Target: [noahmclaughlin/RTR-bench](https://huggingface.co/datasets/noahmclaughli
 The local release folder is [`huggingface/RTR-bench/`](../huggingface/RTR-bench/). Its [README](../huggingface/RTR-bench/README.md) is the dataset card. Preparation and validation are local; neither command below publishes anything or calls a model.
 
 
+## Current publication — November 15, 2026
+
+Uploaded with the `hf` CLI to dataset commit [`4cd62fac70fc4cb55602686c4ca7bc42c63bbe84`](https://huggingface.co/datasets/noahmclaughlin/RTR-bench/commit/4cd62fac70fc4cb55602686c4ca7bc42c63bbe84).
+
+- All 19 published package files downloaded and matched the reviewed local files byte-for-byte.
+- The actual remote `load_dataset` call at that revision loaded 90 reference, 30 development, and 45 evaluation rows, totaling 39,828 submissions.
+- CC0 metadata was verified. All five frozen data/source files are byte-identical to the prior publication.
+- The package includes the eleven-model table, three charts, findings, and current Predict/Learn instructions.
+- The release manifest identifies source commit `7a8cab7e` and CLI package version 0.2.2. Dataset publication and npm publication are separate; see [npm release verification](release-0.2.2-verification.md) for registry status.
+
 ## Original publication (historical)
 
 Published to the user's dataset repository on November 14, 2026 (America/New_York).
